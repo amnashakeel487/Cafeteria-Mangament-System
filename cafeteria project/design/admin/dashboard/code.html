@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Culinary Architect | Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-high": "#28283a",
+                        "on-primary-container": "#5f1900",
+                        "surface-container-highest": "#333345",
+                        "on-surface": "#e3e0f8",
+                        "on-tertiary-container": "#003744",
+                        "surface": "#121222",
+                        "on-surface-variant": "#e1bfb5",
+                        "on-primary": "#5d1900",
+                        "surface-variant": "#333345",
+                        "surface-container-low": "#1a1a2b",
+                        "on-tertiary": "#003543",
+                        "on-primary-fixed-variant": "#832600",
+                        "on-secondary-container": "#fb9d7d",
+                        "primary-fixed": "#ffdbd0",
+                        "surface-container": "#1e1e2f",
+                        "surface-dim": "#121222",
+                        "tertiary-container": "#00a7cb",
+                        "inverse-surface": "#e3e0f8",
+                        "secondary": "#ffb59d",
+                        "surface-bright": "#38374a",
+                        "on-secondary": "#581d07",
+                        "inverse-primary": "#ab3500",
+                        "tertiary": "#59d5fb",
+                        "primary": "#ffb59d",
+                        "on-tertiary-fixed": "#001f28",
+                        "surface-container-lowest": "#0c0c1d",
+                        "tertiary-fixed-dim": "#59d5fb",
+                        "surface-tint": "#ffb59d",
+                        "on-secondary-fixed": "#390c00",
+                        "tertiary-fixed": "#b5ebff",
+                        "on-tertiary-fixed-variant": "#004e60",
+                        "error": "#ffb4ab",
+                        "primary-container": "#ff6b35",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#ffdbd0",
+                        "secondary-fixed-dim": "#ffb59d",
+                        "on-primary-fixed": "#390c00",
+                        "on-secondary-fixed-variant": "#76331b",
+                        "secondary-container": "#76331b",
+                        "on-background": "#e3e0f8",
+                        "inverse-on-surface": "#2f2f41",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "outline-variant": "#594139",
+                        "outline": "#a98a80",
+                        "background": "#121222",
+                        "primary-fixed-dim": "#ffb59d"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121222;
+        }
+        .editorial-text {
+            font-family: 'Manrope', sans-serif;
+            letter-spacing: -0.02em;
+        }
+        .glow-capsule {
+            background: rgba(255, 107, 53, 0.15);
+        }
+        .ambient-shadow {
+            box-shadow: 0 24px 48px rgba(12, 12, 29, 0.5);
+        }
+    </style>
+</head>
+<body class="text-on-surface">
+<!-- SideNavBar Shell -->
+<aside class="bg-[#1A1A2B] dark:bg-[#1A1A2B] font-['Manrope'] tracking-tight h-screen w-64 fixed left-0 top-0 flex flex-col py-6 z-50">
+<div class="px-6 mb-10">
+<h1 class="text-xl font-bold text-[#FF6B35]">Culinary Architect</h1>
+<p class="text-xs text-on-surface-variant opacity-60 uppercase tracking-widest mt-1">Admin Console</p>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Active Tab: Dashboard -->
+<a class="bg-[#FF6B35]/15 text-[#FFB59D] rounded-lg mx-2 flex items-center px-4 py-3 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 text-[#FF6B35]" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-semibold">Dashboard</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 flex items-center px-4 py-3 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 opacity-70 group-hover:opacity-100">group</span>
+<span>Students</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 flex items-center px-4 py-3 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 opacity-70 group-hover:opacity-100">restaurant</span>
+<span>Cafeterias</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 flex items-center px-4 py-3 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 opacity-70 group-hover:opacity-100">assessment</span>
+<span>Reports</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 flex items-center px-4 py-3 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 opacity-70 group-hover:opacity-100">account_circle</span>
+<span>Profile</span>
+</a>
+</nav>
+<div class="px-6 pt-6 border-t border-outline-variant/10">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-full overflow-hidden bg-surface-container-highest">
+<img alt="Admin User Profile" class="w-full h-full object-cover" data-alt="portrait of a professional male administrator in a modern office setting with soft cinematic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA42hq6iFrxk8prfZRgu7QVWfwexbqNbZAlzWVM0aQge_YDRq9XsXwJzOtBOHYE08g2W_GZFE5u6e2PCbC2uSiuhYD7mhcWo3V6QmhnSYNTsQg6ayNtU8De8K1taGlOQfCEAwidVp3CZs4SBnxdjGx83_CMcvx6RGM2hj7xbNflBjDG8i_vLYQR8YUEDn8LleWFUadQ10D0TMW5TBiswAi_h9uhtgY4spPX3jfZi1scyFmekAz6pw8LhXcIRIrgIgJNKJf1xrTE9w"/>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Alex Mercer</p>
+<p class="text-xs text-on-surface-variant">Systems Head</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen bg-surface">
+<!-- TopNavBar Shell -->
+<header class="bg-[#121222]/80 backdrop-blur-xl fixed top-0 right-0 w-[calc(100%-16rem)] z-40 flex justify-between items-center px-8 h-20 font-['Manrope'] font-semibold">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">search</span>
+<input class="w-full bg-surface-container-lowest border-none rounded-xl pl-12 pr-4 py-2.5 text-sm focus:ring-1 focus:ring-primary/50 text-on-surface placeholder-on-surface-variant/30" placeholder="Search students, venues, or orders..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<button class="relative text-[#E3E0F8] opacity-70 hover:text-[#FFB59D] transition-all">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-0 right-0 w-2 h-2 bg-primary-container rounded-full"></span>
+</button>
+<button class="text-[#E3E0F8] opacity-70 hover:text-[#FFB59D] transition-all">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant/20 mx-2"></div>
+<div class="flex items-center space-x-2">
+<span class="text-xs text-on-surface-variant">Status:</span>
+<span class="flex items-center text-xs text-tertiary">
+<span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>
+                        Systems Live
+                    </span>
+</div>
+</div>
+</header>
+<!-- Dashboard Body -->
+<section class="pt-28 px-8 pb-12 space-y-10">
+<!-- Page Header -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="text-4xl font-extrabold editorial-text text-on-surface">Overview</h2>
+<p class="text-on-surface-variant mt-1">Real-time pulse of the university's culinary network.</p>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 rounded-xl font-bold flex items-center space-x-2 ambient-shadow hover:scale-[1.02] active:scale-95 transition-all">
+<span class="material-symbols-outlined text-lg">add_circle</span>
+<span>Create Report</span>
+</button>
+</div>
+<!-- Stats Bento Grid -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+<!-- Stat Card 1 -->
+<div class="bg-surface-container-high rounded-xl p-6 flex flex-col justify-between group hover:bg-surface-container-highest transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="p-3 rounded-lg bg-primary/10 text-primary">
+<span class="material-symbols-outlined">group</span>
+</div>
+<span class="text-xs font-bold text-tertiary font-label">+12%</span>
+</div>
+<div class="mt-4">
+<p class="text-on-surface-variant text-sm font-label uppercase tracking-wider">Total Students</p>
+<h3 class="text-3xl font-extrabold editorial-text mt-1">12,482</h3>
+</div>
+</div>
+<!-- Stat Card 2 -->
+<div class="bg-surface-container-high rounded-xl p-6 flex flex-col justify-between group hover:bg-surface-container-highest transition-all duration-300">
+<div class="flex justify-between items-start">
+<div class="p-3 rounded-lg bg-tertiary/10 text-tertiary">
+<span class="material-symbols-outlined">restaurant</span>
+</div>
+<span class="text-xs font-bold text-on-surface-variant/50 font-label">Stable</span>
+</div>
+<div class="mt-4">
+<p class="text-on-surface-variant text-sm font-label uppercase tracking-wider">Total Cafeterias</p>
+<h3 class="text-3xl font-extrabold editorial-text mt-1">08</h3>
+</div>
+</div>
+<!-- Stat Card 3 (Data Viz Integrated) -->
+<div class="col-span-2 bg-surface-container-high rounded-xl p-6 flex items-center justify-between group hover:bg-surface-container-highest transition-all duration-300">
+<div class="space-y-4">
+<div>
+<p class="text-on-surface-variant text-sm font-label uppercase tracking-wider">Daily Revenue</p>
+<h3 class="text-3xl font-extrabold editorial-text mt-1 text-primary">$42,105.00</h3>
+</div>
+<div class="flex space-x-2">
+<span class="px-2 py-1 rounded bg-primary/20 text-primary text-[10px] font-bold">LUNCH PEAK</span>
+<span class="px-2 py-1 rounded bg-tertiary/20 text-tertiary text-[10px] font-bold">↑ 4.2%</span>
+</div>
+</div>
+<div class="flex-1 h-20 flex items-end justify-end space-x-1 px-4">
+<div class="w-2 bg-primary/20 h-8 rounded-t"></div>
+<div class="w-2 bg-primary/30 h-12 rounded-t"></div>
+<div class="w-2 bg-primary/40 h-10 rounded-t"></div>
+<div class="w-2 bg-primary/50 h-16 rounded-t"></div>
+<div class="w-2 bg-primary/70 h-14 rounded-t"></div>
+<div class="w-2 bg-primary/90 h-18 rounded-t"></div>
+<div class="w-2 bg-primary h-20 rounded-t"></div>
+</div>
+</div>
+</div>
+<!-- Main Insights Section -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+<!-- Student Distribution Chart (Asymmetric) -->
+<div class="lg:col-span-2 bg-surface-container rounded-xl p-8 border border-outline-variant/5">
+<div class="flex justify-between items-center mb-8">
+<div>
+<h4 class="text-xl font-bold editorial-text">Student Load per Cafeteria</h4>
+<p class="text-sm text-on-surface-variant">Real-time distribution of active diners</p>
+</div>
+<select class="bg-surface-container-lowest border-none rounded-lg text-xs font-bold text-on-surface-variant py-1.5 pl-3 pr-8 focus:ring-0">
+<option>Last 24 Hours</option>
+<option>Last 7 Days</option>
+</select>
+</div>
+<div class="space-y-6">
+<!-- Chart Row -->
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
+<span class="text-on-surface">North Wing Dining Hall</span>
+<span class="text-on-surface-variant">2,450 / 3,000 Capacity</span>
+</div>
+<div class="h-3 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-primary rounded-full" style="width: 82%"></div>
+</div>
+</div>
+<!-- Chart Row -->
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
+<span class="text-on-surface">Central Pavilion Cafeteria</span>
+<span class="text-on-surface-variant">1,820 / 2,500 Capacity</span>
+</div>
+<div class="h-3 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 72%"></div>
+</div>
+</div>
+<!-- Chart Row -->
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
+<span class="text-on-surface">The Science Hub Deli</span>
+<span class="text-on-surface-variant">450 / 800 Capacity</span>
+</div>
+<div class="h-3 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-primary/40 rounded-full" style="width: 56%"></div>
+</div>
+</div>
+<!-- Chart Row -->
+<div class="space-y-2">
+<div class="flex justify-between text-xs font-bold uppercase tracking-tighter">
+<span class="text-on-surface">Athletic Complex Nutrition Bar</span>
+<span class="text-on-surface-variant">890 / 1,200 Capacity</span>
+</div>
+<div class="h-3 bg-surface-container-lowest rounded-full overflow-hidden">
+<div class="h-full bg-secondary rounded-full" style="width: 74%"></div>
+</div>
+</div>
+</div>
+<div class="mt-10 p-6 bg-surface-container-low rounded-xl flex items-center justify-between">
+<div class="flex items-center space-x-4">
+<div class="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center text-error">
+<span class="material-symbols-outlined">warning</span>
+</div>
+<div>
+<p class="text-sm font-bold text-on-surface">South Campus Overload</p>
+<p class="text-xs text-on-surface-variant">Reached 95% capacity 10 mins ago.</p>
+</div>
+</div>
+<button class="text-xs font-bold text-primary underline underline-offset-4">Dispatch Crew</button>
+</div>
+</div>
+<!-- Recent Activity Panel -->
+<div class="bg-surface-container rounded-xl p-8 border border-outline-variant/5">
+<h4 class="text-xl font-bold editorial-text mb-6">Recent Activity</h4>
+<div class="space-y-8 relative">
+<!-- Timeline Line -->
+<div class="absolute left-4 top-2 bottom-2 w-[1px] bg-outline-variant/20"></div>
+<!-- Activity Item -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-surface-container-highest border-4 border-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-tertiary">person_add</span>
+</div>
+<div>
+<p class="text-sm text-on-surface"><span class="font-bold">14 New Students</span> enrolled in the Platinum Meal Plan.</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">2 minutes ago</p>
+</div>
+</div>
+<!-- Activity Item -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-surface-container-highest border-4 border-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-primary">restaurant_menu</span>
+</div>
+<div>
+<p class="text-sm text-on-surface"><span class="font-bold">New Venue:</span> 'Green Garden Salad Bar' was added to the Science Hub.</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">45 minutes ago</p>
+</div>
+</div>
+<!-- Activity Item -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-surface-container-highest border-4 border-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-secondary">update</span>
+</div>
+<div>
+<p class="text-sm text-on-surface"><span class="font-bold">Menu Update:</span> Dinner service menus refreshed for North Wing.</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">2 hours ago</p>
+</div>
+</div>
+<!-- Activity Item -->
+<div class="relative pl-10">
+<div class="absolute left-0 top-1 w-8 h-8 rounded-full bg-surface-container-highest border-4 border-surface-container flex items-center justify-center">
+<span class="material-symbols-outlined text-xs text-tertiary">check_circle</span>
+</div>
+<div>
+<p class="text-sm text-on-surface"><span class="font-bold">Audit Completed:</span> Health and Safety audit passed for all 8 venues.</p>
+<p class="text-[10px] text-on-surface-variant uppercase mt-1">5 hours ago</p>
+</div>
+</div>
+</div>
+<button class="w-full mt-10 py-3 rounded-lg border border-outline-variant/30 text-on-surface-variant text-sm font-bold hover:bg-surface-bright/20 transition-all">
+                        View Audit Log
+                    </button>
+</div>
+</div>
+<!-- Detailed Management Section (Modular Asymmetry) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+<!-- Students Breakdown -->
+<div class="bg-surface-container-high/50 rounded-xl p-8 backdrop-blur-sm">
+<div class="flex items-center justify-between mb-8">
+<h4 class="text-xl font-bold editorial-text">Newest Student Enrollments</h4>
+<span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary">more_horiz</span>
+</div>
+<div class="space-y-1">
+<!-- Student Item -->
+<div class="flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-highest transition-all group">
+<div class="flex items-center space-x-4">
+<img alt="Student Avatar" class="w-10 h-10 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="portrait of a male university student smiling slightly, wearing a casual sweater with natural outdoor light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJ0DRELVbHl3plHskPmu3h71dU1ib0RdRoAMiguOsCnJlNUkXzN8qCKLkD3Fz3VPq3yrV3KAAOb2qeMxIjY7_unGOA2LGX4CKzUVO8QsnI9_Aoa794-Mr_6uE8Eh_VmnvINMNa4_VjzDIWZNX130DGvIg7tlBbuhYZHXnwfeSx_kly8Qc8FondQi07A9BqDBwH3RVE6U-bIJRrZhG0_Ws6rL_dnJVWt_2TrCEIu3K1e2zS--xXSWvl5JTNz2c9VUnIII4BTahfmw"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Jordan Hayes</p>
+<p class="text-xs text-on-surface-variant">Computer Science • ID: 8829</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-tertiary/10 text-tertiary text-[10px] font-bold uppercase tracking-widest">Active</span>
+</div>
+<!-- Student Item -->
+<div class="flex items-center justify-between p-4 rounded-xl hover:bg-surface-container-highest transition-all group">
+<div class="flex items-center space-x-4">
+<img alt="Student Avatar" class="w-10 h-10 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="portrait of a young female university student looking focused, blurred library background with warm ambient light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpapW0A3c4fjXjV5okc9YPM0S50Pr1zDIU7NbUh55WsypHxWIU6PE7S9s3NXBL1NyLgaEUgSgNavWIhxofeRLBvlsSzpupAbPFbQOPk37G6zAoFih9bLs2G8Xg7hyAHfTqelxGpZDvfxcZRf77pubEtB8I52yfmN6JgvNM1IL77Bj4BjgWEX9nxx6G87vyCQoHwLZYK_o9y1NlPnIkAgNYRy8toA1JHmaDznwU7Tf4n7ayCVc6VCnXBZ3xXTaKUVtNycA-kSGSpQ"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Maya Sterling</p>
+<p class="text-xs text-on-surface-variant">Biology • ID: 7741</p>
+</div>
+</div>
+<span class="px-3 py-1 rounded-full bg-tertiary/10 text-tertiary text-[10px] font-bold uppercase tracking-widest">Active</span>
+</div>
+</div>
+</div>
+<!-- Cafeteria Spotlight -->
+<div class="relative rounded-xl overflow-hidden group">
+<img alt="Featured Cafeteria" class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" data-alt="interior of a high-end modern university cafeteria with wooden tables, industrial lighting, and large windows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY1jMEYh2_-hcttV-KV6AljH1Gd6EiXB_XQ64cUNA_pxrOkqN-j78iiFPu7ute7EXAaTQiko6klpt02Ud7p0z2OzqcH20dd2UxaCKdcb90SFD-yYva-JNypQXLJGrgmO2rsnSaoMcLC8OF2xxrt_rnOLNT1hADYLD1_qYFQQnDDkG2vNoZH7583FPWCxAbshXdit-SEEnImc3CNuNSNsckNrIc8Jpn77BQh22hWgXo7QjfOsu-KCmFe-ES6EWN70n28wy37dMQ-Q"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0c0c1d] via-[#0c0c1d]/40 to-transparent"></div>
+<div class="relative h-full p-8 flex flex-col justify-end">
+<span class="bg-primary px-3 py-1 rounded text-[10px] font-bold text-on-primary w-fit mb-2 uppercase tracking-widest">Top Rated Venue</span>
+<h4 class="text-2xl font-extrabold editorial-text text-white">Central Pavilion Cafeteria</h4>
+<div class="flex items-center space-x-4 mt-2 text-on-surface-variant">
+<div class="flex items-center text-sm">
+<span class="material-symbols-outlined text-sm text-primary mr-1" style="font-variation-settings: 'FILL' 1;">star</span>
+                                4.9 (2k Reviews)
+                            </div>
+<div class="flex items-center text-sm">
+<span class="material-symbols-outlined text-sm mr-1">schedule</span>
+                                Open until 11 PM
+                            </div>
+</div>
+<div class="mt-6 flex space-x-3">
+<button class="flex-1 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white text-xs font-bold py-3 rounded-lg transition-all">Manage Inventory</button>
+<button class="flex-1 bg-white/10 backdrop-blur-md hover:bg-white/20 text-white text-xs font-bold py-3 rounded-lg transition-all">Edit Menu</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- FAB Suppression: None Needed as this is a Dashboard but we ensure no generic FAB floating in corners unless contextually required for a central action -->
+</body></html>

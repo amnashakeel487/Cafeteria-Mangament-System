@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Students | Culinary Architect</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-high": "#28283a",
+              "on-primary-container": "#5f1900",
+              "surface-container-highest": "#333345",
+              "on-surface": "#e3e0f8",
+              "on-tertiary-container": "#003744",
+              "surface": "#121222",
+              "on-surface-variant": "#e1bfb5",
+              "on-primary": "#5d1900",
+              "surface-variant": "#333345",
+              "surface-container-low": "#1a1a2b",
+              "on-tertiary": "#003543",
+              "on-primary-fixed-variant": "#832600",
+              "on-secondary-container": "#fb9d7d",
+              "primary-fixed": "#ffdbd0",
+              "surface-container": "#1e1e2f",
+              "surface-dim": "#121222",
+              "tertiary-container": "#00a7cb",
+              "inverse-surface": "#e3e0f8",
+              "secondary": "#ffb59d",
+              "surface-bright": "#38374a",
+              "on-secondary": "#581d07",
+              "inverse-primary": "#ab3500",
+              "tertiary": "#59d5fb",
+              "primary": "#ffb59d",
+              "on-tertiary-fixed": "#001f28",
+              "surface-container-lowest": "#0c0c1d",
+              "tertiary-fixed-dim": "#59d5fb",
+              "surface-tint": "#ffb59d",
+              "on-secondary-fixed": "#390c00",
+              "tertiary-fixed": "#b5ebff",
+              "on-tertiary-fixed-variant": "#004e60",
+              "error": "#ffb4ab",
+              "primary-container": "#ff6b35",
+              "on-error-container": "#ffdad6",
+              "secondary-fixed": "#ffdbd0",
+              "secondary-fixed-dim": "#ffb59d",
+              "on-primary-fixed": "#390c00",
+              "on-secondary-fixed-variant": "#76331b",
+              "secondary-container": "#76331b",
+              "on-background": "#e3e0f8",
+              "inverse-on-surface": "#2f2f41",
+              "error-container": "#93000a",
+              "on-error": "#690005",
+              "outline-variant": "#594139",
+              "outline": "#a98a80",
+              "background": "#121222",
+              "primary-fixed-dim": "#ffb59d"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        .glass-effect { backdrop-filter: blur(20px); }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface antialiased">
+<!-- SideNavBar (Authority: Shared Components JSON) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#1A1A2B] dark:bg-[#1A1A2B] flex flex-col py-6 font-['Manrope'] tracking-tight z-50">
+<div class="px-6 mb-10 flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary-container flex items-center justify-center shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined text-on-primary-container" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+</div>
+<div>
+<h1 class="text-xl font-bold text-[#FF6B35]">Culinary Architect</h1>
+<p class="text-[10px] uppercase tracking-widest text-on-surface-variant opacity-60">Admin Console</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center px-4 py-3 text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="dashboard">dashboard</span>
+<span class="font-semibold">Dashboard</span>
+</a>
+<a class="flex items-center px-4 py-3 bg-[#FF6B35]/15 text-[#FFB59D] rounded-lg mx-2 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="group" style="font-variation-settings: 'FILL' 1;">group</span>
+<span class="font-semibold">Students</span>
+</a>
+<a class="flex items-center px-4 py-3 text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="restaurant">restaurant</span>
+<span class="font-semibold">Cafeterias</span>
+</a>
+<a class="flex items-center px-4 py-3 text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="assessment">assessment</span>
+<span class="font-semibold">Reports</span>
+</a>
+<a class="flex items-center px-4 py-3 text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="account_circle">account_circle</span>
+<span class="font-semibold">Profile</span>
+</a>
+</nav>
+<div class="mt-auto px-6">
+<div class="p-4 rounded-xl bg-surface-container-high border border-outline-variant/10">
+<p class="text-xs text-on-surface-variant mb-2">System Status</p>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary shadow-[0_0_8px_rgba(89,213,251,0.6)]"></div>
+<span class="text-sm font-medium">All Systems Live</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- TopNavBar (Authority: Shared Components JSON) -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] z-40 bg-[#121222]/80 backdrop-blur-xl flex justify-between items-center px-8 h-20 font-['Manrope'] font-semibold">
+<div class="flex items-center flex-1 max-w-xl">
+<div class="relative w-full group">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-lowest border-none rounded-xl py-3 pl-12 pr-4 text-sm text-on-surface focus:ring-2 focus:ring-primary/20 placeholder:text-on-surface-variant/30 transition-all" placeholder="Search student records, IDs, or meal plans..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<button class="relative p-2 text-[#E3E0F8] opacity-70 hover:text-[#FFB59D] hover:opacity-100 transition-all active:opacity-80">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full border-2 border-[#121222]"></span>
+</button>
+<button class="p-2 text-[#E3E0F8] opacity-70 hover:text-[#FFB59D] hover:opacity-100 transition-all active:opacity-80">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-[1px] bg-outline-variant/20 mx-2"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface">Alex Mercer</p>
+<p class="text-[10px] text-on-surface-variant/60 uppercase tracking-tighter">Chief Administrator</p>
+</div>
+<img alt="Admin User Profile" class="w-10 h-10 rounded-lg object-cover ring-2 ring-primary/20" data-alt="close-up portrait of a professional man in a dark minimalist setting with dramatic low-key lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQyoviUxr_-K49mdu9TqRUGiM-HopSOFbY8Wl5i_-fZVYuFUyc6l9uGKslz1sKB_l8GwDhXFQAz6TPkTlvq5ckc206eF7PPKJe4EovLQxdjtg-lWSRNVv_8baBGdNvyuahCYwsbhTK2X8N0EsaJRn3ovg9-Og37vDOnGIbsXuUCVcVCQ0z8o4mz8bHYFdZkwTvql9QQGV8EiyhX3sgUFRKi1nQ0wb_UPN_0MC8PeYmmJatlQ1JBemt8KoMQ6wHlrLilYZeVy1ZPA"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-20 min-h-screen bg-surface p-10">
+<!-- Dashboard Header Section -->
+<div class="flex justify-between items-end mb-10">
+<div class="space-y-1">
+<h2 class="text-3xl font-extrabold tracking-tight text-on-surface">Students Directory</h2>
+<p class="text-on-surface-variant font-medium">Manage campus culinary access and dietary requirements.</p>
+</div>
+<div class="flex gap-4">
+<button class="flex items-center gap-2 px-6 py-3 bg-surface-container-high text-primary font-bold rounded-xl hover:bg-surface-bright transition-all active:scale-95 border border-outline-variant/10">
+<span class="material-symbols-outlined text-lg">file_download</span>
+                    Export CSV
+                </button>
+<button class="flex items-center gap-2 px-8 py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold rounded-xl shadow-lg shadow-primary-container/20 hover:shadow-primary-container/40 transition-all active:scale-95">
+<span class="material-symbols-outlined text-lg">person_add</span>
+                    Add New Student
+                </button>
+</div>
+</div>
+<!-- Filters & Stats Grid -->
+<div class="grid grid-cols-12 gap-6 mb-8">
+<div class="col-span-12 lg:col-span-8 p-6 bg-surface-container rounded-xl flex items-center justify-between border border-outline-variant/5">
+<div class="flex gap-3">
+<button class="px-4 py-2 bg-primary-container text-on-primary-container rounded-lg text-sm font-bold">All Students</button>
+<button class="px-4 py-2 bg-surface-container-high text-on-surface-variant rounded-lg text-sm font-semibold hover:bg-surface-bright transition-colors">Active Plans</button>
+<button class="px-4 py-2 bg-surface-container-high text-on-surface-variant rounded-lg text-sm font-semibold hover:bg-surface-bright transition-colors">Dietary Alerts</button>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-xs text-on-surface-variant/40 font-bold uppercase tracking-widest">Filter By</span>
+<select class="bg-surface-container-high border-none text-sm text-on-surface rounded-lg focus:ring-1 focus:ring-primary py-2 px-4 cursor-pointer">
+<option>Department</option>
+<option>Year</option>
+<option>Building</option>
+</select>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 p-6 bg-surface-container-high rounded-xl flex items-center gap-6 border border-outline-variant/5">
+<div class="w-14 h-14 rounded-full bg-tertiary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary text-3xl">groups</span>
+</div>
+<div>
+<p class="text-3xl font-extrabold text-on-surface">2,482</p>
+<p class="text-xs font-bold text-on-surface-variant/60 uppercase tracking-widest">Total Enrolled</p>
+</div>
+<div class="ml-auto text-right">
+<span class="text-tertiary font-bold">+12%</span>
+<p class="text-[10px] text-on-surface-variant/40">vs last month</p>
+</div>
+</div>
+</div>
+<!-- Student Table Module -->
+<div class="bg-surface-container rounded-2xl overflow-hidden shadow-2xl shadow-surface-container-lowest/50 border border-outline-variant/5">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">Student</th>
+<th class="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">Email Address</th>
+<th class="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">Registration Date</th>
+<th class="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">Status</th>
+<th class="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<!-- Row 1 -->
+<tr class="group hover:bg-surface-container-highest/40 transition-all duration-200">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img alt="Student Profile" class="w-10 h-10 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="headshot of a young stylish student in a casual hoodie against a soft bokeh library background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDiSww4avyqLJaBY6O0xMTCamVJ6rAHcJ4kLjIRhcCSNq_ehyCKYMoKcRHEH-BBFqpfU91NFHnQe0yd3sIEVAUJphe4syc9q-fH0Ez5z_bN1Pw9JFSN7NLJK_Cn_8217wLaQNW2PzV-OxTJ9nEUj0VOzVmrYEUqPYHobI4sdNHof54MBBTCI9KPzGTY2LqEcUT0hqrbRL4ItIg8HM77nUoffi2oes6kDf_bfRQr1MU1aZ6B5raI2yrcXNxTVC0rksQpYvGOqtKDOw"/>
+<div>
+<p class="font-bold text-on-surface">Julian Thorne</p>
+<p class="text-xs text-on-surface-variant/60">ID: 2024-8812</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-on-surface-variant font-medium">j.thorne@university.edu</td>
+<td class="px-8 py-6 text-on-surface-variant font-medium">Oct 12, 2023</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-tertiary/10 text-tertiary text-[10px] font-extrabold uppercase rounded-full">Active Plan</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-on-surface-variant/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant/40 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-surface-container-highest/40 transition-all duration-200">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img alt="Student Profile" class="w-10 h-10 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="portrait of a confident female student smiling outdoors in a sunlit campus area with trees" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBBBUJspIk0HAeDUobBhHiB0bKWY3gYQSw1ilkaIYLvv2IOdvNgPFlKcY23olZwQYY1-VXtyUo0gN3S9gMAjfZVHuNvfRxAyZ3CqKVtZWz21q4MDFL9RQ95A5pdu4bDM8y_ICaIf21l3elTpNbRLfxnIaDHXwaNTavs6N2OfoyYN1k6I84oPPYUq7zc7dgixIvzpTKRZaJKdLCtgHZYB9l03VTZgRTP5kITH0OIwTVMq-Ql09_nd80MQlwqz-kJ5e20XwCVnaHlmQ"/>
+<div>
+<p class="font-bold text-on-surface">Elena Rodriguez</p>
+<p class="text-xs text-on-surface-variant/60">ID: 2024-4421</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-on-surface-variant font-medium">e.rod@university.edu</td>
+<td class="px-8 py-6 text-on-surface-variant font-medium">Sep 28, 2023</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-primary/10 text-primary text-[10px] font-extrabold uppercase rounded-full">Balance Low</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-on-surface-variant/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant/40 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-surface-container-highest/40 transition-all duration-200">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img alt="Student Profile" class="w-10 h-10 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="professional headshot of a male student with glasses in a minimalist grey studio background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCXtgkrPaAkTSlT5EmVSj236FiYV6qP0hukJeOAWWcdqnn8Mlj5U6GRGyvOpXPZukm2p0gea7lNuNWC2DqXPFqe94d8TF_xMsSHwIx7YOO9PhoDHYmsK9fqB5JKFwiICXJoavUW_TFFkjacmq5whdsVj5UtqEO10-6g39eWuFpyoOMCIKBLE_9PkMWRm88wM4PZniw57c7vXwLPPzB2Ff-_w3CkxaCPrzLJkEQ97DQh9w0IyDRN-ro0wIQQlO7g4OpmPPU1MKav4Q"/>
+<div>
+<p class="font-bold text-on-surface">Marcus Chen</p>
+<p class="text-xs text-on-surface-variant/60">ID: 2024-1190</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-on-surface-variant font-medium">m.chen@university.edu</td>
+<td class="px-8 py-6 text-on-surface-variant font-medium">Nov 02, 2023</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-surface-bright/50 text-on-surface-variant/50 text-[10px] font-extrabold uppercase rounded-full">Suspended</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-on-surface-variant/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant/40 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="group hover:bg-surface-container-highest/40 transition-all duration-200">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img alt="Student Profile" class="w-10 h-10 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all" data-alt="close-up of a female student with red hair looking thoughtfully at a computer screen in a modern workspace" src="https://lh3.googleusercontent.com/aida-public/AB6AXuANWLUIkyoQan75q_mxtArqS0Bil3DBoYPLhzjWJJxxlRXtpNKtwBgEnfAzogi47e4XyCRSp70FdYHnMuT8NZfaBNGvbYoWErvDW7CxuU-Vbwk3B-_PXxLO4vO5BBJqkPXt36nXwowgwDc8YZ38ab5tjUj9pZ5k51oP2khsl9Tve3D6xlfjFH9aeczEqZfejZ0MQ8fabqPzIlz1Qc2hF8CC5ukCuvDpvHc8xZfhZ0n1k2ONLql_2qyrs_hk2QevZ_97sdDVbQbTBw"/>
+<div>
+<p class="font-bold text-on-surface">Sarah Jenkins</p>
+<p class="text-xs text-on-surface-variant/60">ID: 2024-3301</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6 text-on-surface-variant font-medium">s.jenkins@university.edu</td>
+<td class="px-8 py-6 text-on-surface-variant font-medium">Aug 15, 2023</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-tertiary/10 text-tertiary text-[10px] font-extrabold uppercase rounded-full">Active Plan</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex justify-end gap-2">
+<button class="p-2 text-on-surface-variant/40 hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">edit</span>
+</button>
+<button class="p-2 text-on-surface-variant/40 hover:text-error transition-colors">
+<span class="material-symbols-outlined text-xl">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-8 py-5 bg-surface-container-low/30 flex items-center justify-between">
+<p class="text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">Showing 4 of 2,482 students</p>
+<div class="flex gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface-variant/40 hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-primary-container text-on-primary font-bold">1</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">2</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">3</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-lg bg-surface-container-high text-on-surface-variant/40 hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Info Bento Bottom -->
+<div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="p-6 bg-surface-container-high rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-primary">warning</span>
+<h3 class="font-bold text-on-surface">Dietary Restrictions</h3>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">42 students have flagged severe nut allergies. Kitchen staff must verify all lunch prep stations in Cafeteria A.</p>
+</div>
+<div class="p-6 bg-surface-container-high rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-tertiary">trending_up</span>
+<h3 class="font-bold text-on-surface">Peak Activity</h3>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">Tuesday 12:45 PM remains the highest volume period. Student check-ins are up 4% this week.</p>
+</div>
+<div class="p-6 bg-surface-container-high rounded-xl border border-outline-variant/10">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-on-surface-variant">schedule</span>
+<h3 class="font-bold text-on-surface">Upcoming Audit</h3>
+</div>
+<p class="text-sm text-on-surface-variant leading-relaxed">Plan renewal audit scheduled for Friday. 124 profiles currently marked for verification.</p>
+</div>
+</div>
+</main>
+</body></html>

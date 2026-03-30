@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-bright": "#38374a",
+                        "surface-container-lowest": "#0c0c1d",
+                        "primary": "#ffb59d",
+                        "primary-container": "#ff6b35",
+                        "tertiary": "#59d5fb",
+                        "surface-container": "#1e1e2f",
+                        "surface-container-low": "#1a1a2b",
+                        "inverse-surface": "#e3e0f8",
+                        "inverse-primary": "#ab3500",
+                        "on-secondary": "#581d07",
+                        "secondary-container": "#76331b",
+                        "on-error-container": "#ffdad6",
+                        "error-container": "#93000a",
+                        "on-surface": "#e3e0f8",
+                        "on-tertiary-fixed-variant": "#004e60",
+                        "on-primary-container": "#5f1900",
+                        "background": "#121222",
+                        "on-primary-fixed-variant": "#832600",
+                        "on-surface-variant": "#e1bfb5",
+                        "on-background": "#e3e0f8",
+                        "on-secondary-fixed-variant": "#76331b",
+                        "on-secondary-container": "#fb9d7d",
+                        "surface-dim": "#121222",
+                        "surface-container-high": "#28283a",
+                        "surface": "#121222",
+                        "secondary-fixed": "#ffdbd0",
+                        "on-primary-fixed": "#390c00",
+                        "secondary-fixed-dim": "#ffb59d",
+                        "inverse-on-surface": "#2f2f41",
+                        "on-primary": "#5d1900",
+                        "surface-tint": "#ffb59d",
+                        "on-tertiary-fixed": "#001f28",
+                        "primary-fixed-dim": "#ffb59d",
+                        "primary-fixed": "#ffdbd0",
+                        "on-secondary-fixed": "#390c00",
+                        "secondary": "#ffb59d",
+                        "on-tertiary": "#003543",
+                        "tertiary-container": "#00a7cb",
+                        "surface-variant": "#333345",
+                        "tertiary-fixed": "#b5ebff",
+                        "surface-container-highest": "#333345",
+                        "outline": "#a98a80",
+                        "on-error": "#690005",
+                        "error": "#ffb4ab",
+                        "outline-variant": "#594139",
+                        "tertiary-fixed-dim": "#59d5fb",
+                        "on-tertiary-container": "#003744"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .step-active { color: #ffb59d; }
+        .step-complete { color: #59d5fb; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary/30">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 h-16 bg-[#1E1E2F] dark:bg-[#1E1E2F] shadow-2xl shadow-[#0c0c1d]/50 font-['Manrope'] tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold text-[#FF6B35] tracking-tighter">Culinary Architect</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D] transition-colors px-3 py-2 rounded-lg text-sm font-medium" href="#">Cafeterias</a>
+<a class="text-[#FF6B35] font-bold border-b-2 border-[#FF6B35] px-3 py-2 text-sm" href="#">My Orders</a>
+<a class="text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D] transition-colors px-3 py-2 rounded-lg text-sm font-medium text-nowrap" href="#">Track Order</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 rounded-full text-[#E3E0F8]/80 hover:bg-[#38374A]/40 transition-colors">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="p-2 rounded-full text-[#E3E0F8]/80 hover:bg-[#38374A]/40 transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- Sidebar (Large Screens) -->
+<aside class="hidden md:flex fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-[#1A1A2B] dark:bg-[#1A1A2B] flex-col p-4 font-['Inter'] text-sm tracking-wide z-40">
+<div class="flex items-center gap-3 px-2 py-4 mb-6">
+<div class="w-10 h-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Student Profile Picture showing a professional headshot with warm studio lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCgTvto2k0yTSrjV0Q4NjT_1BPpVfWKRL5e2sTZ3qMcGeTmr7vCzvmSsA1R5bRhfFFTVLT3gLILH0HYrMKfphGfsoGvQOMZOpMIrzkhArlf6IfPNGfKC_OikAeKUc5dFB2-l8j2g8U_EpoixBpfwt6I5QgifVEpHDSb-GTVm-csv6AEyDHgOJu9TzopiPC1uYp5Dx565-k-bLWfxlD0KmILZBOc1PBBUhc0509Osy5k1xJrtDH87sCuN0rXg3BeNAe4NIGBQuq02A"/>
+</div>
+<div>
+<p class="text-lg font-black text-[#E3E0F8]">University Portal</p>
+<p class="text-xs text-[#E1BFB5]/70">Student Account</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out rounded-lg" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span>Cafeterias</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out rounded-lg" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span>My Orders</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 bg-[#FF6B35]/15 text-[#FFB59D] font-semibold rounded-lg transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+<span>Track Order</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out rounded-lg" href="#">
+<span class="material-symbols-outlined">person</span>
+<span>Profile</span>
+</a>
+</nav>
+<div class="pt-4 border-t border-outline-variant/15 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span>Settings</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="md:pl-64 pt-16 min-h-screen bg-background pb-20 md:pb-8">
+<div class="max-w-6xl mx-auto p-6 md:p-10 space-y-10">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-4xl font-headline font-extrabold text-on-surface tracking-tight mb-2">Track Your Order</h1>
+<p class="text-on-surface-variant text-lg">Order ID: <span class="text-primary font-mono font-bold">#CA-8829-24J</span></p>
+</div>
+<div class="flex items-center gap-3 bg-surface-container-high px-4 py-2 rounded-xl">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+<span class="text-sm font-semibold text-tertiary tracking-wide uppercase">Live Update</span>
+</div>
+</div>
+<!-- Main Layout Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<!-- Progress & Map Column -->
+<div class="lg:col-span-8 space-y-8">
+<!-- Progress Bar Modular Section -->
+<div class="bg-surface-container rounded-xl p-8 shadow-2xl shadow-surface-container-lowest/50 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+<div class="relative z-10">
+<h2 class="text-on-surface font-headline font-bold text-xl mb-10">Order Journey</h2>
+<div class="flex flex-col md:flex-row justify-between items-start md:items-center relative gap-8 md:gap-2">
+<!-- Progress Track (Background) -->
+<div class="hidden md:block absolute top-6 left-0 w-full h-1 bg-surface-container-highest rounded-full"></div>
+<!-- Progress Track (Active) -->
+<div class="hidden md:block absolute top-6 left-0 w-[62.5%] h-1 bg-gradient-to-r from-tertiary to-primary-container rounded-full z-0"></div>
+<!-- Step 1: Payment -->
+<div class="flex md:flex-col items-center gap-4 md:gap-6 relative z-10 w-full md:w-auto">
+<div class="w-12 h-12 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center shadow-lg shadow-tertiary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="md:text-center">
+<p class="text-sm font-bold text-on-surface">Payment Submitted</p>
+<p class="text-xs text-on-surface-variant">12:45 PM</p>
+</div>
+</div>
+<!-- Step 2: Approved -->
+<div class="flex md:flex-col items-center gap-4 md:gap-6 relative z-10 w-full md:w-auto">
+<div class="w-12 h-12 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center shadow-lg shadow-tertiary/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="md:text-center">
+<p class="text-sm font-bold text-on-surface">Approved</p>
+<p class="text-xs text-on-surface-variant">12:48 PM</p>
+</div>
+</div>
+<!-- Step 3: Preparing (Active) -->
+<div class="flex md:flex-col items-center gap-4 md:gap-6 relative z-10 w-full md:w-auto">
+<div class="w-12 h-12 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center shadow-lg shadow-primary-container/40 ring-4 ring-primary-container/20">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">cooking</span>
+</div>
+<div class="md:text-center">
+<p class="text-sm font-bold text-primary">Preparing</p>
+<p class="text-xs text-primary-container/80">In Progress</p>
+</div>
+</div>
+<!-- Step 4: Ready -->
+<div class="flex md:flex-col items-center gap-4 md:gap-6 relative z-10 w-full md:w-auto opacity-40">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined">restaurant_menu</span>
+</div>
+<div class="md:text-center">
+<p class="text-sm font-bold text-on-surface-variant">Ready</p>
+<p class="text-xs text-on-surface-variant/60">Estimated 1:15 PM</p>
+</div>
+</div>
+<!-- Step 5: Completed -->
+<div class="flex md:flex-col items-center gap-4 md:gap-6 relative z-10 w-full md:w-auto opacity-40">
+<div class="w-12 h-12 rounded-full bg-surface-container-highest text-on-surface-variant flex items-center justify-center">
+<span class="material-symbols-outlined">task_alt</span>
+</div>
+<div class="md:text-center">
+<p class="text-sm font-bold text-on-surface-variant">Completed</p>
+<p class="text-xs text-on-surface-variant/60">Final handoff</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Live Status Visualization -->
+<div class="h-64 rounded-xl overflow-hidden relative shadow-lg group">
+<div class="absolute inset-0 bg-surface-container-lowest">
+<img class="w-full h-full object-cover opacity-30 grayscale group-hover:scale-105 transition-transform duration-700" data-alt="High-tech kitchen counter with digital displays and stainless steel equipment in a modern dark setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2d8HQ8bpaCFhlwWxztFXCh08yNdq7vOpE94AX99ayxt5kC_6KnPb1hbv7JFJmsRH_uddYZEOnk-biUAD6RsdkMZK4YeMFjCPhW3YUo0TLaUFI7ZBb2RHVvaKa3rN2ScaWh1ClC6bBVOW-1R9X_2JQKpR4DAlCB2xLEBf6LyysX-7J6IvPxFpkz6z6aqlB3AmRUVnWlWXNr8iZ0sTpEzZEdsaWUs1W7gk63aFhA9FRbqI5IrhqsZtDTEmP6vftqW2yo_cn0T60kw"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent"></div>
+<div class="absolute bottom-6 left-6 right-6 flex justify-between items-end">
+<div>
+<span class="text-xs font-bold uppercase tracking-widest text-primary-container mb-2 block">Current Location</span>
+<h3 class="text-2xl font-headline font-bold text-on-surface">Central Kitchen: Station 4</h3>
+<p class="text-on-surface-variant">Searing your wagyu beef sliders...</p>
+</div>
+<div class="bg-surface-container-highest/80 backdrop-blur-md px-4 py-2 rounded-lg border border-outline-variant/20">
+<p class="text-[10px] uppercase font-bold text-on-tertiary-fixed-variant">Est. Delivery</p>
+<p class="text-xl font-headline font-black text-tertiary">12 mins</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Detail Column -->
+<div class="lg:col-span-4 space-y-8">
+<!-- Status Card -->
+<div class="bg-surface-container-high rounded-xl p-6 shadow-xl">
+<div class="flex items-center gap-4 mb-6">
+<div class="w-12 h-12 bg-primary-container/10 rounded-xl flex items-center justify-center">
+<span class="material-symbols-outlined text-primary-container text-3xl">timer</span>
+</div>
+<div>
+<p class="text-sm text-on-surface-variant font-medium">Estimated Wait</p>
+<p class="text-2xl font-headline font-extrabold text-on-surface">~12-15 min</p>
+</div>
+</div>
+<div class="space-y-3">
+<div class="flex items-center justify-between text-sm">
+<span class="text-on-surface-variant">Kitchen Status</span>
+<span class="px-2 py-0.5 bg-error-container text-error rounded-md text-[10px] font-black uppercase">High Traffic</span>
+</div>
+<div class="w-full h-1.5 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="w-[85%] h-full bg-error rounded-full"></div>
+</div>
+</div>
+</div>
+<!-- Assigned Staff Card -->
+<div class="bg-surface-container-high rounded-xl p-6 shadow-xl border border-outline-variant/10">
+<h3 class="text-xs font-black uppercase tracking-widest text-on-surface-variant mb-4">Assigned Chef</h3>
+<div class="flex items-center gap-4 mb-6">
+<div class="relative">
+<img class="w-16 h-16 rounded-xl object-cover shadow-lg" data-alt="Portrait of a head chef wearing a white uniform and black hat in a professional kitchen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBno6NbWaK8Ib37hVcGlo9pvN3pprbCJgu_A8FxAxnvJwvExPTLO37QdhlDn-mqiU4mRUZ42AixgT8bMixDZ7f3Ll5Qfc75ny1zMk6LlUHSw4Q50JoSEYxunnaVYZOvLLm-Fnyy6lENJXhpFo26ZyU1G1wNYIiWGFJ3Pt-rWCs8J0HIKQazzSw01JKbp8jFRyrRXanPL7xdcBE7GENZUosHxildISSd4vEIbjfoqoJjgKA2rISL4Y6npwPz9u96ZI_oxMeNWrU6wg"/>
+<div class="absolute -bottom-1 -right-1 w-5 h-5 bg-tertiary rounded-full border-2 border-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-[12px] text-on-tertiary" style="font-variation-settings: 'FILL' 1;">verified</span>
+</div>
+</div>
+<div>
+<p class="text-lg font-headline font-bold text-on-surface leading-tight">Chef Marcus V.</p>
+<p class="text-sm text-on-surface-variant">Senior Culinary Architect</p>
+</div>
+</div>
+<button class="w-full py-3 bg-surface-container-highest hover:bg-surface-bright transition-colors rounded-lg flex items-center justify-center gap-2 text-sm font-semibold text-primary">
+<span class="material-symbols-outlined text-sm">chat_bubble</span>
+                            Send Instruction
+                        </button>
+</div>
+<!-- Order Details Summary -->
+<div class="bg-surface-container rounded-xl p-6 shadow-2xl">
+<h3 class="text-lg font-headline font-bold text-on-surface mb-4">Order Summary</h3>
+<div class="space-y-4 mb-6">
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<span class="text-primary font-bold">2x</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">Truffle Umami Sliders</p>
+<p class="text-xs text-on-surface-variant">No onions, extra sauce</p>
+</div>
+</div>
+<span class="text-sm font-mono text-on-surface">$24.00</span>
+</div>
+<div class="flex justify-between items-start">
+<div class="flex gap-3">
+<span class="text-primary font-bold">1x</span>
+<div>
+<p class="text-sm font-semibold text-on-surface">Iced Matcha Latte</p>
+<p class="text-xs text-on-surface-variant">Oat milk, 50% sugar</p>
+</div>
+</div>
+<span class="text-sm font-mono text-on-surface">$6.50</span>
+</div>
+</div>
+<div class="pt-4 border-t border-outline-variant/20 space-y-2">
+<div class="flex justify-between text-xs text-on-surface-variant">
+<span>Subtotal</span>
+<span>$30.50</span>
+</div>
+<div class="flex justify-between text-xs text-on-surface-variant">
+<span>Service Fee</span>
+<span>$1.50</span>
+</div>
+<div class="flex justify-between text-base font-headline font-extrabold text-on-surface pt-2">
+<span>Total Amount</span>
+<span class="text-primary">$32.00</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Bottom Navigation (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 left-0 w-full bg-[#1A1A2B] h-16 flex justify-around items-center px-4 z-50 shadow-[0_-8px_24px_rgba(12,12,29,0.5)]">
+<a class="flex flex-col items-center gap-1 text-[#E1BFB5]/70" href="#">
+<span class="material-symbols-outlined">restaurant</span>
+<span class="text-[10px] font-medium">Cafeterias</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#E1BFB5]/70" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px] font-medium">Orders</span>
+</a>
+<a class="flex flex-col items-center gap-1 bg-[#FF6B35]/15 text-[#FFB59D] px-4 py-1 rounded-lg" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">local_shipping</span>
+<span class="text-[10px] font-bold">Track</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#E1BFB5]/70" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-[10px] font-medium">Profile</span>
+</a>
+</nav>
+</body></html>

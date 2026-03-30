@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Culinary Architect | Student Profile</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#38374a",
+              "surface-container-lowest": "#0c0c1d",
+              "primary": "#ffb59d",
+              "primary-container": "#ff6b35",
+              "tertiary": "#59d5fb",
+              "surface-container": "#1e1e2f",
+              "surface-container-low": "#1a1a2b",
+              "inverse-surface": "#e3e0f8",
+              "inverse-primary": "#ab3500",
+              "on-secondary": "#581d07",
+              "secondary-container": "#76331b",
+              "on-error-container": "#ffdad6",
+              "error-container": "#93000a",
+              "on-surface": "#e3e0f8",
+              "on-tertiary-fixed-variant": "#004e60",
+              "on-primary-container": "#5f1900",
+              "background": "#121222",
+              "on-primary-fixed-variant": "#832600",
+              "on-surface-variant": "#e1bfb5",
+              "on-background": "#e3e0f8",
+              "on-secondary-fixed-variant": "#76331b",
+              "on-secondary-container": "#fb9d7d",
+              "surface-dim": "#121222",
+              "surface-container-high": "#28283a",
+              "surface": "#121222",
+              "secondary-fixed": "#ffdbd0",
+              "on-primary-fixed": "#390c00",
+              "secondary-fixed-dim": "#ffb59d",
+              "inverse-on-surface": "#2f2f41",
+              "on-primary": "#5d1900",
+              "surface-tint": "#ffb59d",
+              "on-tertiary-fixed": "#001f28",
+              "primary-fixed-dim": "#ffb59d",
+              "primary-fixed": "#ffdbd0",
+              "on-secondary-fixed": "#390c00",
+              "secondary": "#ffb59d",
+              "on-tertiary": "#003543",
+              "tertiary-container": "#00a7cb",
+              "surface-variant": "#333345",
+              "tertiary-fixed": "#b5ebff",
+              "surface-container-highest": "#333345",
+              "outline": "#a98a80",
+              "on-error": "#690005",
+              "error": "#ffb4ab",
+              "outline-variant": "#594139",
+              "tertiary-fixed-dim": "#59d5fb",
+              "on-tertiary-container": "#003744"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #121222;
+        color: #e3e0f8;
+        font-family: 'Inter', sans-serif;
+      }
+      .no-scrollbar::-webkit-scrollbar {
+        display: none;
+      }
+    </style>
+</head>
+<body class="antialiased">
+<!-- TopNavBar -->
+<header class="fixed top-0 w-full z-50 flex justify-between items-center px-6 bg-[#1E1E2F] dark:bg-[#1E1E2F] h-16 shadow-2xl shadow-[#0c0c1d]/50">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold text-[#FF6B35] tracking-tighter font-['Manrope']">Culinary Architect</span>
+<nav class="hidden md:flex items-center gap-6">
+<a class="text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D] transition-colors px-3 py-1 rounded-lg text-sm font-medium" href="#">Cafeterias</a>
+<a class="text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D] transition-colors px-3 py-1 rounded-lg text-sm font-medium" href="#">My Orders</a>
+<a class="text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D] transition-colors px-3 py-1 rounded-lg text-sm font-medium" href="#">Track Order</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D] transition-colors rounded-full">
+<span class="material-symbols-outlined">shopping_cart</span>
+</button>
+<button class="p-2 text-[#FF6B35] font-bold border-b-2 border-[#FF6B35] flex items-center gap-2">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</header>
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-[#1A1A2B] dark:bg-[#1A1A2B] hidden md:flex flex-col p-4 z-40">
+<div class="flex items-center gap-3 mb-8 px-2">
+<img alt="Student Profile Picture" class="w-10 h-10 rounded-full object-cover" data-alt="Close-up portrait of a friendly university student with warm lighting and soft background bokeh" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC29QzXq1CxQkuc8pVN_VH8a69jVrwdcOL-fJKUEcbWNOKTF6qCJgmxOte48X6l9Vfy04VkTFc80BlkUvI0zxQSAdrxn145VvYBTTE094Ynq27QS8pvXHx9WLbjz4bJw77_gvh9Ydc8dYxtM5LNosYu92deb27matxc4mGc2oVtkDf9oABwt8LtWS2Hwl0R1hmWE1BfOwmwgY_Ys2fgHh5SpipnZreljhPsO71pblodfsgC-qYDVcI6ys5uYftgneDVri8meyJtgw"/>
+<div>
+<p class="text-sm font-black text-[#E3E0F8] font-['Inter']">University Portal</p>
+<p class="text-xs text-[#E1BFB5]/70 font-['Inter']">Student Account</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] rounded-lg transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined">restaurant</span> Cafeterias
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] rounded-lg transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined">receipt_long</span> My Orders
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] rounded-lg transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined">local_shipping</span> Track Order
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 bg-[#FF6B35]/15 text-[#FFB59D] rounded-lg font-semibold transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">person</span> Profile
+            </a>
+</nav>
+<div class="pt-4 border-t border-outline-variant/15 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] rounded-lg transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined">settings</span> Settings
+            </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] rounded-lg transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide" href="#">
+<span class="material-symbols-outlined">logout</span> Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-12 md:pl-72 px-6 min-h-screen">
+<div class="max-w-5xl mx-auto space-y-10">
+<!-- Header Section -->
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
+<div>
+<h1 class="text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-2">Profile Settings</h1>
+<p class="text-on-surface-variant font-body">Manage your architectural preferences and university credentials.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-2.5 bg-surface-container-highest text-on-surface rounded-lg font-semibold hover:bg-surface-bright transition-colors text-sm">Discard</button>
+<button class="px-6 py-2.5 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-lg font-semibold shadow-lg shadow-primary-container/20 hover:brightness-110 transition-all text-sm">Save Changes</button>
+</div>
+</div>
+<!-- Bento Layout for Profile Settings -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- Left Column: Avatar & Quick Stats -->
+<div class="lg:col-span-1 space-y-8">
+<div class="bg-surface-container-high rounded-xl p-8 flex flex-col items-center text-center space-y-6">
+<div class="relative group">
+<div class="w-32 h-32 rounded-full overflow-hidden border-4 border-surface-container-lowest ring-2 ring-primary-container shadow-2xl">
+<img alt="Student Profile" class="w-full h-full object-cover" data-alt="Close-up portrait of a university student against a dark studio background with subtle orange rim lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAl5svU6IGcJM7ouHXoJBXL9nU8j5-yG_RZlXaHdysGRwrn9PYY4riwmpJAn71U3QSo1safxjbWOGgMY3w1zG-66gaK3kqRpmaodgwEflubavGMiIkh45ucrT2nNbRure5l6hbe_RSVL6nQVRehSeFdvrBPlG8GOIAI-IT-O6KpwyEGQ0LBl0jrwdYIuweiWOhMAxtepHSqqxVSFPijKGLBmVPYWgj3vZ-C6943-cMqgnbfeovnhVef6xxYxLC5F-GBMOsE79fIUQ"/>
+</div>
+<button class="absolute bottom-1 right-1 bg-primary-container text-on-primary p-2 rounded-full shadow-lg hover:scale-105 transition-transform flex items-center justify-center">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+<div>
+<h3 class="text-xl font-bold font-headline text-on-surface">Alex Rodriguez</h3>
+<p class="text-sm text-on-surface-variant">Sophomore · Gastronomy &amp; Tech</p>
+</div>
+<div class="w-full grid grid-cols-2 gap-4 pt-4 border-t border-outline-variant/15">
+<div class="text-center">
+<span class="block text-lg font-bold text-tertiary">42</span>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Orders</span>
+</div>
+<div class="text-center">
+<span class="block text-lg font-bold text-primary">4.8</span>
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Reviewer</span>
+</div>
+</div>
+</div>
+<!-- Security Badge Card -->
+<div class="bg-surface-container-high rounded-xl p-6 flex items-center gap-4 border-l-4 border-primary-container">
+<div class="p-3 bg-primary-container/10 rounded-lg">
+<span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">verified_user</span>
+</div>
+<div>
+<h4 class="text-sm font-bold text-on-surface">Account Security</h4>
+<p class="text-xs text-on-surface-variant">2FA is currently enabled for this account.</p>
+</div>
+</div>
+</div>
+<!-- Right Column: Personal Info & Security -->
+<div class="lg:col-span-2 space-y-8">
+<!-- Personal Info Card -->
+<div class="bg-surface-container rounded-xl p-8 space-y-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">person</span>
+<h2 class="text-xl font-bold font-headline">Personal Information</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">Full Name</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-0 rounded-lg py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary-container transition-all font-body" type="text" value="Alex Rodriguez"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">Student ID</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-0 rounded-lg py-3 px-4 text-on-surface-variant cursor-not-allowed font-body opacity-60" disabled="" type="text" value="UA-9420-2024"/>
+</div>
+</div>
+<div class="md:col-span-2 space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">Email Address</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border-0 rounded-lg py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary-container transition-all font-body" type="email" value="alex.rod@university.edu"/>
+<span class="absolute right-4 top-3 text-[10px] bg-tertiary/20 text-tertiary px-2 py-0.5 rounded uppercase font-bold">Verified</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Password Management Card -->
+<div class="bg-surface-container rounded-xl p-8 space-y-8">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">lock_reset</span>
+<h2 class="text-xl font-bold font-headline">Change Password</h2>
+</div>
+<div class="space-y-6">
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">Old Password</label>
+<input class="w-full bg-surface-container-lowest border-0 rounded-lg py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary-container transition-all font-body placeholder:text-on-surface-variant/30" placeholder="••••••••••••" type="password"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">New Password</label>
+<input class="w-full bg-surface-container-lowest border-0 rounded-lg py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary-container transition-all font-body placeholder:text-on-surface-variant/30" placeholder="Min. 8 chars" type="password"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant ml-1">Confirm New Password</label>
+<input class="w-full bg-surface-container-lowest border-0 rounded-lg py-3 px-4 text-on-surface focus:ring-2 focus:ring-primary-container transition-all font-body placeholder:text-on-surface-variant/30" placeholder="Repeat password" type="password"/>
+</div>
+</div>
+<div class="pt-4 flex items-start gap-3 bg-surface-container-low p-4 rounded-lg">
+<span class="material-symbols-outlined text-on-surface-variant text-sm mt-0.5">info</span>
+<p class="text-xs text-on-surface-variant leading-relaxed">
+                                    Password must contain at least 8 characters, including one uppercase letter, one number, and one architectural symbol.
+                                </p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Mobile Bottom NavBar (Hidden on desktop) -->
+<nav class="md:hidden fixed bottom-0 w-full bg-[#1E1E2F] h-16 flex justify-around items-center px-4 z-50 shadow-[0_-8px_24px_rgba(12,12,29,0.5)]">
+<a class="flex flex-col items-center gap-1 text-[#E3E0F8]/80" href="#">
+<span class="material-symbols-outlined text-xl">restaurant</span>
+<span class="text-[10px] font-medium">Cafes</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#E3E0F8]/80" href="#">
+<span class="material-symbols-outlined text-xl">receipt_long</span>
+<span class="text-[10px] font-medium">Orders</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#E3E0F8]/80" href="#">
+<span class="material-symbols-outlined text-xl">local_shipping</span>
+<span class="text-[10px] font-medium">Track</span>
+</a>
+<a class="flex flex-col items-center gap-1 text-[#FFB59D]" href="#">
+<span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="text-[10px] font-bold">Profile</span>
+</a>
+</nav>
+</body></html>

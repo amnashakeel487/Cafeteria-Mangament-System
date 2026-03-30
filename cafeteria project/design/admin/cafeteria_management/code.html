@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Culinary Architect | Cafeteria Management</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-high": "#28283a",
+                        "on-primary-container": "#5f1900",
+                        "surface-container-highest": "#333345",
+                        "on-surface": "#e3e0f8",
+                        "on-tertiary-container": "#003744",
+                        "surface": "#121222",
+                        "on-surface-variant": "#e1bfb5",
+                        "on-primary": "#5d1900",
+                        "surface-variant": "#333345",
+                        "surface-container-low": "#1a1a2b",
+                        "on-tertiary": "#003543",
+                        "on-primary-fixed-variant": "#832600",
+                        "on-secondary-container": "#fb9d7d",
+                        "primary-fixed": "#ffdbd0",
+                        "surface-container": "#1e1e2f",
+                        "surface-dim": "#121222",
+                        "tertiary-container": "#00a7cb",
+                        "inverse-surface": "#e3e0f8",
+                        "secondary": "#ffb59d",
+                        "surface-bright": "#38374a",
+                        "on-secondary": "#581d07",
+                        "inverse-primary": "#ab3500",
+                        "tertiary": "#59d5fb",
+                        "primary": "#ffb59d",
+                        "on-tertiary-fixed": "#001f28",
+                        "surface-container-lowest": "#0c0c1d",
+                        "tertiary-fixed-dim": "#59d5fb",
+                        "surface-tint": "#ffb59d",
+                        "on-secondary-fixed": "#390c00",
+                        "tertiary-fixed": "#b5ebff",
+                        "on-tertiary-fixed-variant": "#004e60",
+                        "error": "#ffb4ab",
+                        "primary-container": "#ff6b35",
+                        "on-error-container": "#ffdad6",
+                        "secondary-fixed": "#ffdbd0",
+                        "secondary-fixed-dim": "#ffb59d",
+                        "on-primary-fixed": "#390c00",
+                        "on-secondary-fixed-variant": "#76331b",
+                        "secondary-container": "#76331b",
+                        "on-background": "#e3e0f8",
+                        "inverse-on-surface": "#2f2f41",
+                        "error-container": "#93000a",
+                        "on-error": "#690005",
+                        "outline-variant": "#594139",
+                        "outline": "#a98a80",
+                        "background": "#121222",
+                        "primary-fixed-dim": "#ffb59d"
+                    },
+                    fontFamily: {
+                        "headline": ["Manrope"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            background-color: #121222;
+            color: #e3e0f8;
+            font-family: 'Inter', sans-serif;
+        }
+        .glass-effect {
+            backdrop-filter: blur(20px);
+            background-color: rgba(56, 55, 74, 0.4);
+        }
+        .primary-gradient {
+            background: linear-gradient(135deg, #ffb59d 0%, #ff6b35 100%);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body">
+<!-- SideNavBar Shell -->
+<aside class="bg-[#1A1A2B] dark:bg-[#1A1A2B] font-['Manrope'] tracking-tight h-screen w-64 fixed left-0 top-0 flex flex-col py-6 z-50">
+<div class="px-6 mb-10 flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl primary-gradient flex items-center justify-center shadow-lg shadow-primary-container/20">
+<span class="material-symbols-outlined text-on-primary" style="font-variation-settings: 'FILL' 1;">restaurant_menu</span>
+</div>
+<div>
+<h1 class="text-xl font-bold text-[#FF6B35]">Culinary Architect</h1>
+<p class="text-[10px] uppercase tracking-[0.2em] text-on-surface-variant opacity-60">Admin Console</p>
+</div>
+</div>
+<nav class="flex-1 space-y-2">
+<!-- Dashboard -->
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 flex items-center px-4 py-3 rounded-lg transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 opacity-70 group-hover:opacity-100" data-icon="dashboard">dashboard</span>
+<span class="font-semibold">Dashboard</span>
+</a>
+<!-- Students -->
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 flex items-center px-4 py-3 rounded-lg transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 opacity-70 group-hover:opacity-100" data-icon="group">group</span>
+<span class="font-semibold">Students</span>
+</a>
+<!-- Cafeterias (ACTIVE) -->
+<a class="bg-[#FF6B35]/15 text-[#FFB59D] rounded-lg mx-2 flex items-center px-4 py-3 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3" data-icon="restaurant" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+<span class="font-semibold">Cafeterias</span>
+</a>
+<!-- Reports -->
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 flex items-center px-4 py-3 rounded-lg transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 opacity-70 group-hover:opacity-100" data-icon="assessment">assessment</span>
+<span class="font-semibold">Reports</span>
+</a>
+<!-- Profile -->
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/10 mx-2 flex items-center px-4 py-3 rounded-lg transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3 opacity-70 group-hover:opacity-100" data-icon="account_circle">account_circle</span>
+<span class="font-semibold">Profile</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<div class="p-4 rounded-xl bg-surface-container-high/50 border border-outline-variant/10">
+<p class="text-xs text-on-surface-variant mb-2">System Status</p>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></div>
+<span class="text-sm font-semibold text-on-surface">All Systems Online</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Wrapper -->
+<main class="ml-64 min-h-screen">
+<!-- TopNavBar Shell -->
+<header class="bg-[#121222]/80 backdrop-blur-xl fixed top-0 right-0 w-[calc(100%-16rem)] z-40 flex justify-between items-center px-8 h-20 font-['Manrope'] font-semibold">
+<div class="flex items-center w-1/2">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">search</span>
+<input class="w-full bg-surface-container-lowest border-none rounded-xl py-2.5 pl-12 pr-4 text-sm text-on-surface placeholder:text-on-surface-variant/30 focus:ring-1 focus:ring-primary/40 transition-all" placeholder="Search cafeterias, managers, or locations..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-bright/20 transition-all text-[#E3E0F8] opacity-70 active:opacity-80">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-bright/20 transition-all text-[#E3E0F8] opacity-70 active:opacity-80">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-outline-variant/20"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-sm font-bold text-on-surface">Alex Thompson</p>
+<p class="text-[10px] text-primary uppercase tracking-wider">System Admin</p>
+</div>
+<img alt="Admin User Profile" class="w-10 h-10 rounded-full border-2 border-primary/20 object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRFlvtoc9Q1sxxSHu5oExnmjvAlqlIzm009pPcsu2_7AJiQob7AlgOCt4wELnwil29qfr7KMLMh5gYN52EewEWq1PtHQhvsia0cVatH45Oxz56jjSKlL0n3W1TVgwPiJx5uzLbejvc3tNKdUNyIQ-LrpjQWncNs4WU5ZpHEYi0B9NysEXMkUUiz7HkbwvLo9r1wdWkThTd1CR_c-LCcxnmx_F52Qesg3EQ_s2pqTcYHGyt32DIvq4yiqH9xgY0DqdtNz-XoBNHgA"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="pt-28 px-10 pb-12">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-10">
+<div>
+<h2 class="text-4xl font-extrabold font-headline tracking-tight text-on-surface mb-2">Cafeteria Hub</h2>
+<p class="text-on-surface-variant max-w-md">Manage university dining facilities, monitor independent portals, and maintain service standards across campus.</p>
+</div>
+<button class="primary-gradient text-on-primary px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-xl shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all">
+<span class="material-symbols-outlined">add</span>
+                    Register New Cafeteria
+                </button>
+</div>
+<!-- Dashboard Stats (Editorial Edge) -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+<div class="bg-surface-container-high p-6 rounded-xl border-l-4 border-primary">
+<p class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant opacity-60 mb-1">Total Facilities</p>
+<h3 class="text-3xl font-extrabold font-headline">12</h3>
+</div>
+<div class="bg-surface-container-high p-6 rounded-xl border-l-4 border-tertiary">
+<p class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant opacity-60 mb-1">Active Portals</p>
+<h3 class="text-3xl font-extrabold font-headline">10</h3>
+</div>
+<div class="bg-surface-container-high p-6 rounded-xl border-l-4 border-secondary">
+<p class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant opacity-60 mb-1">Daily Avg Revenue</p>
+<h3 class="text-3xl font-extrabold font-headline">$4.2k</h3>
+</div>
+<div class="bg-surface-container-high p-6 rounded-xl border-l-4 border-on-surface-variant">
+<p class="text-xs font-semibold uppercase tracking-widest text-on-surface-variant opacity-60 mb-1">Satisfaction</p>
+<h3 class="text-3xl font-extrabold font-headline">4.8<span class="text-sm font-normal opacity-40">/5</span></h3>
+</div>
+</div>
+<!-- Cafeteria Cards Grid (Modular Asymmetry) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Cafeteria Card 1 -->
+<div class="bg-[#2A2A3F] rounded-xl overflow-hidden group hover:shadow-2xl hover:shadow-black/40 transition-all duration-300 flex flex-col">
+<div class="h-32 relative overflow-hidden">
+<img class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110" data-alt="modern luxury university cafeteria interior with industrial lighting and sleek wooden communal tables" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxjiBXUXzPGbVes3c2Vhw0dDtOhkka0gzGJXj1CtxxJmqsYnbI4JTw8rnu-4jzTMd2jRbq_ounvznmTyKVYsSlWvx6LDhz3RsaPVb_SIdrvpSJXwRb-2ymmbnEI7A2Dcx3qWWcQacbp0twz9iq7opNcRwLilibVIUo7infaIHbP-IHw83I8jNc7P8vB1fWW0On_LJD0qgWKEJL8FArb75OWcFpHlxXwr-UKqbZmqIgtKP0pe9f_erUiKIJxiFJFc9DpFmm7uT72Q"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#2A2A3F] to-transparent"></div>
+<div class="absolute top-4 right-4 glass-effect px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-on-surface">Live Portal</span>
+</div>
+</div>
+<div class="p-6 pt-2 flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="text-xl font-bold font-headline mb-1">The Grand Atrium</h4>
+<div class="flex items-center text-xs text-on-surface-variant/70 gap-3">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> Main Campus</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 07:00 - 22:00</span>
+</div>
+</div>
+<div class="flex gap-1">
+<button class="p-2 hover:bg-surface-bright rounded-lg text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center justify-between text-sm py-2 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Manager</span>
+<span class="font-semibold">Sarah Jenkins</span>
+</div>
+<div class="flex items-center justify-between text-sm py-2 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Contact</span>
+<span class="font-semibold">atrium@uni.edu</span>
+</div>
+<div class="flex items-center justify-between text-sm py-2 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Phone</span>
+<span class="font-semibold">+1 (555) 012-9844</span>
+</div>
+</div>
+<button class="w-full py-3 rounded-lg border border-primary/30 text-primary font-bold hover:bg-primary/10 transition-all flex items-center justify-center gap-2 group/btn">
+                            Enter Portal
+                            <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Cafeteria Card 2 -->
+<div class="bg-[#2A2A3F] rounded-xl overflow-hidden group hover:shadow-2xl hover:shadow-black/40 transition-all duration-300 flex flex-col">
+<div class="h-32 relative overflow-hidden">
+<img class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110" data-alt="cozy minimalist university coffee shop and bistro with large windows and hanging plants" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCapbKguwkL-YlR092p2EntnOt_4W-_QdUlmnJgXcbER1VnkRN1y0vX5Q90C-ig8S9k0hzfuZkbJ4hwFxFmBm7L0zvah1hglA2iCYuqV-Zl0d5OKTcAWctzHziPqPV33Mr4tkPLjuZD3c_LTZQR1zpaAVV0zqOnEGRpdsmQrdGP8pjfej2ZEwBWQgUTjKERSNx2suxn78TdFHB_VyWfjLOL3hb4gm_tGp9Augv0uG5f0pp0w_EtGd55k0JpGWpFyXC4u8XoNkEW-A"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#2A2A3F] to-transparent"></div>
+<div class="absolute top-4 right-4 glass-effect px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-on-surface">Live Portal</span>
+</div>
+</div>
+<div class="p-6 pt-2 flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="text-xl font-bold font-headline mb-1">North Square Bistro</h4>
+<div class="flex items-center text-xs text-on-surface-variant/70 gap-3">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> North Campus</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 08:00 - 20:00</span>
+</div>
+</div>
+<div class="flex gap-1">
+<button class="p-2 hover:bg-surface-bright rounded-lg text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center justify-between text-sm py-2 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Manager</span>
+<span class="font-semibold">Marcus Vane</span>
+</div>
+<div class="flex items-center justify-between text-sm py-2 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Contact</span>
+<span class="font-semibold">north.bistro@uni.edu</span>
+</div>
+<div class="flex items-center justify-between text-sm py-2 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Phone</span>
+<span class="font-semibold">+1 (555) 012-7732</span>
+</div>
+</div>
+<button class="w-full py-3 rounded-lg border border-primary/30 text-primary font-bold hover:bg-primary/10 transition-all flex items-center justify-center gap-2 group/btn">
+                            Enter Portal
+                            <span class="material-symbols-outlined text-sm group-hover/btn:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</div>
+</div>
+<!-- Cafeteria Card 3 -->
+<div class="bg-[#2A2A3F] rounded-xl overflow-hidden group hover:shadow-2xl hover:shadow-black/40 transition-all duration-300 flex flex-col">
+<div class="h-32 relative overflow-hidden">
+<img class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110" data-alt="vibrant health-focused university salad bar with colorful vegetable displays and clean white tiling" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDt6iQOH3sKnLqLpFxYx44VDJfC_CKHmAporqJGUAoDsi34Yg71flKudfgycr5ycJxxXVZoVRni0Q9GoAlpRnXwdHpz1EuE8efSgRbEs16RkTnRckaylqXrp6Sj6Y2yIdChhvEHflc-3g4Rjuz-QriqV6rwA914fOjezJvyh1ap6Hx_TTGCtkjhVF3qTk3A5PkIv9r6TF847H3mWN7Pmx-Gn2zQVTV2sn_ZDylgBuEl1N2VQaqX-vPoDBDWAJxQKogqum32RF3XWA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#2A2A3F] to-transparent"></div>
+<div class="absolute top-4 right-4 bg-surface-container-highest/60 backdrop-blur px-3 py-1 rounded-full flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-on-surface-variant/40"></span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-on-surface-variant">Portal Offline</span>
+</div>
+</div>
+<div class="p-6 pt-2 flex-1">
+<div class="flex justify-between items-start mb-4">
+<div>
+<h4 class="text-xl font-bold font-headline mb-1">Health Hub</h4>
+<div class="flex items-center text-xs text-on-surface-variant/70 gap-3">
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">location_on</span> Sports Complex</span>
+<span class="flex items-center gap-1"><span class="material-symbols-outlined text-sm">schedule</span> 06:00 - 18:00</span>
+</div>
+</div>
+<div class="flex gap-1">
+<button class="p-2 hover:bg-surface-bright rounded-lg text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">edit</span></button>
+<button class="p-2 hover:bg-error-container/20 rounded-lg text-error transition-colors"><span class="material-symbols-outlined text-lg">delete</span></button>
+</div>
+</div>
+<div class="space-y-3 mb-6">
+<div class="flex items-center justify-between text-sm py-2 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Manager</span>
+<span class="font-semibold">Elena Rodriguez</span>
+</div>
+<div class="flex items-center justify-between text-sm py-2 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Contact</span>
+<span class="font-semibold">healthhub@uni.edu</span>
+</div>
+<div class="flex items-center justify-between text-sm py-2 border-b border-outline-variant/10">
+<span class="text-on-surface-variant">Phone</span>
+<span class="font-semibold">+1 (555) 012-4451</span>
+</div>
+</div>
+<button class="w-full py-3 rounded-lg bg-surface-container border border-outline-variant/20 text-on-surface-variant/60 font-bold cursor-not-allowed flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">lock</span>
+                            Initialize Portal
+                        </button>
+</div>
+</div>
+</div>
+<!-- Footer / Pagination Area -->
+<div class="mt-12 flex justify-between items-center bg-surface-container p-6 rounded-xl border border-outline-variant/5">
+<p class="text-sm text-on-surface-variant">Showing <span class="text-on-surface font-bold">3</span> of <span class="text-on-surface font-bold">12</span> registered cafeterias</p>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-lg border border-outline-variant/20 flex items-center justify-center hover:bg-surface-bright transition-all text-on-surface-variant">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-primary-container text-on-primary font-bold flex items-center justify-center">1</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant/20 flex items-center justify-center hover:bg-surface-bright transition-all text-on-surface-variant">2</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant/20 flex items-center justify-center hover:bg-surface-bright transition-all text-on-surface-variant">3</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant/20 flex items-center justify-center hover:bg-surface-bright transition-all text-on-surface-variant">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Culinary Architect | Staff Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#333345",
+              "on-surface": "#e3e0f8",
+              "on-tertiary-container": "#003744",
+              "surface": "#121222",
+              "surface-container-high": "#28283a",
+              "on-primary-container": "#5f1900",
+              "on-tertiary": "#003543",
+              "on-primary-fixed-variant": "#832600",
+              "on-secondary-container": "#fb9d7d",
+              "on-surface-variant": "#e1bfb5",
+              "on-primary": "#5d1900",
+              "surface-variant": "#333345",
+              "surface-container-low": "#1a1a2b",
+              "tertiary-container": "#00a7cb",
+              "inverse-surface": "#e3e0f8",
+              "secondary": "#ffb59d",
+              "surface-container": "#1e1e2f",
+              "primary-fixed": "#ffdbd0",
+              "surface-dim": "#121222",
+              "surface-bright": "#38374a",
+              "on-secondary": "#581d07",
+              "primary": "#ffb59d",
+              "on-tertiary-fixed": "#001f28",
+              "surface-container-lowest": "#0c0c1d",
+              "inverse-primary": "#ab3500",
+              "tertiary": "#59d5fb",
+              "tertiary-fixed": "#b5ebff",
+              "tertiary-fixed-dim": "#59d5fb",
+              "surface-tint": "#ffb59d",
+              "on-secondary-fixed": "#390c00",
+              "error": "#ffb4ab",
+              "secondary-fixed-dim": "#ffb59d",
+              "secondary-fixed": "#ffdbd0",
+              "primary-container": "#ff6b35",
+              "on-error-container": "#ffdad6",
+              "on-secondary-fixed-variant": "#76331b",
+              "on-primary-fixed": "#390c00",
+              "on-tertiary-fixed-variant": "#004e60",
+              "outline-variant": "#594139",
+              "outline": "#a98a80",
+              "background": "#121222",
+              "primary-fixed-dim": "#ffb59d",
+              "secondary-container": "#76331b",
+              "on-background": "#e3e0f8",
+              "inverse-on-surface": "#2f2f41",
+              "error-container": "#93000a",
+              "on-error": "#690005"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #121222;
+        color: #e3e0f8;
+      }
+      .glow-capsule {
+        background: rgba(255, 107, 53, 0.15);
+      }
+    </style>
+</head>
+<body class="font-body antialiased">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-[#1A1A2B] font-['Manrope'] text-sm font-medium tracking-wide flex flex-col py-6 space-y-2">
+<div class="px-6 mb-8">
+<h1 class="text-lg font-extrabold text-[#E3E0F8]">Culinary Architect</h1>
+<p class="text-xs text-[#E1BFB5] opacity-80">Staff Portal</p>
+</div>
+<nav class="flex-1 px-2 space-y-1">
+<!-- Active Tab: Dashboard -->
+<a class="bg-[#FF6B35]/15 text-[#FFB59D] rounded-lg flex items-center space-x-3 p-3 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg flex items-center space-x-3 p-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span>Orders</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg flex items-center space-x-3 p-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span>Menu</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg flex items-center space-x-3 p-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span>Payments</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg flex items-center space-x-3 p-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span>Profile</span>
+</a>
+</nav>
+<div class="px-2 pt-4 border-t border-outline-variant/10 space-y-1">
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg flex items-center space-x-3 p-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>Support</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg flex items-center space-x-3 p-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-[#1E1E2F] font-['Manrope'] antialiased tracking-tight sticky top-0 z-50 shadow-[0_24px_48px_rgba(12,12,29,0.5)]">
+<div class="flex justify-between items-center w-full px-8 h-16 max-w-full mx-auto">
+<div class="flex items-center gap-8">
+<span class="text-xl font-bold text-[#E3E0F8] after:content-['|Staff_Portal'] after:ml-2 after:text-sm after:font-medium after:text-[#E1BFB5]">Dashboard</span>
+<div class="hidden md:flex space-x-6 text-sm">
+<a class="text-[#FFB59D] font-bold border-b-2 border-[#FF6B35] pb-1" href="#">Overview</a>
+<a class="text-[#E1BFB5] hover:text-[#E3E0F8] transition-colors" href="#">Live View</a>
+<a class="text-[#E1BFB5] hover:text-[#E3E0F8] transition-colors" href="#">History</a>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 text-[#E1BFB5] hover:bg-[#38374A]/40 hover:backdrop-blur-md transition-all rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-[#E1BFB5] hover:bg-[#38374A]/40 hover:backdrop-blur-md transition-all rounded-full active:scale-95 duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-primary/20">
+<img alt="Staff Profile Avatar" class="w-full h-full object-cover" data-alt="professional portrait of a cafeteria staff manager in a clean white uniform with a friendly expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDDNGM7JNWI3JyAHToMREo4Dzofw2C_N33KIP3UPevYk_ygtCRRDC8mQXKyNHHGmMgO9rFhixJ_gDVxWSu__EaJiDEiAAPPKBWWXTaYLfVBdEsjxQ3BFfV_U6P7svIHyTNVYj4kUUwst1IG74l3ZhVHs9itJq8CYmaIDEVPkqN7E5SVFZbNqJDHzUuTOK_G1mk5xPpamreWqnLEXG3h5kbidmujWBImRIL7nhN_75qaOLhRh9gS1tM9jD69av3mLG0R2LD-5pYYUw"/>
+</div>
+</div>
+</div>
+</header>
+<div class="p-10 max-w-7xl mx-auto space-y-10">
+<!-- Dashboard Hero: Bento Stats -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<!-- Main Stat: Revenue -->
+<div class="md:col-span-2 bg-surface-container-high rounded-xl p-8 flex flex-col justify-between relative overflow-hidden">
+<div class="relative z-10">
+<p class="text-on-surface-variant font-medium text-sm mb-1 uppercase tracking-widest">Daily Revenue</p>
+<h2 class="font-headline text-4xl font-extrabold text-on-surface">$4,852.20</h2>
+<div class="mt-4 flex items-center text-tertiary space-x-2">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span class="text-sm font-bold">+12.5% from yesterday</span>
+</div>
+</div>
+<div class="absolute right-0 bottom-0 w-1/2 h-full opacity-20 pointer-events-none">
+<!-- Placeholder for mini data viz -->
+<svg class="w-full h-full" preserveaspectratio="none" viewbox="0 0 100 100">
+<path d="M0,100 L10,80 L20,85 L30,60 L40,70 L50,40 L60,45 L70,20 L80,30 L90,10 L100,15 L100,100 Z" fill="url(#grad1)"></path>
+<defs>
+<lineargradient id="grad1" x1="0%" x2="0%" y1="0%" y2="100%">
+<stop offset="0%" style="stop-color:#FF6B35;stop-opacity:1"></stop>
+<stop offset="100%" style="stop-color:#FF6B35;stop-opacity:0"></stop>
+</lineargradient>
+</defs>
+</svg>
+</div>
+</div>
+<!-- Secondary Stat: Orders -->
+<div class="bg-primary-container rounded-xl p-8 text-on-primary relative overflow-hidden">
+<p class="font-medium text-sm mb-1 uppercase tracking-widest opacity-80">Total Orders</p>
+<h2 class="font-headline text-4xl font-extrabold">342</h2>
+<p class="mt-2 text-sm font-medium">18 Active right now</p>
+<div class="absolute -right-4 -bottom-4 opacity-10">
+<span class="material-symbols-outlined text-[120px]" data-icon="restaurant">restaurant</span>
+</div>
+</div>
+</section>
+<!-- Orders Management Section -->
+<section class="space-y-6">
+<div class="flex justify-between items-end">
+<div>
+<h3 class="font-headline text-2xl font-bold text-on-surface">Live Orders</h3>
+<p class="text-on-surface-variant text-sm mt-1">Real-time queue for North Campus Cafeteria</p>
+</div>
+<div class="flex space-x-2">
+<button class="bg-surface-container-highest px-4 py-2 rounded-lg text-sm font-medium text-on-surface hover:bg-surface-bright transition-all">Filter</button>
+<button class="bg-primary-container px-4 py-2 rounded-lg text-sm font-bold text-on-primary active:scale-95 transition-all">New Manual Order</button>
+</div>
+</div>
+<!-- Orders Table / Grid -->
+<div class="bg-surface-container rounded-xl overflow-hidden shadow-xl">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-high/50 text-on-surface-variant text-[10px] uppercase tracking-[0.2em] font-bold">
+<th class="px-8 py-4">Order ID</th>
+<th class="px-8 py-4">Student</th>
+<th class="px-8 py-4">Items Summary</th>
+<th class="px-8 py-4">Amount</th>
+<th class="px-8 py-4">Status</th>
+<th class="px-8 py-4 text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<!-- New/Pending Order Row -->
+<tr class="group hover:bg-surface-container-highest transition-all duration-200">
+<td class="px-8 py-6">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+<span class="font-bold text-on-surface">#ORD-8821</span>
+</div>
+</td>
+<td class="px-8 py-6">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center text-xs font-bold text-primary">JD</div>
+<span class="text-on-surface font-medium">Jordan Davis</span>
+</div>
+</td>
+<td class="px-8 py-6 text-on-surface-variant text-sm">
+                                    Avocado Toast (x2), Iced Latte, Fruit Bowl
+                                </td>
+<td class="px-8 py-6 font-bold text-on-surface">$24.50</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-primary-container/20 text-primary border border-primary/30">New Order</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="text-primary hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+</button>
+</td>
+</tr>
+<!-- Pending Order Row -->
+<tr class="group hover:bg-surface-container-highest transition-all duration-200">
+<td class="px-8 py-6">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-bold text-on-surface">#ORD-8819</span>
+</div>
+</td>
+<td class="px-8 py-6">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center text-xs font-bold text-tertiary">ML</div>
+<span class="text-on-surface font-medium">Marcus Lee</span>
+</div>
+</td>
+<td class="px-8 py-6 text-on-surface-variant text-sm">
+                                    Classic Burger, French Fries, Soda
+                                </td>
+<td class="px-8 py-6 font-bold text-on-surface">$18.20</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-tertiary-container/20 text-tertiary border border-tertiary/30">Preparing</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+<!-- In-Queue Row -->
+<tr class="group hover:bg-surface-container-highest transition-all duration-200">
+<td class="px-8 py-6">
+<div class="flex items-center space-x-2">
+<span class="w-2 h-2 rounded-full bg-on-surface-variant"></span>
+<span class="font-bold text-on-surface">#ORD-8815</span>
+</div>
+</td>
+<td class="px-8 py-6">
+<div class="flex items-center space-x-3">
+<div class="w-8 h-8 rounded-full bg-surface-container-lowest flex items-center justify-center text-xs font-bold text-on-surface-variant">AW</div>
+<span class="text-on-surface font-medium">Alice Wong</span>
+</div>
+</td>
+<td class="px-8 py-6 text-on-surface-variant text-sm">
+                                    Garden Salad, Lemonade
+                                </td>
+<td class="px-8 py-6 font-bold text-on-surface">$12.00</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider bg-surface-container-highest text-on-surface-variant">Queued</span>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="text-on-surface-variant hover:text-white transition-colors">
+<span class="material-symbols-outlined" data-icon="more_vert">more_vert</span>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- Inventory & Alerts Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Low Stock Alert -->
+<div class="bg-surface-container-high rounded-xl p-6 border-l-4 border-error">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center space-x-3">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+<h4 class="font-headline font-bold text-on-surface">Critical Stock Alerts</h4>
+</div>
+<span class="text-xs text-on-surface-variant">3 Items</span>
+</div>
+<div class="space-y-4">
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface">Whole Milk (Gallons)</span>
+<span class="text-error font-bold">2 Left</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
+<div class="bg-error h-full w-[10%]"></div>
+</div>
+<div class="flex justify-between items-center text-sm">
+<span class="text-on-surface">Brioche Buns</span>
+<span class="text-error font-bold">12 Left</span>
+</div>
+<div class="w-full bg-surface-container-lowest h-1.5 rounded-full overflow-hidden">
+<div class="bg-error h-full w-[15%]"></div>
+</div>
+</div>
+</div>
+<!-- Today's Special Preview -->
+<div class="bg-surface-container-high rounded-xl overflow-hidden flex relative group">
+<div class="w-1/3 h-full overflow-hidden">
+<img alt="Daily Special Dish" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" data-alt="close-up of a vibrant mediterranean salad with grilled chicken and fresh olives in a rustic ceramic bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAtsQB4a7Hnpn_WTJ1hhSKg42p8GS9h4uQZJRgHQ85A6sOOxFjLXxYq5IQ5CjkLpejpD9du_88pTJE-SVQQ6Perhvg0OSWwfmhhYqmVXo1TJ3153Zn7K4A65Uh0Ihfof-x-jEgXHvGmUrNguDGxtkb0x57uOz9QVS0XfoPGI7mLXlHWl19r9WxGI1uqhsTJh_fSsckEInXoiyMOLrpMBBVVs6R7TrDa5zD64MWGlu4jVRsVe13RHOSAsdl4Up_4Z67aZXaOeGj_wA"/>
+</div>
+<div class="w-2/3 p-6 flex flex-col justify-center">
+<span class="text-[10px] font-bold uppercase tracking-widest text-primary mb-1">Today's Special</span>
+<h4 class="font-headline font-bold text-on-surface text-lg">Mediterranean Harvest Bowl</h4>
+<p class="text-sm text-on-surface-variant mt-2 line-clamp-2">Quinoa base, roasted chickpeas, feta, and tahini dressing.</p>
+<div class="mt-4 flex items-center justify-between">
+<span class="text-on-surface font-bold">$14.95</span>
+<button class="text-xs font-bold text-primary underline underline-offset-4">Edit Details</button>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+<!-- Contextual FAB (Only for main screens) -->
+<button class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-primary-container text-on-primary flex items-center justify-center shadow-2xl hover:scale-110 active:scale-90 transition-all z-50">
+<span class="material-symbols-outlined" data-icon="add" style="font-variation-settings: 'FILL' 0, 'wght' 700;">add</span>
+</button>
+</body></html>

@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Culinary Architect | The Grand Atrium</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-bright": "#38374a",
+              "surface-container-lowest": "#0c0c1d",
+              "primary": "#ffb59d",
+              "primary-container": "#ff6b35",
+              "tertiary": "#59d5fb",
+              "surface-container": "#1e1e2f",
+              "surface-container-low": "#1a1a2b",
+              "inverse-surface": "#e3e0f8",
+              "inverse-primary": "#ab3500",
+              "on-secondary": "#581d07",
+              "secondary-container": "#76331b",
+              "on-error-container": "#ffdad6",
+              "error-container": "#93000a",
+              "on-surface": "#e3e0f8",
+              "on-tertiary-fixed-variant": "#004e60",
+              "on-primary-container": "#5f1900",
+              "background": "#121222",
+              "on-primary-fixed-variant": "#832600",
+              "on-surface-variant": "#e1bfb5",
+              "on-background": "#e3e0f8",
+              "on-secondary-fixed-variant": "#76331b",
+              "on-secondary-container": "#fb9d7d",
+              "surface-dim": "#121222",
+              "surface-container-high": "#28283a",
+              "surface": "#121222",
+              "secondary-fixed": "#ffdbd0",
+              "on-primary-fixed": "#390c00",
+              "secondary-fixed-dim": "#ffb59d",
+              "inverse-on-surface": "#2f2f41",
+              "on-primary": "#5d1900",
+              "surface-tint": "#ffb59d",
+              "on-tertiary-fixed": "#001f28",
+              "primary-fixed-dim": "#ffb59d",
+              "primary-fixed": "#ffdbd0",
+              "on-secondary-fixed": "#390c00",
+              "secondary": "#ffb59d",
+              "on-tertiary": "#003543",
+              "tertiary-container": "#00a7cb",
+              "surface-variant": "#333345",
+              "tertiary-fixed": "#b5ebff",
+              "surface-container-highest": "#333345",
+              "outline": "#a98a80",
+              "on-error": "#690005",
+              "error": "#ffb4ab",
+              "outline-variant": "#594139",
+              "tertiary-fixed-dim": "#59d5fb",
+              "on-tertiary-container": "#003744"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #121222; }
+        ::-webkit-scrollbar-thumb { background: #38374a; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff6b35; }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 bg-[#1E1E2F] dark:bg-[#1E1E2F] h-16 shadow-2xl shadow-[#0c0c1d]/50 font-['Manrope'] tracking-tight">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-bold text-[#FF6B35] tracking-tighter">Culinary Architect</span>
+<div class="hidden md:flex gap-6 items-center">
+<a class="text-[#FF6B35] font-bold border-b-2 border-[#FF6B35] transition-colors" href="#">Cafeterias</a>
+<a class="text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D] transition-colors px-3 py-1 rounded" href="#">My Orders</a>
+<a class="text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D] transition-colors px-3 py-1 rounded" href="#">Track Order</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
+<input class="bg-surface-container-lowest border-none rounded-lg pl-10 pr-4 py-2 text-sm focus:ring-1 focus:ring-primary w-64" placeholder="Search menu..." type="text"/>
+</div>
+<button class="text-[#E3E0F8]/80 hover:bg-[#38374A]/40 p-2 rounded-full transition-colors relative">
+<span class="material-symbols-outlined">shopping_cart</span>
+<span class="absolute top-1 right-1 bg-primary-container text-on-primary-container text-[10px] font-bold h-4 w-4 rounded-full flex items-center justify-center">3</span>
+</button>
+<button class="text-[#E3E0F8]/80 hover:bg-[#38374A]/40 p-2 rounded-full transition-colors">
+<span class="material-symbols-outlined">account_circle</span>
+</button>
+</div>
+</nav>
+<!-- SideNavBar (Desktop Only) -->
+<aside class="fixed left-0 top-16 h-[calc(100vh-64px)] w-64 bg-[#1A1A2B] dark:bg-[#1A1A2B] hidden lg:flex flex-col p-4 font-['Inter'] text-sm tracking-wide z-40">
+<div class="mb-8 px-2 flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-surface-container-highest overflow-hidden">
+<img alt="Student Profile Picture" data-alt="close-up portrait of a young male student smiling confidently in a campus setting with soft bokeh background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARfyx_PgYXJOfe2BCk4OOalXKwOYCsJjscfPIM2iCDM--LDDO78hmeJtp59xsIrwblZ50ug62XGzjdCabyg1dv6bxd1TTpY3vjNAGt9l9LRHR5AVIJWxi4fcvu7e7VwMty8ouy8sb73RKirbSwVb4BvSpHJCUabOjOTGjifreR_ggxgxYgfY3kQYkK4tLf6tckE8DCgHrEPfEostMtBUQNoFwKxofNiWonvQLUWY1VjCYKdt7VfL276V_xMOI07aVC7xJ8YiBk4g"/>
+</div>
+<div>
+<p class="text-lg font-black text-[#E3E0F8] leading-tight">University Portal</p>
+<p class="text-[#E1BFB5]/70 text-xs uppercase tracking-widest">Student Account</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 bg-[#FF6B35]/15 text-[#FFB59D] rounded-lg font-semibold transition-all duration-300 ease-out" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+                Cafeterias
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out rounded-lg" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+                My Orders
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out rounded-lg" href="#">
+<span class="material-symbols-outlined">local_shipping</span>
+                Track Order
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out rounded-lg" href="#">
+<span class="material-symbols-outlined">person</span>
+                Profile
+            </a>
+</nav>
+<div class="mt-auto pt-4 border-t border-outline-variant/15 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out rounded-lg" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out rounded-lg" href="#">
+<span class="material-symbols-outlined text-error">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="lg:ml-64 pt-24 pb-12 px-6 lg:px-10 max-w-7xl mx-auto">
+<!-- Header Section -->
+<header class="mb-10">
+<div class="flex items-center gap-2 text-primary font-medium mb-2">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+<span class="text-sm tracking-wide">Back to All Cafeterias</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<h1 class="font-headline text-4xl md:text-5xl font-extrabold text-on-surface tracking-tighter mb-2">The Grand Atrium</h1>
+<p class="text-on-surface-variant max-w-xl text-lg">Sophisticated dining featuring seasonal ingredients, artisan pastries, and a dedicated barista station.</p>
+</div>
+<div class="flex gap-3">
+<span class="px-4 py-2 rounded-xl bg-surface-container-high text-tertiary flex items-center gap-2 text-sm font-semibold">
+<span class="material-symbols-outlined text-lg">schedule</span>
+                        Open until 9:00 PM
+                    </span>
+<span class="px-4 py-2 rounded-xl bg-surface-container-high text-primary flex items-center gap-2 text-sm font-semibold">
+<span class="material-symbols-outlined text-lg" style="font-variation-settings: 'FILL' 1;">star</span>
+                        4.8 (1.2k Reviews)
+                    </span>
+</div>
+</div>
+</header>
+<!-- Category Tabs -->
+<div class="flex gap-4 mb-12 overflow-x-auto pb-2 scrollbar-hide no-scrollbar">
+<button class="whitespace-nowrap px-8 py-3 rounded-xl bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold shadow-lg shadow-primary-container/20 transition-transform active:scale-95">All Items</button>
+<button class="whitespace-nowrap px-8 py-3 rounded-xl bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all active:scale-95">Meals</button>
+<button class="whitespace-nowrap px-8 py-3 rounded-xl bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all active:scale-95">Snacks</button>
+<button class="whitespace-nowrap px-8 py-3 rounded-xl bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all active:scale-95">Drinks</button>
+<button class="whitespace-nowrap px-8 py-3 rounded-xl bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest transition-all active:scale-95">Desserts</button>
+</div>
+<!-- Menu Grid -->
+<section class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+<!-- Category: Meals Section Headline -->
+<div class="col-span-full mb-2">
+<h2 class="font-headline text-2xl font-bold text-on-surface flex items-center gap-3">
+                    Meals
+                    <span class="h-[1px] flex-1 bg-outline-variant/15"></span>
+</h2>
+</div>
+<!-- Item Card 1 -->
+<div class="group bg-surface-container-high rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="Avocado Harvest Bowl" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="vibrant healthy harvest bowl with sliced avocado, quinoa, roasted vegetables, and microgreens on a dark ceramic plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5w2OIunG5ikJtGbxaYfhZJjGyY3qCUh1U8prTDmdzx3P2r0wQyxGijFEva6Jq90XGVOdHK3vfKoizOiO3PF6ZAilagmjpTjH7ChQEFGV4ynG6GyP9R7i2bLeRBpww40tqDuVgLMI0mufADg7LYssUHaXytzstFNshsNGNM7_pUqokWJnzf_WarskpODcHTGrFiCSijUQduTKWLRsauP3bG91DTAsZQOqZh8vnfFjyKWMc7WUbZDtFSCIt2Mufo-l30sFGjzu90Q"/>
+<div class="absolute top-4 left-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1 rounded-lg text-tertiary text-xs font-bold uppercase tracking-widest">Best Seller</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline text-xl font-bold text-on-surface group-hover:text-primary transition-colors">Avocado Harvest Bowl</h3>
+<span class="text-xl font-bold text-primary font-headline">$12.50</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 flex-1">Warm quinoa, roasted sweet potato, kale, avocado, and tahini dressing.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex items-center bg-surface-container-lowest rounded-lg p-1">
+<button class="h-8 w-8 flex items-center justify-center rounded hover:bg-surface-bright text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">remove</span></button>
+<span class="px-4 text-sm font-bold text-on-surface">1</span>
+<button class="h-8 w-8 flex items-center justify-center rounded hover:bg-surface-bright text-primary transition-colors"><span class="material-symbols-outlined text-lg">add</span></button>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-5 py-2 rounded-lg text-sm font-bold active:scale-95 transition-transform">Add to Cart</button>
+</div>
+</div>
+</div>
+<!-- Item Card 2 -->
+<div class="group bg-surface-container-high rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="Truffle Wagyu Burger" data-alt="gourmet wagyu beef burger with melted cheese and truffle aioli on a toasted brioche bun with dark moody lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAw4uBJMP8EoY87fG7JJ29WQOuaHFeRIR9AlNnx8uSSVqpVV0JI9NdrSHv2t0cDhlyG5susbRe63UaO107ijyQjzYING0viDVpOvhETpTfVScF19ghO8fBMux4OdD17xLyqcVXi_6WY_9TxyeIXgOJak6Wz-RFdsq2JWgEbVznXkIYWZbjzs9HmDBgWjadUIGKGiDprU9y4TZc6PTiYXqIpyY69i1cNqbYz4DhMGWWGVqJ5zpZyxGw17Icu-SIBmbmEuTXQ9AbauA"/>
+<div class="absolute top-4 left-4 bg-surface-container-lowest/80 backdrop-blur-md px-3 py-1 rounded-lg text-primary text-xs font-bold uppercase tracking-widest">Premium</div>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline text-xl font-bold text-on-surface group-hover:text-primary transition-colors">Truffle Wagyu Burger</h3>
+<span class="text-xl font-bold text-primary font-headline">$15.00</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 flex-1">Wagyu beef, truffle aioli, caramelized onions, and gruyère on brioche.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex items-center bg-surface-container-lowest rounded-lg p-1">
+<button class="h-8 w-8 flex items-center justify-center rounded hover:bg-surface-bright text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">remove</span></button>
+<span class="px-4 text-sm font-bold text-on-surface">0</span>
+<button class="h-8 w-8 flex items-center justify-center rounded hover:bg-surface-bright text-primary transition-colors"><span class="material-symbols-outlined text-lg">add</span></button>
+</div>
+<button class="bg-surface-container-highest hover:bg-surface-bright text-on-surface px-5 py-2 rounded-lg text-sm font-bold active:scale-95 transition-transform">Add to Cart</button>
+</div>
+</div>
+</div>
+<!-- Item Card 3 -->
+<div class="group bg-surface-container-high rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="Grilled Salmon Soba" data-alt="perfectly grilled salmon fillet over chilled soba noodles with edamame and sesame seeds in a minimalist dark bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCAWSic5I_Hase5EdmbpwigITs40Ta5yR0KUILkv3_TubmBuwfYjCz4fB0QRbHj9BrPFR8UroNXF2FvtDmZJWc8DlumfkM3uLOsHGlWnrFjuirZS4lMs5Tlo1N1XeymH6k3KEVq-VSM7NptfFI3A2LMlEmkr92bMsViKxLOqfPk5zwZT_mkSkz1n-EsxkU59wMn3JUfSQPI2LmUJa8Zm9QSn5zOYXcqXIEUSsxoTf0sojqyHdkhjrhAL79NGRGLzvzib1D-7zvk6w"/>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline text-xl font-bold text-on-surface group-hover:text-primary transition-colors">Grilled Salmon Soba</h3>
+<span class="text-xl font-bold text-primary font-headline">$14.25</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 flex-1">Atlantic salmon, chilled buckwheat noodles, ginger-soy glaze.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex items-center bg-surface-container-lowest rounded-lg p-1">
+<button class="h-8 w-8 flex items-center justify-center rounded hover:bg-surface-bright text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">remove</span></button>
+<span class="px-4 text-sm font-bold text-on-surface">0</span>
+<button class="h-8 w-8 flex items-center justify-center rounded hover:bg-surface-bright text-primary transition-colors"><span class="material-symbols-outlined text-lg">add</span></button>
+</div>
+<button class="bg-surface-container-highest hover:bg-surface-bright text-on-surface px-5 py-2 rounded-lg text-sm font-bold active:scale-95 transition-transform">Add to Cart</button>
+</div>
+</div>
+</div>
+<!-- Category: Snacks Section Headline -->
+<div class="col-span-full mt-8 mb-2">
+<h2 class="font-headline text-2xl font-bold text-on-surface flex items-center gap-3">
+                    Snacks &amp; Drinks
+                    <span class="h-[1px] flex-1 bg-outline-variant/15"></span>
+</h2>
+</div>
+<!-- Item Card 4 (Snack) -->
+<div class="group bg-surface-container-high rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="Artisan Cookie Box" data-alt="close-up of three large chewy chocolate chip cookies stacked on a dark wooden board with coarse sea salt sprinkled on top" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAVx5rk7h_CFRFzP7LXcpb3NTYK6LRPdDgJeuxpnVd4JpPpfNiLFbt8GoB6cdo4ApxhPoMAfSybKFSAcHZRgMsURPyxU5qAa4F4CJ-0dOpL5PfBGbZWmweHaliSWXjPM9Rflh1qzps5SrQ0ZG6SwRcXnoXiXXt07ZniePrDc2SkW3Xn31RgkpN_MY1HSjxE4jByJy8u7eGEz3z1KF2rb8-ufzIS7CVnj3p39L4XksGVkNmublvwnfUY3a195Urej8umLSCOsJ5o7Q"/>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline text-xl font-bold text-on-surface group-hover:text-primary transition-colors">Artisan Cookie Box</h3>
+<span class="text-xl font-bold text-primary font-headline">$6.50</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 flex-1">Three hand-baked sea salt chocolate chip cookies.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex items-center bg-surface-container-lowest rounded-lg p-1">
+<button class="h-8 w-8 flex items-center justify-center rounded hover:bg-surface-bright text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">remove</span></button>
+<span class="px-4 text-sm font-bold text-on-surface">2</span>
+<button class="h-8 w-8 flex items-center justify-center rounded hover:bg-surface-bright text-primary transition-colors"><span class="material-symbols-outlined text-lg">add</span></button>
+</div>
+<button class="bg-gradient-to-br from-primary to-primary-container text-on-primary px-5 py-2 rounded-lg text-sm font-bold active:scale-95 transition-transform">Add to Cart</button>
+</div>
+</div>
+</div>
+<!-- Item Card 5 (Drink) -->
+<div class="group bg-surface-container-high rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col">
+<div class="relative h-56 overflow-hidden">
+<img alt="Iced Oat Milk Latte" data-alt="layered iced coffee with creamy oat milk in a tall glass showing beautiful marble swirl effects on a dark surface" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDXv_0oUH8G7a8Nxjt1L32tBBX1ex5VUFFchVXfmRDAXwy2ywItlk4HpQmMHlec-batbIuurX_JW5RxWWP6X04c2ooDB4dnLDPE8OPFxXIN6da5Se8oPkFXkGWhb5W2KZtCfjDsUsk-xc4eX2pwHhBTU2Wko_V0ZS_5JgZA0VItd2gXj7jUEYLWu4deSK1FU2A0GNdsZKzNLXHnZZbq-TkToE-vCN1yytmR66krEjhyHgLlfF5wbNoO6i3mLAQfKkiz2lnyw0UTDg"/>
+</div>
+<div class="p-6 flex-1 flex flex-col">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-headline text-xl font-bold text-on-surface group-hover:text-primary transition-colors">Iced Oat Milk Latte</h3>
+<span class="text-xl font-bold text-primary font-headline">$5.75</span>
+</div>
+<p class="text-on-surface-variant text-sm mb-6 flex-1">Single-origin espresso with creamy oat milk and house-made vanilla.</p>
+<div class="flex items-center justify-between mt-auto">
+<div class="flex items-center bg-surface-container-lowest rounded-lg p-1">
+<button class="h-8 w-8 flex items-center justify-center rounded hover:bg-surface-bright text-on-surface-variant transition-colors"><span class="material-symbols-outlined text-lg">remove</span></button>
+<span class="px-4 text-sm font-bold text-on-surface">0</span>
+<button class="h-8 w-8 flex items-center justify-center rounded hover:bg-surface-bright text-primary transition-colors"><span class="material-symbols-outlined text-lg">add</span></button>
+</div>
+<button class="bg-surface-container-highest hover:bg-surface-bright text-on-surface px-5 py-2 rounded-lg text-sm font-bold active:scale-95 transition-transform">Add to Cart</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Floating Sidebar Cart Preview -->
+<div class="fixed right-6 bottom-6 lg:top-24 lg:bottom-auto w-[calc(100%-3rem)] sm:w-80 z-40">
+<div class="bg-surface-container-high border border-outline-variant/15 rounded-2xl shadow-2xl p-6 flex flex-col max-h-[716px] lg:max-h-[calc(100vh-10rem)]">
+<div class="flex items-center justify-between mb-6">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">shopping_bag</span>
+<h4 class="font-headline font-bold text-on-surface">Your Order</h4>
+</div>
+<span class="text-xs font-bold text-on-surface-variant bg-surface-container-lowest px-2 py-1 rounded">3 Items</span>
+</div>
+<div class="flex-1 overflow-y-auto space-y-4 mb-6 pr-2">
+<!-- Cart Item 1 -->
+<div class="flex gap-4 group">
+<img alt="Small Bowl" class="h-12 w-12 rounded-lg object-cover" data-alt="miniature thumbnail of a healthy salad bowl" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAPQEtU7LqGaZald9bzhR12TgsGF3yYvc8LyU8s3JYYwHGVVYneSee7dY71lasFx3Oe-BhGUGIZTOyZ7vPDReNPVLzGlwIzxGRSzXMy51H8IjdlTZTBK67_EY9kKM4WWAGmPesTYia4BHxL3Lq9deJ5XT_QMEVpx2pC3zFrn692w0GQ6eoBO5jwyM05lEi9ZR2TnNAbS8q7Ii3QOis6q8_qCmTc4qRaRYCuhd7IP_hXURoSZ7ni6zXcCbiRa4MIr8x5BohdIg08cA"/>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="text-sm font-bold text-on-surface leading-tight">Avocado Harvest Bowl</p>
+<p class="text-sm font-bold text-primary">$12.50</p>
+</div>
+<p class="text-[10px] text-on-surface-variant">Qty: 1</p>
+</div>
+</div>
+<!-- Cart Item 2 -->
+<div class="flex gap-4 group">
+<img alt="Small Cookie" class="h-12 w-12 rounded-lg object-cover" data-alt="miniature thumbnail of chocolate chip cookies" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBqgFYoDzF6n7wq0bpdwkUTjVo340IlNGu0zu95tph7NHwtYKd5jnMeTQ-Pvzl8FugOm4nrvtYWlTNornOCrFtDEj_zjJHV_UBdioPL3AZDWNb0sOSkWgUEhGNa31sLPl3iiOAnmuiNBr3NbUvSao6qJvEQ2Vp0QqQIRNL4vN8Re1An7B-Ftdq8QhhgLQRszd_RmeksDyWuaKNEFn7DwBUE9INKbrx6dglju1fP85kBliEohYnWMdndd3l-L5_O5S2bDNdhdoAAVg"/>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<p class="text-sm font-bold text-on-surface leading-tight">Artisan Cookie Box</p>
+<p class="text-sm font-bold text-primary">$13.00</p>
+</div>
+<p class="text-[10px] text-on-surface-variant">Qty: 2</p>
+</div>
+</div>
+</div>
+<div class="pt-6 border-t border-outline-variant/15">
+<div class="flex justify-between items-center mb-6">
+<p class="text-on-surface-variant font-medium">Subtotal</p>
+<p class="text-2xl font-bold text-on-surface font-headline tracking-tight">$25.50</p>
+</div>
+<button class="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-4 rounded-xl font-extrabold text-sm uppercase tracking-widest shadow-xl shadow-primary-container/30 active:scale-95 transition-all">
+                    Checkout Now
+                </button>
+<p class="text-center text-[10px] text-on-surface-variant mt-4">Estimated prep time: <span class="text-tertiary">12-15 mins</span></p>
+</div>
+</div>
+</div>
+<!-- Mobile Navigation Suppressor: Following the "Destination" rule, only TopNav/SideNav are present. BottomNavBar is hidden as we are in a sub-view (Selected Cafeteria) -->
+</body></html>

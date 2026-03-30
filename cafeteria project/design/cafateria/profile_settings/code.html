@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Staff Portal | Culinary Architect</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#333345",
+              "on-surface": "#e3e0f8",
+              "on-tertiary-container": "#003744",
+              "surface": "#121222",
+              "surface-container-high": "#28283a",
+              "on-primary-container": "#5f1900",
+              "on-tertiary": "#003543",
+              "on-primary-fixed-variant": "#832600",
+              "on-secondary-container": "#fb9d7d",
+              "on-surface-variant": "#e1bfb5",
+              "on-primary": "#5d1900",
+              "surface-variant": "#333345",
+              "surface-container-low": "#1a1a2b",
+              "tertiary-container": "#00a7cb",
+              "inverse-surface": "#e3e0f8",
+              "secondary": "#ffb59d",
+              "surface-container": "#1e1e2f",
+              "primary-fixed": "#ffdbd0",
+              "surface-dim": "#121222",
+              "surface-bright": "#38374a",
+              "on-secondary": "#581d07",
+              "primary": "#ffb59d",
+              "on-tertiary-fixed": "#001f28",
+              "surface-container-lowest": "#0c0c1d",
+              "inverse-primary": "#ab3500",
+              "tertiary": "#59d5fb",
+              "tertiary-fixed": "#b5ebff",
+              "tertiary-fixed-dim": "#59d5fb",
+              "surface-tint": "#ffb59d",
+              "on-secondary-fixed": "#390c00",
+              "error": "#ffb4ab",
+              "secondary-fixed-dim": "#ffb59d",
+              "secondary-fixed": "#ffdbd0",
+              "primary-container": "#ff6b35",
+              "on-error-container": "#ffdad6",
+              "on-secondary-fixed-variant": "#76331b",
+              "on-primary-fixed": "#390c00",
+              "on-tertiary-fixed-variant": "#004e60",
+              "outline-variant": "#594139",
+              "outline": "#a98a80",
+              "background": "#121222",
+              "primary-fixed-dim": "#ffb59d",
+              "secondary-container": "#76331b",
+              "on-background": "#e3e0f8",
+              "inverse-on-surface": "#2f2f41",
+              "error-container": "#93000a",
+              "on-error": "#690005"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, .font-headline { font-family: 'Manrope', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen">
+<!-- TopNavBar from JSON -->
+<header class="bg-[#1E1E2F] dark:bg-[#1E1E2F] font-['Manrope'] antialiased tracking-tight docked full-width top-0 sticky z-50 border-none shadow-[0_24px_48px_rgba(12,12,29,0.5)]">
+<div class="flex justify-between items-center w-full px-8 h-16 max-w-full mx-auto">
+<div class="flex items-center space-x-8">
+<span class="text-xl font-bold text-[#E3E0F8] after:content-['|Staff_Portal'] after:ml-2 after:text-sm after:font-medium after:text-[#E1BFB5]">Culinary Architect</span>
+<nav class="hidden md:flex space-x-6">
+<a class="text-[#E1BFB5] hover:text-[#E3E0F8] transition-colors" href="#">Dashboard</a>
+<a class="text-[#E1BFB5] hover:text-[#E3E0F8] transition-colors" href="#">Orders</a>
+<a class="text-[#E1BFB5] hover:text-[#E3E0F8] transition-colors" href="#">Menu</a>
+<a class="text-[#E1BFB5] hover:text-[#E3E0F8] transition-colors" href="#">Payments</a>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 text-[#E1BFB5] hover:bg-[#38374A]/40 hover:backdrop-blur-md transition-all active:scale-95 duration-200 rounded-full">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 text-[#FFB59D] font-bold border-b-2 border-[#FF6B35] transition-all active:scale-95 duration-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-outline-variant/30">
+<img alt="Staff Profile Avatar" data-alt="Close up portrait of a professional male chef in a clean white uniform with a focused and friendly expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9km-pArkvcLQYz8C2lkHvLaJtTSp57OZup6ukWB8LafF1OdcnMEqtnEXghMqPKH9frpkKNCngwNn0kNai7Km5_dDGMj1my9mnjHUM1NrSAS0CdTCXtA4g3XvNljTGSD3ewnwhuXCttemlKK9QdKIskkvAvIKhnQ50Bj2R-THxBlJklATbwIiKGQ232nbzVI7YDH8uqpNVmH-a715_RiTzKItwlTWyBXmOa24FiguRoZvB9xyjEFTfsjXRnYdaIh-fgwCbH8LRAQ"/>
+</div>
+</div>
+</div>
+</header>
+<div class="flex min-h-[calc(100vh-64px)]">
+<!-- SideNavBar from JSON -->
+<aside class="bg-[#1A1A2B] dark:bg-[#1A1A2B] font-['Manrope'] text-sm font-medium tracking-wide h-screen w-64 fixed left-0 top-16 z-40 no-line flat no-border hidden lg:block">
+<div class="flex flex-col h-full py-6 space-y-2">
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">receipt_long</span>
+<span>Orders</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">restaurant_menu</span>
+<span>Menu</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span>Payments</span>
+</a>
+<a class="bg-[#FF6B35]/15 text-[#FFB59D] rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 active:translate-x-1 transition-transform" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span>Profile</span>
+</a>
+<div class="mt-auto pt-6 border-t border-outline-variant/10">
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span>Support</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 lg:ml-64 p-8 bg-surface">
+<div class="max-w-5xl mx-auto">
+<!-- Page Header -->
+<div class="mb-10">
+<h1 class="text-4xl font-extrabold text-on-surface tracking-tight mb-2">Staff Settings</h1>
+<p class="text-on-surface-variant">Manage your cafeteria profile, kitchen hierarchy, and security credentials.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Sidebar Tabs/Status -->
+<div class="md:col-span-1 space-y-6">
+<div class="bg-surface-container-high rounded-xl p-6 shadow-2xl">
+<div class="flex flex-col items-center text-center mb-6">
+<div class="relative mb-4">
+<img alt="Profile" class="w-24 h-24 rounded-full border-4 border-primary-container" data-alt="Top down professional food photography shot of a modern industrial kitchen with stainless steel surfaces and warm lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuChjNzD08RLQSGnzSwagChP5HB63HpyNRoSChmGEzSgxHbeQB3pnrAMfvQO8BnMIjzGwsYsUGftMArMS0u5crUKHvwlnK8njKzYbQ6H4oTcC6d4BSUjldzBft_evzzLmD6hIIcFWB1e_Vee4shWB0wcyTYBc2vQg5IxWx4P7UXvItlQPkHfZGkpnDkciJnOJCJBTBR5CN712CLxSLM5m_ZuVYbpxWfZw9RzYDfLK07v3-7RdWISECRgGCfKEu4M5BS6EwQxsFm_oA"/>
+<button class="absolute bottom-0 right-0 bg-primary-container p-2 rounded-full text-on-primary shadow-lg hover:scale-105 transition-transform">
+<span class="material-symbols-outlined text-sm">edit</span>
+</button>
+</div>
+<h2 class="text-xl font-bold text-on-surface">The Grand Hall</h2>
+<p class="text-sm text-on-surface-variant font-medium">Main University Cafeteria</p>
+</div>
+<div class="space-y-1">
+<button class="w-full flex items-center justify-between p-3 rounded-lg bg-surface-bright/20 text-primary border-r-4 border-primary-container">
+<span class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">store</span> Profile Info</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 rounded-lg text-on-surface-variant hover:bg-surface-bright/10 transition-colors">
+<span class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">security</span> Security</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+<button class="w-full flex items-center justify-between p-3 rounded-lg text-on-surface-variant hover:bg-surface-bright/10 transition-colors">
+<span class="flex items-center gap-3"><span class="material-symbols-outlined text-[20px]">notifications_active</span> Alerts</span>
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- System Status Card -->
+<div class="bg-surface-container rounded-xl p-6 border border-outline-variant/10">
+<h3 class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-4">Kitchen System Status</h3>
+<div class="flex items-center justify-between mb-3">
+<span class="text-sm">POS Terminal 01</span>
+<span class="h-2 w-2 rounded-full bg-tertiary"></span>
+</div>
+<div class="flex items-center justify-between mb-3">
+<span class="text-sm">Inventory Sync</span>
+<span class="h-2 w-2 rounded-full bg-tertiary"></span>
+</div>
+<div class="flex items-center justify-between">
+<span class="text-sm">Order Display</span>
+<span class="h-2 w-2 rounded-full bg-error animate-pulse"></span>
+</div>
+</div>
+</div>
+<!-- Main Settings Forms -->
+<div class="md:col-span-2 space-y-8">
+<!-- Section: Cafeteria Info -->
+<section class="bg-surface-container-high rounded-xl overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-outline-variant/10 flex justify-between items-center">
+<h3 class="text-lg font-bold">Cafeteria Contact Information</h3>
+<button class="text-xs font-bold text-primary hover:underline uppercase tracking-tighter">Restore Defaults</button>
+</div>
+<div class="p-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="col-span-2 space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Official Cafeteria Name</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-on-surface focus:ring-2 focus:ring-primary-container/40 transition-all outline-none" type="text" value="The Grand Hall | Central Campus"/>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Primary Email</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-on-surface focus:ring-2 focus:ring-primary-container/40 transition-all outline-none" type="email" value="grandhall.catering@university.edu"/>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Contact Extension</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-on-surface focus:ring-2 focus:ring-primary-container/40 transition-all outline-none" type="text" value="+1 (555) 012-4492"/>
+</div>
+<div class="col-span-2 space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Physical Campus Location</label>
+<textarea class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-on-surface focus:ring-2 focus:ring-primary-container/40 transition-all outline-none" rows="2">Building 7, North Wing, Level 2, University Central Campus</textarea>
+</div>
+</div>
+</section>
+<!-- Section: Manager Details -->
+<section class="bg-surface-container-high rounded-xl overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-outline-variant/10">
+<h3 class="text-lg font-bold">Operational Manager</h3>
+</div>
+<div class="p-8 flex flex-col sm:flex-row gap-8 items-start">
+<div class="w-full sm:w-1/3 space-y-4">
+<div class="aspect-square bg-surface-container-lowest rounded-xl flex items-center justify-center overflow-hidden">
+<img alt="Manager Avatar" class="w-full h-full object-cover" data-alt="Close up portrait of a middle-aged woman with glasses and professional attire, standing in a bright modern office environment" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrwUEan6V8h158WpINYT0frKrh-6jMLFasTBtL9CGb1UywdopwikXgUwsanqwLuLS7AUQ396VSmn2sbFCRgMWtElnQhQS2GNoBVe6DmzeLsUFEZ5HUU7aI8AvLCKVdtHDDM-hk-s06DAijEP0frysBkRrgQ42N3c4vh-QfTEzaL2QKN0xbIioLRiElZHiie5EZNgFZObsjxzok_9y6BOrN16rA78aYfxQ8SfrfPTCmEbOzAMMh3-Yb42IKKiB3Gl8L83bzQamg5g"/>
+</div>
+<button class="w-full py-2 bg-surface-bright/20 hover:bg-surface-bright/40 text-xs font-bold uppercase rounded-lg transition-colors">Replace Manager</button>
+</div>
+<div class="w-full sm:w-2/3 space-y-6">
+<div class="grid grid-cols-2 gap-4">
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Full Name</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-on-surface focus:ring-2 focus:ring-primary-container/40 outline-none" type="text" value="Elena Rodriguez"/>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Staff ID</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-on-surface-variant opacity-70 cursor-not-allowed" readonly="" type="text" value="UNIV-88290"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Certification Level</label>
+<div class="flex flex-wrap gap-2">
+<span class="px-3 py-1 bg-tertiary-container/20 text-tertiary border border-tertiary/20 rounded-full text-xs font-bold">HACCP Certified</span>
+<span class="px-3 py-1 bg-tertiary-container/20 text-tertiary border border-tertiary/20 rounded-full text-xs font-bold">Health Safety L3</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Section: Security -->
+<section class="bg-surface-container-high rounded-xl overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-outline-variant/10">
+<h3 class="text-lg font-bold">Security &amp; Credentials</h3>
+</div>
+<div class="p-8 space-y-6">
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Current Password</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-on-surface focus:ring-2 focus:ring-primary-container/40 outline-none" placeholder="••••••••••••" type="password"/>
+</div>
+<div class="hidden sm:block"></div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">New Password</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-on-surface focus:ring-2 focus:ring-primary-container/40 outline-none" placeholder="••••••••••••" type="password"/>
+</div>
+<div class="space-y-2">
+<label class="block text-xs font-bold text-on-surface-variant uppercase tracking-wider">Confirm New Password</label>
+<input class="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-on-surface focus:ring-2 focus:ring-primary-container/40 outline-none" placeholder="••••••••••••" type="password"/>
+</div>
+</div>
+<div class="bg-[#FF6B35]/10 border-l-4 border-primary-container p-4 rounded-r-lg">
+<div class="flex gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+<p class="text-sm text-on-surface-variant">Changing your password will log you out of all active kitchen terminals and mobile inventory scanners.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Form Actions -->
+<div class="flex flex-col sm:flex-row gap-4 justify-end pt-4 pb-12">
+<button class="px-8 py-3 rounded-lg text-on-surface-variant font-bold hover:bg-surface-bright/20 transition-all active:scale-95">Discard Changes</button>
+<button class="px-10 py-3 rounded-lg bg-gradient-to-br from-[#FFB59D] to-[#FF6B35] text-[#5D1900] font-bold shadow-lg shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all">
+                                Update Profile Settings
+                            </button>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Mobile Navigation (BottomNavBar substitute for small screens) -->
+<div class="md:hidden fixed bottom-0 left-0 right-0 bg-surface-container-low h-16 flex items-center justify-around z-50 px-4">
+<button class="flex flex-col items-center gap-1 text-[#E1BFB5]">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[10px]">Dashboard</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#E1BFB5]">
+<span class="material-symbols-outlined">receipt_long</span>
+<span class="text-[10px]">Orders</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#FFB59D]">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">account_circle</span>
+<span class="text-[10px]">Settings</span>
+</button>
+<button class="flex flex-col items-center gap-1 text-[#E1BFB5]">
+<span class="material-symbols-outlined">more_horiz</span>
+<span class="text-[10px]">More</span>
+</button>
+</div>
+</body></html>

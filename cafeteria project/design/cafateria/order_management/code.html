@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-highest": "#333345",
+            "on-surface": "#e3e0f8",
+            "on-tertiary-container": "#003744",
+            "surface": "#121222",
+            "surface-container-high": "#28283a",
+            "on-primary-container": "#5f1900",
+            "on-tertiary": "#003543",
+            "on-primary-fixed-variant": "#832600",
+            "on-secondary-container": "#fb9d7d",
+            "on-surface-variant": "#e1bfb5",
+            "on-primary": "#5d1900",
+            "surface-variant": "#333345",
+            "surface-container-low": "#1a1a2b",
+            "tertiary-container": "#00a7cb",
+            "inverse-surface": "#e3e0f8",
+            "secondary": "#ffb59d",
+            "surface-container": "#1e1e2f",
+            "primary-fixed": "#ffdbd0",
+            "surface-dim": "#121222",
+            "surface-bright": "#38374a",
+            "on-secondary": "#581d07",
+            "primary": "#ffb59d",
+            "on-tertiary-fixed": "#001f28",
+            "surface-container-lowest": "#0c0c1d",
+            "inverse-primary": "#ab3500",
+            "tertiary": "#59d5fb",
+            "tertiary-fixed": "#b5ebff",
+            "tertiary-fixed-dim": "#59d5fb",
+            "surface-tint": "#ffb59d",
+            "on-secondary-fixed": "#390c00",
+            "error": "#ffb4ab",
+            "secondary-fixed-dim": "#ffb59d",
+            "secondary-fixed": "#ffdbd0",
+            "primary-container": "#ff6b35",
+            "on-error-container": "#ffdad6",
+            "on-secondary-fixed-variant": "#76331b",
+            "on-primary-fixed": "#390c00",
+            "on-tertiary-fixed-variant": "#004e60",
+            "outline-variant": "#594139",
+            "outline": "#a98a80",
+            "background": "#121222",
+            "primary-fixed-dim": "#ffb59d",
+            "secondary-container": "#76331b",
+            "on-background": "#e3e0f8",
+            "inverse-on-surface": "#2f2f41",
+            "error-container": "#93000a",
+            "on-error": "#690005",
+            "status-green": "#28A745",
+            "status-yellow": "#FFC107",
+            "status-red": "#DC3545"
+          },
+          fontFamily: {
+            "headline": ["Manrope"],
+            "body": ["Inter"],
+            "label": ["Inter"]
+          },
+          borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .glass-effect {
+      background: rgba(56, 55, 74, 0.4);
+      backdrop-filter: blur(20px);
+    }
+  </style>
+</head>
+<body class="bg-background text-on-surface font-body selection:bg-primary-container selection:text-on-primary">
+<aside class="h-screen w-64 fixed left-0 top-0 z-40 bg-[#1A1A2B] flex flex-col h-full py-6 space-y-2 font-['Manrope'] text-sm font-medium tracking-wide">
+<div class="px-6 mb-8">
+<h1 class="text-lg font-extrabold text-[#E3E0F8]">Culinary Architect</h1>
+<p class="text-xs text-[#E1BFB5]">Staff Portal</p>
+</div>
+<nav class="flex-1">
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="bg-[#FF6B35]/15 text-[#FFB59D] rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="receipt_long">receipt_long</span>
+<span>Orders</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="restaurant_menu">restaurant_menu</span>
+<span>Menu</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span>Payments</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200 active:translate-x-1" href="#">
+<span class="material-symbols-outlined" data-icon="account_circle">account_circle</span>
+<span>Profile</span>
+</a>
+</nav>
+<div class="pt-6 border-t border-outline-variant/10">
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span>Support</span>
+</a>
+<a class="text-[#E1BFB5] hover:bg-[#38374A]/20 rounded-lg mx-2 my-1 flex items-center space-x-3 p-3 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<main class="ml-64 min-h-screen p-8 lg:p-10 space-y-10">
+<header class="flex justify-between items-end">
+<div>
+<h2 class="text-3xl font-headline font-bold text-on-surface tracking-tight">Order Management</h2>
+<p class="text-on-surface-variant font-body mt-1">Real-time terminal for university cafeteria operations.</p>
+</div>
+<div class="flex gap-4">
+<div class="bg-surface-container-high rounded-xl p-3 flex items-center gap-4 px-6">
+<div class="flex flex-col items-end">
+<span class="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Kitchen Status</span>
+<span class="text-status-green font-bold flex items-center gap-1">
+<span class="w-2 h-2 bg-status-green rounded-full animate-pulse"></span>
+              LIVE
+            </span>
+</div>
+</div>
+</div>
+</header>
+<section class="grid grid-cols-12 gap-6">
+<div class="col-span-12 lg:col-span-8 space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-xl font-headline font-semibold text-on-surface">Active Orders Queue</h3>
+<div class="flex gap-2 bg-surface-container-low p-1 rounded-lg">
+<button class="px-4 py-1.5 rounded-md bg-surface-container-highest text-primary text-sm font-medium">New</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant text-sm font-medium hover:text-on-surface">Preparing</button>
+<button class="px-4 py-1.5 rounded-md text-on-surface-variant text-sm font-medium hover:text-on-surface">Ready</button>
+</div>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container-high rounded-xl p-6 transition-all hover:bg-surface-container-highest group">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-lg">Alex Rivera</h4>
+<p class="text-xs text-on-surface-variant">Student ID: #220941 • 3 mins ago</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-2xl font-headline font-extrabold text-on-surface">$18.50</span>
+<p class="text-[10px] uppercase tracking-tighter text-status-yellow font-bold">Awaiting Acceptance</p>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-8 mb-6">
+<div class="space-y-2">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Order Details</p>
+<ul class="text-sm space-y-1">
+<li class="flex justify-between"><span>2x Spicy Chicken Ramen</span> <span class="text-on-surface-variant">Qty: 2</span></li>
+<li class="flex justify-between"><span>1x Iced Matcha Latte</span> <span class="text-on-surface-variant">Qty: 1</span></li>
+</ul>
+</div>
+<div class="space-y-2">
+<p class="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Payment Method</p>
+<div class="flex items-center gap-2 text-sm text-tertiary">
+<span class="material-symbols-outlined text-sm" data-icon="cloud_done">cloud_done</span>
+<span>Online (Paid)</span>
+</div>
+</div>
+</div>
+<div class="flex gap-3">
+<button class="flex-1 py-3 bg-status-green/10 text-status-green rounded-lg font-bold text-sm hover:bg-status-green hover:text-white transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined" data-icon="check_circle">check_circle</span>
+                Accept Order
+              </button>
+<button class="px-6 py-3 bg-status-red/10 text-status-red rounded-lg font-bold text-sm hover:bg-status-red hover:text-white transition-colors">
+                Reject
+              </button>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-6 transition-all border-l-4 border-status-yellow">
+<div class="flex justify-between items-start mb-6">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-lg">Jordan Smith</h4>
+<p class="text-xs text-on-surface-variant">Student ID: #220112 • 12 mins ago</p>
+</div>
+</div>
+<div class="text-right">
+<span class="text-2xl font-headline font-extrabold text-on-surface">$9.20</span>
+<p class="text-[10px] uppercase tracking-tighter text-status-yellow font-bold">Preparing</p>
+</div>
+</div>
+<div class="flex items-center justify-between bg-surface-container-lowest p-4 rounded-lg mb-6">
+<div class="flex items-center gap-6">
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-on-surface-variant">Current Step</span>
+<span class="text-sm font-bold">Kitchen Preparation</span>
+</div>
+<div class="h-8 w-px bg-outline-variant/20"></div>
+<div class="flex flex-col">
+<span class="text-[10px] uppercase text-on-surface-variant">Timer</span>
+<span class="text-sm font-bold text-status-yellow">08:42 Left</span>
+</div>
+</div>
+<button class="px-5 py-2 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-lg font-bold text-xs shadow-lg flex items-center gap-2">
+                Mark as Ready
+                <span class="material-symbols-outlined text-xs" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-6 opacity-80 transition-all border-l-4 border-status-green">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 bg-status-green/10 rounded-full flex items-center justify-center text-status-green">
+<span class="material-symbols-outlined" data-icon="done_all">done_all</span>
+</div>
+<div>
+<h4 class="font-headline font-bold text-lg">Casey Wong</h4>
+<p class="text-xs text-on-surface-variant">Ready for Pickup • Bay 4</p>
+</div>
+</div>
+<button class="px-4 py-2 border border-outline-variant rounded-lg text-xs font-bold hover:bg-surface-container-highest transition-colors">
+                Complete Order
+              </button>
+</div>
+</div>
+</div>
+</div>
+<div class="col-span-12 lg:col-span-4 space-y-6">
+<div class="bg-surface-container p-6 rounded-xl space-y-6">
+<div class="flex items-center justify-between">
+<h3 class="text-lg font-headline font-bold text-on-surface">Payment Verification</h3>
+<span class="bg-status-red text-[10px] text-white px-2 py-0.5 rounded-full font-bold">2 PENDING</span>
+</div>
+<div class="space-y-4">
+<div class="bg-surface-container-high rounded-xl p-4 space-y-4 border border-outline-variant/20">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center">
+<span class="material-symbols-outlined text-tertiary" data-icon="receipt">receipt</span>
+</div>
+<div>
+<p class="text-sm font-bold">Order #4492</p>
+<p class="text-[10px] text-on-surface-variant">Student: Priya S. • $24.00</p>
+</div>
+</div>
+<div class="relative group cursor-zoom-in">
+<img alt="Screenshot of a mobile banking transaction confirmation screen showing a successful payment of twenty four dollars" class="w-full h-40 object-cover rounded-lg" data-alt="screenshot of a mobile banking payment confirmation with transaction ID and green checkmark on dark phone screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqch1I8JIvD2BYhB1N72V1mnJfUSbZq2-5SBYibQryF8Qf6rSL4l43ElhpmyYmYL9IGNDobvud89d3G9LknKBm5uky4-qOQVaRz9va0mDHrEjNiS6i4rUD-z5L9TsLN27PQDkm0xsgFNdYxEAhNj_S3cn4iFouaJNEFrSv-_v5z-PDH9a9yjQN9GxHsmSorl4g0AnJnWlydYQoIFYz32Iim4ILrTW-47CbO10cmq6PR22Er-CQjKl3eZxD4Mu73OxiyJnTR5IaYw"/>
+<div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+<span class="text-xs font-bold text-white bg-black/60 px-3 py-1 rounded-full">Click to Expand</span>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<button class="py-2 bg-status-green/20 text-status-green text-[10px] font-bold rounded-lg hover:bg-status-green hover:text-white transition-colors">Verify Receipt</button>
+<button class="py-2 bg-status-red/20 text-status-red text-[10px] font-bold rounded-lg hover:bg-status-red hover:text-white transition-colors">Flag Issues</button>
+</div>
+</div>
+<div class="bg-surface-container-high/50 rounded-xl p-4 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-on-surface-variant" data-icon="payments">payments</span>
+<span class="text-sm text-on-surface-variant">COD Verification</span>
+</div>
+<span class="text-[10px] font-bold text-on-surface-variant">0 PENDING</span>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-high rounded-xl p-6">
+<h3 class="text-sm font-bold uppercase tracking-widest text-on-surface-variant mb-4">Stock Alerts</h3>
+<div class="space-y-3">
+<div class="flex items-center justify-between p-3 bg-status-red/10 rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-status-red" data-icon="warning">warning</span>
+<span class="text-sm font-medium">Boba Pearls</span>
+</div>
+<span class="text-xs font-bold text-status-red">LOW: 12%</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-status-yellow/10 rounded-lg">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-status-yellow" data-icon="inventory_2">inventory_2</span>
+<span class="text-sm font-medium">Whole Milk</span>
+</div>
+<span class="text-xs font-bold text-status-yellow">30% Left</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<div class="fixed bottom-8 right-8 z-50">
+<button class="w-14 h-14 rounded-full bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-[0_24px_48px_rgba(12,12,29,0.5)] flex items-center justify-center hover:scale-105 active:scale-95 transition-all">
+<span class="material-symbols-outlined" data-icon="add" style="font-variation-settings: 'wght' 600;">add</span>
+</button>
+</div>
+</body></html>
