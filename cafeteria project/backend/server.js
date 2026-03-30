@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
-const db = require('./database');
+const supabase = require('./database');
 const adminAuthRoutes = require('./routes/adminAuth');
 const adminStudentsRoutes = require('./routes/adminStudents');
 const adminCafeteriasRoutes = require('./routes/adminCafeterias');
@@ -31,9 +31,9 @@ const PORT = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true }));
-app.use('/uploads', require('express').static(require('path').join(__dirname, '../frontend/public/uploads')));
-app.use('/screenshots', require('express').static(require('path').join(__dirname, '../frontend/public/screenshots')));
-app.use('/avatars', require('express').static(require('path').join(__dirname, '../frontend/public/avatars')));
+app.use('/uploads', require('express').static(require('path').join(__dirname, '../public/uploads')));
+app.use('/screenshots', require('express').static(require('path').join(__dirname, '../public/screenshots')));
+app.use('/avatars', require('express').static(require('path').join(__dirname, '../public/avatars')));
 
 // Routes
 app.use('/api/admin', adminAuthRoutes);
@@ -56,11 +56,19 @@ app.use('/api/student/menu', studentAuth, studentMenuRoutes);
 app.use('/api/student/orders', studentAuth, studentOrdersRoutes);
 app.use('/api/student/profile', studentAuth, studentProfileRoutes);
 
-app.get('/api/payments/public/:cafeteriaId', (req, res) => {
-    db.get('SELECT * FROM payment_info WHERE cafeteria_id = ?', [req.params.cafeteriaId], (err, row) => {
-        if (err) return res.status(500).json({ message: 'Database error' });
+app.get('/api/payments/public/:cafeteriaId', async (req, res) => {
+    try {
+        const { data: row, error } = await supabase
+            .from('payment_info')
+            .select('*')
+            .eq('cafeteria_id', req.params.cafeteriaId)
+            .maybeSingle();
+            
+        if (error) return res.status(500).json({ message: 'Database error' });
         res.json(row || null);
-    });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
 });
 
 app.get('/', (req, res) => {

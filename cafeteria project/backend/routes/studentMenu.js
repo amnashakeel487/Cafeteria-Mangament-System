@@ -1,26 +1,42 @@
 const express = require('express');
-const db = require('../database');
+const supabase = require('../database');
 
 const router = express.Router();
 
 // GET cafeteria info, categories, and menu items
-router.get('/:cafeteriaId', (req, res) => {
-    const { cafeteriaId } = req.params;
+router.get('/:cafeteriaId', async (req, res) => {
+    try {
+        const { cafeteriaId } = req.params;
 
-    db.get(`SELECT id, name, location, contact, profile_picture FROM cafeterias WHERE id = ?`, [cafeteriaId], (err, cafeteria) => {
-        if (err) return res.status(500).json({ message: 'Database error' });
+        const { data: cafeteria, error: cafeteriaErr } = await supabase
+            .from('cafeterias')
+            .select('id, name, location, contact, profile_picture')
+            .eq('id', cafeteriaId)
+            .maybeSingle();
+
+        if (cafeteriaErr) return res.status(500).json({ message: 'Database error' });
         if (!cafeteria) return res.status(404).json({ message: 'Cafeteria not found' });
 
-        db.all(`SELECT * FROM menu_categories WHERE cafeteria_id = ? ORDER BY name ASC`, [cafeteriaId], (err, categories) => {
-            if (err) return res.status(500).json({ message: 'Database error' });
+        const { data: categories, error: catErr } = await supabase
+            .from('menu_categories')
+            .select('*')
+            .eq('cafeteria_id', cafeteriaId)
+            .order('name', { ascending: true });
 
-            db.all(`SELECT * FROM menu_items WHERE cafeteria_id = ? ORDER BY id DESC`, [cafeteriaId], (err, items) => {
-                if (err) return res.status(500).json({ message: 'Database error' });
+        if (catErr) return res.status(500).json({ message: 'Database error' });
 
-                res.json({ cafeteria, categories, items });
-            });
-        });
-    });
+        const { data: items, error: itemsErr } = await supabase
+            .from('menu_items')
+            .select('*')
+            .eq('cafeteria_id', cafeteriaId)
+            .order('id', { ascending: false });
+
+        if (itemsErr) return res.status(500).json({ message: 'Database error' });
+
+        res.json({ cafeteria, categories, items });
+    } catch (err) {
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
 
 module.exports = router;

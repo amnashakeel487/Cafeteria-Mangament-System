@@ -1,35 +1,53 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../database');
+const supabase = require('../database');
 
 const router = express.Router();
 
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
         return res.status(400).json({ message: 'Email and password are required' });
     }
 
-    db.get('SELECT * FROM users WHERE email = ? AND role = ?', [email.trim(), 'student'], async (err, student) => {
-        if (err) return res.status(500).json({ message: 'Database error' });
+    try {
+        const { data: student, error } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', email.trim())
+            .eq('role', 'student')
+            .maybeSingle();
+
+        if (error) {
+            console.error('Database error on student login:', error);
+            return res.status(500).json({ message: 'Database error' });
+        }
 
         if (!student) {
             // For demo purposes, auto-register students instead of failing if not found.
-            // In production, this would be a separate register endpoint.
             const hashedPassword = await bcrypt.hash(password, 10);
-            db.run(
-                `INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)`,
-                [email.split('@')[0], email.trim(), hashedPassword, 'student'],
-                function(err) {
-                    if (err) return res.status(500).json({ message: 'Failed to auto-register student: ' + err.message });
-                    const newStudent = { id: this.lastID, name: email.split('@')[0], email: email.trim(), role: 'student' };
-                    const token = jwt.sign(newStudent, process.env.JWT_SECRET || 'secret_key', { expiresIn: '24h' });
-                    return res.json({ token, student: newStudent });
-                }
-            );
-            return;
+            const newName = email.split('@')[0];
+            const { data: newStudentArray, error: insertError } = await supabase
+                .from('users')
+                .insert({
+                    name: newName,
+                    email: email.trim(),
+                    password: hashedPassword,
+                    role: 'student'
+                })
+                .select();
+
+            if (insertError) {
+                console.error('Insert error inside auto-register:', insertError);
+                return res.status(500).json({ message: 'Failed to auto-register student: ' + insertError.message });
+            }
+
+            const newStudent = newStudentArray[0];
+            const tokenPayload = { id: newStudent.id, name: newStudent.name, email: newStudent.email, role: 'student' };
+            const token = jwt.sign(tokenPayload, process.env.JWT_SECRET || 'secret_key', { expiresIn: '24h' });
+            return res.json({ token, student: tokenPayload });
         }
 
         // Validate password
@@ -48,7 +66,10 @@ router.post('/login', (req, res) => {
 
         const token = jwt.sign(tokenPayload, process.env.JWT_SECRET || 'secret_key', { expiresIn: '24h' });
         res.json({ token, student: tokenPayload });
-    });
+    } catch (err) {
+        console.error('Unexpected error during login:', err);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
 
 module.exports = router;

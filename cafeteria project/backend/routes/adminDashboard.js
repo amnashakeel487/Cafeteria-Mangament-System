@@ -1,45 +1,81 @@
 const express = require('express');
-const db = require('../database');
+const supabase = require('../database');
 const router = express.Router();
 
-router.get('/stats', (req, res) => {
-    const stats = {
-        totalStudents: 0,
-        totalCafeterias: 0,
-        totalOrders: 0,
-        totalRevenue: 0,
-        newestStudents: [],
-        topCafeteria: null,
-        cafeteriaLoads: []
-    };
+router.get('/stats', async (req, res) => {
+    try {
+        const stats = {
+            totalStudents: 0,
+            totalCafeterias: 0,
+            totalOrders: 0,
+            totalRevenue: 0,
+            newestStudents: [],
+            topCafeteria: null,
+            cafeteriaLoads: []
+        };
 
-    db.get(`SELECT COUNT(*) as count FROM users WHERE role = 'student'`, (err, row) => {
-        if (!err && row) stats.totalStudents = row.count;
+        const [{ error: err1, count: totalStudents }, { error: err2, count: totalCafeterias }, { data: orders, error: err3 }] = await Promise.all([
+            supabase.from('users').select('*', { count: 'exact', head: true }).eq('role', 'student'),
+            supabase.from('cafeterias').select('*', { count: 'exact', head: true }),
+            supabase.from('orders').select('cafeteria_id, total_amount')
+        ]);
+        
+        if (!err1) stats.totalStudents = totalStudents || 0;
+        if (!err2) stats.totalCafeterias = totalCafeterias || 0;
+        if (!err3 && orders) {
+            stats.totalOrders = orders.length;
+            stats.totalRevenue = orders.reduce((sum, order) => sum + (order.total_amount || 0), 0);
+        }
 
-        db.get(`SELECT COUNT(*) as count FROM cafeterias`, (err, row) => {
-            if (!err && row) stats.totalCafeterias = row.count;
+        const { data: newestStudents } = await supabase
+            .from('users')
+            .select('id, name, email, contact')
+            .eq('role', 'student')
+            .order('id', { ascending: false })
+            .limit(3);
+            
+        if (newestStudents) stats.newestStudents = newestStudents;
 
-            db.get(`SELECT COUNT(*) as count, SUM(total_amount) as revenue FROM orders`, (err, row) => {
-                if (!err && row) {
-                    stats.totalOrders = row.count;
-                    stats.totalRevenue = row.revenue || 0;
-                }
+        const { data: cafeterias } = await supabase
+            .from('cafeterias')
+            .select('id, name');
 
-                db.all(`SELECT id, name, email, contact FROM users WHERE role = 'student' ORDER BY id DESC LIMIT 3`, (err, rows) => {
-                    if (!err && rows) stats.newestStudents = rows;
-
-                    db.get(`SELECT c.name, COUNT(o.id) as order_count FROM cafeterias c LEFT JOIN orders o ON c.id = o.cafeteria_id GROUP BY c.id ORDER BY order_count DESC LIMIT 1`, (err, row) => {
-                        if (!err && row) stats.topCafeteria = row;
-
-                        db.all(`SELECT c.id, c.name, COUNT(o.id) as active_orders FROM cafeterias c LEFT JOIN orders o ON c.id = o.cafeteria_id GROUP BY c.id`, (err, loads) => {
-                             if (!err && loads) stats.cafeteriaLoads = loads;
-                             res.json(stats);
-                        });
-                    });
-                });
+        if (cafeterias && orders) {
+            const loadsMap = {};
+            cafeterias.forEach(c => {
+                loadsMap[c.id] = { id: c.id, name: c.name, order_count: 0 };
             });
-        });
-    });
+            
+            orders.forEach(o => {
+                if (loadsMap[o.cafeteria_id]) {
+                    loadsMap[o.cafeteria_id].order_count++;
+                }
+            });
+
+            const cafeteriaLoadsArray = Object.values(loadsMap);
+            
+            // Map keys for the old UI
+            stats.cafeteriaLoads = cafeteriaLoadsArray.map(c => ({
+                id: c.id,
+                name: c.name,
+                active_orders: c.order_count
+            }));
+
+            // Find top cafeteria
+            cafeteriaLoadsArray.sort((a, b) => b.order_count - a.order_count);
+            if (cafeteriaLoadsArray.length > 0) {
+                stats.topCafeteria = {
+                    name: cafeteriaLoadsArray[0].name,
+                    order_count: cafeteriaLoadsArray[0].order_count
+                };
+            }
+        }
+
+        res.json(stats);
+    } catch (err) {
+        console.error("Dashboard Stats Error:", err);
+        res.status(500).json({ message: "Server error" });
+    }
 });
 
 module.exports = router;

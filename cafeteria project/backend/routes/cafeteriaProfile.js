@@ -3,11 +3,11 @@ const bcrypt = require('bcryptjs');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
-const db = require('../database');
+const supabase = require('../database');
 const router = express.Router();
 
 // Multer for profile pictures
-const avatarDir = path.join(__dirname, '../../frontend/public/avatars');
+const avatarDir = path.join(__dirname, '../../public/avatars');
 if (!fs.existsSync(avatarDir)) fs.mkdirSync(avatarDir, { recursive: true });
 
 const storage = multer.diskStorage({
@@ -26,52 +26,85 @@ const upload = multer({
 });
 
 // GET profile
-router.get('/', (req, res) => {
-    db.get(`SELECT id, name, email, location, contact, profile_picture FROM cafeterias WHERE id = ?`, [req.cafeteria.id], (err, row) => {
-        if (err || !row) return res.status(500).json({ message: 'Error fetching profile' });
+router.get('/', async (req, res) => {
+    try {
+        const { data: row, error } = await supabase
+            .from('cafeterias')
+            .select('id, name, email, location, contact, profile_picture')
+            .eq('id', req.cafeteria.id)
+            .maybeSingle();
+
+        if (error || !row) return res.status(500).json({ message: 'Error fetching profile' });
         res.json(row);
-    });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error.' });
+    }
 });
 
 // PUT update profile details (name, location, contact)
-router.put('/', (req, res) => {
-    const { name, location, contact } = req.body;
-    db.run(
-        `UPDATE cafeterias SET name = ?, location = ?, contact = ? WHERE id = ?`,
-        [name, location, contact, req.cafeteria.id],
-        function(err) {
-            if (err) return res.status(500).json({ message: 'Error updating profile' });
-            res.json({ message: 'Profile updated successfully', name, location, contact });
-        }
-    );
+router.put('/', async (req, res) => {
+    try {
+        const { name, location, contact } = req.body;
+        
+        const { error } = await supabase
+            .from('cafeterias')
+            .update({ name, location, contact })
+            .eq('id', req.cafeteria.id);
+
+        if (error) return res.status(500).json({ message: 'Error updating profile' });
+        res.json({ message: 'Profile updated successfully', name, location, contact });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error.' });
+    }
 });
 
 // PUT update password
 router.put('/password', async (req, res) => {
-    const { currentPassword, newPassword } = req.body;
-    db.get(`SELECT password FROM cafeterias WHERE id = ?`, [req.cafeteria.id], async (err, row) => {
-        if (err || !row) return res.status(500).json({ message: 'Error fetching user' });
+    try {
+        const { currentPassword, newPassword } = req.body;
+        
+        const { data: row, error } = await supabase
+            .from('cafeterias')
+            .select('password')
+            .eq('id', req.cafeteria.id)
+            .maybeSingle();
+
+        if (error || !row) return res.status(500).json({ message: 'Error fetching user' });
         
         const isMatch = await bcrypt.compare(currentPassword, row.password);
         if (!isMatch) return res.status(400).json({ message: 'Incorrect current password' });
 
         const hashed = await bcrypt.hash(newPassword, 10);
-        db.run(`UPDATE cafeterias SET password = ? WHERE id = ?`, [hashed, req.cafeteria.id], function(err) {
-            if (err) return res.status(500).json({ message: 'Error updating password' });
-            res.json({ message: 'Password updated successfully' });
-        });
-    });
+        
+        const { error: updateError } = await supabase
+            .from('cafeterias')
+            .update({ password: hashed })
+            .eq('id', req.cafeteria.id);
+
+        if (updateError) return res.status(500).json({ message: 'Error updating password' });
+        res.json({ message: 'Password updated successfully' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error.' });
+    }
 });
 
 // POST upload profile picture
-router.post('/picture', upload.single('avatar'), (req, res) => {
-    if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
-    
-    const imageUrl = `/avatars/${req.file.filename}`;
-    db.run(`UPDATE cafeterias SET profile_picture = ? WHERE id = ?`, [imageUrl, req.cafeteria.id], function(err) {
-        if (err) return res.status(500).json({ message: 'Database error' });
+router.post('/picture', upload.single('avatar'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+        
+        const imageUrl = `/avatars/${req.file.filename}`;
+        
+        const { error } = await supabase
+            .from('cafeterias')
+            .update({ profile_picture: imageUrl })
+            .eq('id', req.cafeteria.id);
+
+        if (error) return res.status(500).json({ message: 'Database error' });
         res.json({ message: 'Profile picture updated', profile_picture: imageUrl });
-    });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error.' });
+    }
 });
 
 module.exports = router;

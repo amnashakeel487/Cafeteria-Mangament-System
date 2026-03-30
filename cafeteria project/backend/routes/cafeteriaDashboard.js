@@ -1,72 +1,78 @@
 const express = require('express');
-const db = require('../database');
+const supabase = require('../database');
 const router = express.Router();
 
 // GET /api/cafeteria/dashboard/stats
 // Returns stats scoped to the logged-in cafeteria via req.cafeteria.id
-router.get('/stats', (req, res) => {
-    const cafeteriaId = req.cafeteria.id;
+router.get('/stats', async (req, res) => {
+    try {
+        const cafeteriaId = req.cafeteria.id;
 
-    const stats = {
-        totalOrders: 0,
-        totalRevenue: 0,
-        pendingOrders: 0,
-        completedOrders: 0,
-        todayOrders: 0,
-        todayRevenue: 0
-    };
+        const { data: orders, error } = await supabase
+            .from('orders')
+            .select('id, total_amount, status, created_at')
+            .eq('cafeteria_id', cafeteriaId);
 
-    db.get(`SELECT COUNT(*) as count, SUM(total_amount) as revenue FROM orders WHERE cafeteria_id = ?`,
-        [cafeteriaId], (err, row) => {
-        if (!err && row) {
-            stats.totalOrders = row.count || 0;
-            stats.totalRevenue = row.revenue || 0;
-        }
+        if (error) return res.status(500).json({ message: 'Database error' });
 
-        db.get(`SELECT COUNT(*) as count FROM orders WHERE cafeteria_id = ? AND status = 'pending'`,
-            [cafeteriaId], (err, row) => {
-            if (!err && row) stats.pendingOrders = row.count || 0;
+        const stats = {
+            totalOrders: 0,
+            totalRevenue: 0,
+            pendingOrders: 0,
+            completedOrders: 0,
+            todayOrders: 0,
+            todayRevenue: 0
+        };
 
-            db.get(`SELECT COUNT(*) as count FROM orders WHERE cafeteria_id = ? AND status = 'completed'`,
-                [cafeteriaId], (err, row) => {
-                if (!err && row) stats.completedOrders = row.count || 0;
+        const todayDateString = new Date().toISOString().split('T')[0];
 
-                // Today's stats
-                db.get(`SELECT COUNT(*) as count, SUM(total_amount) as revenue FROM orders 
-                    WHERE cafeteria_id = ? AND DATE(created_at) = DATE('now')`,
-                    [cafeteriaId], (err, row) => {
-                    if (!err && row) {
-                        stats.todayOrders = row.count || 0;
-                        stats.todayRevenue = row.revenue || 0;
-                    }
-                    res.json(stats);
-                });
-            });
+        orders.forEach(order => {
+            stats.totalOrders++;
+            stats.totalRevenue += order.total_amount;
+            
+            if (order.status === 'pending') stats.pendingOrders++;
+            if (order.status === 'completed') stats.completedOrders++;
+
+            const orderDateString = (order.created_at || '').split('T')[0];
+            if (orderDateString === todayDateString) {
+                stats.todayOrders++;
+                stats.todayRevenue += order.total_amount;
+            }
         });
-    });
+
+        res.json(stats);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
 });
 
 // GET /api/cafeteria/dashboard/orders  — recent orders for this cafeteria
-router.get('/orders', (req, res) => {
-    const cafeteriaId = req.cafeteria.id;
-    const query = `
-        SELECT 
-            orders.id,
-            orders.total_amount,
-            orders.status,
-            orders.created_at as date,
-            users.name as student_name,
-            users.email as student_email
-        FROM orders
-        JOIN users ON orders.user_id = users.id
-        WHERE orders.cafeteria_id = ?
-        ORDER BY orders.id DESC
-        LIMIT 20
-    `;
-    db.all(query, [cafeteriaId], (err, rows) => {
-        if (err) return res.status(500).json({ message: 'Database error' });
-        res.json(rows);
-    });
+router.get('/orders', async (req, res) => {
+    try {
+        const cafeteriaId = req.cafeteria.id;
+        
+        const { data: orders, error } = await supabase
+            .from('orders')
+            .select('id, total_amount, status, created_at, users!inner(name, email)')
+            .eq('cafeteria_id', cafeteriaId)
+            .order('id', { ascending: false })
+            .limit(20);
+
+        if (error) return res.status(500).json({ message: 'Database error' });
+
+        const formatted = orders.map(o => ({
+            id: o.id,
+            total_amount: o.total_amount,
+            status: o.status,
+            date: o.created_at,
+            student_name: o.users?.name,
+            student_email: o.users?.email
+        }));
+
+        res.json(formatted);
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
 });
 
 module.exports = router;
