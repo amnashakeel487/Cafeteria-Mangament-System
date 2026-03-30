@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import DevelopmentTeam from '../../components/DevelopmentTeam';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({ totalStudents: 0, totalCafeterias: 0, totalOrders: 0, totalRevenue: 0, newestStudents: [], topCafeteria: null, cafeteriaLoads: [] });
@@ -267,6 +268,9 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Development Team */}
+      <DevelopmentTeam />
     </section>
   );
 }

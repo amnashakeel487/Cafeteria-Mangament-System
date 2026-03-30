@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import DevelopmentTeam from '../../components/DevelopmentTeam';
 
 const STATUS_STYLES = {
   pending:    'bg-primary-container/20 text-primary border border-primary/30',
@@ -351,6 +352,9 @@ export default function CafeteriaDashboard() {
           </div>
         </div>
       )}
+
+      {/* Development Team */}
+      <DevelopmentTeam />
     </section>
   );
 }
