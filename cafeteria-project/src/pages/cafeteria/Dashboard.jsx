@@ -280,7 +280,7 @@ export default function CafeteriaDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {menuItems.map(item => (
                     <div key={item.id} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/5 flex gap-4 hover:border-primary/30 transition-colors">
-                       <img src={item.image_url ? `${item.image_url}` : 'https://placehold.co/100?text=No+Image'} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
+                       <img src={item.image_url ? item.image_url : 'https://placehold.co/100?text=No+Image'} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
                        <div className="flex-1 flex flex-col justify-between">
                          <p className="font-bold text-sm text-on-surface leading-snug">{item.name}</p>
                          <div className="flex justify-between items-end mt-2">

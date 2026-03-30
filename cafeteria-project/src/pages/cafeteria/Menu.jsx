@@ -75,7 +75,7 @@ export default function CafeteriaMenu() {
   const openEdit = (item) => {
     setEditing(item);
     setForm({ name: item.name, price: item.price, category: item.category, description: item.description || '' });
-    setImagePreview(item.image_url ? `${BASE}${item.image_url}` : '');
+    setImagePreview(item.image_url ? item.image_url : '');
     setImageFile(null);
     setModal('edit');
   };
@@ -226,7 +226,7 @@ export default function CafeteriaMenu() {
           <div key={item.id} className="group relative bg-surface-container-high rounded-xl overflow-hidden hover:shadow-[0_24px_48px_rgba(12,12,29,0.5)] transition-all duration-300 flex flex-col">
             <div className="h-48 overflow-hidden relative bg-surface-container-highest">
               {item.image_url ? (
-                <img src={`${BASE}${item.image_url}`} alt={item.name}
+                <img src={item.image_url} alt={item.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
@@ -284,7 +284,7 @@ export default function CafeteriaMenu() {
               </button>
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="grid grid-cols-2 gap-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-5">
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest ml-1">Dish Name *</label>

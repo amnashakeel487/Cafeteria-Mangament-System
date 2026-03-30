@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 
 export default function CafeteriaLayout() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -26,8 +28,14 @@ export default function CafeteriaLayout() {
 
   return (
     <div className="flex min-h-screen bg-surface text-on-surface font-['Manrope']">
+      {/* Mobile Overlay */}
+      <div 
+        className={`md:hidden fixed inset-0 bg-black/60 z-40 transition-opacity duration-300 ${mobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        onClick={() => setMobileMenuOpen(false)}
+      ></div>
+
       {/* Sidebar */}
-      <aside className="hidden md:flex h-screen w-64 fixed left-0 top-0 z-40 bg-[#1A1A2B] flex-col py-6">
+      <aside className={`h-screen w-64 fixed left-0 top-0 z-50 bg-[#1A1A2B] flex-col py-6 transition-transform duration-300 md:translate-x-0 flex ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="px-6 mb-8">
           <h1 className="text-lg font-extrabold text-on-surface">COMSTAS Cafe</h1>
           <p className="text-xs text-on-surface-variant opacity-80 uppercase tracking-widest mt-0.5">Staff Portal</p>
@@ -75,13 +83,18 @@ export default function CafeteriaLayout() {
       </aside>
 
       {/* Main */}
-      <main className="flex-1 md:ml-64 min-h-screen">
+      <main className="flex-1 md:ml-64 min-h-screen w-full">
         {/* Topbar */}
-        <header className="bg-[#1E1E2F]/90 backdrop-blur-xl fixed top-0 left-0 right-0 md:left-64 z-30 h-16 flex items-center justify-between px-8 border-b border-outline-variant/5 shadow-[0_8px_32px_rgba(12,12,29,0.5)]">
-          <span className="text-lg font-bold text-on-surface">
-            {links.find(l => location.pathname.startsWith(l.path))?.name || 'Portal'}
-            <span className="ml-2 text-sm font-medium text-on-surface-variant opacity-60">| Staff Portal</span>
-          </span>
+        <header className="bg-[#1E1E2F]/90 backdrop-blur-xl fixed top-0 w-full md:w-[calc(100%-16rem)] z-30 h-16 flex items-center justify-between px-4 md:px-8 border-b border-outline-variant/5 shadow-[0_8px_32px_rgba(12,12,29,0.5)]">
+          <div className="flex items-center gap-3">
+            <button className="md:hidden text-on-surface hover:text-primary transition-colors p-2 -ml-2" onClick={() => setMobileMenuOpen(true)}>
+              <span className="material-symbols-outlined mt-1">menu</span>
+            </button>
+            <span className="text-lg font-bold text-on-surface">
+              {links.find(l => location.pathname.startsWith(l.path))?.name || 'Portal'}
+              <span className="ml-2 text-sm font-medium text-on-surface-variant opacity-60 hidden sm:inline">| Staff Portal</span>
+            </span>
+          </div>
           <div className="flex items-center space-x-3">
             <button className="p-2 text-on-surface-variant hover:bg-surface-container-highest rounded-full transition-all">
               <span className="material-symbols-outlined">notifications</span>

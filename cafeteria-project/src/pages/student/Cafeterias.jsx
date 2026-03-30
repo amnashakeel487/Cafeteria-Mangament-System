@@ -35,7 +35,7 @@ export default function StudentCafeterias() {
           <h1 className="text-2xl md:text-3xl font-extrabold text-[#E3E0F8] tracking-tight mb-1 font-['Manrope']">Campus Dining</h1>
           <p className="text-[#E1BFB5] text-sm max-w-lg font-['Inter']">Curated culinary experiences across campus. Select your destination and architect your perfect meal.</p>
         </div>
-        <div className="flex items-center gap-3 bg-[#28283a] p-1.5 rounded-full font-['Inter']">
+        <div className="flex items-center gap-3 bg-[#28283a] p-1.5 rounded-full font-['Inter'] overflow-x-auto whitespace-nowrap w-full md:w-auto custom-scrollbar">
           <button className="px-5 py-2 rounded-full bg-[#FF6B35] text-[#5f1900] font-bold text-sm transition-all duration-200">All</button>
           <button className="px-5 py-2 rounded-full text-[#e1bfb5] hover:bg-[#38374a]/40 font-semibold text-sm transition-all duration-200">Nearest</button>
           <button className="px-5 py-2 rounded-full text-[#e1bfb5] hover:bg-[#38374a]/40 font-semibold text-sm transition-all duration-200">Top Rated</button>
@@ -58,7 +58,7 @@ export default function StudentCafeterias() {
               <div className="h-56 w-full relative overflow-hidden bg-[#333345]">
                 {cafe.profile_picture ? (
                   <img 
-                    src={`${BASE}${cafe.profile_picture}`} 
+                    src={cafe.profile_picture} 
                     alt={cafe.name} 
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
                   />

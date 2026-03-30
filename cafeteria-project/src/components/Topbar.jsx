@@ -1,10 +1,15 @@
 import { Link } from 'react-router-dom';
 
-export default function Topbar() {
+export default function Topbar({ setMobileMenuOpen }) {
   return (
-    <header className="bg-[#121222]/80 backdrop-blur-xl absolute md:fixed top-0 flex w-full md:w-[calc(100%-16rem)] z-40 justify-between items-center px-4 md:px-8 h-20 font-['Manrope'] font-semibold border-b border-outline-variant/5">
-      <div className="flex items-center flex-1 max-w-xl">
-        <div className="relative w-full">
+    <header className="bg-[#121222]/80 backdrop-blur-xl fixed top-0 flex w-full md:w-[calc(100%-16rem)] z-30 justify-between items-center px-4 md:px-8 h-20 font-['Manrope'] font-semibold border-b border-outline-variant/5">
+      <div className="flex items-center flex-1 max-w-xl gap-3">
+        {setMobileMenuOpen && (
+          <button className="md:hidden text-on-surface hover:text-primary transition-colors flex items-center justify-center p-2 -ml-2" onClick={() => setMobileMenuOpen(true)}>
+            <span className="material-symbols-outlined text-2xl">menu</span>
+          </button>
+        )}
+        <div className="relative w-full hidden sm:block">
           <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">search</span>
           <input className="w-full bg-surface-container-lowest border-none rounded-xl pl-12 pr-4 py-2.5 text-sm focus:ring-1 focus:ring-primary/50 text-on-surface placeholder-on-surface-variant/30" placeholder="Search students, venues, or orders..." type="text"/>
         </div>

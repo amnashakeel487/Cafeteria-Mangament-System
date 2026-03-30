@@ -123,14 +123,14 @@ export default function MenuBrowsing() {
         </div>
 
         {/* Menu Grid */}
-        <section className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredItems.map(item => {
             const qty = getCartQty(item.id);
             return (
             <div key={item.id} className="group bg-[#28283a] rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col">
               <div className="relative h-40 overflow-hidden bg-[#333345]">
                 {item.image_url ? (
-                  <img src={`${BASE}${item.image_url}`} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <img src={item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
                     <span className="material-symbols-outlined text-4xl text-[#e1bfb5]/20">restaurant</span>
@@ -214,7 +214,7 @@ export default function MenuBrowsing() {
                 <div key={item.id} className="flex gap-4 group items-center">
                   <div className="h-12 w-12 rounded-lg overflow-hidden bg-[#333345] shrink-0 border border-[#594139]/10">
                     {item.image_url ? (
-                      <img src={`${BASE}${item.image_url}`} alt={item.name} className="h-full w-full object-cover" />
+                      <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" />
                     ) : (
                       <div className="h-full w-full flex items-center justify-center"><span className="material-symbols-outlined text-[#e1bfb5]/20 text-xl">restaurant</span></div>
                     )}

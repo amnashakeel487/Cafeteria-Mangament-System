@@ -139,7 +139,7 @@ export default function OrderTracking() {
           <div className="h-64 rounded-xl overflow-hidden relative shadow-lg group border border-[#594139]/20">
             <div className="absolute inset-0 bg-[#0c0c1d]">
               {activeOrder.cafeteria_image ? (
-                  <img src={`${BASE}${activeOrder.cafeteria_image}`} className="w-full h-full object-cover opacity-40 grayscale group-hover:scale-105 transition-transform duration-700" />
+                  <img src={activeOrder.cafeteria_image} className="w-full h-full object-cover opacity-40 grayscale group-hover:scale-105 transition-transform duration-700" />
               ) : (
                   <div className="w-full h-full flex items-center justify-center opacity-30 bg-[#333345]">
                       <span className="material-symbols-outlined text-[#e1bfb5] text-6xl">restaurant</span>

@@ -179,8 +179,8 @@ export default function CafeteriaOrders() {
                   {/* Screenshot */}
                   {order.payment_screenshot ? (
                     <div className="relative group cursor-zoom-in rounded-xl overflow-hidden"
-                      onClick={() => setPreview(`${BASE}${order.payment_screenshot}`)}>
-                      <img src={`${BASE}${order.payment_screenshot}`} alt="Payment receipt"
+                      onClick={() => setPreview(order.payment_screenshot)}>
+                      <img src={order.payment_screenshot} alt="Payment receipt"
                         className="w-full h-40 object-cover rounded-xl" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
                         <span className="text-xs font-bold text-white bg-black/60 px-3 py-1 rounded-full">Click to Expand</span>
@@ -297,7 +297,7 @@ export default function CafeteriaOrders() {
                         <span className="text-on-surface capitalize">{order.payment_method || 'Cash'}</span>
                       </div>
                       {order.payment_screenshot && (
-                        <button onClick={() => setPreview(`${BASE}${order.payment_screenshot}`)}
+                        <button onClick={() => setPreview(order.payment_screenshot)}
                           className="flex items-center gap-1 text-[10px] font-bold text-tertiary hover:underline mt-1">
                           <span className="material-symbols-outlined text-xs">image</span> View Receipt
                         </button>
@@ -366,8 +366,8 @@ export default function CafeteriaOrders() {
                     </div>
                   </div>
                   {order.payment_screenshot ? (
-                    <div className="relative group cursor-zoom-in" onClick={() => setPreview(`${BASE}${order.payment_screenshot}`)}>
-                      <img src={`${BASE}${order.payment_screenshot}`} alt="receipt"
+                    <div className="relative group cursor-zoom-in" onClick={() => setPreview(order.payment_screenshot)}>
+                      <img src={order.payment_screenshot} alt="receipt"
                         className="w-full h-32 object-cover rounded-lg" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
                         <span className="text-[10px] font-bold text-white bg-black/60 px-3 py-1 rounded-full">Click to Expand</span>

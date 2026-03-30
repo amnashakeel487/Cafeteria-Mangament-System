@@ -152,7 +152,7 @@ export default function CafeteriaProfile() {
             <div className="flex flex-col items-center text-center mb-6">
               <div className="relative mb-4 group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                 {profile.profile_picture ? (
-                  <img src={`${BASE}${profile.profile_picture}`} alt="Profile" className="w-24 h-24 rounded-full border-4 border-primary-container object-cover" />
+                  <img src={profile.profile_picture} alt="Profile" className="w-24 h-24 rounded-full border-4 border-primary-container object-cover" />
                 ) : (
                   <div className="w-24 h-24 rounded-full border-4 border-primary-container bg-surface-container-lowest flex items-center justify-center text-primary text-4xl">
                     <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>restaurant</span>

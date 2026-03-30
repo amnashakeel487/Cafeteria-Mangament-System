@@ -132,7 +132,7 @@ export default function CartCheckout() {
               <div key={item.id} className="flex items-center gap-4 group">
                 <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-[#333345]">
                   {item.image_url ? (
-                    <img src={`${BASE}${item.image_url}`} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                    <img src={item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center"><span className="material-symbols-outlined text-[#e1bfb5]/20 text-2xl">restaurant</span></div>
                   )}
