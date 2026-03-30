@@ -1,10 +1,13 @@
+import { motion } from 'framer-motion';
 import abdullahImg from '../assets/abdullah_avatar.png';
+import amnaImg from '../assets/amna_avatar.png';
+import maidaImg from '../assets/maida_avatar.png';
 
 const teamMembers = [
   {
     name: 'Muhammad Abdullah',
     role: 'Team Leader',
-    description: 'Full-stack developer specializing in modern web technologies and scalable systems architecture.',
+    description: 'Full-stack developer specializing in modern web technologies and scalable systems.',
     image: abdullahImg,
     isLeader: true,
     portfolioUrl: 'https://muhammadabdullahcv.vercel.app/',
@@ -12,16 +15,16 @@ const teamMembers = [
   {
     name: 'Amna Shakeel',
     role: 'Full Stack Developer',
-    description: 'A dedicated Full Stack Developer with expertise in modern web technologies, delivering efficient and user-friendly applications.',
-    initials: 'AS',
+    description: 'Expertise in modern web technologies, delivering user-friendly applications.',
+    image: amnaImg,
     isLeader: false,
     portfolioUrl: 'https://my-portfolio-puce-rho-26.vercel.app/',
   },
   {
     name: 'Maida Amjad',
     role: 'Full Stack Developer',
-    description: 'Full Stack Developer with a strong foundation in end-to-end application development, delivering secure, and high-performance web solutions through modern technologies.',
-    initials: 'MA',
+    description: 'Focus on end-to-end application development and secure web solutions.',
+    image: maidaImg,
     isLeader: false,
     portfolioUrl: 'https://my-portfolio-iota-two-82.vercel.app/',
   },
@@ -29,119 +32,123 @@ const teamMembers = [
 
 export default function DevelopmentTeam() {
   return (
-    <section className="mt-16 mb-4 px-4">
-      {/* Section Header */}
-      <div className="text-center mb-10">
-        <span className="inline-flex items-center gap-2 bg-primary-container/20 text-primary border border-primary/20 px-5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
-          <span className="material-symbols-outlined text-sm">code</span>
-          Meet The Developers
-        </span>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-on-surface mt-3" style={{ fontFamily: 'Manrope' }}>
-          Development Team
-        </h2>
-        <p className="text-on-surface-variant text-sm mt-2 max-w-md mx-auto">
-          The talented minds behind this FYP Portal
-        </p>
-      </div>
+    <motion.section 
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="mt-20 mb-10 px-4"
+    >
+      {/* Outer Card Wrapper */}
+      <div className="max-w-6xl mx-auto bg-surface-container-low/40 backdrop-blur-md rounded-[2.5rem] border border-white/5 p-8 md:p-14 shadow-2xl relative overflow-hidden group/outer">
+        {/* Abstract Background Glows */}
+        <div className="absolute top-0 -right-20 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute bottom-0 -left-20 w-96 h-96 bg-tertiary/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-      {/* Team Leader — Top Center */}
-      <div className="flex justify-center mb-10">
-        <TeamCard member={teamMembers[0]} />
-      </div>
+        {/* Section Header */}
+        <div className="text-center mb-16 relative z-10">
+          <motion.span 
+            initial={{ scale: 0.9 }}
+            whileInView={{ scale: 1 }}
+            className="inline-flex items-center gap-2 bg-primary/10 text-primary border border-primary/20 px-6 py-2 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-6"
+          >
+            <span className="material-symbols-outlined text-[14px]">bolt</span>
+            Engineering Excellence
+          </motion.span>
+          <h2 className="text-4xl md:text-5xl font-black text-on-surface tracking-tight" style={{ fontFamily: 'Manrope' }}>
+            Meet The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-container">Architects</span>
+          </h2>
+          <p className="text-on-surface-variant text-base mt-4 max-w-xl mx-auto font-medium">
+            The visionary engineering team behind the COMSTAS Cafeteria ecosystem.
+          </p>
+        </div>
 
-      {/* Team Members — Bottom Row */}
-      <div className="flex flex-col md:flex-row justify-center items-center md:items-stretch gap-8">
-        {teamMembers.slice(1).map((member, i) => (
-          <TeamCard key={i} member={member} />
-        ))}
+        {/* Team Grid */}
+        <div className="relative z-10">
+          {/* Team Leader — Centered Row */}
+          <div className="flex justify-center mb-12">
+            <TeamCard member={teamMembers[0]} index={0} />
+          </div>
+
+          {/* Developers — Two in Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            {teamMembers.slice(1).map((member, i) => (
+              <TeamCard key={i} member={member} index={i + 1} />
+            ))}
+          </div>
+        </div>
       </div>
-    </section>
+    </motion.section>
   );
 }
 
-function TeamCard({ member }) {
+function TeamCard({ member, index }) {
   return (
-    <div className="group relative w-full max-w-sm flex flex-col">
-      {/* Glow border effect */}
-      <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-primary/60 via-primary-container/40 to-primary/60 opacity-60 group-hover:opacity-100 transition-opacity duration-500 blur-[1px]"></div>
+    <motion.div 
+      initial={{ opacity: 0, scale: 0.95 }}
+      whileInView={{ opacity: 1, scale: 1 }}
+      transition={{ delay: index * 0.1 }}
+      whileHover={{ y: -8 }}
+      className={`group relative flex flex-col items-center p-6 rounded-3xl bg-surface-container-high/60 border border-white/5 backdrop-blur-sm shadow-xl transition-all duration-500 hover:bg-surface-container-highest ${
+        member.isLeader ? 'max-w-md w-full' : 'w-full'
+      }`}
+    >
+      {/* Dynamic Hover Glow */}
+      <div className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500 pointer-events-none ${
+        member.isLeader ? 'bg-primary' : 'bg-tertiary'
+      }`}></div>
 
-      <div className="relative flex-1 bg-surface-container-high rounded-2xl p-8 flex flex-col items-center text-center overflow-hidden transition-all duration-300 group-hover:bg-surface-container-highest">
-        {/* Subtle gradient overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none"></div>
-
-        {/* Avatar */}
-        <div className="relative z-10 mb-6">
-          <div className="relative">
-            {/* Ring */}
-            <div className={`w-32 h-32 rounded-full p-[4px] ${
-              member.isLeader
-                ? 'bg-gradient-to-br from-primary via-primary-container to-primary'
-                : 'bg-gradient-to-br from-tertiary via-tertiary-container to-tertiary'
-            }`}>
-              {member.image ? (
-                <img
-                  src={member.image}
-                  alt={member.name}
-                  className="w-full h-full rounded-full object-cover border-2 border-surface-container-high shadow-xl"
-                />
-              ) : (
-                <div className="w-full h-full rounded-full bg-primary-container/30 border-2 border-surface-container-high flex items-center justify-center shadow-xl">
-                  <span className="text-4xl font-extrabold text-primary/70" style={{ fontFamily: 'Manrope' }}>
-                    {member.initials}
-                  </span>
-                </div>
-              )}
-            </div>
-
-            {/* Badge icon */}
-            <div className={`absolute -bottom-1 -right-1 w-10 h-10 rounded-full flex items-center justify-center shadow-2xl ${
-              member.isLeader
-                ? 'bg-gradient-to-br from-[#FFD700] to-[#FFA500]'
-                : 'bg-gradient-to-br from-tertiary to-tertiary-container'
-            }`}>
-              <span className="material-symbols-outlined text-base text-white" style={{ fontVariationSettings: "'FILL' 1" }}>
-                {member.isLeader ? 'workspace_premium' : 'star'}
-              </span>
-            </div>
-          </div>
+      {/* Profile Image Container */}
+      <div className="relative mb-6">
+        <div className={`w-28 h-28 md:w-32 md:h-32 rounded-full p-1 shadow-2xl transition-transform duration-500 group-hover:scale-105 ${
+          member.isLeader 
+            ? 'bg-gradient-to-tr from-primary via-primary-container to-primary' 
+            : 'bg-gradient-to-tr from-tertiary via-tertiary-container to-tertiary'
+        }`}>
+          <img 
+            src={member.image} 
+            alt={member.name}
+            className="w-full h-full rounded-full object-cover border-4 border-surface-container-high"
+          />
         </div>
-
-        {/* Info */}
-        <div className="relative z-10 space-y-4 flex-1 flex flex-col">
-          <h3 className="text-xl font-extrabold text-on-surface" style={{ fontFamily: 'Manrope' }}>
-            {member.name}
-          </h3>
-
-          <div>
-             <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest ${
-                member.isLeader
-                ? 'bg-primary-container/20 text-primary border border-primary/20 shadow-sm'
-                : 'bg-tertiary/10 text-tertiary border border-tertiary/20 shadow-sm'
-            }`}>
-                <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-                {member.isLeader ? 'shield' : 'code'}
-                </span>
-                {member.role}
-            </span>
-          </div>
-
-          <p className="text-on-surface-variant text-sm leading-relaxed max-w-[280px]">
-            {member.description}
-          </p>
-
-          <div className="pt-6 mt-auto">
-            <a 
-              href={member.portfolioUrl} 
-              target="_blank" 
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 rounded-xl font-bold text-sm hover:scale-105 active:scale-95 transition-all shadow-lg ambient-shadow"
-            >
-              <span className="material-symbols-outlined text-base">person</span>
-              View Portfolio
-            </a>
-          </div>
+        
+        {/* Floating Icon */}
+        <div className={`absolute -bottom-1 -right-1 w-10 h-10 rounded-2xl flex items-center justify-center shadow-lg transform rotate-12 transition-transform group-hover:rotate-0 duration-300 ${
+          member.isLeader ? 'bg-primary text-on-primary' : 'bg-tertiary text-on-tertiary'
+        }`}>
+          <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+            {member.isLeader ? 'military_tech' : 'verified'}
+          </span>
         </div>
       </div>
-    </div>
+
+      {/* Info Content */}
+      <div className="text-center space-y-4">
+        <div>
+          <h3 className="text-xl font-black text-on-surface tracking-tight" style={{ fontFamily: 'Manrope' }}>
+            {member.name}
+          </h3>
+          <p className={`text-[10px] font-black uppercase tracking-[0.15em] mt-1 ${
+            member.isLeader ? 'text-primary' : 'text-tertiary'
+          }`}>{member.role}</p>
+        </div>
+
+        <p className="text-on-surface-variant text-xs leading-relaxed max-w-[240px] font-medium opacity-80 group-hover:opacity-100 transition-opacity">
+          {member.description}
+        </p>
+
+        {/* Simple Text Button */}
+        <div className="pt-4">
+          <a 
+            href={member.portfolioUrl} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="group/btn inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-on-tertiary-fixed hover:text-primary transition-colors"
+          >
+            Explore Portfolio
+            <span className="material-symbols-outlined text-[14px] transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
+          </a>
+        </div>
+      </div>
+    </motion.div>
   );
 }
