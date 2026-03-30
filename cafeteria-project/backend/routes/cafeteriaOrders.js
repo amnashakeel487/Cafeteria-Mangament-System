@@ -1,28 +1,9 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 const supabase = require('../database');
+const { createUpload, uploadToSupabase } = require('../uploadHelper');
 const router = express.Router();
 
-// Multer for payment screenshot uploads
-const screenshotDir = path.join(__dirname, '../../public/screenshots');
-if (!fs.existsSync(screenshotDir)) fs.mkdirSync(screenshotDir, { recursive: true });
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, screenshotDir),
-    filename: (req, file, cb) => {
-        cb(null, `pay_${Date.now()}${path.extname(file.originalname)}`);
-    }
-});
-const upload = multer({
-    storage,
-    limits: { fileSize: 5 * 1024 * 1024 },
-    fileFilter: (req, file, cb) => {
-        /jpeg|jpg|png|webp/.test(path.extname(file.originalname).toLowerCase())
-            ? cb(null, true) : cb(new Error('Only images allowed'));
-    }
-});
+const upload = createUpload('screenshot', 5);
 
 // ──────────────────────────────────────────────
 // CAFETERIA STAFF ENDPOINTS (require cafeteriaAuth middleware)

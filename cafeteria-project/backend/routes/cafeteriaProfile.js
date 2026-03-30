@@ -1,29 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 const supabase = require('../database');
+const { createUpload, uploadToSupabase, deleteFromSupabase } = require('../uploadHelper');
 const router = express.Router();
 
-// Multer for profile pictures
-const avatarDir = path.join(__dirname, '../../public/avatars');
-if (!fs.existsSync(avatarDir)) fs.mkdirSync(avatarDir, { recursive: true });
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, avatarDir),
-    filename: (req, file, cb) => {
-        cb(null, `cafeteria_${req.cafeteria.id}_${Date.now()}${path.extname(file.originalname)}`);
-    }
-});
-const upload = multer({
-    storage,
-    limits: { fileSize: 5 * 1024 * 1024 },
-    fileFilter: (req, file, cb) => {
-        /jpeg|jpg|png|webp/.test(path.extname(file.originalname).toLowerCase())
-            ? cb(null, true) : cb(new Error('Only images allowed'));
-    }
-});
+const upload = createUpload('avatar', 5);
 
 // GET profile
 router.get('/', async (req, res) => {
@@ -92,8 +73,19 @@ router.put('/password', async (req, res) => {
 router.post('/picture', upload.single('avatar'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+
+        // Fetch current profile to delete old image
+        const { data: current } = await supabase
+            .from('cafeterias')
+            .select('profile_picture')
+            .eq('id', req.cafeteria.id)
+            .maybeSingle();
+
+        if (current && current.profile_picture) {
+            await deleteFromSupabase(current.profile_picture);
+        }
         
-        const imageUrl = `/avatars/${req.file.filename}`;
+        const imageUrl = await uploadToSupabase(req.file.buffer, 'avatars', req.file.originalname);
         
         const { error } = await supabase
             .from('cafeterias')
@@ -103,6 +95,7 @@ router.post('/picture', upload.single('avatar'), async (req, res) => {
         if (error) return res.status(500).json({ message: 'Database error' });
         res.json({ message: 'Profile picture updated', profile_picture: imageUrl });
     } catch (err) {
+        console.error('Profile picture upload error:', err);
         res.status(500).json({ message: 'Server error.' });
     }
 });

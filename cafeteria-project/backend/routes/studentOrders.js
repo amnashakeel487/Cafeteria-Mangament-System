@@ -1,28 +1,10 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
 const supabase = require('../database');
+const { createUpload, uploadToSupabase } = require('../uploadHelper');
 
 const router = express.Router();
 
-// Setup Multer for Screenshots
-const storage = multer.diskStorage({
-    destination: './uploads/screenshots/',
-    filename: (req, file, cb) => {
-        cb(null, `screenshot-${Date.now()}${path.extname(file.originalname)}`);
-    }
-});
-const upload = multer({ 
-    storage,
-    limits: { fileSize: 5000000 }, 
-    fileFilter: (req, file, cb) => {
-        const filetypes = /jpeg|jpg|png/;
-        const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-        const mimetype = filetypes.test(file.mimetype);
-        if (mimetype && extname) return cb(null, true);
-        cb(new Error('Images Only!'));
-    }
-});
+const upload = createUpload('screenshot', 5);
 
 // Create Order endpoint
 router.post('/', upload.single('screenshot'), async (req, res) => {
@@ -41,7 +23,10 @@ router.post('/', upload.single('screenshot'), async (req, res) => {
             return res.status(400).json({ message: 'Invalid items format' });
         }
 
-        const screenshotUrl = req.file ? `/uploads/screenshots/${req.file.filename}` : null;
+        let screenshotUrl = null;
+        if (req.file) {
+            screenshotUrl = await uploadToSupabase(req.file.buffer, 'screenshots', req.file.originalname);
+        }
         
         const status = 'pending';
         const payment_status = 'pending';
@@ -81,7 +66,6 @@ router.post('/', upload.single('screenshot'), async (req, res) => {
 
         if (itemsErr) {
             console.error('Order items insert error:', itemsErr);
-            // Optionally delete the order if items fail, or handle appropriately
         }
         
         res.status(201).json({ message: 'Order created successfully', orderId });

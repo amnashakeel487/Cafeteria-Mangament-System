@@ -1,30 +1,9 @@
 const express = require('express');
-const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
 const supabase = require('../database');
+const { createUpload, uploadToSupabase, deleteFromSupabase } = require('../uploadHelper');
 const router = express.Router();
 
-// Ensure uploads dir exists
-const uploadsDir = path.join(__dirname, '../../public/uploads');
-if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
-
-const storage = multer.diskStorage({
-    destination: (req, file, cb) => cb(null, uploadsDir),
-    filename: (req, file, cb) => {
-        const unique = `${Date.now()}-${Math.round(Math.random() * 1e6)}`;
-        cb(null, `${unique}${path.extname(file.originalname)}`);
-    }
-});
-const upload = multer({
-    storage,
-    limits: { fileSize: 2 * 1024 * 1024 }, // 2MB
-    fileFilter: (req, file, cb) => {
-        const allowed = /jpeg|jpg|png|webp/;
-        if (allowed.test(path.extname(file.originalname).toLowerCase())) cb(null, true);
-        else cb(new Error('Only image files are allowed'));
-    }
-});
+const upload = createUpload('image', 2);
 
 // GET all menu items for this cafeteria
 router.get('/', async (req, res) => {
@@ -48,7 +27,10 @@ router.post('/', upload.single('image'), async (req, res) => {
         const { name, price, category, description } = req.body;
         if (!name || !price || !category) return res.status(400).json({ message: 'Name, price and category are required.' });
         
-        const image_url = req.file ? `/uploads/${req.file.filename}` : null;
+        let image_url = null;
+        if (req.file) {
+            image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname);
+        }
         
         const { data, error } = await supabase
             .from('menu_items')
@@ -66,6 +48,7 @@ router.post('/', upload.single('image'), async (req, res) => {
         if (error) return res.status(500).json({ message: 'Database error' });
         res.status(201).json({ id: data.id, message: 'Menu item added successfully.' });
     } catch (err) {
+        console.error('Menu add error:', err);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -86,7 +69,12 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 
         if (fetchErr || !item) return res.status(404).json({ message: 'Menu item not found.' });
         
-        const image_url = req.file ? `/uploads/${req.file.filename}` : item.image_url;
+        let image_url = item.image_url;
+        if (req.file) {
+            // Delete old image from storage
+            await deleteFromSupabase(item.image_url);
+            image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname);
+        }
         
         const { error: updateErr } = await supabase
             .from('menu_items')
@@ -103,6 +91,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
         if (updateErr) return res.status(500).json({ message: 'Database error' });
         res.json({ message: 'Menu item updated successfully.' });
     } catch (err) {
+        console.error('Menu update error:', err);
         res.status(500).json({ message: 'Server error' });
     }
 });
@@ -119,11 +108,8 @@ router.delete('/:id', async (req, res) => {
 
         if (fetchErr || !item) return res.status(404).json({ message: 'Menu item not found.' });
         
-        // Remove old image file
-        if (item.image_url && item.image_url.startsWith('/uploads/')) {
-            const filePath = path.join(__dirname, '../../public', item.image_url);
-            if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-        }
+        // Remove old image from Supabase Storage
+        await deleteFromSupabase(item.image_url);
         
         const { error: delErr } = await supabase
             .from('menu_items')
