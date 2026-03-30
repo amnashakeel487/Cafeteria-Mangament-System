@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import DevelopmentTeam from '../../components/DevelopmentTeam';
 
 const BASE = '';
 
@@ -105,6 +106,9 @@ export default function StudentCafeterias() {
           )}
         </div>
       )}
+
+      {/* Development Team */}
+      <DevelopmentTeam />
     </div>
   );
 }
