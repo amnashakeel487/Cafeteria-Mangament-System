@@ -7,19 +7,29 @@ const teamMembers = [
     description: 'Full-stack developer specializing in modern web technologies and scalable systems architecture.',
     image: abdullahImg,
     isLeader: true,
+    portfolioUrl: 'https://muhammadabdullahcv.vercel.app/',
   },
   {
-    name: 'Muhammad Waqar Anjum',
-    role: 'Developer',
-    description: 'Creative developer with expertise in UI/UX design and frontend technologies.',
-    initials: 'WA',
+    name: 'Amna Shakeel',
+    role: 'Full Stack Developer',
+    description: 'A dedicated Full Stack Developer with expertise in modern web technologies, delivering efficient and user-friendly applications.',
+    initials: 'AS',
     isLeader: false,
+    portfolioUrl: 'https://my-portfolio-puce-rho-26.vercel.app/',
+  },
+  {
+    name: 'Maida Amjad',
+    role: 'Full Stack Developer',
+    description: 'Full Stack Developer with a strong foundation in end-to-end application development, delivering secure, and high-performance web solutions through modern technologies.',
+    initials: 'MA',
+    isLeader: false,
+    portfolioUrl: 'https://my-portfolio-iota-two-82.vercel.app/',
   },
 ];
 
 export default function DevelopmentTeam() {
   return (
-    <section className="mt-16 mb-4">
+    <section className="mt-16 mb-4 px-4">
       {/* Section Header */}
       <div className="text-center mb-10">
         <span className="inline-flex items-center gap-2 bg-primary-container/20 text-primary border border-primary/20 px-5 py-1.5 rounded-full text-xs font-bold uppercase tracking-widest mb-4">
@@ -35,12 +45,12 @@ export default function DevelopmentTeam() {
       </div>
 
       {/* Team Leader — Top Center */}
-      <div className="flex justify-center mb-8">
+      <div className="flex justify-center mb-10">
         <TeamCard member={teamMembers[0]} />
       </div>
 
       {/* Team Members — Bottom Row */}
-      <div className="flex justify-center gap-6 flex-wrap">
+      <div className="flex flex-col md:flex-row justify-center items-center md:items-stretch gap-8">
         {teamMembers.slice(1).map((member, i) => (
           <TeamCard key={i} member={member} />
         ))}
@@ -51,19 +61,19 @@ export default function DevelopmentTeam() {
 
 function TeamCard({ member }) {
   return (
-    <div className="group relative w-full max-w-xs">
+    <div className="group relative w-full max-w-sm flex flex-col">
       {/* Glow border effect */}
       <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-br from-primary/60 via-primary-container/40 to-primary/60 opacity-60 group-hover:opacity-100 transition-opacity duration-500 blur-[1px]"></div>
 
-      <div className="relative bg-surface-container-high rounded-2xl p-8 flex flex-col items-center text-center overflow-hidden transition-all duration-300 group-hover:bg-surface-container-highest">
+      <div className="relative flex-1 bg-surface-container-high rounded-2xl p-8 flex flex-col items-center text-center overflow-hidden transition-all duration-300 group-hover:bg-surface-container-highest">
         {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none"></div>
 
         {/* Avatar */}
-        <div className="relative z-10 mb-5">
+        <div className="relative z-10 mb-6">
           <div className="relative">
             {/* Ring */}
-            <div className={`w-28 h-28 rounded-full p-[3px] ${
+            <div className={`w-32 h-32 rounded-full p-[4px] ${
               member.isLeader
                 ? 'bg-gradient-to-br from-primary via-primary-container to-primary'
                 : 'bg-gradient-to-br from-tertiary via-tertiary-container to-tertiary'
@@ -72,11 +82,11 @@ function TeamCard({ member }) {
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-full h-full rounded-full object-cover border-2 border-surface-container-high"
+                  className="w-full h-full rounded-full object-cover border-2 border-surface-container-high shadow-xl"
                 />
               ) : (
-                <div className="w-full h-full rounded-full bg-primary-container/30 border-2 border-surface-container-high flex items-center justify-center">
-                  <span className="text-3xl font-extrabold text-primary/70" style={{ fontFamily: 'Manrope' }}>
+                <div className="w-full h-full rounded-full bg-primary-container/30 border-2 border-surface-container-high flex items-center justify-center shadow-xl">
+                  <span className="text-4xl font-extrabold text-primary/70" style={{ fontFamily: 'Manrope' }}>
                     {member.initials}
                   </span>
                 </div>
@@ -84,12 +94,12 @@ function TeamCard({ member }) {
             </div>
 
             {/* Badge icon */}
-            <div className={`absolute -bottom-1 -right-1 w-8 h-8 rounded-full flex items-center justify-center shadow-lg ${
+            <div className={`absolute -bottom-1 -right-1 w-10 h-10 rounded-full flex items-center justify-center shadow-2xl ${
               member.isLeader
                 ? 'bg-gradient-to-br from-[#FFD700] to-[#FFA500]'
                 : 'bg-gradient-to-br from-tertiary to-tertiary-container'
             }`}>
-              <span className="material-symbols-outlined text-sm text-white" style={{ fontVariationSettings: "'FILL' 1" }}>
+              <span className="material-symbols-outlined text-base text-white" style={{ fontVariationSettings: "'FILL' 1" }}>
                 {member.isLeader ? 'workspace_premium' : 'star'}
               </span>
             </div>
@@ -97,25 +107,39 @@ function TeamCard({ member }) {
         </div>
 
         {/* Info */}
-        <div className="relative z-10 space-y-3">
-          <h3 className="text-lg font-extrabold text-on-surface" style={{ fontFamily: 'Manrope' }}>
+        <div className="relative z-10 space-y-4 flex-1 flex flex-col">
+          <h3 className="text-xl font-extrabold text-on-surface" style={{ fontFamily: 'Manrope' }}>
             {member.name}
           </h3>
 
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
-            member.isLeader
-              ? 'bg-primary-container/20 text-primary border border-primary/20'
-              : 'bg-tertiary/10 text-tertiary border border-tertiary/20'
-          }`}>
-            <span className="material-symbols-outlined text-[12px]" style={{ fontVariationSettings: "'FILL' 1" }}>
-              {member.isLeader ? 'shield' : 'code'}
+          <div>
+             <span className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest ${
+                member.isLeader
+                ? 'bg-primary-container/20 text-primary border border-primary/20 shadow-sm'
+                : 'bg-tertiary/10 text-tertiary border border-tertiary/20 shadow-sm'
+            }`}>
+                <span className="material-symbols-outlined text-[14px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+                {member.isLeader ? 'shield' : 'code'}
+                </span>
+                {member.role}
             </span>
-            {member.role}
-          </span>
+          </div>
 
-          <p className="text-on-surface-variant text-xs leading-relaxed max-w-[240px]">
+          <p className="text-on-surface-variant text-sm leading-relaxed max-w-[280px]">
             {member.description}
           </p>
+
+          <div className="pt-6 mt-auto">
+            <a 
+              href={member.portfolioUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 rounded-xl font-bold text-sm hover:scale-105 active:scale-95 transition-all shadow-lg ambient-shadow"
+            >
+              <span className="material-symbols-outlined text-base">person</span>
+              View Portfolio
+            </a>
+          </div>
         </div>
       </div>
     </div>
