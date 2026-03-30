@@ -37,8 +37,8 @@ export default function CafeteriaDashboard() {
       const token = localStorage.getItem('cafeteriaToken');
       const config = { headers: { Authorization: `Bearer ${token}` } };
       const [statsRes, ordersRes] = await Promise.all([
-        axios.get('http://localhost:5000/api/cafeteria/dashboard/stats', config),
-        axios.get('http://localhost:5000/api/cafeteria/dashboard/orders', config),
+        axios.get('/api/cafeteria/dashboard/stats', config),
+        axios.get('/api/cafeteria/dashboard/orders', config),
       ]);
       setStats(statsRes.data);
       setOrders(ordersRes.data);
@@ -52,7 +52,7 @@ export default function CafeteriaDashboard() {
   const fetchMenu = async () => {
     try {
       const token = localStorage.getItem('cafeteriaToken');
-      const res = await axios.get('http://localhost:5000/api/cafeteria/menu', {
+      const res = await axios.get('/api/cafeteria/menu', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setMenuItems(res.data);
@@ -96,7 +96,7 @@ export default function CafeteriaDashboard() {
     setSubmitting(true);
     try {
       const token = localStorage.getItem('cafeteriaToken');
-      await axios.post('http://localhost:5000/api/cafeteria/orders/manual', {
+      await axios.post('/api/cafeteria/orders/manual', {
         items: cart,
         total_amount: cartTotal
       }, { headers: { Authorization: `Bearer ${token}` } });
@@ -280,7 +280,7 @@ export default function CafeteriaDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {menuItems.map(item => (
                     <div key={item.id} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/5 flex gap-4 hover:border-primary/30 transition-colors">
-                       <img src={item.image_url ? `http://localhost:5000${item.image_url}` : 'https://placehold.co/100?text=No+Image'} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
+                       <img src={item.image_url ? `${item.image_url}` : 'https://placehold.co/100?text=No+Image'} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
                        <div className="flex-1 flex flex-col justify-between">
                          <p className="font-bold text-sm text-on-surface leading-snug">{item.name}</p>
                          <div className="flex justify-between items-end mt-2">

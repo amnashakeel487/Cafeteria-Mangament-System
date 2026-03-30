@@ -12,7 +12,7 @@ const BANKS = [
   'Askari Bank',
 ];
 
-const BASE = 'http://localhost:5000';
+const BASE = '';
 
 const Toggle = ({ checked, onChange, color = 'primary' }) => (
   <label className="relative inline-flex items-center cursor-pointer">

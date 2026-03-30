@@ -16,7 +16,7 @@ export default function Cafeterias() {
   const fetchCafeterias = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:5000/api/admin/cafeterias', axiosConfig);
+      const res = await axios.get('/api/admin/cafeterias', axiosConfig);
       setCafeterias(res.data);
     } catch (err) {
       showMessage('Failed to load cafeterias', 'error');
@@ -49,10 +49,10 @@ export default function Cafeterias() {
     try {
       setLoading(true);
       if (modalMode === 'add') {
-        await axios.post('http://localhost:5000/api/admin/cafeterias', current, axiosConfig);
+        await axios.post('/api/admin/cafeterias', current, axiosConfig);
         showMessage('Cafeteria registered successfully');
       } else {
-        await axios.put(`http://localhost:5000/api/admin/cafeterias/${current.id}`, current, axiosConfig);
+        await axios.put(`/api/admin/cafeterias/${current.id}`, current, axiosConfig);
         showMessage('Cafeteria updated successfully');
       }
       setIsModalOpen(false);
@@ -68,7 +68,7 @@ export default function Cafeterias() {
     if (!window.confirm("Are you sure you want to delete this cafeteria? This action cannot be undone.")) return;
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:5000/api/admin/cafeterias/${id}`, axiosConfig);
+      await axios.delete(`/api/admin/cafeterias/${id}`, axiosConfig);
       showMessage('Cafeteria deleted successfully');
       fetchCafeterias();
     } catch (err) {

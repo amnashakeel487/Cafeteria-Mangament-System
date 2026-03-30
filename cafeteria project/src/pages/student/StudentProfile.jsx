@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-const BASE = 'http://localhost:5000';
+const BASE = '';
 
 export default function StudentProfile() {
   const navigate = useNavigate();

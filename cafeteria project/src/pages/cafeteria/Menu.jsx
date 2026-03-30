@@ -16,7 +16,7 @@ const getCatStyle = (name) => {
   return CAT_COLORS[Math.abs(hash) % CAT_COLORS.length];
 };
 
-const BASE = 'http://localhost:5000';
+const BASE = '';
 const emptyForm = { name: '', price: '', category: '', description: '' };
 
 export default function CafeteriaMenu() {

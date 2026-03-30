@@ -16,7 +16,7 @@ export default function Students() {
   const fetchStudents = async () => {
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:5000/api/admin/students', axiosConfig);
+      const res = await axios.get('/api/admin/students', axiosConfig);
       setStudents(res.data);
     } catch (err) {
       showMessage('Failed to load students', 'error');
@@ -49,10 +49,10 @@ export default function Students() {
     try {
       setLoading(true);
       if (modalMode === 'add') {
-        await axios.post('http://localhost:5000/api/admin/students', currentStudent, axiosConfig);
+        await axios.post('/api/admin/students', currentStudent, axiosConfig);
         showMessage('Student added successfully');
       } else {
-        await axios.put(`http://localhost:5000/api/admin/students/${currentStudent.id}`, currentStudent, axiosConfig);
+        await axios.put(`/api/admin/students/${currentStudent.id}`, currentStudent, axiosConfig);
         showMessage('Student updated successfully');
       }
       setIsModalOpen(false);
@@ -68,7 +68,7 @@ export default function Students() {
     if (!window.confirm("Are you sure you want to delete this student?")) return;
     try {
       setLoading(true);
-      await axios.delete(`http://localhost:5000/api/admin/students/${id}`, axiosConfig);
+      await axios.delete(`/api/admin/students/${id}`, axiosConfig);
       showMessage('Student deleted successfully');
       fetchStudents();
     } catch (err) {

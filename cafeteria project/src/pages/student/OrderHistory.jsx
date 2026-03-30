@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../../context/CartContext';
 
-const BASE = 'http://localhost:5000';
+const BASE = '';
 
 const statusConfig = {
   completed: { label: 'Completed', bg: 'bg-green-500/10', text: 'text-green-400', border: 'border-green-500/20' },

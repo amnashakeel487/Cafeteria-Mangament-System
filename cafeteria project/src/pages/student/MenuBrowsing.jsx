@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../../context/CartContext';
 
-const BASE = 'http://localhost:5000';
+const BASE = '';
 
 export default function MenuBrowsing() {
   const { cafeteriaId } = useParams();

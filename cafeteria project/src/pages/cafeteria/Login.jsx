@@ -15,7 +15,7 @@ export default function CafeteriaLogin() {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/cafeteria/login', { email, password });
+      const response = await axios.post('/api/cafeteria/login', { email, password });
 
       if (response.data.token) {
         localStorage.setItem('cafeteriaToken', response.data.token);

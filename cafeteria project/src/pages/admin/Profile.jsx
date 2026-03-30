@@ -15,7 +15,7 @@ export default function Profile() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await axios.get('http://localhost:5000/api/admin/profile', {
+      const res = await axios.get('/api/admin/profile', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProfile(res.data);
@@ -49,7 +49,7 @@ export default function Profile() {
       const payload = { ...profile };
       if (password) payload.password = password;
 
-      await axios.put('http://localhost:5000/api/admin/profile', payload, {
+      await axios.put('/api/admin/profile', payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
       // Sync local storage manually to immediately update Sidebar

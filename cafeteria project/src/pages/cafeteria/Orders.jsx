@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const BASE = 'http://localhost:5000';
+const BASE = '';
 
 const STATUS_COLORS = {
   pending:    'text-[#FFC107] bg-[#FFC107]/10 border border-[#FFC107]/30',

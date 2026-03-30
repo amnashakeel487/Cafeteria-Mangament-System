@@ -15,7 +15,7 @@ export default function StudentLogin() {
     setError('');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/student/login', {
+      const response = await axios.post('/api/student/login', {
         email,
         password
       });

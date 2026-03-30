@@ -15,10 +15,10 @@ export default function Dashboard() {
             const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
             
             setLoading(true);
-            const statsRes = await axios.get('http://localhost:5000/api/admin/dashboard/stats', axiosConfig);
+            const statsRes = await axios.get('/api/admin/dashboard/stats', axiosConfig);
             setStats(statsRes.data);
 
-            const ordersRes = await axios.get('http://localhost:5000/api/admin/orders', axiosConfig);
+            const ordersRes = await axios.get('/api/admin/orders', axiosConfig);
             setRecentOrders(ordersRes.data.slice(0, 5)); // First 5 recent
 
         } catch (err) {
