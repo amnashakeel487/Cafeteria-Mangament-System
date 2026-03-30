@@ -142,7 +142,7 @@ function TeamCard({ member, index }) {
             href={member.portfolioUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="group/btn inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-on-tertiary-fixed hover:text-primary transition-colors"
+            className="group/btn inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-primary hover:text-white transition-all underline-offset-4 hover:underline"
           >
             Explore Portfolio
             <span className="material-symbols-outlined text-[14px] transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
