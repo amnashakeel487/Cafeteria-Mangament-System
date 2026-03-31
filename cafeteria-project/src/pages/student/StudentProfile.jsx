@@ -74,16 +74,51 @@ export default function StudentProfile() {
     }
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
+  const handleImageUpload = async (e) => {
+    let file = e.target.files[0];
     if (!file) return;
-    // Read as data URL for preview only — user must save via URL field for persistence
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setProfileImage(reader.result);
-      setMsg({ type: 'error', text: 'To save a profile picture, paste an image URL in the field below your photo.' });
-    };
-    reader.readAsDataURL(file);
+
+    if (file.size > 2 * 1024 * 1024 && file.type.startsWith('image/')) {
+      file = await compressImage(file);
+    }
+
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    try {
+      const token = localStorage.getItem('studentToken');
+      const res = await axios.post(`${BASE}/api/student/profile/picture`, formData, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' }
+      });
+      setProfileImage(res.data.profile_image);
+      const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+      localStorage.setItem('studentData', JSON.stringify({ ...studentData, profile_image: res.data.profile_image }));
+      window.dispatchEvent(new Event('storage'));
+      setMsg({ type: 'success', text: 'Profile picture updated!' });
+    } catch (err) {
+      setMsg({ type: 'error', text: err.response?.data?.message || 'Failed to upload image' });
+    }
+  };
+
+  const compressImage = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let { width, height } = img;
+          const MAX = 1200;
+          if (width > height && width > MAX) { height *= MAX / width; width = MAX; }
+          else if (height > MAX) { width *= MAX / height; height = MAX; }
+          canvas.width = width; canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          canvas.toBlob((blob) => resolve(new File([blob], file.name, { type: 'image/jpeg' })), 'image/jpeg', 0.7);
+        };
+      };
+    });
   };
 
   const handleChangePassword = async () => {
@@ -180,6 +215,23 @@ export default function StudentProfile() {
                   className="w-full bg-[#0c0c1d] border border-[#594139]/30 rounded-lg pl-10 pr-4 py-2 text-xs font-bold text-[#E3E0F8] focus:ring-1 focus:ring-[#FF6B35] outline-none transition-all placeholder:text-[#e1bfb5]/20"
                   value={profileImage && !profileImage.startsWith('data:') && profileImage.startsWith('http') ? profileImage : ''}
                   onChange={e => setProfileImage(e.target.value)}
+                  onBlur={async (e) => {
+                    const url = e.target.value;
+                    if (!url || !url.startsWith('http')) return;
+                    try {
+                      const token = localStorage.getItem('studentToken');
+                      const res = await axios.post(`${BASE}/api/student/profile/picture`, { profile_image: url }, {
+                        headers: { Authorization: `Bearer ${token}` }
+                      });
+                      setProfileImage(res.data.profile_image);
+                      const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+                      localStorage.setItem('studentData', JSON.stringify({ ...studentData, profile_image: res.data.profile_image }));
+                      window.dispatchEvent(new Event('storage'));
+                      setMsg({ type: 'success', text: 'Profile picture updated!' });
+                    } catch (err) {
+                      setMsg({ type: 'error', text: err.response?.data?.message || 'Failed to update picture' });
+                    }
+                  }}
                 />
             </div>
 

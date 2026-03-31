@@ -104,37 +104,41 @@ router.put('/', async (req, res) => {
 });
 
 // POST upload profile picture (Supabase Storage)
-router.post('/picture', upload.single('avatar'), async (req, res) => {
-    try {
-        let imageUrl = req.body.profile_image;
-
-        if (req.file) {
-            // Fetch current to delete old
-            const { data: current } = await supabase
-                .from('users')
-                .select('profile_image')
-                .eq('id', req.user.id)
-                .maybeSingle();
-
-            if (current && current.profile_image) {
-                await deleteFromSupabase(current.profile_image);
-            }
-            imageUrl = await uploadToSupabase(req.file.buffer, 'avatars', req.file.originalname);
+router.post('/picture', (req, res) => {
+    upload.single('avatar')(req, res, async (err) => {
+        if (err) {
+            return res.status(400).json({ message: err.message || 'File upload error' });
         }
+        try {
+            let imageUrl = req.body.profile_image;
 
-        if (!imageUrl && !req.file) return res.status(400).json({ message: 'No media provided' });
+            if (req.file) {
+                const { data: current } = await supabase
+                    .from('users')
+                    .select('profile_image')
+                    .eq('id', req.user.id)
+                    .maybeSingle();
 
-        const { error } = await supabase
-            .from('users')
-            .update({ profile_image: imageUrl })
-            .eq('id', req.user.id);
+                if (current?.profile_image) {
+                    await deleteFromSupabase(current.profile_image);
+                }
+                imageUrl = await uploadToSupabase(req.file.buffer, 'avatars', req.file.originalname);
+            }
 
-        if (error) return res.status(500).json({ message: "Database error" });
-        res.json({ message: "Profile media updated", profile_image: imageUrl });
-    } catch (err) {
-        console.error('Admin picture upload error:', err);
-        res.status(500).json({ message: "Server error" });
-    }
+            if (!imageUrl) return res.status(400).json({ message: 'No media provided' });
+
+            const { error } = await supabase
+                .from('users')
+                .update({ profile_image: imageUrl })
+                .eq('id', req.user.id);
+
+            if (error) return res.status(500).json({ message: 'Database error: ' + error.message });
+            res.json({ message: 'Profile media updated', profile_image: imageUrl });
+        } catch (err) {
+            console.error('Admin picture upload error:', err);
+            res.status(500).json({ message: err.message || 'Server error' });
+        }
+    });
 });
 
 module.exports = router;

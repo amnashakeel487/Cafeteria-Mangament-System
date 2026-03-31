@@ -1,8 +1,10 @@
 const express = require('express');
-const bcrypt = require('bcryptjs'); // standardizing on bcryptjs based on package.json usage
+const bcrypt = require('bcryptjs');
 const supabase = require('../database');
+const { createUpload, uploadToSupabase, deleteFromSupabase } = require('../uploadHelper');
 
 const router = express.Router();
+const upload = createUpload('avatar', 5);
 
 // GET Student Profile
 router.get('/', async (req, res) => {
@@ -112,6 +114,45 @@ router.put('/password', async (req, res) => {
     } catch (err) {
         res.status(500).json({ message: 'Internal Server Error' });
     }
+});
+
+// POST upload profile picture
+router.post('/picture', (req, res) => {
+    upload.single('avatar')(req, res, async (err) => {
+        if (err) {
+            return res.status(400).json({ message: err.message || 'File upload error' });
+        }
+        try {
+            const studentId = req.user.id;
+            let imageUrl = req.body.profile_image;
+
+            if (req.file) {
+                const { data: current } = await supabase
+                    .from('users')
+                    .select('profile_image')
+                    .eq('id', studentId)
+                    .maybeSingle();
+
+                if (current?.profile_image) {
+                    await deleteFromSupabase(current.profile_image);
+                }
+                imageUrl = await uploadToSupabase(req.file.buffer, 'avatars', req.file.originalname);
+            }
+
+            if (!imageUrl) return res.status(400).json({ message: 'No media provided' });
+
+            const { error } = await supabase
+                .from('users')
+                .update({ profile_image: imageUrl })
+                .eq('id', studentId);
+
+            if (error) return res.status(500).json({ message: 'Database error: ' + error.message });
+            res.json({ message: 'Profile media updated', profile_image: imageUrl });
+        } catch (err) {
+            console.error('Student picture upload error:', err);
+            res.status(500).json({ message: err.message || 'Server error' });
+        }
+    });
 });
 
 module.exports = router;
