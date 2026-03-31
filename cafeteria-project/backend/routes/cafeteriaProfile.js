@@ -22,18 +22,18 @@ router.get('/', async (req, res) => {
     }
 });
 
-// PUT update profile details (name, location, contact)
+// PUT update profile details (name, location, contact, picture)
 router.put('/', async (req, res) => {
     try {
-        const { name, location, contact } = req.body;
+        const { name, location, contact, profile_picture } = req.body;
         
         const { error } = await supabase
             .from('cafeterias')
-            .update({ name, location, contact })
+            .update({ name, location, contact, profile_picture })
             .eq('id', req.cafeteria.id);
 
         if (error) return res.status(500).json({ message: 'Error updating profile' });
-        res.json({ message: 'Profile updated successfully', name, location, contact });
+        res.json({ message: 'Profile updated successfully', name, location, contact, profile_picture });
     } catch (err) {
         res.status(500).json({ message: 'Server error.' });
     }
@@ -69,23 +69,29 @@ router.put('/password', async (req, res) => {
     }
 });
 
-// POST upload profile picture
+// POST upload profile picture (handles both file upload and direct URL update)
 router.post('/picture', upload.single('avatar'), async (req, res) => {
     try {
-        if (!req.file) return res.status(400).json({ message: 'No file uploaded' });
+        let imageUrl = req.body.profile_picture;
 
-        // Fetch current profile to delete old image
-        const { data: current } = await supabase
-            .from('cafeterias')
-            .select('profile_picture')
-            .eq('id', req.cafeteria.id)
-            .maybeSingle();
+        if (req.file) {
+            // Fetch current profile to delete old image ONLY if we are uploading a new one to Supabase
+            const { data: current } = await supabase
+                .from('cafeterias')
+                .select('profile_picture')
+                .eq('id', req.cafeteria.id)
+                .maybeSingle();
 
-        if (current && current.profile_picture) {
-            await deleteFromSupabase(current.profile_picture);
+            if (current && current.profile_picture) {
+                await deleteFromSupabase(current.profile_picture);
+            }
+            
+            imageUrl = await uploadToSupabase(req.file.buffer, 'avatars', req.file.originalname);
         }
-        
-        const imageUrl = await uploadToSupabase(req.file.buffer, 'avatars', req.file.originalname);
+
+        if (!imageUrl && !req.file) {
+            return res.status(400).json({ message: 'No file uploaded or URL provided' });
+        }
         
         const { error } = await supabase
             .from('cafeterias')
@@ -93,9 +99,9 @@ router.post('/picture', upload.single('avatar'), async (req, res) => {
             .eq('id', req.cafeteria.id);
 
         if (error) return res.status(500).json({ message: 'Database error' });
-        res.json({ message: 'Profile picture updated', profile_picture: imageUrl });
+        res.json({ message: 'Profile media updated', profile_picture: imageUrl });
     } catch (err) {
-        console.error('Profile picture upload error:', err);
+        console.error('Profile picture update error:', err);
         res.status(500).json({ message: 'Server error.' });
     }
 });

@@ -6,6 +6,8 @@ export default function Profile() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState({ visible: false, message: '', type: '' });
 
   useEffect(() => {
     fetchProfile();

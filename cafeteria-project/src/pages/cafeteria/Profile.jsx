@@ -58,13 +58,15 @@ export default function CafeteriaProfile() {
       const res = await axios.put(`${BASE}/api/cafeteria/profile`, {
         name: profile.name,
         location: profile.location,
-        contact: profile.contact
+        contact: profile.contact,
+        profile_picture: profile.profile_picture
       }, axiosConfig);
       showToast(res.data.message, 'success');
       
       // Update navbar/sidebar immediately
       const currentData = JSON.parse(localStorage.getItem('cafeteriaData') || '{}');
       currentData.name = profile.name;
+      currentData.profile_picture = profile.profile_picture;
       localStorage.setItem('cafeteriaData', JSON.stringify(currentData));
       
       // Force a re-render by dispatching storage event for layout to catch
@@ -152,7 +154,7 @@ export default function CafeteriaProfile() {
     let file = e.target.files[0];
     if (!file) return;
 
-    if (file.size > 2 * 1024 * 1024) {
+    if (file.size > 2 * 1024 * 1024 && file.type.startsWith('image/')) {
       showToast('Large media detected. Compressing...', 'success');
       file = await compressImage(file);
       showToast('Media compressed to under 2MB successfully!', 'success');
@@ -234,7 +236,8 @@ export default function CafeteriaProfile() {
                   type="text" 
                   placeholder="Paste URL..."
                   className="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-lg pl-10 pr-4 py-2 text-xs font-bold text-on-surface focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-on-surface-variant/30"
-                  defaultValue={profile.profile_picture || ''}
+                  value={profile.profile_picture || ''}
+                  onChange={e => setProfile({...profile, profile_picture: e.target.value})}
                   onBlur={e => handleAvatarUpdate(e.target.value)}
                 />
               </div>

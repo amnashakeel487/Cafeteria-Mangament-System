@@ -12,11 +12,11 @@ function createUpload(fieldName, maxSizeMB = 5) {
         storage,
         limits: { fileSize: maxSizeMB * 1024 * 1024 },
         fileFilter: (req, file, cb) => {
-            const allowed = /jpeg|jpg|png|webp/;
+            const allowed = /jpeg|jpg|png|webp|mp4|webm|ogg|mov/;
             if (allowed.test(path.extname(file.originalname).toLowerCase())) {
                 cb(null, true);
             } else {
-                cb(new Error('Only image files (jpeg, jpg, png, webp) are allowed'));
+                cb(new Error('Only image/video files (jpeg, jpg, png, webp, mp4, webm, ogg, mov) are allowed'));
             }
         }
     });
@@ -33,10 +33,13 @@ async function uploadToSupabase(buffer, folder, originalName) {
     const ext = path.extname(originalName).toLowerCase();
     const uniqueName = `${folder}/${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`;
 
+    const isVideo = ['.mp4', '.webm', '.ogg', '.mov'].includes(ext);
+    const contentType = isVideo ? `video/${ext.replace('.', '')}` : `image/${ext.replace('.', '')}`;
+
     const { error } = await supabase.storage
         .from(BUCKET)
         .upload(uniqueName, buffer, {
-            contentType: `image/${ext.replace('.', '')}`,
+            contentType: contentType === 'image/jpg' ? 'image/jpeg' : contentType,
             upsert: false
         });
 

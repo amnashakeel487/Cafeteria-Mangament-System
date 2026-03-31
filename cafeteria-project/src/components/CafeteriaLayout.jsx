@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 
 export default function CafeteriaLayout() {
@@ -6,8 +6,19 @@ export default function CafeteriaLayout() {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const cafeteriaDataString = localStorage.getItem('cafeteriaData');
-  const cafeteria = cafeteriaDataString ? JSON.parse(cafeteriaDataString) : { name: 'Staff Portal', location: '' };
+  const [cafeteria, setCafeteria] = useState(() => {
+    const data = localStorage.getItem('cafeteriaData');
+    return data ? JSON.parse(data) : { name: 'Staff Portal', location: '', profile_picture: null };
+  });
+
+  useEffect(() => {
+    const handleStorage = () => {
+      const data = localStorage.getItem('cafeteriaData');
+      if (data) setCafeteria(JSON.parse(data));
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
 
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to log out of the Staff Portal?')) {
@@ -63,8 +74,16 @@ export default function CafeteriaLayout() {
         <div className="px-2 pt-4 border-t border-outline-variant/10">
           <div className="flex items-center justify-between p-3">
             <div className="flex items-center space-x-3 min-w-0">
-              <div className="w-9 h-9 rounded-full bg-primary-container/20 border border-primary/20 flex items-center justify-center text-primary/70 flex-shrink-0">
-                <span className="material-symbols-outlined text-lg">restaurant</span>
+              <div className="w-10 h-10 rounded-full border-2 border-primary/20 flex items-center justify-center overflow-hidden flex-shrink-0 bg-surface-container-highest">
+                {cafeteria.profile_picture ? (
+                   ['.mp4', '.webm', '.ogg', '.mov'].some(ext => cafeteria.profile_picture.toLowerCase().split('?')[0].endsWith(ext)) ? (
+                    <video src={cafeteria.profile_picture} className="w-full h-full object-cover" autoPlay muted loop />
+                  ) : (
+                    <img src={cafeteria.profile_picture} className="w-full h-full object-cover" alt="Profile" />
+                  )
+                ) : (
+                  <span className="material-symbols-outlined text-primary/70">restaurant</span>
+                )}
               </div>
               <div className="min-w-0">
                 <p className="text-sm font-bold text-on-surface truncate max-w-[110px]" title={cafeteria.name}>{cafeteria.name}</p>
@@ -99,8 +118,19 @@ export default function CafeteriaLayout() {
             <button className="p-2 text-on-surface-variant hover:bg-surface-container-highest rounded-full transition-all">
               <span className="material-symbols-outlined">notifications</span>
             </button>
-            <Link to="/cafeteria/profile" className="p-2 text-on-surface-variant hover:bg-surface-container-highest rounded-full transition-all" title="Settings">
-              <span className="material-symbols-outlined">settings</span>
+            <Link to="/cafeteria/profile" className="flex items-center gap-2 group p-1 pr-3 rounded-full hover:bg-surface-container-highest transition-all">
+              <div className="w-8 h-8 rounded-full border border-outline-variant/30 overflow-hidden bg-surface-container flex items-center justify-center">
+                 {cafeteria.profile_picture ? (
+                   ['.mp4', '.webm', '.ogg', '.mov'].some(ext => cafeteria.profile_picture.toLowerCase().split('?')[0].endsWith(ext)) ? (
+                    <video src={cafeteria.profile_picture} className="w-full h-full object-cover" autoPlay muted loop />
+                  ) : (
+                    <img src={cafeteria.profile_picture} className="w-full h-full object-cover" alt="Profile" />
+                  )
+                ) : (
+                  <span className="material-symbols-outlined text-sm">person</span>
+                )}
+              </div>
+              <span className="text-xs font-bold text-on-surface-variant group-hover:text-primary transition-colors hidden sm:block">Settings</span>
             </Link>
           </div>
         </header>

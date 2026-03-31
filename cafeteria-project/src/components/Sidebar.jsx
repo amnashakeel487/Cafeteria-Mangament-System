@@ -1,11 +1,28 @@
+import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Sidebar({ mobileMenuOpen, setMobileMenuOpen }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const adminDataString = localStorage.getItem('adminData');
-  const admin = adminDataString ? JSON.parse(adminDataString) : { name: 'Admin', role: 'System Admin' };
+  const [admin, setAdmin] = useState(() => {
+    const data = localStorage.getItem('adminData');
+    return data ? JSON.parse(data) : { name: 'Admin', role: 'System Admin', profile_image: null };
+  });
+
+  useEffect(() => {
+    const handleStorage = () => {
+      const data = localStorage.getItem('adminData');
+      if (data) setAdmin(JSON.parse(data));
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
+
+  const isVideo = (url) => {
+    if (!url) return false;
+    return ['.mp4', '.webm', '.ogg', '.mov'].some(ext => url.toLowerCase().split('?')[0].endsWith(ext));
+  };
 
   const handleLogout = () => {
     if (window.confirm("Are you sure you want to log out of the Admin Console?")) {
