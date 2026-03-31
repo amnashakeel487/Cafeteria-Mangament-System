@@ -29,7 +29,12 @@ router.get('/', async (req, res) => {
         
         res.json({ ...user, orderCount: count || 0 });
     } catch (err) {
-        res.status(500).json({ message: 'Internal Server Error' });
+        console.error('Student profile fetch error:', err);
+        res.status(500).json({ 
+            message: 'Internal Server Error fetching student profile', 
+            details: err.message,
+            stack: err.stack
+        });
     }
 });
 

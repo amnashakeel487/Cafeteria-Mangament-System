@@ -38,6 +38,7 @@ export default function StudentProfile() {
         setOrderCount(res.data.orderCount || 0);
       } catch (err) {
         console.error('Failed to load profile', err);
+        setMsg({ type: 'error', text: err.response?.data?.message || 'Failed to load profile' });
       } finally {
         setLoading(false);
       }
