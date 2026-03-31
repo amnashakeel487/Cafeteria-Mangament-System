@@ -4,9 +4,8 @@ import axios from 'axios';
 export default function Profile() {
   const [profile, setProfile] = useState({ name: '', email: '', contact: '', role: '', profile_image: '' });
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [toast, setToast] = useState({ visible: false, message: '', type: '' });
 
   useEffect(() => {
     fetchProfile();
@@ -179,12 +178,21 @@ export default function Profile() {
                   <div className="relative">
                     <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/30">password</span>
                     <input 
-                       className="w-full bg-surface-container-lowest border border-outline-variant/10 rounded-lg py-3 pl-12 pr-4 text-on-surface focus:ring-2 focus:ring-tertiary transition-all focus:border-transparent outline-none" 
-                       type="password" 
+                       className="w-full bg-surface-container-lowest border border-outline-variant/10 rounded-lg py-3 pl-12 pr-12 text-on-surface focus:ring-2 focus:ring-tertiary transition-all focus:border-transparent outline-none" 
+                       type={showPassword ? "text" : "password"} 
                        placeholder="Leave blank to keep existing password"
                        value={password}
                        onChange={e => setPassword(e.target.value)}
                     />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-tertiary transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-xl">
+                        {showPassword ? 'visibility_off' : 'visibility'}
+                      </span>
+                    </button>
                   </div>
                 </div>
 

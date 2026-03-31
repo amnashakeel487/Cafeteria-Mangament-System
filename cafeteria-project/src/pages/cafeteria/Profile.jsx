@@ -26,6 +26,8 @@ export default function CafeteriaProfile() {
     confirmPassword: '',
   });
 
+  const [showPasswords, setShowPasswords] = useState({ current: false, new: false, confirm: false });
+
   useEffect(() => {
     fetchProfile();
   }, []);
@@ -241,22 +243,55 @@ export default function CafeteriaProfile() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Current Password</label>
-                  <input required type="password" value={passwords.currentPassword} onChange={e => setPasswords({...passwords, currentPassword: e.target.value})}
-                    className="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-sm text-on-surface focus:ring-2 focus:ring-primary-container/40 outline-none" placeholder="••••••••" 
-                  />
+                  <div className="relative">
+                    <input required type={showPasswords.current ? "text" : "password"} value={passwords.currentPassword} onChange={e => setPasswords({...passwords, currentPassword: e.target.value})}
+                      className="w-full bg-surface-container-lowest border-none rounded-lg p-3 pr-12 text-sm text-on-surface focus:ring-2 focus:ring-primary-container/40 outline-none" placeholder="••••••••" 
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords({...showPasswords, current: !showPasswords.current})}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-primary transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-xl">
+                        {showPasswords.current ? 'visibility_off' : 'visibility'}
+                      </span>
+                    </button>
+                  </div>
                 </div>
                 <div className="hidden sm:block"></div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">New Password</label>
-                  <input required type="password" value={passwords.newPassword} onChange={e => setPasswords({...passwords, newPassword: e.target.value})} minLength={6}
-                    className="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-sm text-on-surface focus:ring-2 focus:ring-primary-container/40 outline-none" placeholder="••••••••" 
-                  />
+                  <div className="relative">
+                    <input required type={showPasswords.new ? "text" : "password"} value={passwords.newPassword} onChange={e => setPasswords({...passwords, newPassword: e.target.value})} minLength={6}
+                      className="w-full bg-surface-container-lowest border-none rounded-lg p-3 pr-12 text-sm text-on-surface focus:ring-2 focus:ring-primary-container/40 outline-none" placeholder="••••••••" 
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords({...showPasswords, new: !showPasswords.new})}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-primary transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-xl">
+                        {showPasswords.new ? 'visibility_off' : 'visibility'}
+                      </span>
+                    </button>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-wider">Confirm New Password</label>
-                  <input required type="password" value={passwords.confirmPassword} onChange={e => setPasswords({...passwords, confirmPassword: e.target.value})} minLength={6}
-                    className="w-full bg-surface-container-lowest border-none rounded-lg p-3 text-sm text-on-surface focus:ring-2 focus:ring-primary-container/40 outline-none" placeholder="••••••••" 
-                  />
+                  <div className="relative">
+                    <input required type={showPasswords.confirm ? "text" : "password"} value={passwords.confirmPassword} onChange={e => setPasswords({...passwords, confirmPassword: e.target.value})} minLength={6}
+                      className="w-full bg-surface-container-lowest border-none rounded-lg p-3 pr-12 text-sm text-on-surface focus:ring-2 focus:ring-primary-container/40 outline-none" placeholder="••••••••" 
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords({...showPasswords, confirm: !showPasswords.confirm})}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-primary transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-xl">
+                        {showPasswords.confirm ? 'visibility_off' : 'visibility'}
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </div>
               

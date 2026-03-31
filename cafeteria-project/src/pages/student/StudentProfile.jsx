@@ -21,6 +21,7 @@ export default function StudentProfile() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPasswords, setShowPasswords] = useState({ old: false, new: false, confirm: false });
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -214,34 +215,67 @@ export default function StudentProfile() {
             <div className="space-y-6">
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-[#e1bfb5] ml-1">Old Password</label>
-                <input
-                  className="w-full bg-[#0c0c1d] border-0 rounded-lg py-3 px-4 text-[#E3E0F8] focus:ring-2 focus:ring-[#FF6B35] transition-all placeholder:text-[#e1bfb5]/30 outline-none"
-                  placeholder="••••••••••••"
-                  type="password"
-                  value={oldPassword}
-                  onChange={(e) => setOldPassword(e.target.value)}
-                />
+                <div className="relative">
+                  <input
+                    className="w-full bg-[#0c0c1d] border-0 rounded-lg py-3 px-4 pr-12 text-[#E3E0F8] focus:ring-2 focus:ring-[#FF6B35] transition-all placeholder:text-[#e1bfb5]/30 outline-none"
+                    placeholder="••••••••••••"
+                    type={showPasswords.old ? "text" : "password"}
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPasswords({...showPasswords, old: !showPasswords.old})}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#e1bfb5]/50 hover:text-[#FF6B35] transition-colors"
+                  >
+                    <span className="material-symbols-outlined text-xl">
+                      {showPasswords.old ? 'visibility_off' : 'visibility'}
+                    </span>
+                  </button>
+                </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-widest text-[#e1bfb5] ml-1">New Password</label>
-                  <input
-                    className="w-full bg-[#0c0c1d] border-0 rounded-lg py-3 px-4 text-[#E3E0F8] focus:ring-2 focus:ring-[#FF6B35] transition-all placeholder:text-[#e1bfb5]/30 outline-none"
-                    placeholder="Min. 6 chars"
-                    type="password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                  />
+                  <div className="relative">
+                    <input
+                      className="w-full bg-[#0c0c1d] border-0 rounded-lg py-3 px-4 pr-12 text-[#E3E0F8] focus:ring-2 focus:ring-[#FF6B35] transition-all placeholder:text-[#e1bfb5]/30 outline-none"
+                      placeholder="Min. 6 chars"
+                      type={showPasswords.new ? "text" : "password"}
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords({...showPasswords, new: !showPasswords.new})}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#e1bfb5]/50 hover:text-[#FF6B35] transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-xl">
+                        {showPasswords.new ? 'visibility_off' : 'visibility'}
+                      </span>
+                    </button>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-widest text-[#e1bfb5] ml-1">Confirm New Password</label>
-                  <input
-                    className="w-full bg-[#0c0c1d] border-0 rounded-lg py-3 px-4 text-[#E3E0F8] focus:ring-2 focus:ring-[#FF6B35] transition-all placeholder:text-[#e1bfb5]/30 outline-none"
-                    placeholder="Repeat password"
-                    type="password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                  />
+                  <div className="relative">
+                    <input
+                      className="w-full bg-[#0c0c1d] border-0 rounded-lg py-3 px-4 pr-12 text-[#E3E0F8] focus:ring-2 focus:ring-[#FF6B35] transition-all placeholder:text-[#e1bfb5]/30 outline-none"
+                      placeholder="Repeat password"
+                      type={showPasswords.confirm ? "text" : "password"}
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPasswords({...showPasswords, confirm: !showPasswords.confirm})}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-[#e1bfb5]/50 hover:text-[#FF6B35] transition-colors"
+                    >
+                      <span className="material-symbols-outlined text-xl">
+                        {showPasswords.confirm ? 'visibility_off' : 'visibility'}
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </div>
               <div className="flex items-center justify-between">
