@@ -15,6 +15,7 @@ export default function StudentProfile() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [contact, setContact] = useState('');
+  const [profileImage, setProfileImage] = useState('');
   const [orderCount, setOrderCount] = useState(0);
 
   // Password form
