@@ -48,13 +48,52 @@ export default function CartCheckout() {
     fetchCafeteria();
   }, [cafeteriaId]);
 
-  const handleFileChange = (e) => {
-      const file = e.target.files[0];
-      if (file && ['image/jpeg', 'image/png'].includes(file.type)) {
-          setScreenshot(file);
-      } else {
+  const compressImage = async (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const MAX_SIDE = 1200;
+          if (width > height) {
+            if (width > MAX_SIDE) { height *= MAX_SIDE / width; width = MAX_SIDE; }
+          } else {
+            if (height > MAX_SIDE) { width *= MAX_SIDE / height; height = MAX_SIDE; }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob((blob) => {
+            const compressed = new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() });
+            resolve(compressed);
+          }, 'image/jpeg', 0.7);
+        };
+      };
+    });
+  };
+
+  const handleFileChange = async (e) => {
+      let file = e.target.files[0];
+      if (!file) return;
+
+      if (!['image/jpeg', 'image/png'].includes(file.type)) {
           alert("Please upload a valid image file (JPG/PNG)");
+          return;
       }
+
+      if (file.size > 2 * 1024 * 1024) {
+          setError("Large screenshot detected. Compressing to under 2MB...");
+          file = await compressImage(file);
+          setError(""); // Clear message after compression
+      }
+      
+      setScreenshot(file);
   };
 
   const handleCheckout = async () => {
@@ -281,7 +320,7 @@ export default function CartCheckout() {
                         <p className="text-sm font-semibold text-[#e1bfb5] group-hover:text-[#E3E0F8]">
                             {screenshot ? screenshot.name : "Click or Drag to Upload"}
                         </p>
-                        <p className="text-[10px] text-[#594139] mt-1">PNG, JPG up to 5MB</p>
+                        <p className="text-[10px] text-[#594139] mt-1">PNG, JPG (Auto-compressed to 2MB)</p>
                     </label>
                 </div>
              </section>
