@@ -96,11 +96,45 @@ export default function CafeteriaProfile() {
     }
   };
 
+  const compressImage = async (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const MAX_SIDE = 1200;
+          if (width > height) {
+            if (width > MAX_SIDE) { height *= MAX_SIDE / width; width = MAX_SIDE; }
+          } else {
+            if (height > MAX_SIDE) { width *= MAX_SIDE / height; height = MAX_SIDE; }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob((blob) => {
+            const compressed = new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() });
+            resolve(compressed);
+          }, 'image/jpeg', 0.7);
+        };
+      };
+    });
+  };
+
   const handleAvatarUpload = async (e) => {
-    const file = e.target.files[0];
+    let file = e.target.files[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) return showToast('Image must be under 5MB', 'error');
+    if (file.size > 2 * 1024 * 1024) {
+      showToast('Large image detected. Compressing...', 'success');
+      file = await compressImage(file);
+      showToast('Image compressed to under 2MB successfully!', 'success');
+    }
 
     const formData = new FormData();
     formData.append('avatar', file);
