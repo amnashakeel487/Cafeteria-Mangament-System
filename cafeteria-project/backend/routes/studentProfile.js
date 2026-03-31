@@ -44,13 +44,20 @@ router.put('/', async (req, res) => {
         const studentId = req.user.id;
         const { name, email, contact, profile_image } = req.body;
         
-        if (!name || !email) {
-            return res.status(400).json({ message: 'Name and email are required' });
+        if (!name) {
+            return res.status(400).json({ message: 'Name is required' });
         }
         
+        const updateData = { name, contact: contact || null };
+        if (profile_image && profile_image.startsWith('http')) {
+            updateData.profile_image = profile_image;
+        } else if (profile_image === null) {
+            updateData.profile_image = null;
+        }
+
         const { error } = await supabase
             .from('users')
-            .update({ name, email, contact: contact || null, profile_image: profile_image || null })
+            .update(updateData)
             .eq('id', studentId)
             .eq('role', 'student');
 

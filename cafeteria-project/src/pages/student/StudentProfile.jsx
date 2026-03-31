@@ -57,12 +57,15 @@ export default function StudentProfile() {
     setMsg({ type: '', text: '' });
     try {
       const token = localStorage.getItem('studentToken');
-      await axios.put(`${BASE}/api/student/profile`, { name, email, contact, profile_image: profileImage }, {
+      // Only send profile_image if it's a valid URL
+      const imageToSave = profileImage && profileImage.startsWith('http') ? profileImage : null;
+      await axios.put(`${BASE}/api/student/profile`, { name, contact, profile_image: imageToSave }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       // Update local storage
       const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
-      localStorage.setItem('studentData', JSON.stringify({ ...studentData, name, email, profile_image: profileImage }));
+      localStorage.setItem('studentData', JSON.stringify({ ...studentData, name, profile_image: imageToSave }));
+      window.dispatchEvent(new Event('storage'));
       setMsg({ type: 'success', text: 'Profile updated successfully!' });
     } catch (err) {
       setMsg({ type: 'error', text: err.response?.data?.message || 'Failed to update profile' });
@@ -73,11 +76,14 @@ export default function StudentProfile() {
 
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => setProfileImage(reader.result);
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    // Read as data URL for preview only — user must save via URL field for persistence
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setProfileImage(reader.result);
+      setMsg({ type: 'error', text: 'To save a profile picture, paste an image URL in the field below your photo.' });
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleChangePassword = async () => {
@@ -172,7 +178,7 @@ export default function StudentProfile() {
                   type="text" 
                   placeholder="Profile Media URL..."
                   className="w-full bg-[#0c0c1d] border border-[#594139]/30 rounded-lg pl-10 pr-4 py-2 text-xs font-bold text-[#E3E0F8] focus:ring-1 focus:ring-[#FF6B35] outline-none transition-all placeholder:text-[#e1bfb5]/20"
-                  value={profileImage || ''}
+                  value={profileImage && !profileImage.startsWith('data:') && profileImage.startsWith('http') ? profileImage : ''}
                   onChange={e => setProfileImage(e.target.value)}
                 />
             </div>
@@ -218,19 +224,20 @@ export default function StudentProfile() {
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-[#e1bfb5] ml-1">Full Name</label>
                 <input
-                  className="w-full bg-[#1a1a2b] border-0 rounded-lg py-3 px-4 text-[#E3E0F8]/60 cursor-not-allowed outline-none"
+                  className="w-full bg-[#0c0c1d] border-0 rounded-lg py-3 px-4 text-[#E3E0F8] focus:ring-2 focus:ring-[#FF6B35] transition-all outline-none"
                   type="text"
                   value={name}
-                  disabled
+                  onChange={e => setName(e.target.value)}
                 />
               </div>
               <div className="space-y-2">
                 <label className="text-xs font-bold uppercase tracking-widest text-[#e1bfb5] ml-1">Contact</label>
                 <input
-                  className="w-full bg-[#1a1a2b] border-0 rounded-lg py-3 px-4 text-[#E3E0F8]/60 cursor-not-allowed outline-none"
+                  className="w-full bg-[#0c0c1d] border-0 rounded-lg py-3 px-4 text-[#E3E0F8] focus:ring-2 focus:ring-[#FF6B35] transition-all outline-none"
                   type="text"
-                  value={contact || 'Not set'}
-                  disabled
+                  value={contact || ''}
+                  placeholder="Not set"
+                  onChange={e => setContact(e.target.value)}
                 />
               </div>
               <div className="md:col-span-2 space-y-2">
@@ -245,6 +252,16 @@ export default function StudentProfile() {
                   <span className="absolute right-4 top-3 text-[10px] bg-[#59d5fb]/20 text-[#59d5fb] px-2 py-0.5 rounded uppercase font-bold">Verified</span>
                 </div>
               </div>
+            </div>
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={handleSaveProfile}
+                disabled={saving}
+                className="px-8 py-2.5 bg-gradient-to-br from-[#FFB59D] to-[#FF6B35] text-[#5D1900] rounded-lg font-bold text-sm hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center gap-2 shadow-lg shadow-[#FF6B35]/20"
+              >
+                <span className="material-symbols-outlined text-sm">save</span>
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
             </div>
           </div>
 
