@@ -79,6 +79,9 @@ router.put('/:id', (req, res) => {
                     await deleteFromSupabase(item.image_url);
                 }
                 image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname, req.file.mimetype);
+            }
+
+            const { error: updateErr } = await supabase
                 .from('menu_items')
                 .update({
                     name: name || item.name,
