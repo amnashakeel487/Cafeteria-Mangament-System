@@ -158,7 +158,8 @@ export default function CafeteriaMenu() {
     e.preventDefault();
     setSaving(true);
     try {
-      let finalImageUrl = form.image_url || null;
+      // Start with existing image URL when editing, so we don't wipe it
+      let finalImageUrl = form.image_url || (modal === 'edit' && editing ? editing.image_url : null);
 
       // If a file was selected, upload it
       if (imageFile) {
@@ -171,14 +172,15 @@ export default function CafeteriaMenu() {
             { filename: imageFile.name, mimetype: imageFile.type },
             axiosConfig
           );
-          await fetch(uploadData.signedUrl, {
+          const uploadRes = await fetch(uploadData.signedUrl, {
             method: 'PUT',
             headers: { 'Content-Type': imageFile.type },
             body: imageFile,
           });
+          if (!uploadRes.ok) throw new Error('Direct upload to storage failed');
           finalImageUrl = uploadData.publicUrl;
         } else {
-          // Small image — upload via backend as before
+          // Small image — upload via multipart
           const fd = new FormData();
           fd.append('name', form.name);
           fd.append('price', form.price);
@@ -198,7 +200,7 @@ export default function CafeteriaMenu() {
         }
       }
 
-      // Save item with URL (either from direct upload or pasted URL)
+      // Save item with JSON payload (no file, or after direct upload)
       const payload = {
         name: form.name,
         price: form.price,

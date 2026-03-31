@@ -81,49 +81,59 @@ router.post('/', (req, res) => {
 
 // PUT update menu item
 router.put('/:id', (req, res) => {
+    // Only run multer if it's a multipart request, otherwise parse as JSON
+    const contentType = req.headers['content-type'] || '';
+    if (!contentType.includes('multipart/form-data')) {
+        // JSON body — handle directly without multer
+        return handleMenuUpdate(req, res);
+    }
     upload.single('image')(req, res, async (err) => {
         if (err) return res.status(400).json({ message: err.message || 'File upload error' });
-        try {
-            const { name, price, category, description } = req.body;
-            const { id } = req.params;
-            
-            const { data: item, error: fetchErr } = await supabase
-                .from('menu_items')
-                .select('*')
-                .eq('id', id)
-                .eq('cafeteria_id', req.cafeteria.id)
-                .maybeSingle();
-
-            if (fetchErr || !item) return res.status(404).json({ message: 'Menu item not found.' });
-            
-            let image_url = req.body.image_url || item.image_url;
-            if (req.file) {
-                if (item.image_url && item.image_url.includes('supabase.co')) {
-                    await deleteFromSupabase(item.image_url);
-                }
-                image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname, req.file.mimetype);
-            }
-
-            const { error: updateErr } = await supabase
-                .from('menu_items')
-                .update({
-                    name: name || item.name,
-                    price: parseFloat(price) || item.price,
-                    category: category || item.category,
-                    description: description ?? item.description,
-                    image_url
-                })
-                .eq('id', id)
-                .eq('cafeteria_id', req.cafeteria.id);
-
-            if (updateErr) return res.status(500).json({ message: 'Database error' });
-            res.json({ message: 'Menu item updated successfully.' });
-        } catch (err) {
-            console.error('Menu update error:', err);
-            res.status(500).json({ message: err.message || 'Server error' });
-        }
+        return handleMenuUpdate(req, res);
     });
 });
+
+async function handleMenuUpdate(req, res) {
+    try {
+        const { name, price, category, description, image_url: bodyImageUrl } = req.body;
+        const { id } = req.params;
+
+        const { data: item, error: fetchErr } = await supabase
+            .from('menu_items')
+            .select('*')
+            .eq('id', id)
+            .eq('cafeteria_id', req.cafeteria.id)
+            .maybeSingle();
+
+        if (fetchErr || !item) return res.status(404).json({ message: 'Menu item not found.' });
+
+        let image_url = bodyImageUrl !== undefined ? (bodyImageUrl || item.image_url) : item.image_url;
+        if (req.file) {
+            if (item.image_url && item.image_url.includes('supabase.co')) {
+                await deleteFromSupabase(item.image_url);
+            }
+            image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname, req.file.mimetype);
+        }
+
+        const { error: updateErr } = await supabase
+            .from('menu_items')
+            .update({
+                name: name || item.name,
+                price: parseFloat(price) || item.price,
+                category: category || item.category,
+                description: description ?? item.description,
+                image_url
+            })
+            .eq('id', id)
+            .eq('cafeteria_id', req.cafeteria.id);
+
+        if (updateErr) return res.status(500).json({ message: 'Database error' });
+        res.json({ message: 'Menu item updated successfully.' });
+    } catch (err) {
+        console.error('Menu update error:', err);
+        res.status(500).json({ message: err.message || 'Server error' });
+    }
+}
 
 // DELETE menu item
 router.delete('/:id', async (req, res) => {
