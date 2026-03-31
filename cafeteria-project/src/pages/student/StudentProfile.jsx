@@ -31,8 +31,8 @@ export default function StudentProfile() {
         const res = await axios.get(`${BASE}/api/student/profile`, {
           headers: { Authorization: `Bearer ${token}` }
         });
-        setName(res.data.name);
-        setEmail(res.data.email);
+        setName(res.data.name || '');
+        setEmail(res.data.email || '');
         setContact(res.data.contact || '');
         setProfileImage(res.data.profile_image || '');
         setOrderCount(res.data.orderCount || 0);
