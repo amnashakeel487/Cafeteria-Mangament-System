@@ -44,19 +44,20 @@ router.get('/', async (req, res) => {
     }
 });
 
-// POST add menu item
-router.post('/', (req, res) => {
-    upload.single('image')(req, res, async (err) => {
-        if (err) return res.status(400).json({ message: err.message || 'File upload error' });
+// POST add menu item — handles both JSON and multipart
+router.post('/', async (req, res) => {
+    const contentType = req.headers['content-type'] || '';
+
+    const doInsert = async () => {
         try {
             const { name, price, category, description } = req.body;
             if (!name || !price || !category) return res.status(400).json({ message: 'Name, price and category are required.' });
-            
+
             let image_url = req.body.image_url || null;
             if (req.file) {
                 image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname, req.file.mimetype);
             }
-            
+
             const { data, error } = await supabase
                 .from('menu_items')
                 .insert({
@@ -70,70 +71,83 @@ router.post('/', (req, res) => {
                 .select()
                 .single();
 
-            if (error) return res.status(500).json({ message: 'Database error' });
-            res.status(201).json({ id: data.id, message: 'Menu item added successfully.' });
+            if (error) return res.status(500).json({ message: 'Database error: ' + error.message });
+            return res.status(201).json({ id: data.id, message: 'Menu item added successfully.' });
         } catch (err) {
             console.error('Menu add error:', err);
-            res.status(500).json({ message: err.message || 'Server error' });
+            return res.status(500).json({ message: err.message || 'Server error' });
         }
-    });
+    };
+
+    if (contentType.includes('multipart/form-data')) {
+        upload.single('image')(req, res, async (err) => {
+            if (err) return res.status(400).json({ message: err.message || 'File upload error' });
+            await doInsert();
+        });
+    } else {
+        await doInsert();
+    }
 });
 
-// PUT update menu item
-router.put('/:id', (req, res) => {
-    // Only run multer if it's a multipart request, otherwise parse as JSON
+// PUT update menu item — handles both JSON and multipart
+router.put('/:id', async (req, res) => {
     const contentType = req.headers['content-type'] || '';
-    if (!contentType.includes('multipart/form-data')) {
-        // JSON body — handle directly without multer
-        return handleMenuUpdate(req, res);
-    }
-    upload.single('image')(req, res, async (err) => {
-        if (err) return res.status(400).json({ message: err.message || 'File upload error' });
-        return handleMenuUpdate(req, res);
-    });
-});
 
-async function handleMenuUpdate(req, res) {
-    try {
-        const { name, price, category, description, image_url: bodyImageUrl } = req.body;
-        const { id } = req.params;
+    const doUpdate = async () => {
+        try {
+            const { name, price, category, description, image_url: bodyImageUrl } = req.body;
+            const { id } = req.params;
 
-        const { data: item, error: fetchErr } = await supabase
-            .from('menu_items')
-            .select('*')
-            .eq('id', id)
-            .eq('cafeteria_id', req.cafeteria.id)
-            .maybeSingle();
+            const { data: item, error: fetchErr } = await supabase
+                .from('menu_items')
+                .select('*')
+                .eq('id', id)
+                .eq('cafeteria_id', req.cafeteria.id)
+                .maybeSingle();
 
-        if (fetchErr || !item) return res.status(404).json({ message: 'Menu item not found.' });
+            if (fetchErr || !item) return res.status(404).json({ message: 'Menu item not found.' });
 
-        let image_url = bodyImageUrl !== undefined ? (bodyImageUrl || item.image_url) : item.image_url;
-        if (req.file) {
-            if (item.image_url && item.image_url.includes('supabase.co')) {
-                await deleteFromSupabase(item.image_url);
+            // Preserve existing image if no new one provided
+            let image_url = (bodyImageUrl !== undefined && bodyImageUrl !== null)
+                ? (bodyImageUrl || item.image_url)
+                : item.image_url;
+
+            if (req.file) {
+                if (item.image_url && item.image_url.includes('supabase.co')) {
+                    await deleteFromSupabase(item.image_url);
+                }
+                image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname, req.file.mimetype);
             }
-            image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname, req.file.mimetype);
+
+            const { error: updateErr } = await supabase
+                .from('menu_items')
+                .update({
+                    name: name || item.name,
+                    price: parseFloat(price) || item.price,
+                    category: category || item.category,
+                    description: description ?? item.description,
+                    image_url
+                })
+                .eq('id', id)
+                .eq('cafeteria_id', req.cafeteria.id);
+
+            if (updateErr) return res.status(500).json({ message: 'Database error: ' + updateErr.message });
+            return res.json({ message: 'Menu item updated successfully.' });
+        } catch (err) {
+            console.error('Menu update error:', err);
+            return res.status(500).json({ message: err.message || 'Server error' });
         }
+    };
 
-        const { error: updateErr } = await supabase
-            .from('menu_items')
-            .update({
-                name: name || item.name,
-                price: parseFloat(price) || item.price,
-                category: category || item.category,
-                description: description ?? item.description,
-                image_url
-            })
-            .eq('id', id)
-            .eq('cafeteria_id', req.cafeteria.id);
-
-        if (updateErr) return res.status(500).json({ message: 'Database error' });
-        res.json({ message: 'Menu item updated successfully.' });
-    } catch (err) {
-        console.error('Menu update error:', err);
-        res.status(500).json({ message: err.message || 'Server error' });
+    if (contentType.includes('multipart/form-data')) {
+        upload.single('image')(req, res, async (err) => {
+            if (err) return res.status(400).json({ message: err.message || 'File upload error' });
+            await doUpdate();
+        });
+    } else {
+        await doUpdate();
     }
-}
+});
 
 // DELETE menu item
 router.delete('/:id', async (req, res) => {
