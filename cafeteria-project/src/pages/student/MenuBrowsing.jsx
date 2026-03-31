@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useCart } from '../../context/CartContext';
 
 const BASE = '';
+const DEFAULT_IMAGE = 'https://raw.githubusercontent.com/amnashakeel487/Cafeteria-Mangament-System/main/cafeteria-project/src/assets/hero.png'; // Placeholder, user should replace with their provided image
 
 export default function MenuBrowsing() {
   const { cafeteriaId } = useParams();
@@ -129,13 +130,11 @@ export default function MenuBrowsing() {
             return (
             <div key={item.id} className="group bg-[#28283a] rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col">
               <div className="relative h-40 overflow-hidden bg-[#333345]">
-                {item.image_url ? (
-                  <img src={item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <span className="material-symbols-outlined text-4xl text-[#e1bfb5]/20">restaurant</span>
-                  </div>
-                )}
+                <img 
+                  src={item.image_url || DEFAULT_IMAGE} 
+                  alt={item.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                />
                 {qty > 0 && (
                   <div className="absolute top-2 right-2 bg-[#FF6B35] text-white px-2 py-0.5 rounded-md text-[10px] font-bold shadow-lg">
                     In Cart ({qty})
@@ -213,11 +212,11 @@ export default function MenuBrowsing() {
               {cart.map(item => (
                 <div key={item.id} className="flex gap-4 group items-center">
                   <div className="h-12 w-12 rounded-lg overflow-hidden bg-[#333345] shrink-0 border border-[#594139]/10">
-                    {item.image_url ? (
-                      <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" />
-                    ) : (
-                      <div className="h-full w-full flex items-center justify-center"><span className="material-symbols-outlined text-[#e1bfb5]/20 text-xl">restaurant</span></div>
-                    )}
+                    <img 
+                      src={item.image_url || DEFAULT_IMAGE} 
+                      alt={item.name} 
+                      className="h-full w-full object-cover" 
+                    />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start gap-2">

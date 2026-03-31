@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useCart } from '../../context/CartContext';
 
 const BASE = '';
+const DEFAULT_IMAGE = 'https://raw.githubusercontent.com/amnashakeel487/Cafeteria-Mangament-System/main/cafeteria-project/src/assets/hero.png'; // Placeholder, user should replace with their provided image
 
 export default function CartCheckout() {
   const navigate = useNavigate();
@@ -131,11 +132,11 @@ export default function CartCheckout() {
             {cart.map(item => (
               <div key={item.id} className="flex items-center gap-4 group">
                 <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-[#333345]">
-                  {item.image_url ? (
-                    <img src={item.image_url} alt={item.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                  ) : (
-                    <div className="h-full w-full flex items-center justify-center"><span className="material-symbols-outlined text-[#e1bfb5]/20 text-2xl">restaurant</span></div>
-                  )}
+                  <img 
+                    src={item.image_url || DEFAULT_IMAGE} 
+                    alt={item.name} 
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                  />
                 </div>
                 
                 <div className="flex-grow min-w-0">

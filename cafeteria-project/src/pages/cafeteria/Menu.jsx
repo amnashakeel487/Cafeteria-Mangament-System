@@ -17,6 +17,7 @@ const getCatStyle = (name) => {
 };
 
 const BASE = '';
+const DEFAULT_IMAGE = 'https://raw.githubusercontent.com/amnashakeel487/Cafeteria-Mangament-System/main/cafeteria-project/src/assets/hero.png'; // Placeholder, user should replace with their provided image
 const emptyForm = { name: '', price: '', category: '', description: '' };
 
 export default function CafeteriaMenu() {
@@ -272,15 +273,12 @@ export default function CafeteriaMenu() {
           const style = getCatStyle(item.category);
           return (
           <div key={item.id} className="group relative bg-surface-container-high rounded-xl overflow-hidden hover:shadow-[0_24px_48px_rgba(12,12,29,0.5)] transition-all duration-300 flex flex-col">
-            <div className="h-48 overflow-hidden relative bg-surface-container-highest">
-              {item.image_url ? (
-                <img src={item.image_url} alt={item.name}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="material-symbols-outlined text-5xl text-on-surface-variant/20">restaurant_menu</span>
-                </div>
-              )}
+            <div className="h-48 overflow-hidden relative bg-surface-container-highest font-['Manrope']">
+              <img 
+                src={item.image_url || DEFAULT_IMAGE} 
+                alt={item.name}
+                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+              />
               <div className={`absolute top-4 left-4 backdrop-blur-md px-3 py-1 rounded-full ${style.badge}`}>
                 <span className={`text-[10px] font-bold tracking-widest uppercase ${style.pill}`}>{item.category}</span>
               </div>
