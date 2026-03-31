@@ -73,6 +73,15 @@ app.get('/', (req, res) => {
     res.send("Cafeteria API is running");
 });
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('API Error:', err);
+    res.status(err.status || 500).json({
+        message: err.message || "Internal server error",
+        error: process.env.NODE_ENV === 'development' ? err : {}
+    });
+});
+
 if (process.env.NODE_ENV !== 'production') {
     app.listen(PORT, () => {
         console.log(`Server running on port ${PORT}`);
