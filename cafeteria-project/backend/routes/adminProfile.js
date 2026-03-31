@@ -40,7 +40,14 @@ router.put('/', async (req, res) => {
 
         if (fetchErr) return res.status(500).json({ message: "Database check failed" });
 
-        const updateData = { name, contact, profile_image };
+        const updateData = { name };
+        // Only include contact if it has a value
+        if (contact !== undefined && contact !== null) updateData.contact = contact || null;
+        
+        // Never store base64 data in profile_image — only URLs are valid
+        if (profile_image && !profile_image.startsWith('data:')) {
+            updateData.profile_image = profile_image;
+        }
         
         // Only include email in update if it's actually different from current
         if (email && current?.email && email.toLowerCase().trim() !== current.email.toLowerCase().trim()) {
@@ -69,11 +76,12 @@ router.put('/', async (req, res) => {
             .eq('role', 'admin');
 
         if (error) {
-            console.error('Admin update failure:', error);
-            if (error.code === '23505' || error.message?.includes('unique')) {
+            console.error('Admin update failure - code:', error.code, 'message:', error.message, 'details:', error.details);
+            // Only show email conflict for actual unique violation on email column
+            if (error.code === '23505' && error.message?.toLowerCase().includes('email')) {
                 return res.status(409).json({ message: "Update failed. Email might be taken." });
             }
-            return res.status(500).json({ message: "Update failed. Please try again." });
+            return res.status(500).json({ message: `Update failed: ${error.message || 'Unknown error'}` });
         }
         res.json({ message: "Profile updated successfully" });
     } catch (err) {

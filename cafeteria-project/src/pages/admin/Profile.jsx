@@ -52,7 +52,7 @@ export default function Profile() {
   };
 
   const handleImageUpload = async (e) => {
-    const file = e.target.files[0];
+    let file = e.target.files[0];
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024 && file.type.startsWith('image/')) {
@@ -119,6 +119,10 @@ export default function Profile() {
     try {
       const token = localStorage.getItem('adminToken');
       const payload = { ...profile };
+      // Never send base64 data in the profile PUT — image updates use /picture endpoint
+      if (payload.profile_image && payload.profile_image.startsWith('data:')) {
+        delete payload.profile_image;
+      }
       if (password) payload.password = password;
 
       await axios.put('/api/admin/profile', payload, {
