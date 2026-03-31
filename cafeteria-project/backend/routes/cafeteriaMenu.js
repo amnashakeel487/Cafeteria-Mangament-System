@@ -31,7 +31,7 @@ router.post('/', (req, res) => {
             
             let image_url = req.body.image_url || null;
             if (req.file) {
-                image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname);
+                image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname, req.file.mimetype);
             }
             
             const { data, error } = await supabase
@@ -78,10 +78,7 @@ router.put('/:id', (req, res) => {
                 if (item.image_url && item.image_url.includes('supabase.co')) {
                     await deleteFromSupabase(item.image_url);
                 }
-                image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname);
-            }
-            
-            const { error: updateErr } = await supabase
+                image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname, req.file.mimetype);
                 .from('menu_items')
                 .update({
                     name: name || item.name,

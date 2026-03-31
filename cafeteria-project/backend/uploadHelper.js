@@ -12,11 +12,13 @@ function createUpload(fieldName, maxSizeMB = 5) {
         storage,
         limits: { fileSize: maxSizeMB * 1024 * 1024 },
         fileFilter: (req, file, cb) => {
-            const allowed = /jpeg|jpg|png|webp|mp4|webm|ogg|mov/;
-            if (allowed.test(path.extname(file.originalname).toLowerCase())) {
+            const ext = path.extname(file.originalname).toLowerCase();
+            const allowedExts = /\.(jpeg|jpg|png|webp|mp4|webm|ogg|mov|avi|mkv)$/;
+            const allowedMime = /^(image|video)\//;
+            if (allowedExts.test(ext) || allowedMime.test(file.mimetype)) {
                 cb(null, true);
             } else {
-                cb(new Error('Only image/video files (jpeg, jpg, png, webp, mp4, webm, ogg, mov) are allowed'));
+                cb(new Error('Only image/video files are allowed'));
             }
         }
     });
@@ -29,7 +31,7 @@ function createUpload(fieldName, maxSizeMB = 5) {
  * @param {string} originalName - Original filename for extension extraction
  * @returns {Promise<string>} The public URL of the uploaded file
  */
-async function uploadToSupabase(buffer, folder, originalName) {
+async function uploadToSupabase(buffer, folder, originalName, mimetype) {
     const ext = path.extname(originalName).toLowerCase();
     const uniqueName = `${folder}/${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`;
 
@@ -42,8 +44,10 @@ async function uploadToSupabase(buffer, folder, originalName) {
         '.webm': 'video/webm',
         '.ogg': 'video/ogg',
         '.mov': 'video/quicktime',
+        '.avi': 'video/x-msvideo',
+        '.mkv': 'video/x-matroska',
     };
-    const contentType = mimeMap[ext] || 'application/octet-stream';
+    const contentType = mimeMap[ext] || mimetype || 'application/octet-stream';
 
     const { error } = await supabase.storage
         .from(BUCKET)
