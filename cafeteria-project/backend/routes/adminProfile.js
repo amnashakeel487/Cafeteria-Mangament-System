@@ -42,9 +42,20 @@ router.put('/', async (req, res) => {
 
         const updateData = { name, contact, profile_image };
         
-        // Only include email in update if it's different and not null
-        if (email && email !== current?.email) {
-            updateData.email = email;
+        // Only include email in update if it's actually different from current
+        if (email && current?.email && email.toLowerCase().trim() !== current.email.toLowerCase().trim()) {
+            // Check if the new email is already taken by another user
+            const { data: existing } = await supabase
+                .from('users')
+                .select('id')
+                .eq('email', email.toLowerCase().trim())
+                .neq('id', req.user.id)
+                .maybeSingle();
+
+            if (existing) {
+                return res.status(409).json({ message: "Update failed. Email might be taken." });
+            }
+            updateData.email = email.toLowerCase().trim();
         }
 
         if (password) {
@@ -60,12 +71,9 @@ router.put('/', async (req, res) => {
         if (error) {
             console.error('Admin update failure:', error);
             if (error.code === '23505' || error.message?.includes('unique')) {
-                return res.status(409).json({ 
-                    message: "E-mail conflict detected. This address is used by another account.",
-                    details: `Current: ${current?.email}, Attempted: ${email}` 
-                });
+                return res.status(409).json({ message: "Update failed. Email might be taken." });
             }
-            return res.status(500).json({ message: `System error during update (${error.code || 'UNK'}): ${error.message}` });
+            return res.status(500).json({ message: "Update failed. Please try again." });
         }
         res.json({ message: "Profile updated successfully" });
     } catch (err) {
