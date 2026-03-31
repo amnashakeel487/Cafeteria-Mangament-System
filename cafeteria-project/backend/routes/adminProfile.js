@@ -58,11 +58,14 @@ router.put('/', async (req, res) => {
             .eq('role', 'admin');
 
         if (error) {
-            console.error('Admin profile update error:', error);
+            console.error('Admin update failure:', error);
             if (error.code === '23505' || error.message?.includes('unique')) {
-                return res.status(409).json({ message: "This email is already linked to another account." });
+                return res.status(409).json({ 
+                    message: "E-mail conflict detected. This address is used by another account.",
+                    details: `Current: ${current?.email}, Attempted: ${email}` 
+                });
             }
-            return res.status(500).json({ message: "Update failed: " + error.message });
+            return res.status(500).json({ message: `System error during update (${error.code || 'UNK'}): ${error.message}` });
         }
         res.json({ message: "Profile updated successfully" });
     } catch (err) {

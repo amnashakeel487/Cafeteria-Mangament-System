@@ -132,7 +132,7 @@ export default function Profile() {
       setPassword(''); // Clear password field after success
       fetchProfile(); // re-fetch data to be sure
     } catch (err) {
-      showToast(err.response?.data?.message || 'Update failed.', 'error');
+      showToast(`${err.response?.data?.message || 'Update failed.'} ${err.response?.data?.details || ''}`.trim(), 'error');
     } finally {
       setSaving(false);
     }
