@@ -128,10 +128,14 @@ export default function CafeteriaMenu() {
 
   const isVideo = (url) => {
     if (!url) return false;
+    if (url.startsWith('blob-video:')) return true;
     const lower = url.toLowerCase().split('?')[0];
     const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'];
     return videoExtensions.some(ext => lower.includes(ext));
   };
+
+  // Strip blob-video: prefix to get actual src
+  const getMediaSrc = (url) => url?.startsWith('blob-video:') ? url.slice(11) : url;
 
   const handleImageChange = async (e) => {
     let file = e.target.files[0];
@@ -145,7 +149,8 @@ export default function CafeteriaMenu() {
     }
     
     setImageFile(file);
-    setImagePreview(URL.createObjectURL(file));
+    // Store file type alongside preview so isVideo works on blob URLs
+    setImagePreview(file.type.startsWith('video/') ? `blob-video:${URL.createObjectURL(file)}` : URL.createObjectURL(file));
     setForm(prev => ({ ...prev, image_url: '' }));
   };
 
@@ -153,31 +158,65 @@ export default function CafeteriaMenu() {
     e.preventDefault();
     setSaving(true);
     try {
-      const fd = new FormData();
-      fd.append('name', form.name);
-      fd.append('price', form.price);
-      fd.append('category', form.category);
-      fd.append('description', form.description || '');
-      
+      let finalImageUrl = form.image_url || null;
+
+      // If a file was selected, upload it
       if (imageFile) {
-        fd.append('image', imageFile);
-      } else if (form.image_url) {
-        fd.append('image_url', form.image_url);
+        const isVideoFile = imageFile.type.startsWith('video/');
+
+        if (isVideoFile || imageFile.size > 4 * 1024 * 1024) {
+          // Direct upload to Supabase (bypasses Vercel 4.5MB limit)
+          const { data: uploadData } = await axios.post(
+            `${BASE}/api/cafeteria/menu/upload-url`,
+            { filename: imageFile.name, mimetype: imageFile.type },
+            axiosConfig
+          );
+          await fetch(uploadData.signedUrl, {
+            method: 'PUT',
+            headers: { 'Content-Type': imageFile.type },
+            body: imageFile,
+          });
+          finalImageUrl = uploadData.publicUrl;
+        } else {
+          // Small image — upload via backend as before
+          const fd = new FormData();
+          fd.append('name', form.name);
+          fd.append('price', form.price);
+          fd.append('category', form.category);
+          fd.append('description', form.description || '');
+          fd.append('image', imageFile);
+          const multipartConfig = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } };
+          if (modal === 'edit' && editing) {
+            await axios.put(`${BASE}/api/cafeteria/menu/${editing.id}`, fd, multipartConfig);
+          } else {
+            await axios.post(`${BASE}/api/cafeteria/menu`, fd, multipartConfig);
+          }
+          showToast(modal === 'edit' ? 'Menu item updated!' : 'Menu item added!', 'success');
+          closeModal();
+          fetchData();
+          return;
+        }
       }
 
-      const multipartConfig = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } };
-
+      // Save item with URL (either from direct upload or pasted URL)
+      const payload = {
+        name: form.name,
+        price: form.price,
+        category: form.category,
+        description: form.description || '',
+        image_url: finalImageUrl,
+      };
       if (modal === 'edit' && editing) {
-        await axios.put(`${BASE}/api/cafeteria/menu/${editing.id}`, fd, multipartConfig);
+        await axios.put(`${BASE}/api/cafeteria/menu/${editing.id}`, payload, axiosConfig);
         showToast('Menu item updated!', 'success');
       } else {
-        await axios.post(`${BASE}/api/cafeteria/menu`, fd, multipartConfig);
+        await axios.post(`${BASE}/api/cafeteria/menu`, payload, axiosConfig);
         showToast('Menu item added!', 'success');
       }
       closeModal();
       fetchData();
     } catch (err) {
-      showToast(err.response?.data?.message || 'Save failed.', 'error');
+      showToast(err.response?.data?.message || err.message || 'Save failed.', 'error');
     } finally { setSaving(false); }
   };
 
@@ -390,7 +429,7 @@ export default function CafeteriaMenu() {
                     {imagePreview ? (
                       <div className="relative h-20 w-full group" onClick={() => fileRef.current.click()}>
                         {isVideo(imagePreview) ? (
-                          <video src={imagePreview} className="w-full h-full object-cover rounded-lg" autoPlay muted loop />
+                          <video src={getMediaSrc(imagePreview)} className="w-full h-full object-cover rounded-lg" autoPlay muted loop />
                         ) : (
                           <img src={imagePreview} alt="p" className="w-full h-full object-cover rounded-lg" />
                         )}

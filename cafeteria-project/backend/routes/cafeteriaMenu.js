@@ -1,9 +1,32 @@
 const express = require('express');
 const supabase = require('../database');
-const { createUpload, uploadToSupabase, deleteFromSupabase } = require('../uploadHelper');
+const { createUpload, uploadToSupabase, deleteFromSupabase, BUCKET } = require('../uploadHelper');
 const router = express.Router();
 
 const upload = createUpload('image', 50); // 50MB to support video uploads
+
+// GET signed upload URL for direct browser-to-Supabase upload (bypasses Vercel 4.5MB limit)
+router.post('/upload-url', async (req, res) => {
+    try {
+        const { filename, mimetype } = req.body;
+        if (!filename) return res.status(400).json({ message: 'filename required' });
+
+        const ext = require('path').extname(filename).toLowerCase();
+        const uniqueName = `uploads/${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`;
+
+        const { data, error } = await supabase.storage
+            .from(BUCKET)
+            .createSignedUploadUrl(uniqueName);
+
+        if (error) return res.status(500).json({ message: 'Could not create upload URL: ' + error.message });
+
+        const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(uniqueName);
+
+        res.json({ signedUrl: data.signedUrl, token: data.token, path: uniqueName, publicUrl: urlData.publicUrl });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+});
 
 // GET all menu items for this cafeteria
 router.get('/', async (req, res) => {
