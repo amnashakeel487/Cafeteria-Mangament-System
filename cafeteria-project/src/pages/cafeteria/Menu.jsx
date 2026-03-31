@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import DefaultImage from '../../assets/default_dish.png';
+import { supabase, BUCKET } from '../../supabaseClient';
 
 const CAT_COLORS = [
   { badge: 'bg-tertiary/20 text-tertiary border border-tertiary/30', pill: 'text-tertiary' },
@@ -164,18 +165,15 @@ export default function CafeteriaMenu() {
         const isVideoFile = imageFile.type.startsWith('video/');
 
         if (isVideoFile || imageFile.size > 4 * 1024 * 1024) {
-          const { data: uploadData } = await axios.post(
-            `${BASE}/api/cafeteria/menu/upload-url`,
-            { filename: imageFile.name, mimetype: imageFile.type },
-            axiosConfig
-          );
-          const uploadRes = await fetch(uploadData.signedUrl, {
-            method: 'PUT',
-            headers: { 'Content-Type': imageFile.type },
-            body: imageFile,
-          });
-          if (!uploadRes.ok) throw new Error('Direct upload to storage failed');
-          finalImageUrl = uploadData.publicUrl;
+          // Upload directly from browser via Supabase JS client (no Vercel size limit)
+          const ext = imageFile.name.split('.').pop();
+          const path = `uploads/${Date.now()}-${Math.round(Math.random() * 1e6)}.${ext}`;
+          const { error: uploadErr } = await supabase.storage
+            .from(BUCKET)
+            .upload(path, imageFile, { contentType: imageFile.type, upsert: true });
+          if (uploadErr) throw new Error('Upload failed: ' + uploadErr.message);
+          const { data: urlData } = supabase.storage.from(BUCKET).getPublicUrl(path);
+          finalImageUrl = urlData.publicUrl;
         } else {
           // Small image via multipart
           const fd = new FormData();
