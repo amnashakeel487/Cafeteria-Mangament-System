@@ -158,15 +158,12 @@ export default function CafeteriaMenu() {
     e.preventDefault();
     setSaving(true);
     try {
-      // Start with existing image URL when editing, so we don't wipe it
       let finalImageUrl = form.image_url || (modal === 'edit' && editing ? editing.image_url : null);
 
-      // If a file was selected, upload it
       if (imageFile) {
         const isVideoFile = imageFile.type.startsWith('video/');
 
         if (isVideoFile || imageFile.size > 4 * 1024 * 1024) {
-          // Direct upload to Supabase (bypasses Vercel 4.5MB limit)
           const { data: uploadData } = await axios.post(
             `${BASE}/api/cafeteria/menu/upload-url`,
             { filename: imageFile.name, mimetype: imageFile.type },
@@ -180,7 +177,7 @@ export default function CafeteriaMenu() {
           if (!uploadRes.ok) throw new Error('Direct upload to storage failed');
           finalImageUrl = uploadData.publicUrl;
         } else {
-          // Small image — upload via multipart
+          // Small image via multipart
           const fd = new FormData();
           fd.append('name', form.name);
           fd.append('price', form.price);
@@ -190,17 +187,19 @@ export default function CafeteriaMenu() {
           const multipartConfig = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } };
           if (modal === 'edit' && editing) {
             await axios.put(`${BASE}/api/cafeteria/menu/${editing.id}`, fd, multipartConfig);
+            const updated = { ...editing, ...form, price: parseFloat(form.price), image_url: finalImageUrl || editing.image_url };
+            setItems(prev => prev.map(i => i.id === editing.id ? updated : i));
           } else {
-            await axios.post(`${BASE}/api/cafeteria/menu`, fd, multipartConfig);
+            const res = await axios.post(`${BASE}/api/cafeteria/menu`, fd, multipartConfig);
+            const newItem = { id: res.data.id, ...form, price: parseFloat(form.price), image_url: finalImageUrl, cafeteria_id: null };
+            setItems(prev => [newItem, ...prev]);
           }
           showToast(modal === 'edit' ? 'Menu item updated!' : 'Menu item added!', 'success');
           closeModal();
-          fetchData();
           return;
         }
       }
 
-      // Save item with JSON payload (no file, or after direct upload)
       const payload = {
         name: form.name,
         price: form.price,
@@ -208,15 +207,19 @@ export default function CafeteriaMenu() {
         description: form.description || '',
         image_url: finalImageUrl,
       };
+
       if (modal === 'edit' && editing) {
         await axios.put(`${BASE}/api/cafeteria/menu/${editing.id}`, payload, axiosConfig);
+        const updated = { ...editing, ...payload, price: parseFloat(form.price) };
+        setItems(prev => prev.map(i => i.id === editing.id ? updated : i));
         showToast('Menu item updated!', 'success');
       } else {
-        await axios.post(`${BASE}/api/cafeteria/menu`, payload, axiosConfig);
+        const res = await axios.post(`${BASE}/api/cafeteria/menu`, payload, axiosConfig);
+        const newItem = { id: res.data.id, ...payload, price: parseFloat(form.price) };
+        setItems(prev => [newItem, ...prev]);
         showToast('Menu item added!', 'success');
       }
       closeModal();
-      fetchData();
     } catch (err) {
       showToast(err.response?.data?.message || err.message || 'Save failed.', 'error');
     } finally { setSaving(false); }
@@ -226,8 +229,8 @@ export default function CafeteriaMenu() {
     if (!window.confirm(`Delete "${item.name}" from the menu?`)) return;
     try {
       await axios.delete(`${BASE}/api/cafeteria/menu/${item.id}`, axiosConfig);
+      setItems(prev => prev.filter(i => i.id !== item.id));
       showToast('Item deleted.', 'success');
-      fetchData();
     } catch { showToast('Delete failed.', 'error'); }
   };
 
@@ -235,10 +238,10 @@ export default function CafeteriaMenu() {
     e.preventDefault();
     if (!newCategoryName.trim()) return;
     try {
-      await axios.post(`${BASE}/api/cafeteria/menu/categories`, { name: newCategoryName }, axiosConfig);
+      const res = await axios.post(`${BASE}/api/cafeteria/menu/categories`, { name: newCategoryName }, axiosConfig);
+      setCategories(prev => [...prev, { id: res.data.id, name: newCategoryName.trim() }]);
       setNewCategoryName('');
       showToast('Category added!', 'success');
-      fetchData();
     } catch (err) {
       showToast(err.response?.data?.message || 'Error adding category.', 'error');
     }
@@ -248,9 +251,9 @@ export default function CafeteriaMenu() {
     if (!window.confirm(`Delete category "${name}"?`)) return;
     try {
       await axios.delete(`${BASE}/api/cafeteria/menu/categories/${id}`, axiosConfig);
+      setCategories(prev => prev.filter(c => c.id !== id));
       showToast('Category deleted.', 'success');
       if (filter === name) setFilter('All');
-      fetchData();
     } catch (err) {
       showToast(err.response?.data?.message || 'Delete failed.', 'error');
     }
