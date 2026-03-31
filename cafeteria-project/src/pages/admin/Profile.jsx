@@ -2,7 +2,15 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 export default function Profile() {
-  const [profile, setProfile] = useState({ name: '', email: '', contact: '', role: '', profile_image: '' });
+  const savedAdmin = JSON.parse(localStorage.getItem('adminData') || '{}');
+  const [profile, setProfile] = useState({ 
+    name: savedAdmin.name || '', 
+    email: savedAdmin.email || '', 
+    contact: savedAdmin.contact || '', 
+    role: savedAdmin.role || '', 
+    profile_image: savedAdmin.profile_image || '' 
+  });
+  const [fetchError, setFetchError] = useState(false);
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -20,8 +28,10 @@ export default function Profile() {
         headers: { Authorization: `Bearer ${token}` }
       });
       setProfile(res.data);
+      setFetchError(false);
     } catch (err) {
-      showToast('Failed to load profile data.', 'error');
+      setFetchError(true);
+      showToast(err.response?.data?.message || 'Failed to load profile data.', 'error');
     } finally {
       setLoading(false);
     }
@@ -173,6 +183,13 @@ export default function Profile() {
         <div className="mb-10">
           <h2 className="text-4xl font-extrabold font-headline tracking-tight text-on-surface">Account Settings</h2>
           <p className="text-on-surface-variant mt-2 text-lg">Manage your architectural identity and system credentials.</p>
+          {fetchError && (
+            <div className="mt-4 flex items-center gap-3 bg-error-container/20 border border-error/30 text-error px-4 py-3 rounded-lg text-sm font-medium">
+              <span className="material-symbols-outlined text-base">warning</span>
+              <span>Could not load latest profile data from server. Showing cached data.</span>
+              <button onClick={() => { setLoading(true); fetchProfile(); }} className="ml-auto underline hover:no-underline">Retry</button>
+            </div>
+          )}
         </div>
 
         {/* Asymmetric Layout: 2/3 Content, 1/3 Sidebar */}

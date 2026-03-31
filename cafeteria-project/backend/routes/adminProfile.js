@@ -9,7 +9,6 @@ const upload = createUpload('avatar', 5);
 // Get admin profile
 router.get('/', async (req, res) => {
     try {
-        // req.user is set by the auth middleware
         const { data: row, error } = await supabase
             .from('users')
             .select('id, name, email, contact, role, profile_image')
@@ -17,11 +16,26 @@ router.get('/', async (req, res) => {
             .eq('role', 'admin')
             .maybeSingle();
 
-        if (error) return res.status(500).json({ message: "Database error" });
+        if (error) {
+            // If profile_image column doesn't exist, retry without it
+            if (error.message?.includes('profile_image') || error.code === '42703') {
+                const { data: fallback, error: fallbackErr } = await supabase
+                    .from('users')
+                    .select('id, name, email, contact, role')
+                    .eq('id', req.user.id)
+                    .eq('role', 'admin')
+                    .maybeSingle();
+                if (fallbackErr || !fallback) return res.status(500).json({ message: "Database error" });
+                return res.json({ ...fallback, profile_image: null });
+            }
+            console.error('Admin profile GET error:', error);
+            return res.status(500).json({ message: "Database error", details: error.message });
+        }
         if (!row) return res.status(404).json({ message: "Admin not found" });
         
         res.json(row);
     } catch (err) {
+        console.error('Admin profile GET exception:', err);
         res.status(500).json({ message: "Server error" });
     }
 });

@@ -33,14 +33,23 @@ async function uploadToSupabase(buffer, folder, originalName) {
     const ext = path.extname(originalName).toLowerCase();
     const uniqueName = `${folder}/${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`;
 
-    const isVideo = ['.mp4', '.webm', '.ogg', '.mov'].includes(ext);
-    const contentType = isVideo ? `video/${ext.replace('.', '')}` : `image/${ext.replace('.', '')}`;
+    const mimeMap = {
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.webp': 'image/webp',
+        '.mp4': 'video/mp4',
+        '.webm': 'video/webm',
+        '.ogg': 'video/ogg',
+        '.mov': 'video/quicktime',
+    };
+    const contentType = mimeMap[ext] || 'application/octet-stream';
 
     const { error } = await supabase.storage
         .from(BUCKET)
         .upload(uniqueName, buffer, {
-            contentType: contentType === 'image/jpg' ? 'image/jpeg' : contentType,
-            upsert: true // Changed to true to avoid 'already exists' errors
+            contentType,
+            upsert: true
         });
 
     if (error) {

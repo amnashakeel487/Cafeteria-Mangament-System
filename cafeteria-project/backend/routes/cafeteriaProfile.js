@@ -103,9 +103,7 @@ router.post('/picture', upload.single('avatar'), async (req, res) => {
     } catch (err) {
         console.error('Cafeteria picture update error:', err);
         res.status(500).json({ 
-            message: 'Server error during media update', 
-            details: err.message,
-            error: err
+            message: err.message || 'Server error during media update'
         });
     }
 });
