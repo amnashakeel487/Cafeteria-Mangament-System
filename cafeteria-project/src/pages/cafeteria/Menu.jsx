@@ -297,7 +297,7 @@ export default function CafeteriaMenu() {
                 <img 
                   src={item.image_url || DEFAULT_IMAGE} 
                   alt={item.name}
-                  className={`transition-all duration-700 group-hover:scale-110 ${item.image_url ? 'w-full h-full object-cover' : 'h-24 w-auto object-contain opacity-70'}`}
+                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
                 />
               )}
               <div className={`absolute top-4 left-4 backdrop-blur-md px-3 py-1 rounded-full ${style.badge}`}>
