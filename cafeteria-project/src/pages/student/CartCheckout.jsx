@@ -132,11 +132,11 @@ export default function CartCheckout() {
           <div className="p-6 space-y-6">
             {cart.map(item => (
               <div key={item.id} className="flex items-center gap-4 group">
-                <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-[#333345]">
+                <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-[#333345] flex items-center justify-center p-2">
                   <img 
                     src={item.image_url || DEFAULT_IMAGE} 
                     alt={item.name} 
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                    className={`transition-all duration-500 group-hover:scale-110 ${item.image_url ? 'w-full h-full object-cover' : 'h-10 w-auto object-contain opacity-50'}`}
                   />
                 </div>
                 

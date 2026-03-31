@@ -274,16 +274,16 @@ export default function CafeteriaMenu() {
           const style = getCatStyle(item.category);
           return (
           <div key={item.id} className="group relative bg-surface-container-high rounded-xl overflow-hidden hover:shadow-[0_24px_48px_rgba(12,12,29,0.5)] transition-all duration-300 flex flex-col">
-            <div className="h-48 overflow-hidden relative bg-surface-container-highest font-['Manrope']">
+            <div className="h-48 overflow-hidden relative bg-surface-container-highest font-['Manrope'] flex items-center justify-center">
               <img 
                 src={item.image_url || DEFAULT_IMAGE} 
                 alt={item.name}
-                className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 
+                className={`transition-all duration-700 group-hover:scale-110 ${item.image_url ? 'w-full h-full object-cover' : 'h-24 w-auto object-contain opacity-70'}`}
               />
               <div className={`absolute top-4 left-4 backdrop-blur-md px-3 py-1 rounded-full ${style.badge}`}>
                 <span className={`text-[10px] font-bold tracking-widest uppercase ${style.pill}`}>{item.category}</span>
               </div>
-              <div className="absolute inset-0 bg-gradient-to-t from-surface-container-high via-transparent to-transparent opacity-60"></div>
+              <div className="absolute inset-0 bg-gradient-to-t from-surface-container-high/60 via-transparent to-transparent opacity-60 pointer-events-none"></div>
             </div>
             <div className="p-6 flex flex-col flex-1">
               <div className="flex justify-between items-start mb-2">

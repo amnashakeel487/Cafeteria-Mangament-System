@@ -130,11 +130,11 @@ export default function MenuBrowsing() {
             const qty = getCartQty(item.id);
             return (
             <div key={item.id} className="group bg-[#28283a] rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col">
-              <div className="relative h-40 overflow-hidden bg-[#333345]">
+              <div className="relative h-40 overflow-hidden bg-[#333345] flex items-center justify-center">
                 <img 
                   src={item.image_url || DEFAULT_IMAGE} 
                   alt={item.name} 
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                  className={`transition-all duration-500 group-hover:scale-110 ${item.image_url ? 'w-full h-full object-cover' : 'h-24 w-auto object-contain opacity-60'}`}
                 />
                 {qty > 0 && (
                   <div className="absolute top-2 right-2 bg-[#FF6B35] text-white px-2 py-0.5 rounded-md text-[10px] font-bold shadow-lg">
