@@ -137,15 +137,16 @@ export default function CafeteriaMenu() {
     let file = e.target.files[0];
     if (!file) return;
     
-    if (file.size > 2 * 1024 * 1024) {
+    // Only compress images, not videos
+    if (file.type.startsWith('image/') && file.size > 2 * 1024 * 1024) {
       showToast('Large image detected. Compressing...', 'success');
       file = await compressImage(file);
-      showToast('Image compressed to under 2MB successfully!', 'success');
+      showToast('Image compressed successfully!', 'success');
     }
     
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
-    setForm(prev => ({ ...prev, image_url: '' })); // Clear URL if file selected
+    setForm(prev => ({ ...prev, image_url: '' }));
   };
 
   const handleSubmit = async (e) => {

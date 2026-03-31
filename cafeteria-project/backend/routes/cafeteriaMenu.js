@@ -3,7 +3,7 @@ const supabase = require('../database');
 const { createUpload, uploadToSupabase, deleteFromSupabase } = require('../uploadHelper');
 const router = express.Router();
 
-const upload = createUpload('image', 2);
+const upload = createUpload('image', 50); // 50MB to support video uploads
 
 // GET all menu items for this cafeteria
 router.get('/', async (req, res) => {
@@ -22,80 +22,84 @@ router.get('/', async (req, res) => {
 });
 
 // POST add menu item
-router.post('/', upload.single('image'), async (req, res) => {
-    try {
-        const { name, price, category, description } = req.body;
-        if (!name || !price || !category) return res.status(400).json({ message: 'Name, price and category are required.' });
-        
-        let image_url = req.body.image_url || null;
-        if (req.file) {
-            image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname);
-        }
-        
-        const { data, error } = await supabase
-            .from('menu_items')
-            .insert({
-                cafeteria_id: req.cafeteria.id,
-                name,
-                price: parseFloat(price),
-                category,
-                description: description || '',
-                image_url
-            })
-            .select()
-            .single();
+router.post('/', (req, res) => {
+    upload.single('image')(req, res, async (err) => {
+        if (err) return res.status(400).json({ message: err.message || 'File upload error' });
+        try {
+            const { name, price, category, description } = req.body;
+            if (!name || !price || !category) return res.status(400).json({ message: 'Name, price and category are required.' });
+            
+            let image_url = req.body.image_url || null;
+            if (req.file) {
+                image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname);
+            }
+            
+            const { data, error } = await supabase
+                .from('menu_items')
+                .insert({
+                    cafeteria_id: req.cafeteria.id,
+                    name,
+                    price: parseFloat(price),
+                    category,
+                    description: description || '',
+                    image_url
+                })
+                .select()
+                .single();
 
-        if (error) return res.status(500).json({ message: 'Database error' });
-        res.status(201).json({ id: data.id, message: 'Menu item added successfully.' });
-    } catch (err) {
-        console.error('Menu add error:', err);
-        res.status(500).json({ message: 'Server error' });
-    }
+            if (error) return res.status(500).json({ message: 'Database error' });
+            res.status(201).json({ id: data.id, message: 'Menu item added successfully.' });
+        } catch (err) {
+            console.error('Menu add error:', err);
+            res.status(500).json({ message: err.message || 'Server error' });
+        }
+    });
 });
 
 // PUT update menu item
-router.put('/:id', upload.single('image'), async (req, res) => {
-    try {
-        const { name, price, category, description } = req.body;
-        const { id } = req.params;
-        
-        // Fetch current to preserve image if none uploaded
-        const { data: item, error: fetchErr } = await supabase
-            .from('menu_items')
-            .select('*')
-            .eq('id', id)
-            .eq('cafeteria_id', req.cafeteria.id)
-            .maybeSingle();
+router.put('/:id', (req, res) => {
+    upload.single('image')(req, res, async (err) => {
+        if (err) return res.status(400).json({ message: err.message || 'File upload error' });
+        try {
+            const { name, price, category, description } = req.body;
+            const { id } = req.params;
+            
+            const { data: item, error: fetchErr } = await supabase
+                .from('menu_items')
+                .select('*')
+                .eq('id', id)
+                .eq('cafeteria_id', req.cafeteria.id)
+                .maybeSingle();
 
-        if (fetchErr || !item) return res.status(404).json({ message: 'Menu item not found.' });
-        
-        let image_url = req.body.image_url || item.image_url;
-        if (req.file) {
-            // Delete old image from storage if it was a supabase path
-            if (item.image_url && item.image_url.includes('supabase.co')) {
-                await deleteFromSupabase(item.image_url);
+            if (fetchErr || !item) return res.status(404).json({ message: 'Menu item not found.' });
+            
+            let image_url = req.body.image_url || item.image_url;
+            if (req.file) {
+                if (item.image_url && item.image_url.includes('supabase.co')) {
+                    await deleteFromSupabase(item.image_url);
+                }
+                image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname);
             }
-            image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname);
-        }
-        
-        const { error: updateErr } = await supabase
-            .from('menu_items')
-            .update({
-                name: name || item.name,
-                price: parseFloat(price) || item.price,
-                category: category || item.category,
-                description: description ?? item.description,
-                image_url
-            })
-            .eq('id', id)
-            .eq('cafeteria_id', req.cafeteria.id);
+            
+            const { error: updateErr } = await supabase
+                .from('menu_items')
+                .update({
+                    name: name || item.name,
+                    price: parseFloat(price) || item.price,
+                    category: category || item.category,
+                    description: description ?? item.description,
+                    image_url
+                })
+                .eq('id', id)
+                .eq('cafeteria_id', req.cafeteria.id);
 
-        if (updateErr) return res.status(500).json({ message: 'Database error' });
-        res.json({ message: 'Menu item updated successfully.' });
-    } catch (err) {
-        console.error('Menu update error:', err);
-        res.status(500).json({ message: 'Server error' });
-    }
+            if (updateErr) return res.status(500).json({ message: 'Database error' });
+            res.json({ message: 'Menu item updated successfully.' });
+        } catch (err) {
+            console.error('Menu update error:', err);
+            res.status(500).json({ message: err.message || 'Server error' });
+        }
+    });
 });
 
 // DELETE menu item
