@@ -39,8 +39,8 @@ export default function CafeteriaProfile() {
       // Update local storage so the sidebar reflects changes immediately
       const savedData = JSON.parse(localStorage.getItem('cafeteriaData') || '{}');
       localStorage.setItem('cafeteriaData', JSON.stringify({ ...savedData, ...res.data }));
-    } catch {
-      showToast('Failed to load profile', 'error');
+    } catch (err) {
+      showToast(err.response?.data?.message || 'Failed to load profile', 'error');
     } finally {
       setLoading(false);
     }
@@ -145,8 +145,9 @@ export default function CafeteriaProfile() {
       currentData.profile_picture = res.data.profile_picture;
       localStorage.setItem('cafeteriaData', JSON.stringify(currentData));
       window.dispatchEvent(new Event('storage'));
-    } catch {
-      showToast('Failed to update media', 'error');
+      window.dispatchEvent(new Event('storage'));
+    } catch (err) {
+      showToast(err.response?.data?.message || err.response?.data?.details || 'Failed to update media', 'error');
     }
   };
 
@@ -174,8 +175,9 @@ export default function CafeteriaProfile() {
       currentData.profile_picture = res.data.profile_picture;
       localStorage.setItem('cafeteriaData', JSON.stringify(currentData));
       window.dispatchEvent(new Event('storage'));
-    } catch {
-      showToast('Failed to upload media', 'error');
+      window.dispatchEvent(new Event('storage'));
+    } catch (err) {
+      showToast(err.response?.data?.message || err.response?.data?.details || 'Failed to upload media', 'error');
     }
   };
 

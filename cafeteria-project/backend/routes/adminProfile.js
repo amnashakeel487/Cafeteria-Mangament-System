@@ -1,7 +1,10 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const supabase = require('../database');
+const { createUpload, uploadToSupabase, deleteFromSupabase } = require('../uploadHelper');
 const router = express.Router();
+
+const upload = createUpload('avatar', 5);
 
 // Get admin profile
 router.get('/', async (req, res) => {
@@ -28,7 +31,22 @@ router.put('/', async (req, res) => {
     try {
         const { name, email, password, contact, profile_image } = req.body;
         
-        const updateData = { name, email, contact, profile_image };
+        // Fetch current profile to see if email is actually changing
+        const { data: current, error: fetchErr } = await supabase
+            .from('users')
+            .select('email')
+            .eq('id', req.user.id)
+            .maybeSingle();
+
+        if (fetchErr) return res.status(500).json({ message: "Database check failed" });
+
+        const updateData = { name, contact, profile_image };
+        
+        // Only include email in update if it's different and not null
+        if (email && email !== current?.email) {
+            updateData.email = email;
+        }
+
         if (password) {
             updateData.password = await bcrypt.hash(password, 10);
         }
@@ -40,11 +58,48 @@ router.put('/', async (req, res) => {
             .eq('role', 'admin');
 
         if (error) {
-            console.error(error);
-            return res.status(400).json({ message: "Update failed. Email might be taken." });
+            console.error('Admin profile update error:', error);
+            if (error.code === '23505' || error.message?.includes('unique')) {
+                return res.status(409).json({ message: "This email is already linked to another account." });
+            }
+            return res.status(500).json({ message: "Update failed: " + error.message });
         }
         res.json({ message: "Profile updated successfully" });
     } catch (err) {
+        res.status(500).json({ message: "Server error" });
+    }
+});
+
+// POST upload profile picture (Supabase Storage)
+router.post('/picture', upload.single('avatar'), async (req, res) => {
+    try {
+        let imageUrl = req.body.profile_image;
+
+        if (req.file) {
+            // Fetch current to delete old
+            const { data: current } = await supabase
+                .from('users')
+                .select('profile_image')
+                .eq('id', req.user.id)
+                .maybeSingle();
+
+            if (current && current.profile_image) {
+                await deleteFromSupabase(current.profile_image);
+            }
+            imageUrl = await uploadToSupabase(req.file.buffer, 'avatars', req.file.originalname);
+        }
+
+        if (!imageUrl && !req.file) return res.status(400).json({ message: 'No media provided' });
+
+        const { error } = await supabase
+            .from('users')
+            .update({ profile_image: imageUrl })
+            .eq('id', req.user.id);
+
+        if (error) return res.status(500).json({ message: "Database error" });
+        res.json({ message: "Profile media updated", profile_image: imageUrl });
+    } catch (err) {
+        console.error('Admin picture upload error:', err);
         res.status(500).json({ message: "Server error" });
     }
 });

@@ -40,12 +40,12 @@ async function uploadToSupabase(buffer, folder, originalName) {
         .from(BUCKET)
         .upload(uniqueName, buffer, {
             contentType: contentType === 'image/jpg' ? 'image/jpeg' : contentType,
-            upsert: false
+            upsert: true // Changed to true to avoid 'already exists' errors
         });
 
     if (error) {
-        console.error('Supabase Storage upload error:', error);
-        throw new Error('Failed to upload file to storage');
+        console.error('Full Supabase Storage upload error:', error);
+        throw new Error(`Storage upload failed: ${error.message} (Bucket: ${BUCKET})`);
     }
 
     const { data: urlData } = supabase.storage

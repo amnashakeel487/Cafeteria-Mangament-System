@@ -62,7 +62,7 @@ router.put('/password', async (req, res) => {
             .update({ password: hashed })
             .eq('id', req.cafeteria.id);
 
-        if (updateError) return res.status(500).json({ message: 'Error updating password' });
+        if (updateError) return res.status(500).json({ message: 'Error updating password', details: updateError.message });
         res.json({ message: 'Password updated successfully' });
     } catch (err) {
         res.status(500).json({ message: 'Server error.' });
@@ -101,8 +101,12 @@ router.post('/picture', upload.single('avatar'), async (req, res) => {
         if (error) return res.status(500).json({ message: 'Database error' });
         res.json({ message: 'Profile media updated', profile_picture: imageUrl });
     } catch (err) {
-        console.error('Profile picture update error:', err);
-        res.status(500).json({ message: 'Server error.' });
+        console.error('Cafeteria picture update error:', err);
+        res.status(500).json({ 
+            message: 'Server error during media update', 
+            details: err.message,
+            error: err
+        });
     }
 });
 

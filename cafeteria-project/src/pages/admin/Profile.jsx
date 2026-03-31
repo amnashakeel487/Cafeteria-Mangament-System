@@ -33,18 +33,84 @@ export default function Profile() {
     return videoExtensions.some(ext => url.toLowerCase().split('?')[0].endsWith(ext));
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      if (file.size > 2 * 1024 * 1024) {
-        showToast("Large media detected. Processing...", "success");
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setProfile({ ...profile, profile_image: reader.result });
-      };
-      reader.readAsDataURL(file);
+  const handleMediaUpdate = async (url) => {
+    if (!url) return;
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await axios.post('/api/admin/profile/picture', { profile_image: url }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setProfile(prev => ({ ...prev, profile_image: res.data.profile_image }));
+      showToast('Profile media updated!', 'success');
+      
+      const oldAdmin = JSON.parse(localStorage.getItem('adminData') || "{}");
+      localStorage.setItem('adminData', JSON.stringify({ ...oldAdmin, profile_image: res.data.profile_image }));
+      window.dispatchEvent(new Event('storage'));
+    } catch {
+      showToast('Failed to update media', 'error');
     }
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024 && file.type.startsWith('image/')) {
+      showToast("Large media detected. Compressing...", "success");
+      file = await compressImage(file);
+      showToast("Media compressed to under 2MB successfully!", "success");
+    }
+
+    const formData = new FormData();
+    formData.append('avatar', file);
+
+    try {
+      const token = localStorage.getItem('adminToken');
+      const res = await axios.post('/api/admin/profile/picture', formData, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      setProfile(prev => ({ ...prev, profile_image: res.data.profile_image }));
+      showToast('Profile media updated!', 'success');
+      
+      const oldAdmin = JSON.parse(localStorage.getItem('adminData') || "{}");
+      localStorage.setItem('adminData', JSON.stringify({ ...oldAdmin, profile_image: res.data.profile_image }));
+      window.dispatchEvent(new Event('storage'));
+    } catch {
+      showToast('Failed to upload media', 'error');
+    }
+  };
+
+  const compressImage = async (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (e) => {
+        const img = new Image();
+        img.src = e.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
+          const MAX_SIDE = 1200;
+          if (width > height) {
+            if (width > MAX_SIDE) { height *= MAX_SIDE / width; width = MAX_SIDE; }
+          } else {
+            if (height > MAX_SIDE) { width *= MAX_SIDE / height; height = MAX_SIDE; }
+          }
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
+          canvas.toBlob((blob) => {
+            const compressed = new File([blob], file.name, { type: 'image/jpeg', lastModified: Date.now() });
+            resolve(compressed);
+          }, 'image/jpeg', 0.7);
+        };
+      };
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -248,6 +314,7 @@ export default function Profile() {
                       className="w-full bg-surface-container-lowest border border-outline-variant/10 rounded-lg pl-10 pr-4 py-2 text-xs font-bold text-on-surface focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-on-surface-variant/30"
                       value={profile.profile_image || ''}
                       onChange={e => setProfile({...profile, profile_image: e.target.value})}
+                      onBlur={e => handleMediaUpdate(e.target.value)}
                     />
                 </div>
                 <h4 className="mt-4 text-2xl font-bold font-headline">{profile.name}</h4>
