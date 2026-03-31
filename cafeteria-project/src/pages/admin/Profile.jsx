@@ -25,12 +25,17 @@ export default function Profile() {
     }
   };
 
+  const isVideo = (url) => {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+    return videoExtensions.some(ext => url.toLowerCase().split('?')[0].endsWith(ext));
+  };
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 2 * 1024 * 1024) {
-        showToast("Image too large (max 2MB)", "error");
-        return;
+        showToast("Large media detected. Processing...", "success");
       }
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -219,15 +224,29 @@ export default function Profile() {
                 <div className="relative group">
                   <label htmlFor="profile-upload" className="w-32 h-32 rounded-full border-4 border-surface-container-high bg-surface-container-lowest flex items-center justify-center shadow-xl overflow-hidden cursor-pointer group-hover:opacity-80 transition-opacity relative">
                      {profile.profile_image ? (
-                        <img src={profile.profile_image} className="w-full h-full object-cover" alt="Profile" />
+                        isVideo(profile.profile_image) ? (
+                            <video src={profile.profile_image} className="w-full h-full object-cover" autoPlay muted loop />
+                        ) : (
+                            <img src={profile.profile_image} className="w-full h-full object-cover" alt="Profile" />
+                        )
                      ) : (
                         <span className="material-symbols-outlined text-6xl text-primary/50">account_circle</span>
                      )}
                      <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                         <span className="material-symbols-outlined text-white">photo_camera</span>
                      </div>
-                     <input type="file" id="profile-upload" className="hidden" accept="image/*" onChange={handleImageUpload} />
+                     <input type="file" id="profile-upload" className="hidden" accept="image/*,video/*" onChange={handleImageUpload} />
                   </label>
+                </div>
+                <div className="mt-4 w-full relative px-6">
+                    <span className="material-symbols-outlined absolute left-9 top-1/2 -translate-y-1/2 text-on-surface-variant/40 text-sm">link</span>
+                    <input 
+                      type="text" 
+                      placeholder="Paste Media URL..."
+                      className="w-full bg-surface-container-lowest border border-outline-variant/10 rounded-lg pl-10 pr-4 py-2 text-xs font-bold text-on-surface focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-on-surface-variant/30"
+                      value={profile.profile_image || ''}
+                      onChange={e => setProfile({...profile, profile_image: e.target.value})}
+                    />
                 </div>
                 <h4 className="mt-4 text-2xl font-bold font-headline">{profile.name}</h4>
                 <p className="text-primary font-medium">{profile.email}</p>

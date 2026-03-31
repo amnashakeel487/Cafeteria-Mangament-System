@@ -27,7 +27,7 @@ router.post('/', upload.single('image'), async (req, res) => {
         const { name, price, category, description } = req.body;
         if (!name || !price || !category) return res.status(400).json({ message: 'Name, price and category are required.' });
         
-        let image_url = null;
+        let image_url = req.body.image_url || null;
         if (req.file) {
             image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname);
         }
@@ -69,10 +69,12 @@ router.put('/:id', upload.single('image'), async (req, res) => {
 
         if (fetchErr || !item) return res.status(404).json({ message: 'Menu item not found.' });
         
-        let image_url = item.image_url;
+        let image_url = req.body.image_url || item.image_url;
         if (req.file) {
-            // Delete old image from storage
-            await deleteFromSupabase(item.image_url);
+            // Delete old image from storage if it was a supabase path
+            if (item.image_url && item.image_url.includes('supabase.co')) {
+                await deleteFromSupabase(item.image_url);
+            }
             image_url = await uploadToSupabase(req.file.buffer, 'uploads', req.file.originalname);
         }
         

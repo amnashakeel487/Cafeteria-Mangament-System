@@ -126,14 +126,36 @@ export default function CafeteriaProfile() {
     });
   };
 
+  const isVideo = (url) => {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+    return videoExtensions.some(ext => url.toLowerCase().split('?')[0].endsWith(ext));
+  };
+
+  const handleAvatarUpdate = async (url) => {
+    if (!url) return;
+    try {
+      const res = await axios.post(`${BASE}/api/cafeteria/profile/picture`, { profile_picture: url }, axiosConfig);
+      setProfile(prev => ({ ...prev, profile_picture: res.data.profile_picture }));
+      showToast('Profile media updated!', 'success');
+      
+      const currentData = JSON.parse(localStorage.getItem('cafeteriaData') || '{}');
+      currentData.profile_picture = res.data.profile_picture;
+      localStorage.setItem('cafeteriaData', JSON.stringify(currentData));
+      window.dispatchEvent(new Event('storage'));
+    } catch {
+      showToast('Failed to update media', 'error');
+    }
+  };
+
   const handleAvatarUpload = async (e) => {
     let file = e.target.files[0];
     if (!file) return;
 
     if (file.size > 2 * 1024 * 1024) {
-      showToast('Large image detected. Compressing...', 'success');
+      showToast('Large media detected. Compressing...', 'success');
       file = await compressImage(file);
-      showToast('Image compressed to under 2MB successfully!', 'success');
+      showToast('Media compressed to under 2MB successfully!', 'success');
     }
 
     const formData = new FormData();
@@ -141,15 +163,17 @@ export default function CafeteriaProfile() {
 
     try {
       const res = await axios.post(`${BASE}/api/cafeteria/profile/picture`, formData, {
-        headers: {
-          ...axiosConfig.headers,
-          'Content-Type': 'multipart/form-data'
-        }
+        headers: { ...axiosConfig.headers, 'Content-Type': 'multipart/form-data' }
       });
       setProfile(prev => ({ ...prev, profile_picture: res.data.profile_picture }));
-      showToast('Profile picture updated!', 'success');
+      showToast('Profile media updated!', 'success');
+      
+      const currentData = JSON.parse(localStorage.getItem('cafeteriaData') || '{}');
+      currentData.profile_picture = res.data.profile_picture;
+      localStorage.setItem('cafeteriaData', JSON.stringify(currentData));
+      window.dispatchEvent(new Event('storage'));
     } catch {
-      showToast('Failed to upload picture', 'error');
+      showToast('Failed to upload media', 'error');
     }
   };
 
@@ -185,25 +209,40 @@ export default function CafeteriaProfile() {
         {/* Left Sidebar Info Card */}
         <div className="md:col-span-1 space-y-6">
           <div className="bg-surface-container-high rounded-xl p-6 shadow-2xl border border-outline-variant/5">
-            <div className="flex flex-col items-center text-center mb-6">
-              <div className="relative mb-4 group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="relative group cursor-pointer" onClick={() => fileInputRef.current?.click()}>
                 {profile.profile_picture ? (
-                  <img src={profile.profile_picture} alt="Profile" className="w-24 h-24 rounded-full border-4 border-primary-container object-cover" />
+                  isVideo(profile.profile_picture) ? (
+                    <video src={profile.profile_picture} className="w-32 h-32 rounded-full border-4 border-primary-container object-cover" autoPlay muted loop />
+                  ) : (
+                    <img src={profile.profile_picture} alt="Profile" className="w-32 h-32 rounded-full border-4 border-primary-container object-cover" />
+                  )
                 ) : (
-                  <div className="w-24 h-24 rounded-full border-4 border-primary-container bg-surface-container-lowest flex items-center justify-center text-primary text-4xl">
+                  <div className="w-32 h-32 rounded-full border-4 border-primary-container bg-surface-container-lowest flex items-center justify-center text-primary text-4xl">
                     <span className="material-symbols-outlined" style={{fontVariationSettings: "'FILL' 1"}}>restaurant</span>
                   </div>
                 )}
-                <button className="absolute bottom-0 right-0 bg-primary-container p-2 rounded-full text-on-primary shadow-lg hover:scale-105 transition-transform">
-                  <span className="material-symbols-outlined text-sm">edit</span>
-                </button>
-                <div className="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-xs font-bold">
-                  Upload
+                <div className="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white text-[10px] font-bold uppercase tracking-widest">
+                  Change Media
                 </div>
-                <input type="file" ref={fileInputRef} onChange={handleAvatarUpload} accept="image/*" className="hidden" />
+                <input type="file" ref={fileInputRef} onChange={handleAvatarUpload} accept="image/*,video/*" className="hidden" />
               </div>
-              <h2 className="text-xl font-bold text-on-surface" style={{ fontFamily: 'Manrope' }}>{profile.name || 'Cafeteria Staff'}</h2>
-              <p className="text-xs text-on-surface-variant font-medium mt-1 uppercase tracking-widest">{profile.email}</p>
+              
+              <div className="w-full relative px-4">
+                <span className="material-symbols-outlined absolute left-7 top-1/2 -translate-y-1/2 text-on-surface-variant/40 text-sm">link</span>
+                <input 
+                  type="text" 
+                  placeholder="Paste URL..."
+                  className="w-full bg-surface-container-lowest border border-outline-variant/20 rounded-lg pl-10 pr-4 py-2 text-xs font-bold text-on-surface focus:ring-1 focus:ring-primary outline-none transition-all placeholder:text-on-surface-variant/30"
+                  defaultValue={profile.profile_picture || ''}
+                  onBlur={e => handleAvatarUpdate(e.target.value)}
+                />
+              </div>
+
+              <div className="pt-2">
+                <h2 className="text-xl font-bold text-on-surface" style={{ fontFamily: 'Manrope' }}>{profile.name || 'Cafeteria Staff'}</h2>
+                <p className="text-xs text-on-surface-variant font-medium mt-1 uppercase tracking-widest">{profile.email}</p>
+              </div>
             </div>
           </div>
 

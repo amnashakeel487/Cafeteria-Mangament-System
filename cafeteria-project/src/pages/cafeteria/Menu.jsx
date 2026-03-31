@@ -126,6 +126,12 @@ export default function CafeteriaMenu() {
     });
   };
 
+  const isVideo = (url) => {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+    return videoExtensions.some(ext => url.toLowerCase().split('?')[0].endsWith(ext));
+  };
+
   const handleImageChange = async (e) => {
     let file = e.target.files[0];
     if (!file) return;
@@ -138,6 +144,7 @@ export default function CafeteriaMenu() {
     
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
+    setForm(prev => ({ ...prev, image_url: '' })); // Clear URL if file selected
   };
 
   const handleSubmit = async (e) => {
@@ -148,8 +155,13 @@ export default function CafeteriaMenu() {
       fd.append('name', form.name);
       fd.append('price', form.price);
       fd.append('category', form.category);
-      fd.append('description', form.description);
-      if (imageFile) fd.append('image', imageFile);
+      fd.append('description', form.description || '');
+      
+      if (imageFile) {
+        fd.append('image', imageFile);
+      } else if (form.image_url) {
+        fd.append('image_url', form.image_url);
+      }
 
       const multipartConfig = { headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'multipart/form-data' } };
 
@@ -275,11 +287,19 @@ export default function CafeteriaMenu() {
           return (
           <div key={item.id} className="group relative bg-surface-container-high rounded-xl overflow-hidden hover:shadow-[0_24px_48px_rgba(12,12,29,0.5)] transition-all duration-300 flex flex-col">
             <div className="h-48 overflow-hidden relative bg-surface-container-highest font-['Manrope'] flex items-center justify-center">
-              <img 
-                src={item.image_url || DEFAULT_IMAGE} 
-                alt={item.name}
-                className={`transition-all duration-700 group-hover:scale-110 ${item.image_url ? 'w-full h-full object-cover' : 'h-24 w-auto object-contain opacity-70'}`}
-              />
+              {isVideo(item.image_url) ? (
+                <video 
+                  src={item.image_url} 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" 
+                  autoPlay muted loop 
+                />
+              ) : (
+                <img 
+                  src={item.image_url || DEFAULT_IMAGE} 
+                  alt={item.name}
+                  className={`transition-all duration-700 group-hover:scale-110 ${item.image_url ? 'w-full h-full object-cover' : 'h-24 w-auto object-contain opacity-70'}`}
+                />
+              )}
               <div className={`absolute top-4 left-4 backdrop-blur-md px-3 py-1 rounded-full ${style.badge}`}>
                 <span className={`text-[10px] font-bold tracking-widest uppercase ${style.pill}`}>{item.category}</span>
               </div>
@@ -361,21 +381,45 @@ export default function CafeteriaMenu() {
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest ml-1">Item Visualization</label>
-                  <label htmlFor="menu-img-upload"
-                    className="aspect-video w-full rounded-2xl bg-surface-container-lowest flex flex-col items-center justify-center border-2 border-dashed border-outline-variant/30 text-on-surface-variant hover:border-primary/50 transition-all cursor-pointer overflow-hidden">
+                <label className="block text-xs font-bold text-on-surface-variant uppercase tracking-widest ml-1">Media Selection</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                  <div className="relative group overflow-hidden bg-surface-container rounded-xl cursor-pointer border-2 border-dashed border-outline-variant/30 hover:border-primary transition-all p-1">
+                    <input type="file" ref={fileRef} onChange={handleImageChange} className="hidden" accept="image/*,video/*" />
                     {imagePreview ? (
-                      <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                      <div className="relative h-20 w-full group" onClick={() => fileRef.current.click()}>
+                        {isVideo(imagePreview) ? (
+                          <video src={imagePreview} className="w-full h-full object-cover rounded-lg" autoPlay muted loop />
+                        ) : (
+                          <img src={imagePreview} alt="p" className="w-full h-full object-cover rounded-lg" />
+                        )}
+                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-lg">
+                          <span className="material-symbols-outlined text-white">edit</span>
+                        </div>
+                      </div>
                     ) : (
-                      <>
-                        <span className="material-symbols-outlined text-4xl mb-2">add_a_photo</span>
-                        <span className="text-sm">Upload High-Res Media</span>
-                      </>
+                      <div onClick={() => fileRef.current.click()} className="h-20 w-full flex flex-col items-center justify-center gap-1 text-on-surface-variant/40 group-hover:text-primary transition-colors">
+                        <span className="material-symbols-outlined text-3xl">add_a_photo</span>
+                        <span className="text-[10px] font-bold">DEVICE FILE</span>
+                      </div>
                     )}
-                  </label>
-                  <input id="menu-img-upload" type="file" accept="image/*" className="hidden" ref={fileRef} onChange={handleImageChange} />
-                  <p className="text-[10px] text-on-surface-variant">Recommended: 1200×800px · PNG/JPG · Max 2MB</p>
+                  </div>
+
+                  <div className="relative">
+                    <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant/40 text-sm">link</span>
+                    <input 
+                      type="text" 
+                      placeholder="Image or Video URL..."
+                      className="w-full bg-surface-container-high border-none rounded-xl pl-10 pr-4 py-4 text-xs font-bold text-on-surface focus:ring-2 focus:ring-primary outline-none transition-all placeholder:text-on-surface-variant/30"
+                      value={form.image_url || ''}
+                      onChange={e => {
+                        setForm({...form, image_url: e.target.value});
+                        setImagePreview(e.target.value);
+                        setImageFile(null);
+                      }}
+                    />
+                  </div>
                 </div>
+              </div>
               </div>
               <div className="flex justify-end gap-4 mt-8">
                 <button type="button" onClick={closeModal} className="px-8 py-3 rounded-xl font-bold text-on-surface-variant hover:text-on-surface transition-colors">Discard</button>

@@ -7,6 +7,12 @@ import DefaultImage from '../../assets/default_dish.png';
 const BASE = '';
 const DEFAULT_IMAGE = DefaultImage; // COMSATS Cafe logo as default image
 
+const isVideo = (url) => {
+  if (!url) return false;
+  const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+  return videoExtensions.some(ext => url.toLowerCase().split('?')[0].endsWith(ext));
+};
+
 export default function MenuBrowsing() {
   const { cafeteriaId } = useParams();
   const navigate = useNavigate();
@@ -131,11 +137,15 @@ export default function MenuBrowsing() {
             return (
             <div key={item.id} className="group bg-[#28283a] rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col">
               <div className="relative h-40 overflow-hidden bg-[#333345] flex items-center justify-center">
-                <img 
-                  src={item.image_url || DEFAULT_IMAGE} 
-                  alt={item.name} 
-                  className={`transition-all duration-500 group-hover:scale-110 ${item.image_url ? 'w-full h-full object-cover' : 'h-24 w-auto object-contain opacity-60'}`}
-                />
+                {isVideo(item.image_url) ? (
+                  <video src={item.image_url} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500" autoPlay muted loop />
+                ) : (
+                  <img 
+                    src={item.image_url || DEFAULT_IMAGE} 
+                    alt={item.name} 
+                    className={`transition-all duration-500 group-hover:scale-110 ${item.image_url ? 'w-full h-full object-cover' : 'h-24 w-auto object-contain opacity-60'}`}
+                  />
+                )}
                 {qty > 0 && (
                   <div className="absolute top-2 right-2 bg-[#FF6B35] text-white px-2 py-0.5 rounded-md text-[10px] font-bold shadow-lg">
                     In Cart ({qty})

@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
         // req.user is set by the auth middleware
         const { data: row, error } = await supabase
             .from('users')
-            .select('id, name, email, contact, role')
+            .select('id, name, email, contact, role, profile_image')
             .eq('id', req.user.id)
             .eq('role', 'admin')
             .maybeSingle();
@@ -26,9 +26,9 @@ router.get('/', async (req, res) => {
 // Update admin profile
 router.put('/', async (req, res) => {
     try {
-        const { name, email, password, contact } = req.body;
+        const { name, email, password, contact, profile_image } = req.body;
         
-        const updateData = { name, email, contact };
+        const updateData = { name, email, contact, profile_image };
         if (password) {
             updateData.password = await bcrypt.hash(password, 10);
         }
@@ -39,7 +39,10 @@ router.put('/', async (req, res) => {
             .eq('id', req.user.id)
             .eq('role', 'admin');
 
-        if (error) return res.status(400).json({ message: "Email might be taken" });
+        if (error) {
+            console.error(error);
+            return res.status(400).json({ message: "Update failed. Email might be taken." });
+        }
         res.json({ message: "Profile updated successfully" });
     } catch (err) {
         res.status(500).json({ message: "Server error" });

@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
         
         const { data: user, error } = await supabase
             .from('users')
-            .select('id, name, email, contact')
+            .select('id, name, email, contact, profile_image')
             .eq('id', studentId)
             .eq('role', 'student')
             .maybeSingle();
@@ -37,7 +37,7 @@ router.get('/', async (req, res) => {
 router.put('/', async (req, res) => {
     try {
         const studentId = req.user.id;
-        const { name, email, contact } = req.body;
+        const { name, email, contact, profile_image } = req.body;
         
         if (!name || !email) {
             return res.status(400).json({ message: 'Name and email are required' });
@@ -45,7 +45,7 @@ router.put('/', async (req, res) => {
         
         const { error } = await supabase
             .from('users')
-            .update({ name, email, contact: contact || null })
+            .update({ name, email, contact: contact || null, profile_image: profile_image || null })
             .eq('id', studentId)
             .eq('role', 'student');
 

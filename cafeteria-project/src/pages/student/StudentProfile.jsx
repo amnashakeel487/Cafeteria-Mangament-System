@@ -33,6 +33,7 @@ export default function StudentProfile() {
         setName(res.data.name);
         setEmail(res.data.email);
         setContact(res.data.contact || '');
+        setProfileImage(res.data.profile_image || '');
         setOrderCount(res.data.orderCount || 0);
       } catch (err) {
         console.error('Failed to load profile', err);
@@ -43,22 +44,37 @@ export default function StudentProfile() {
     fetchProfile();
   }, []);
 
+  const isVideo = (url) => {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+    return videoExtensions.some(ext => url.toLowerCase().split('?')[0].endsWith(ext));
+  };
+
   const handleSaveProfile = async () => {
     setSaving(true);
     setMsg({ type: '', text: '' });
     try {
       const token = localStorage.getItem('studentToken');
-      await axios.put(`${BASE}/api/student/profile`, { name, email, contact }, {
+      await axios.put(`${BASE}/api/student/profile`, { name, email, contact, profile_image: profileImage }, {
         headers: { Authorization: `Bearer ${token}` }
       });
       // Update local storage
       const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
-      localStorage.setItem('studentData', JSON.stringify({ ...studentData, name, email }));
+      localStorage.setItem('studentData', JSON.stringify({ ...studentData, name, email, profile_image: profileImage }));
       setMsg({ type: 'success', text: 'Profile updated successfully!' });
     } catch (err) {
       setMsg({ type: 'error', text: err.response?.data?.message || 'Failed to update profile' });
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setProfileImage(reader.result);
+      reader.readAsDataURL(file);
     }
   };
 
@@ -130,11 +146,35 @@ export default function StudentProfile() {
         {/* Left Column: Avatar & Stats */}
         <div className="lg:col-span-1 space-y-8">
           <div className="bg-[#28283a] rounded-xl p-8 flex flex-col items-center text-center space-y-6 border border-[#594139]/20">
-            <div className="relative group">
-              <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#0c0c1d] ring-2 ring-[#FF6B35] shadow-2xl bg-[#333345] flex items-center justify-center">
-                <span className="material-symbols-outlined text-5xl text-[#e1bfb5]/40">person</span>
-              </div>
+            <div className="relative group cursor-pointer">
+              <label htmlFor="student-avatar-upload" className="w-32 h-32 rounded-full overflow-hidden border-4 border-[#0c0c1d] ring-2 ring-[#FF6B35] shadow-2xl bg-[#333345] flex items-center justify-center relative cursor-pointer">
+                {profileImage ? (
+                  isVideo(profileImage) ? (
+                    <video src={profileImage} className="w-full h-full object-cover" autoPlay muted loop />
+                  ) : (
+                    <img src={profileImage} className="w-full h-full object-cover" alt="Student" />
+                  )
+                ) : (
+                  <span className="material-symbols-outlined text-5xl text-[#e1bfb5]/40">person</span>
+                )}
+                <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                   <span className="material-symbols-outlined text-white">photo_camera</span>
+                </div>
+              </label>
+              <input type="file" id="student-avatar-upload" className="hidden" accept="image/*,video/*" onChange={handleImageUpload} />
             </div>
+            
+            <div className="w-full relative px-4">
+                <span className="material-symbols-outlined absolute left-7 top-1/2 -translate-y-1/2 text-[#e1bfb5]/40 text-sm">link</span>
+                <input 
+                  type="text" 
+                  placeholder="Profile Media URL..."
+                  className="w-full bg-[#0c0c1d] border border-[#594139]/30 rounded-lg pl-10 pr-4 py-2 text-xs font-bold text-[#E3E0F8] focus:ring-1 focus:ring-[#FF6B35] outline-none transition-all placeholder:text-[#e1bfb5]/20"
+                  value={profileImage || ''}
+                  onChange={e => setProfileImage(e.target.value)}
+                />
+            </div>
+
             <div>
               <h3 className="text-xl font-bold font-['Manrope'] text-[#E3E0F8]">{name}</h3>
               <p className="text-sm text-[#e1bfb5]">{email}</p>

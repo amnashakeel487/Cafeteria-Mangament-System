@@ -18,6 +18,7 @@ export default function CartCheckout() {
   // Checkout States
   const [paymentMethod, setPaymentMethod] = useState('cash'); // 'cash' or 'online'
   const [screenshot, setScreenshot] = useState(null);
+  const [screenshotUrl, setScreenshotUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -78,27 +79,34 @@ export default function CartCheckout() {
     });
   };
 
+  const isVideo = (url) => {
+    if (!url) return false;
+    const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
+    return videoExtensions.some(ext => url.toLowerCase().split('?')[0].endsWith(ext));
+  };
+
   const handleFileChange = async (e) => {
       let file = e.target.files[0];
       if (!file) return;
 
-      if (!['image/jpeg', 'image/png'].includes(file.type)) {
-          alert("Please upload a valid image file (JPG/PNG)");
+      if (!['image/jpeg', 'image/png', 'video/mp4', 'video/quicktime'].includes(file.type)) {
+          alert("Please upload a valid image or video file");
           return;
       }
 
-      if (file.size > 2 * 1024 * 1024) {
-          setError("Large screenshot detected. Compressing to under 2MB...");
+      if (file.type.startsWith('image/') && file.size > 2 * 1024 * 1024) {
+          setError("Large media detected. Compressing...");
           file = await compressImage(file);
-          setError(""); // Clear message after compression
+          setError(""); 
       }
       
       setScreenshot(file);
+      setScreenshotUrl(''); // Clear URL if file selected
   };
 
   const handleCheckout = async () => {
-      if (paymentMethod === 'online' && !screenshot) {
-          setError("Please upload a payment screenshot for online payment.");
+      if (paymentMethod === 'online' && !screenshot && !screenshotUrl) {
+          setError("Please upload a payment screenshot or provide a URL.");
           return;
       }
       
@@ -312,16 +320,44 @@ export default function CartCheckout() {
                     <p className="text-sm text-[#e1bfb5]">Cafeteria has not setup online payments.</p>
                 )}
 
-                <div className="space-y-3">
-                    <p className="text-xs text-[#e1bfb5]">Upload your transaction screenshot for instant verification</p>
-                    <label className="border-2 border-dashed border-[#594139]/50 rounded-lg p-6 flex flex-col items-center justify-center group hover:border-[#FFB59D]/50 transition-colors cursor-pointer w-full text-center">
-                        <input type="file" className="hidden" accept="image/png, image/jpeg" onChange={handleFileChange} />
-                        <span className="material-symbols-outlined text-3xl text-[#e1bfb5] group-hover:text-[#FFB59D] mb-2">cloud_upload</span>
-                        <p className="text-sm font-semibold text-[#e1bfb5] group-hover:text-[#E3E0F8]">
-                            {screenshot ? screenshot.name : "Click or Drag to Upload"}
-                        </p>
-                        <p className="text-[10px] text-[#594139] mt-1">PNG, JPG (Auto-compressed to 2MB)</p>
-                    </label>
+                <div className="space-y-4">
+                    <div className="flex bg-[#0c0c1d] rounded-xl overflow-hidden border border-[#594139]/30">
+                        <label className="flex-1 transition-all hover:bg-[#333345] group cursor-pointer border-r border-[#594139]/20">
+                            <input type="file" className="hidden" accept="image/*,video/*" onChange={handleFileChange} />
+                            <div className="flex items-center justify-center h-20 gap-3">
+                                <span className="material-symbols-outlined text-[#FFB59D]">upload_file</span>
+                                <span className="text-xs font-bold text-[#E3E0F8]">
+                                    {screenshot ? screenshot.name : "Select Device File"}
+                                </span>
+                            </div>
+                        </label>
+                        <div className="flex-1 relative group">
+                            <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#e1bfb5]/40 text-sm">link</span>
+                            <input 
+                              type="text" 
+                              placeholder="Paste Media URL..."
+                              className="w-full h-20 bg-transparent border-none rounded-none pl-10 pr-4 text-xs font-bold text-[#E3E0F8] focus:ring-1 focus:ring-[#FF6B35] outline-none transition-all placeholder:text-[#e1bfb5]/20"
+                              value={screenshotUrl}
+                              onChange={e => {
+                                setScreenshotUrl(e.target.value);
+                                setScreenshot(null);
+                              }}
+                            />
+                        </div>
+                    </div>
+
+                    {(screenshot || screenshotUrl) && (
+                        <div className="mt-4 aspect-video rounded-xl overflow-hidden bg-[#0c0c1d] border border-[#594139]/30 relative group">
+                            {isVideo(screenshotUrl || (screenshot && URL.createObjectURL(screenshot))) ? (
+                                <video src={screenshotUrl || (screenshot && URL.createObjectURL(screenshot))} className="w-full h-full object-contain" controls autoPlay muted />
+                            ) : (
+                                <img src={screenshotUrl || (screenshot && URL.createObjectURL(screenshot))} className="w-full h-full object-contain" alt="Receipt" />
+                            )}
+                            <button onClick={() => {setScreenshot(null); setScreenshotUrl('');}} className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
+                                <span className="material-symbols-outlined text-sm">close</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
              </section>
              )}

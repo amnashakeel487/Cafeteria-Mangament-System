@@ -65,7 +65,11 @@ export default function Sidebar({ mobileMenuOpen, setMobileMenuOpen }) {
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 rounded-full bg-surface-container-highest flex items-center justify-center text-primary/50 overflow-hidden">
                {admin.profile_image ? (
-                  <img src={admin.profile_image} alt="Admin" className="w-full h-full object-cover" />
+                  isVideo(admin.profile_image) ? (
+                    <video src={admin.profile_image} className="w-full h-full object-cover" autoPlay muted loop />
+                  ) : (
+                    <img src={admin.profile_image} alt="Admin" className="w-full h-full object-cover" />
+                  )
                ) : (
                   <span className="material-symbols-outlined">account_circle</span>
                )}
