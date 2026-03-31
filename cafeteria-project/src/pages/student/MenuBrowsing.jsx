@@ -9,8 +9,9 @@ const DEFAULT_IMAGE = DefaultImage; // COMSATS Cafe logo as default image
 
 const isVideo = (url) => {
   if (!url) return false;
-  const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov'];
-  return videoExtensions.some(ext => url.toLowerCase().split('?')[0].endsWith(ext));
+  const lower = url.toLowerCase().split('?')[0];
+  const videoExtensions = ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'];
+  return videoExtensions.some(ext => lower.includes(ext));
 };
 
 export default function MenuBrowsing() {
