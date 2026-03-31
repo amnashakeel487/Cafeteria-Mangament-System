@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../../context/CartContext';
+import DefaultImage from '../../assets/default_dish.png';
 
 const BASE = '';
-const DEFAULT_IMAGE = 'https://raw.githubusercontent.com/amnashakeel487/Cafeteria-Mangament-System/main/cafeteria-project/src/assets/hero.png'; // Placeholder, user should replace with their provided image
+const DEFAULT_IMAGE = DefaultImage; // COMSATS Cafe logo as default image
 
 export default function MenuBrowsing() {
   const { cafeteriaId } = useParams();

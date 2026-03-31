@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import DefaultImage from '../../assets/default_dish.png';
 
 const CAT_COLORS = [
   { badge: 'bg-tertiary/20 text-tertiary border border-tertiary/30', pill: 'text-tertiary' },
@@ -17,7 +18,7 @@ const getCatStyle = (name) => {
 };
 
 const BASE = '';
-const DEFAULT_IMAGE = 'https://raw.githubusercontent.com/amnashakeel487/Cafeteria-Mangament-System/main/cafeteria-project/src/assets/hero.png'; // Placeholder, user should replace with their provided image
+const DEFAULT_IMAGE = DefaultImage; // Points to our newly added COMSATS logo
 const emptyForm = { name: '', price: '', category: '', description: '' };
 
 export default function CafeteriaMenu() {
