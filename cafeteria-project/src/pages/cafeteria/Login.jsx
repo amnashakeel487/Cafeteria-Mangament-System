@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import DevelopmentTeam from '../../components/DevelopmentTeam';
 
 export default function CafeteriaLogin() {
   const [email, setEmail] = useState('');
@@ -31,12 +32,12 @@ export default function CafeteriaLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-6 text-on-surface font-['Inter'] relative overflow-hidden">
+    <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-6 text-on-surface font-['Inter'] relative overflow-hidden">
       {/* Background ambient glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary-container opacity-10 blur-[120px] rounded-full pointer-events-none"></div>
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-tertiary opacity-5 blur-[100px] rounded-full pointer-events-none"></div>
 
-      <div className="max-w-md w-full relative group">
+      <div className="max-w-md w-full relative group z-10">
         {/* Glow border */}
         <div className="absolute -inset-1 bg-gradient-to-r from-tertiary to-primary-container opacity-20 blur-sm group-hover:opacity-30 transition duration-1000 rounded-xl"></div>
 
@@ -122,6 +123,7 @@ export default function CafeteriaLogin() {
           </p>
         </div>
       </div>
+      <DevelopmentTeam />
     </div>
   );
 }

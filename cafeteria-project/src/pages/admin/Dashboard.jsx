@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import DevelopmentTeam from '../../components/DevelopmentTeam';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({ totalStudents: 0, totalCafeterias: 0, totalOrders: 0, totalRevenue: 0, newestStudents: [], topCafeteria: null, cafeteriaLoads: [] });
@@ -57,14 +56,14 @@ export default function Dashboard() {
   };
 
   return (
-    <section className="pt-28 px-8 pb-12 space-y-10">
+    <section className="pt-20 md:pt-28 px-4 md:px-8 pb-12 space-y-6 md:space-y-10">
       {/* Page Header */}
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
         <div>
-          <h2 className="text-4xl font-extrabold editorial-text text-on-surface">Overview</h2>
-          <p className="text-on-surface-variant mt-1">Real-time pulse of the university's culinary network.</p>
+          <h2 className="text-2xl md:text-4xl font-extrabold editorial-text text-on-surface">Overview</h2>
+          <p className="text-on-surface-variant mt-1 text-sm md:text-base">Real-time pulse of the university's culinary network.</p>
         </div>
-        <button onClick={handleCreateReport} className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 rounded-xl font-bold flex items-center space-x-2 ambient-shadow hover:scale-[1.02] active:scale-95 transition-all">
+        <button onClick={handleCreateReport} className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-4 py-2.5 md:px-6 md:py-3 rounded-xl font-bold flex items-center space-x-2 ambient-shadow hover:scale-[1.02] active:scale-95 transition-all text-sm w-fit">
           <span className="material-symbols-outlined text-lg">download</span>
           <span>Download Report</span>
         </button>
@@ -82,47 +81,45 @@ export default function Dashboard() {
       )}
 
       {/* Stats Bento Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 relative">
-        {/* Stat Card 1 */}
-        <div className="bg-surface-container-high rounded-xl p-6 flex flex-col justify-between group hover:bg-surface-container-highest transition-all duration-300 shadow-md">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 relative">
+        <div className="bg-surface-container-high rounded-xl p-4 md:p-6 flex flex-col justify-between group hover:bg-surface-container-highest transition-all duration-300 shadow-md">
           <div className="flex justify-between items-start">
-            <div className="p-3 rounded-lg bg-primary/10 text-primary">
-              <span className="material-symbols-outlined">group</span>
+            <div className="p-2 md:p-3 rounded-lg bg-primary/10 text-primary">
+              <span className="material-symbols-outlined text-lg md:text-2xl">group</span>
             </div>
           </div>
-          <div className="mt-4">
-            <p className="text-on-surface-variant text-sm font-label uppercase tracking-wider">Total Students</p>
-            <h3 className="text-3xl font-extrabold editorial-text mt-1">{loading ? '-' : stats.totalStudents}</h3>
+          <div className="mt-3 md:mt-4">
+            <p className="text-on-surface-variant text-xs font-label uppercase tracking-wider">Total Students</p>
+            <h3 className="text-2xl md:text-3xl font-extrabold editorial-text mt-1">{loading ? '-' : stats.totalStudents}</h3>
           </div>
         </div>
 
-        {/* Stat Card 2 */}
-        <div className="bg-surface-container-high rounded-xl p-6 flex flex-col justify-between group hover:bg-surface-container-highest transition-all duration-300 shadow-md">
+        <div className="bg-surface-container-high rounded-xl p-4 md:p-6 flex flex-col justify-between group hover:bg-surface-container-highest transition-all duration-300 shadow-md">
           <div className="flex justify-between items-start">
-            <div className="p-3 rounded-lg bg-tertiary/10 text-tertiary">
-              <span className="material-symbols-outlined">restaurant</span>
+            <div className="p-2 md:p-3 rounded-lg bg-tertiary/10 text-tertiary">
+              <span className="material-symbols-outlined text-lg md:text-2xl">restaurant</span>
             </div>
           </div>
-          <div className="mt-4">
-            <p className="text-on-surface-variant text-sm font-label uppercase tracking-wider">Total Cafeterias</p>
-            <h3 className="text-3xl font-extrabold editorial-text mt-1">{loading ? '-' : stats.totalCafeterias}</h3>
+          <div className="mt-3 md:mt-4">
+            <p className="text-on-surface-variant text-xs font-label uppercase tracking-wider">Total Cafeterias</p>
+            <h3 className="text-2xl md:text-3xl font-extrabold editorial-text mt-1">{loading ? '-' : stats.totalCafeterias}</h3>
           </div>
         </div>
 
-        <div className="bg-surface-container-high rounded-xl p-6 flex items-center justify-between group hover:bg-surface-container-highest transition-all duration-300 shadow-md">
-          <div className="space-y-4">
+        <div className="bg-surface-container-high rounded-xl p-4 md:p-6 flex items-center justify-between group hover:bg-surface-container-highest transition-all duration-300 shadow-md">
+          <div className="space-y-2 md:space-y-4">
             <div>
-              <p className="text-on-surface-variant text-sm font-label uppercase tracking-wider">Total Revenue</p>
-              <h3 className="text-3xl font-extrabold editorial-text mt-1 text-primary">${loading ? '0' : Number(stats.totalRevenue).toFixed(2)}</h3>
+              <p className="text-on-surface-variant text-xs font-label uppercase tracking-wider">Total Revenue</p>
+              <h3 className="text-2xl md:text-3xl font-extrabold editorial-text mt-1 text-primary">${loading ? '0' : Number(stats.totalRevenue).toFixed(2)}</h3>
             </div>
           </div>
         </div>
 
-        <div className="bg-surface-container-high rounded-xl p-6 flex col-span-1 items-center justify-between group hover:bg-surface-container-highest transition-all duration-300 shadow-md">
-          <div className="space-y-4">
+        <div className="bg-surface-container-high rounded-xl p-4 md:p-6 flex col-span-1 items-center justify-between group hover:bg-surface-container-highest transition-all duration-300 shadow-md">
+          <div className="space-y-2 md:space-y-4">
             <div>
-              <p className="text-on-surface-variant text-sm font-label uppercase tracking-wider">Total Orders</p>
-              <h3 className="text-3xl font-extrabold editorial-text mt-1 text-secondary">{loading ? '-' : stats.totalOrders}</h3>
+              <p className="text-on-surface-variant text-xs font-label uppercase tracking-wider">Total Orders</p>
+              <h3 className="text-2xl md:text-3xl font-extrabold editorial-text mt-1 text-secondary">{loading ? '-' : stats.totalOrders}</h3>
             </div>
           </div>
         </div>
@@ -269,8 +266,6 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* Development Team */}
-      <DevelopmentTeam />
     </section>
   );
 }

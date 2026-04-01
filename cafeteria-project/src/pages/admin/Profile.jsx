@@ -167,7 +167,7 @@ export default function Profile() {
   }
 
   return (
-    <section className="pt-28 pb-12 px-10 relative">
+    <section className="pt-20 md:pt-28 pb-12 px-4 md:px-10 relative">
       <div className="max-w-6xl mx-auto">
         
         {/* Toast Notification */}

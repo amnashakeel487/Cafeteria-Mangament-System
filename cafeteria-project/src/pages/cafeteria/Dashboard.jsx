@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import DevelopmentTeam from '../../components/DevelopmentTeam';
 
 const STATUS_STYLES = {
   pending:    'bg-primary-container/20 text-primary border border-primary/30',
@@ -124,7 +123,7 @@ export default function CafeteriaDashboard() {
   );
 
   return (
-    <section className="p-8 max-w-7xl mx-auto space-y-10 pt-10">
+    <section className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-10 pt-6 md:pt-10">
       {toast.visible && (
         <div className={`fixed bottom-8 right-8 px-6 py-3 rounded-lg shadow-2xl z-50 flex items-center gap-2 font-bold animate-pulse text-white
           ${toast.type === 'error' ? 'bg-error' : 'bg-[#28A745]'}`}>
@@ -136,9 +135,9 @@ export default function CafeteriaDashboard() {
       )}
 
       {/* Hero Bento */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         {/* Welcome / Revenue Hero */}
-        <div className="md:col-span-2 bg-surface-container-high rounded-xl p-8 flex flex-col justify-between relative overflow-hidden">
+        <div className="md:col-span-2 bg-surface-container-high rounded-xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden">
           <div className="absolute right-0 bottom-0 w-1/2 h-full opacity-10 pointer-events-none">
             <svg className="w-full h-full" preserveAspectRatio="none" viewBox="0 0 100 100">
               <path d="M0,100 L10,80 L20,85 L30,60 L40,70 L50,40 L60,45 L70,20 L80,30 L90,10 L100,15 L100,100 Z" fill="url(#heroGrad)" />
@@ -152,7 +151,7 @@ export default function CafeteriaDashboard() {
           </div>
           <div className="relative z-10">
             <p className="text-on-surface-variant font-medium text-xs mb-1 uppercase tracking-widest">Total Revenue</p>
-            <h2 className="font-headline text-5xl font-extrabold text-on-surface">
+            <h2 className="font-headline text-3xl md:text-5xl font-extrabold text-on-surface">
               {loading ? '—' : `$${Number(stats.totalRevenue).toFixed(2)}`}
             </h2>
             <div className="mt-4 flex items-center space-x-6">
@@ -169,9 +168,9 @@ export default function CafeteriaDashboard() {
         </div>
 
         {/* Total Orders Hero */}
-        <div className="bg-primary-container rounded-xl p-8 text-on-primary relative overflow-hidden">
+        <div className="bg-primary-container rounded-xl p-6 md:p-8 text-on-primary relative overflow-hidden">
           <p className="font-medium text-sm mb-1 uppercase tracking-widest opacity-80">Total Orders</p>
-          <h2 className="font-headline text-5xl font-extrabold">{loading ? '—' : stats.totalOrders}</h2>
+          <h2 className="font-headline text-3xl md:text-5xl font-extrabold">{loading ? '—' : stats.totalOrders}</h2>
           <p className="mt-2 text-sm font-medium opacity-70">{loading ? '' : `${stats.pendingOrders} pending right now`}</p>
           <div className="absolute -right-4 -bottom-4 opacity-10">
             <span className="material-symbols-outlined text-[120px]">restaurant</span>
@@ -353,8 +352,6 @@ export default function CafeteriaDashboard() {
         </div>
       )}
 
-      {/* Development Team */}
-      <DevelopmentTeam />
     </section>
   );
 }

@@ -86,46 +86,46 @@ export default function Cafeterias() {
   );
 
   return (
-    <div className="pt-28 px-10 pb-12 font-['Inter'] relative min-h-screen">
+    <div className="pt-20 md:pt-28 px-4 md:px-10 pb-12 font-['Inter'] relative min-h-screen">
       {message.text && (
-        <div className={`fixed top-24 right-10 p-4 rounded-xl shadow-lg shadow-black/30 z-[100] text-sm font-bold flex items-center gap-2 transition-all ${message.type === 'error' ? 'bg-error-container text-on-error' : 'bg-tertiary-container text-on-tertiary-container'}`}>
+        <div className={`fixed top-20 right-4 md:right-10 p-3 md:p-4 rounded-xl shadow-lg shadow-black/30 z-[100] text-sm font-bold flex items-center gap-2 transition-all ${message.type === 'error' ? 'bg-error-container text-on-error' : 'bg-tertiary-container text-on-tertiary-container'}`}>
            <span className="material-symbols-outlined">{message.type === 'error' ? 'error' : 'check_circle'}</span>
            {message.text}
         </div>
       )}
 
       {/* Header Section */}
-      <div className="flex justify-between items-end mb-10">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-6 md:mb-10">
         <div>
-          <h2 className="text-4xl font-extrabold editorial-text tracking-tight text-on-surface mb-2">Cafeteria Hub</h2>
-          <p className="text-on-surface-variant max-w-md">Manage university dining facilities, monitor independent portals, and maintain service standards across campus.</p>
+          <h2 className="text-2xl md:text-4xl font-extrabold editorial-text tracking-tight text-on-surface mb-1 md:mb-2">Cafeteria Hub</h2>
+          <p className="text-on-surface-variant max-w-md text-sm">Manage university dining facilities across campus.</p>
         </div>
-        <button onClick={() => handleOpenModal('add')} className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-xl shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all">
+        <button onClick={() => handleOpenModal('add')} className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-4 py-2.5 md:px-6 md:py-3 rounded-xl font-bold flex items-center gap-2 shadow-xl shadow-primary-container/20 hover:scale-[1.02] active:scale-95 transition-all text-sm w-fit">
           <span className="material-symbols-outlined">add</span>
-          Register New Cafeteria
+          Register Cafeteria
         </button>
       </div>
 
       {/* Dashboard Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
-        <div className="bg-surface-container-high p-6 rounded-xl border-l-4 border-primary">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-10">
+        <div className="bg-surface-container-high p-4 md:p-6 rounded-xl border-l-4 border-primary">
           <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant opacity-60 mb-1">Total Facilities</p>
-          <h3 className="text-3xl font-extrabold editorial-text">{cafeterias.length}</h3>
+          <h3 className="text-2xl md:text-3xl font-extrabold editorial-text">{cafeterias.length}</h3>
         </div>
-        <div className="bg-surface-container-high p-6 rounded-xl border-l-4 border-tertiary flex items-center justify-between">
+        <div className="bg-surface-container-high p-4 md:p-6 rounded-xl border-l-4 border-tertiary flex items-center justify-between">
            <div>
             <p className="text-xs font-semibold uppercase tracking-widest text-on-surface-variant opacity-60 mb-1">Active Portals</p>
-            <h3 className="text-3xl font-extrabold editorial-text">{cafeterias.length}</h3>
+            <h3 className="text-2xl md:text-3xl font-extrabold editorial-text">{cafeterias.length}</h3>
            </div>
-           <span className="material-symbols-outlined text-tertiary text-opacity-20 text-5xl">public</span>
+           <span className="material-symbols-outlined text-tertiary text-opacity-20 text-4xl hidden sm:block">public</span>
         </div>
-        <div className="col-span-2 bg-surface-container-high p-6 rounded-xl border-l-4 border-surface flex items-center">
-            <div className="relative w-full max-w-md group">
+        <div className="col-span-2 bg-surface-container-high p-4 md:p-6 rounded-xl border-l-4 border-surface flex items-center">
+            <div className="relative w-full group">
               <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 group-focus-within:text-primary transition-colors">search</span>
               <input 
                 value={search} onChange={(e) => setSearch(e.target.value)}
-                className="w-full bg-surface-container-lowest border-none rounded-xl py-3 pl-12 pr-4 text-sm text-on-surface focus:ring-1 focus:ring-primary/50 placeholder-on-surface-variant/30 font-label outline-none" 
-                placeholder="Search cafeterias or locations..." />
+                className="w-full bg-surface-container-lowest border-none rounded-xl py-2.5 pl-12 pr-4 text-sm text-on-surface focus:ring-1 focus:ring-primary/50 placeholder-on-surface-variant/30 font-label outline-none" 
+                placeholder="Search cafeterias..." />
             </div>
         </div>
       </div>

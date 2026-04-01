@@ -83,7 +83,7 @@ export default function StudentLayout() {
       </aside>
 
       {/* Main Content Area */}
-      <main className="lg:pl-72 pt-20 px-6 lg:px-10 pb-24 lg:pb-12 bg-[#121222] min-h-screen">
+      <main className="lg:pl-72 pt-20 px-4 md:px-6 lg:px-10 pb-24 lg:pb-12 bg-[#121222] min-h-screen">
          <Outlet />
       </main>
 

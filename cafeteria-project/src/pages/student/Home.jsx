@@ -1,5 +1,3 @@
-import DevelopmentTeam from '../../components/DevelopmentTeam';
-
 export default function StudentHome() {
   const student = JSON.parse(localStorage.getItem('studentData') || '{}');
 
@@ -28,9 +26,6 @@ export default function StudentHome() {
           </div>
         </div>
       </div>
-
-      {/* Development Team */}
-      <DevelopmentTeam />
     </div>
   );
 }

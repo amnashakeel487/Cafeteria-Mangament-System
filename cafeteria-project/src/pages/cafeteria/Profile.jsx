@@ -191,7 +191,7 @@ export default function CafeteriaProfile() {
   }
 
   return (
-    <section className="p-8 max-w-5xl mx-auto space-y-8 pt-10 pb-20">
+    <section className="p-4 md:p-8 max-w-5xl mx-auto space-y-6 md:space-y-8 pt-6 md:pt-10 pb-20">
       {/* Toast */}
       {toast.visible && (
         <div className={`fixed bottom-8 right-8 flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border-l-4 z-50

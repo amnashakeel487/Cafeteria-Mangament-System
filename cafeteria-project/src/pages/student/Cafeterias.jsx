@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import DevelopmentTeam from '../../components/DevelopmentTeam';
 
 const BASE = '';
 
@@ -31,15 +30,15 @@ export default function StudentCafeterias() {
   return (
     <div className="max-w-7xl mx-auto">
       {/* Hero Header Section */}
-      <section className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <section className="mb-6 md:mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-extrabold text-[#E3E0F8] tracking-tight mb-1 font-['Manrope']">Campus Dining</h1>
-          <p className="text-[#E1BFB5] text-sm max-w-lg font-['Inter']">Curated culinary experiences across campus. Select your destination and architect your perfect meal.</p>
+          <h1 className="text-xl md:text-3xl font-extrabold text-[#E3E0F8] tracking-tight mb-1 font-['Manrope']">Campus Dining</h1>
+          <p className="text-[#E1BFB5] text-sm max-w-lg font-['Inter']">Select your destination and architect your perfect meal.</p>
         </div>
-        <div className="flex items-center gap-3 bg-[#28283a] p-1.5 rounded-full font-['Inter'] overflow-x-auto whitespace-nowrap w-full md:w-auto custom-scrollbar">
-          <button className="px-5 py-2 rounded-full bg-[#FF6B35] text-[#5f1900] font-bold text-sm transition-all duration-200">All</button>
-          <button className="px-5 py-2 rounded-full text-[#e1bfb5] hover:bg-[#38374a]/40 font-semibold text-sm transition-all duration-200">Nearest</button>
-          <button className="px-5 py-2 rounded-full text-[#e1bfb5] hover:bg-[#38374a]/40 font-semibold text-sm transition-all duration-200">Top Rated</button>
+        <div className="flex items-center gap-2 bg-[#28283a] p-1.5 rounded-full font-['Inter'] overflow-x-auto whitespace-nowrap w-full md:w-auto">
+          <button className="px-4 py-1.5 rounded-full bg-[#FF6B35] text-[#5f1900] font-bold text-sm">All</button>
+          <button className="px-4 py-1.5 rounded-full text-[#e1bfb5] hover:bg-[#38374a]/40 font-semibold text-sm">Nearest</button>
+          <button className="px-4 py-1.5 rounded-full text-[#e1bfb5] hover:bg-[#38374a]/40 font-semibold text-sm">Top Rated</button>
         </div>
       </section>
 
@@ -50,13 +49,13 @@ export default function StudentCafeterias() {
             <span className="material-symbols-outlined animate-spin text-4xl text-[#FFB59D]">refresh</span>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 md:gap-8">
           {cafeterias.map((cafe) => (
             <article 
               key={cafe.id} 
-              className="group relative bg-[#28283a] rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[#FF6B35]/20 flex flex-col"
+              className="group relative bg-[#28283a] rounded-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-[#FF6B35]/20 flex flex-col"
             >
-              <div className="h-56 w-full relative overflow-hidden bg-[#333345]">
+              <div className="h-40 md:h-56 w-full relative overflow-hidden bg-[#333345]">
                 {cafe.profile_picture ? (
                   <img 
                     src={cafe.profile_picture} 
@@ -108,7 +107,6 @@ export default function StudentCafeterias() {
       )}
 
       {/* Development Team */}
-      <DevelopmentTeam />
     </div>
   );
 }

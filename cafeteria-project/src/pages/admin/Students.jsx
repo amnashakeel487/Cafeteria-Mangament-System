@@ -87,54 +87,76 @@ export default function Students() {
   );
 
   return (
-    <div className="pt-28 px-10 pb-12 space-y-10 font-['Inter'] relative">
+    <div className="pt-20 md:pt-28 px-4 md:px-10 pb-12 space-y-6 md:space-y-10 font-['Inter'] relative">
       {message.text && (
-        <div className={`fixed top-24 right-10 p-4 rounded-xl shadow-lg shadow-black/30 z-[100] text-sm font-bold flex items-center gap-2 transition-all ${message.type === 'error' ? 'bg-error-container text-on-error' : 'bg-tertiary-container text-on-tertiary-container'}`}>
+        <div className={`fixed top-20 right-4 md:right-10 p-3 md:p-4 rounded-xl shadow-lg shadow-black/30 z-[100] text-sm font-bold flex items-center gap-2 transition-all ${message.type === 'error' ? 'bg-error-container text-on-error' : 'bg-tertiary-container text-on-tertiary-container'}`}>
            <span className="material-symbols-outlined">{message.type === 'error' ? 'error' : 'check_circle'}</span>
            {message.text}
         </div>
       )}
 
       {/* Header */}
-      <div className="flex justify-between items-end mb-10">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3 mb-6 md:mb-10">
         <div className="space-y-1">
-          <h2 className="text-3xl font-extrabold tracking-tight text-on-surface editorial-text">Students Directory</h2>
-          <p className="text-on-surface-variant font-medium">Manage campus culinary access and dietary requirements.</p>
+          <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-on-surface editorial-text">Students Directory</h2>
+          <p className="text-on-surface-variant font-medium text-sm">Manage campus culinary access and dietary requirements.</p>
         </div>
-        <div className="flex gap-4">
-          <button onClick={() => handleOpenModal('add')} className="flex items-center gap-2 px-8 py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold rounded-xl shadow-lg shadow-primary-container/20 hover:opacity-90 active:scale-95 transition-all">
-            <span className="material-symbols-outlined text-lg">person_add</span>
-            Add New Student
-          </button>
-        </div>
+        <button onClick={() => handleOpenModal('add')} className="flex items-center gap-2 px-4 md:px-8 py-2.5 md:py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold rounded-xl shadow-lg shadow-primary-container/20 hover:opacity-90 active:scale-95 transition-all text-sm w-fit">
+          <span className="material-symbols-outlined text-lg">person_add</span>
+          Add Student
+        </button>
       </div>
 
       {/* Filters Region */}
-      <div className="grid grid-cols-12 gap-6 mb-8">
-        <div className="col-span-12 lg:col-span-8 p-6 bg-surface-container rounded-xl flex items-center justify-between border border-outline-variant/5">
-          <div className="relative w-full max-w-md group">
+      <div className="flex flex-col sm:flex-row gap-4 mb-6 md:mb-8">
+        <div className="flex-1 p-4 md:p-6 bg-surface-container rounded-xl flex items-center border border-outline-variant/5">
+          <div className="relative w-full group">
             <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 group-focus-within:text-primary transition-colors">search</span>
             <input 
               value={search} onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-surface-container-highest border-none rounded-xl py-3 pl-12 pr-4 text-sm text-on-surface focus:ring-1 focus:ring-primary/50 placeholder-on-surface-variant/30 font-label outline-none" 
-              placeholder="Search student records, IDs, or emails..." />
+              className="w-full bg-surface-container-highest border-none rounded-xl py-2.5 pl-12 pr-4 text-sm text-on-surface focus:ring-1 focus:ring-primary/50 placeholder-on-surface-variant/30 font-label outline-none" 
+              placeholder="Search students..." />
           </div>
         </div>
-        <div className="col-span-12 lg:col-span-4 p-6 bg-surface-container-high rounded-xl flex items-center gap-6 border border-outline-variant/5">
-          <div className="w-14 h-14 rounded-full bg-tertiary/10 flex items-center justify-center">
-            <span className="material-symbols-outlined text-tertiary text-3xl">groups</span>
+        <div className="p-4 md:p-6 bg-surface-container-high rounded-xl flex items-center gap-4 border border-outline-variant/5">
+          <div className="w-10 h-10 md:w-14 md:h-14 rounded-full bg-tertiary/10 flex items-center justify-center">
+            <span className="material-symbols-outlined text-tertiary text-2xl md:text-3xl">groups</span>
           </div>
           <div>
-            <p className="text-3xl font-extrabold text-on-surface editorial-text">{students.length}</p>
+            <p className="text-2xl md:text-3xl font-extrabold text-on-surface editorial-text">{students.length}</p>
             <p className="text-xs font-bold text-on-surface-variant/60 uppercase tracking-widest">Total Enrolled</p>
           </div>
         </div>
       </div>
 
-      {/* Main Table */}
+      {/* Main Table - hidden on mobile, shown on md+ */}
       <div className="bg-surface-container rounded-2xl overflow-hidden shadow-2xl shadow-surface-container-lowest/50 border border-outline-variant/5 relative">
         {loading && <div className="absolute inset-0 bg-surface-container-highest/50 backdrop-blur-sm z-10 flex items-center justify-center text-primary"><span className="material-symbols-outlined animate-spin text-4xl">refresh</span></div>}
-        <div className="overflow-x-auto min-h-[300px]">
+        
+        {/* Mobile card view */}
+        <div className="md:hidden divide-y divide-outline-variant/5">
+          {filteredStudents.map(student => (
+            <div key={student.id} className="p-4 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-3 min-w-0">
+                <div className="w-9 h-9 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-bold shrink-0">{student.name.charAt(0).toUpperCase()}</div>
+                <div className="min-w-0">
+                  <p className="font-bold text-on-surface text-sm truncate">{student.name}</p>
+                  <p className="text-xs text-on-surface-variant truncate">{student.email}</p>
+                </div>
+              </div>
+              <div className="flex gap-1 shrink-0">
+                <button onClick={() => handleOpenModal('edit', student)} className="p-2 text-on-surface-variant/40 hover:text-primary transition-colors"><span className="material-symbols-outlined text-lg">edit</span></button>
+                <button onClick={() => handleDelete(student.id)} className="p-2 text-on-surface-variant/40 hover:text-error transition-colors"><span className="material-symbols-outlined text-lg">delete</span></button>
+              </div>
+            </div>
+          ))}
+          {filteredStudents.length === 0 && !loading && (
+            <p className="px-4 py-10 text-center text-on-surface-variant text-sm">No students found.</p>
+          )}
+        </div>
+
+        {/* Desktop table */}
+        <div className="hidden md:block overflow-x-auto min-h-[300px]">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-surface-container-low/50">
@@ -164,20 +186,14 @@ export default function Students() {
                   </td>
                   <td className="px-8 py-6">
                     <div className="flex justify-end gap-2">
-                      <button onClick={() => handleOpenModal('edit', student)} className="p-2 text-on-surface-variant/40 hover:text-primary transition-colors">
-                        <span className="material-symbols-outlined text-xl">edit</span>
-                      </button>
-                      <button onClick={() => handleDelete(student.id)} className="p-2 text-on-surface-variant/40 hover:text-error transition-colors">
-                        <span className="material-symbols-outlined text-xl">delete</span>
-                      </button>
+                      <button onClick={() => handleOpenModal('edit', student)} className="p-2 text-on-surface-variant/40 hover:text-primary transition-colors"><span className="material-symbols-outlined text-xl">edit</span></button>
+                      <button onClick={() => handleDelete(student.id)} className="p-2 text-on-surface-variant/40 hover:text-error transition-colors"><span className="material-symbols-outlined text-xl">delete</span></button>
                     </div>
                   </td>
                 </tr>
               ))}
               {filteredStudents.length === 0 && !loading && (
-                <tr>
-                  <td colSpan="5" className="px-8 py-16 text-center text-on-surface-variant">No students found matching your criteria.</td>
-                </tr>
+                <tr><td colSpan="5" className="px-8 py-16 text-center text-on-surface-variant">No students found matching your criteria.</td></tr>
               )}
             </tbody>
           </table>

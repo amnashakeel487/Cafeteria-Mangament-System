@@ -74,10 +74,10 @@ export default function CafeteriaOrders() {
     : orders.filter(o => o.status === activeFilter);
 
   return (
-    <section className="p-8 max-w-7xl mx-auto space-y-8 pt-10">
+    <section className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 pt-6 md:pt-10">
       {/* Toast */}
       {toast.visible && (
-        <div className={`fixed bottom-8 right-8 flex items-center gap-3 px-6 py-4 rounded-xl shadow-2xl border-l-4 z-50
+        <div className={`fixed bottom-4 right-4 md:bottom-8 md:right-8 flex items-center gap-3 px-4 py-3 md:px-6 md:py-4 rounded-xl shadow-2xl border-l-4 z-50
             ${toast.type === 'success' ? 'bg-surface-container-highest border-[#28A745] text-on-surface' : 'bg-error-container/20 border-error text-error'}`}>
           <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
             {toast.type === 'success' ? 'check_circle' : 'error'}
@@ -99,20 +99,19 @@ export default function CafeteriaOrders() {
       )}
 
       {/* Header */}
-      <header className="flex justify-between items-end">
+      <header className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-on-surface" style={{ fontFamily: 'Manrope' }}>Order Management</h2>
+          <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-on-surface" style={{ fontFamily: 'Manrope' }}>Order Management</h2>
           <p className="text-on-surface-variant mt-1 text-sm">Real-time terminal for cafeteria operations.</p>
         </div>
-        <div className="flex gap-4 items-center">
-          <div className="bg-surface-container-high rounded-xl p-3 px-6 flex items-center gap-3">
-            <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold">Kitchen Status</span>
+        <div className="flex gap-3 items-center">
+          <div className="bg-surface-container-high rounded-xl p-2 px-4 flex items-center gap-2">
+            <span className="text-[10px] uppercase tracking-widest text-on-surface-variant font-bold hidden sm:block">Kitchen</span>
             <span className="text-[#28A745] font-bold flex items-center gap-1 text-sm">
               <span className="w-2 h-2 bg-[#28A745] rounded-full animate-pulse"></span> LIVE
             </span>
           </div>
-          <button onClick={fetchAll}
-            className="p-3 bg-surface-container-high rounded-xl text-on-surface-variant hover:text-primary transition-all">
+          <button onClick={fetchAll} className="p-2.5 bg-surface-container-high rounded-xl text-on-surface-variant hover:text-primary transition-all">
             <span className="material-symbols-outlined">refresh</span>
           </button>
         </div>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import DevelopmentTeam from '../../components/DevelopmentTeam';
 
 export default function StudentLogin() {
   const [email, setEmail] = useState('');
@@ -34,7 +35,7 @@ export default function StudentLogin() {
   };
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-6 text-on-surface font-['Inter']">
+    <div className="min-h-screen bg-surface flex flex-col items-center justify-center p-6 text-on-surface font-['Inter']">
       <div className="max-w-md w-full relative group">
         <div className="absolute -inset-1 bg-gradient-to-r from-tertiary to-tertiary-container opacity-20 blur group-hover:opacity-30 transition duration-1000 group-hover:duration-200"></div>
         
@@ -114,6 +115,7 @@ export default function StudentLogin() {
           </form>
         </div>
       </div>
+      <DevelopmentTeam />
     </div>
   );
 }

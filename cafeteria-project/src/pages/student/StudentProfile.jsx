@@ -162,7 +162,7 @@ export default function StudentProfile() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-10 font-['Inter']">
+    <div className="max-w-5xl mx-auto space-y-6 md:space-y-10 font-['Inter']">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>

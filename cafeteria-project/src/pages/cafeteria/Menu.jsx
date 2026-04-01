@@ -138,6 +138,23 @@ export default function CafeteriaMenu() {
   // Strip blob-video: prefix to get actual src
   const getMediaSrc = (url) => url?.startsWith('blob-video:') ? url.slice(11) : url;
 
+  const getYoutubeId = (url) => {
+    if (!url) return null;
+    const patterns = [
+      /youtube\.com\/watch\?v=([^&]+)/,
+      /youtu\.be\/([^?&]+)/,
+      /youtube\.com\/embed\/([^?&]+)/,
+      /youtube\.com\/shorts\/([^?&]+)/,
+    ];
+    for (const p of patterns) {
+      const m = url.match(p);
+      if (m) return m[1];
+    }
+    return null;
+  };
+
+  const isYoutube = (url) => !!getYoutubeId(url);
+
   const handleImageChange = async (e) => {
     let file = e.target.files[0];
     if (!file) return;
@@ -274,7 +291,7 @@ export default function CafeteriaMenu() {
   const filterTabs = ['All', ...categoryNames];
 
   return (
-    <section className="p-8 max-w-7xl mx-auto space-y-8 pt-10">
+    <section className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 pt-6 md:pt-10">
       {toast.visible && (
         <div onClick={() => setToast({ ...toast, visible: false })}
           className={`fixed bottom-8 right-8 p-4 rounded-xl shadow-2xl flex items-center space-x-3 z-50 cursor-pointer
@@ -285,21 +302,22 @@ export default function CafeteriaMenu() {
       )}
 
       {/* Header */}
-      <div className="flex justify-between items-end">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
         <div>
-          <h2 className="text-4xl font-extrabold tracking-tight text-on-surface" style={{ fontFamily: 'Manrope' }}>Menu Architecture</h2>
-          <p className="text-on-surface-variant mt-1">Design and curate the daily culinary offerings.</p>
+          <h2 className="text-2xl md:text-4xl font-extrabold tracking-tight text-on-surface" style={{ fontFamily: 'Manrope' }}>Menu Architecture</h2>
+          <p className="text-on-surface-variant mt-1 text-sm">Design and curate the daily culinary offerings.</p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
             <button onClick={() => setModal('categories')}
-            className="bg-surface-container-highest text-on-surface hover:bg-surface-bright px-5 py-3 rounded-xl font-bold flex items-center gap-2 transition-all">
+            className="bg-surface-container-highest text-on-surface hover:bg-surface-bright px-3 md:px-5 py-2.5 md:py-3 rounded-xl font-bold flex items-center gap-2 transition-all text-sm">
             <span className="material-symbols-outlined">category</span>
-            Categories
+            <span className="hidden sm:inline">Categories</span>
             </button>
             <button onClick={openAdd}
-            className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-6 py-3 rounded-xl font-bold flex items-center gap-2 shadow-[0_8px_16px_rgba(255,107,53,0.2)] hover:scale-[1.02] active:scale-95 transition-all">
+            className="bg-gradient-to-br from-primary to-primary-container text-on-primary px-3 md:px-6 py-2.5 md:py-3 rounded-xl font-bold flex items-center gap-2 shadow-[0_8px_16px_rgba(255,107,53,0.2)] hover:scale-[1.02] active:scale-95 transition-all text-sm">
             <span className="material-symbols-outlined">add</span>
-            Create New Entry
+            <span className="hidden sm:inline">Create New Entry</span>
+            <span className="sm:hidden">Add</span>
             </button>
         </div>
       </div>
@@ -331,7 +349,15 @@ export default function CafeteriaMenu() {
           return (
           <div key={item.id} className="group relative bg-surface-container-high rounded-xl overflow-hidden hover:shadow-[0_24px_48px_rgba(12,12,29,0.5)] transition-all duration-300 flex flex-col">
             <div className="h-48 overflow-hidden relative bg-surface-container-highest font-['Manrope'] flex items-center justify-center">
-              {isVideo(item.image_url) ? (
+              {isYoutube(item.image_url) ? (
+                <iframe
+                  src={`https://www.youtube.com/embed/${getYoutubeId(item.image_url)}?autoplay=1&mute=1&loop=1&playlist=${getYoutubeId(item.image_url)}&controls=0`}
+                  className="w-full h-full"
+                  allow="autoplay; encrypted-media"
+                  allowFullScreen={false}
+                  style={{ border: 'none', pointerEvents: 'none' }}
+                />
+              ) : isVideo(item.image_url) ? (
                 <video 
                   src={item.image_url} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-all duration-700" 
@@ -431,7 +457,9 @@ export default function CafeteriaMenu() {
                     <input type="file" ref={fileRef} onChange={handleImageChange} className="hidden" accept="image/*,video/*" />
                     {imagePreview ? (
                       <div className="relative h-20 w-full group" onClick={() => fileRef.current.click()}>
-                        {isVideo(imagePreview) ? (
+                        {isYoutube(imagePreview) ? (
+                          <iframe src={`https://www.youtube.com/embed/${getYoutubeId(imagePreview)}?autoplay=1&mute=1&controls=0`} className="w-full h-full rounded-lg" style={{ border: 'none', pointerEvents: 'none' }} allow="autoplay" />
+                        ) : isVideo(imagePreview) ? (
                           <video src={getMediaSrc(imagePreview)} className="w-full h-full object-cover rounded-lg" autoPlay muted loop />
                         ) : (
                           <img src={imagePreview} alt="p" className="w-full h-full object-cover rounded-lg" />

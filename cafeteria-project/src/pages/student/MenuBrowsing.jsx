@@ -93,7 +93,7 @@ export default function MenuBrowsing() {
           
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <h1 className="font-['Manrope'] text-4xl md:text-5xl font-extrabold text-[#E3E0F8] tracking-tighter mb-2">
+              <h1 className="font-['Manrope'] text-2xl md:text-4xl lg:text-5xl font-extrabold text-[#E3E0F8] tracking-tighter mb-2">
                 {cafeteria.name}
               </h1>
               <p className="text-[#e1bfb5] max-w-xl text-lg">
