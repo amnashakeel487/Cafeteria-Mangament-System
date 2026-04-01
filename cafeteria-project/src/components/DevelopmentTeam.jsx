@@ -30,13 +30,13 @@ const teamMembers = [
   },
 ];
 
-export default function DevelopmentTeam() {
+export default function DevelopmentTeam({ loginSlot }) {
   return (
     <motion.section 
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      className="mt-20 mb-10 px-4"
+      className={loginSlot ? 'w-full px-4 py-8' : 'mt-20 mb-10 px-4'}
     >
       {/* Outer Card Wrapper */}
       <div className="max-w-6xl mx-auto bg-surface-container-low/40 backdrop-blur-md rounded-[2.5rem] border border-white/5 p-8 md:p-14 shadow-2xl relative overflow-hidden group/outer">
@@ -44,108 +44,127 @@ export default function DevelopmentTeam() {
         <div className="absolute top-0 -right-20 w-96 h-96 bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
         <div className="absolute bottom-0 -left-20 w-96 h-96 bg-tertiary/10 rounded-full blur-[100px] pointer-events-none"></div>
 
-        {/* Section Header */}
-        <div className="text-center mb-16 relative z-10">
-          <motion.span 
-            initial={{ scale: 0.9 }}
-            whileInView={{ scale: 1 }}
-            className="inline-flex items-center gap-2 bg-primary/10 text-primary border border-primary/20 px-6 py-2 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-6"
-          >
-            <span className="material-symbols-outlined text-[14px]">bolt</span>
-            Engineering Excellence
-          </motion.span>
-          <h2 className="text-4xl md:text-5xl font-black text-on-surface tracking-tight" style={{ fontFamily: 'Manrope' }}>
-            Meet The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-container">Architects</span>
-          </h2>
-          <p className="text-on-surface-variant text-base mt-4 max-w-xl mx-auto font-medium">
-            The visionary engineering team behind the COMSTAS Cafeteria ecosystem.
-          </p>
-        </div>
+        {loginSlot ? (
+          /* ── Login page layout: team left, login right ── */
+          <div className="relative z-10 flex flex-col lg:flex-row gap-10 lg:gap-16 items-start">
+            {/* Left: team info */}
+            <div className="flex-1 min-w-0">
+              <div className="mb-10">
+                <motion.span
+                  initial={{ scale: 0.9 }}
+                  whileInView={{ scale: 1 }}
+                  className="inline-flex items-center gap-2 bg-primary/10 text-primary border border-primary/20 px-5 py-1.5 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-5"
+                >
+                  <span className="material-symbols-outlined text-[14px]">bolt</span>
+                  Engineering Excellence
+                </motion.span>
+                <h2 className="text-3xl md:text-4xl font-black text-on-surface tracking-tight" style={{ fontFamily: 'Manrope' }}>
+                  Meet The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-container">Architects</span>
+                </h2>
+                <p className="text-on-surface-variant text-sm mt-3 max-w-sm font-medium">
+                  The visionary engineering team behind the COMSTAS Cafeteria ecosystem.
+                </p>
+              </div>
 
-        {/* Team Grid */}
-        <div className="relative z-10">
-          {/* Team Leader — Centered Row */}
-          <div className="flex justify-center mb-12">
-            <TeamCard member={teamMembers[0]} index={0} />
-          </div>
+              {/* Team Leader */}
+              <div className="mb-6">
+                <TeamCard member={teamMembers[0]} index={0} compact />
+              </div>
+              {/* Other members */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {teamMembers.slice(1).map((member, i) => (
+                  <TeamCard key={i} member={member} index={i + 1} compact />
+                ))}
+              </div>
+            </div>
 
-          {/* Developers — Two in Row */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {teamMembers.slice(1).map((member, i) => (
-              <TeamCard key={i} member={member} index={i + 1} />
-            ))}
+            {/* Right: login form */}
+            <div className="w-full lg:w-[420px] shrink-0">
+              {loginSlot}
+            </div>
           </div>
-        </div>
+        ) : (
+          /* ── Dashboard layout: centered ── */
+          <>
+            <div className="text-center mb-16 relative z-10">
+              <motion.span 
+                initial={{ scale: 0.9 }}
+                whileInView={{ scale: 1 }}
+                className="inline-flex items-center gap-2 bg-primary/10 text-primary border border-primary/20 px-6 py-2 rounded-full text-xs font-black uppercase tracking-[0.2em] mb-6"
+              >
+                <span className="material-symbols-outlined text-[14px]">bolt</span>
+                Engineering Excellence
+              </motion.span>
+              <h2 className="text-4xl md:text-5xl font-black text-on-surface tracking-tight" style={{ fontFamily: 'Manrope' }}>
+                Meet The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-container">Architects</span>
+              </h2>
+              <p className="text-on-surface-variant text-base mt-4 max-w-xl mx-auto font-medium">
+                The visionary engineering team behind the COMSTAS Cafeteria ecosystem.
+              </p>
+            </div>
+
+            <div className="relative z-10">
+              <div className="flex justify-center mb-12">
+                <TeamCard member={teamMembers[0]} index={0} />
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                {teamMembers.slice(1).map((member, i) => (
+                  <TeamCard key={i} member={member} index={i + 1} />
+                ))}
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </motion.section>
   );
 }
 
-function TeamCard({ member, index }) {
+function TeamCard({ member, index, compact }) {
   return (
     <motion.div 
       initial={{ opacity: 0, scale: 0.95 }}
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.1 }}
-      whileHover={{ y: -8 }}
-      className={`group relative flex flex-col items-center p-6 rounded-3xl bg-surface-container-high/60 border border-white/5 backdrop-blur-sm shadow-xl transition-all duration-500 hover:bg-surface-container-highest ${
-        member.isLeader ? 'max-w-md w-full' : 'w-full'
+      whileHover={{ y: compact ? -4 : -8 }}
+      className={`group relative flex ${compact ? 'flex-row items-center gap-4 p-4' : 'flex-col items-center p-6'} rounded-3xl bg-surface-container-high/60 border border-white/5 backdrop-blur-sm shadow-xl transition-all duration-500 hover:bg-surface-container-highest ${
+        !compact && member.isLeader ? 'max-w-md w-full' : 'w-full'
       }`}
     >
-      {/* Dynamic Hover Glow */}
-      <div className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500 pointer-events-none ${
-        member.isLeader ? 'bg-primary' : 'bg-tertiary'
-      }`}></div>
+      <div className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500 pointer-events-none ${member.isLeader ? 'bg-primary' : 'bg-tertiary'}`}></div>
 
-      {/* Profile Image Container */}
-      <div className="relative mb-6">
-        <div className={`w-28 h-28 md:w-32 md:h-32 rounded-full p-1 shadow-2xl transition-transform duration-500 group-hover:scale-105 ${
+      {/* Profile Image */}
+      <div className={`relative shrink-0 ${compact ? '' : 'mb-6'}`}>
+        <div className={`rounded-full p-1 shadow-2xl transition-transform duration-500 group-hover:scale-105 ${compact ? 'w-14 h-14' : 'w-28 h-28 md:w-32 md:h-32'} ${
           member.isLeader 
             ? 'bg-gradient-to-tr from-primary via-primary-container to-primary' 
             : 'bg-gradient-to-tr from-tertiary via-tertiary-container to-tertiary'
         }`}>
-          <img 
-            src={member.image} 
-            alt={member.name}
-            className="w-full h-full rounded-full object-cover border-4 border-surface-container-high"
-          />
+          <img src={member.image} alt={member.name} className="w-full h-full rounded-full object-cover border-4 border-surface-container-high" />
         </div>
-        
-        {/* Floating Icon */}
-        <div className={`absolute -bottom-1 -right-1 w-10 h-10 rounded-2xl flex items-center justify-center shadow-lg transform rotate-12 transition-transform group-hover:rotate-0 duration-300 ${
-          member.isLeader ? 'bg-primary text-on-primary' : 'bg-tertiary text-on-tertiary'
-        }`}>
-          <span className="material-symbols-outlined text-[20px]" style={{ fontVariationSettings: "'FILL' 1" }}>
+        <div className={`absolute -bottom-1 -right-1 rounded-2xl flex items-center justify-center shadow-lg transform rotate-12 transition-transform group-hover:rotate-0 duration-300 ${compact ? 'w-6 h-6' : 'w-10 h-10'} ${member.isLeader ? 'bg-primary text-on-primary' : 'bg-tertiary text-on-tertiary'}`}>
+          <span className="material-symbols-outlined" style={{ fontSize: compact ? '12px' : '20px', fontVariationSettings: "'FILL' 1" }}>
             {member.isLeader ? 'military_tech' : 'verified'}
           </span>
         </div>
       </div>
 
-      {/* Info Content */}
-      <div className="text-center space-y-4">
+      {/* Info */}
+      <div className={compact ? 'flex-1 min-w-0' : 'text-center space-y-4'}>
         <div>
-          <h3 className="text-xl font-black text-on-surface tracking-tight" style={{ fontFamily: 'Manrope' }}>
-            {member.name}
-          </h3>
-          <p className={`text-[10px] font-black uppercase tracking-[0.15em] mt-1 ${
-            member.isLeader ? 'text-primary' : 'text-tertiary'
-          }`}>{member.role}</p>
+          <h3 className={`font-black text-on-surface tracking-tight ${compact ? 'text-sm' : 'text-xl'}`} style={{ fontFamily: 'Manrope' }}>{member.name}</h3>
+          <p className={`font-black uppercase tracking-[0.15em] mt-0.5 ${compact ? 'text-[9px]' : 'text-[10px]'} ${member.isLeader ? 'text-primary' : 'text-tertiary'}`}>{member.role}</p>
         </div>
-
-        <p className="text-on-surface-variant text-xs leading-relaxed max-w-[240px] font-medium opacity-80 group-hover:opacity-100 transition-opacity">
-          {member.description}
-        </p>
-
-        {/* Simple Text Button */}
-        <div className="pt-4">
-          <a 
-            href={member.portfolioUrl} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="group/btn inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-primary hover:text-white transition-all underline-offset-4 hover:underline"
+        {!compact && (
+          <p className="text-on-surface-variant text-xs leading-relaxed max-w-[240px] font-medium opacity-80 group-hover:opacity-100 transition-opacity">{member.description}</p>
+        )}
+        <div className={compact ? 'mt-1' : 'pt-4'}>
+          <a href={member.portfolioUrl} target="_blank" rel="noopener noreferrer"
+            className="group/btn inline-flex items-center gap-1 font-black uppercase tracking-widest text-primary hover:text-white transition-all hover:underline"
+            style={{ fontSize: compact ? '9px' : '11px' }}
           >
-            Explore Portfolio
-            <span className="material-symbols-outlined text-[14px] transition-transform group-hover/btn:translate-x-1">arrow_forward</span>
+            Portfolio
+            <span className="material-symbols-outlined transition-transform group-hover/btn:translate-x-1" style={{ fontSize: compact ? '11px' : '14px' }}>arrow_forward</span>
           </a>
         </div>
       </div>
