@@ -22,8 +22,8 @@ const teamMembers = [
   },
   {
     name: 'Maida Amjad',
-    role: 'Full Stack Developer',
-    description: 'Focus on end-to-end application development and secure web solutions.',
+    role: 'AI Engineer',
+    description: 'Focus on making real world AI Applications and Training Models.',
     image: maidaImg,
     isLeader: false,
     portfolioUrl: 'https://my-portfolio-iota-two-82.vercel.app/',
