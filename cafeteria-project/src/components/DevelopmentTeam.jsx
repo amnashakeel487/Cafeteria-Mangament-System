@@ -28,7 +28,6 @@ const teamMembers = [
     isLeader: false,
     portfolioUrl: 'https://my-portfolio-iota-two-82.vercel.app/',
   },
-  // v2
 ];
 
 export default function DevelopmentTeam({ loginSlot }) {
