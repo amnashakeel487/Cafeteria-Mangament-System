@@ -66,14 +66,10 @@ export default function DevelopmentTeam({ loginSlot }) {
                 </p>
               </div>
 
-              {/* Team Leader */}
-              <div className="mb-6">
-                <TeamCard member={teamMembers[0]} index={0} compact />
-              </div>
-              {/* Other members */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {teamMembers.slice(1).map((member, i) => (
-                  <TeamCard key={i} member={member} index={i + 1} compact />
+              {/* All 3 members — equal size grid, photo top, info below */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {teamMembers.map((member, i) => (
+                  <TeamCard key={i} member={member} index={i} compact />
                 ))}
               </div>
             </div>
@@ -127,14 +123,12 @@ function TeamCard({ member, index, compact }) {
       whileInView={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.1 }}
       whileHover={{ y: compact ? -4 : -8 }}
-      className={`group relative flex ${compact ? 'flex-row items-center gap-4 p-4' : 'flex-col items-center p-6'} rounded-3xl bg-surface-container-high/60 border border-white/5 backdrop-blur-sm shadow-xl transition-all duration-500 hover:bg-surface-container-highest ${
-        !compact && member.isLeader ? 'max-w-md w-full' : 'w-full'
-      }`}
+      className={`group relative flex ${compact ? 'flex-col items-center text-center p-4' : 'flex-col items-center p-6'} rounded-3xl bg-surface-container-high/60 border border-white/5 backdrop-blur-sm shadow-xl transition-all duration-500 hover:bg-surface-container-highest w-full`}
     >
       <div className={`absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-20 blur-2xl transition-opacity duration-500 pointer-events-none ${member.isLeader ? 'bg-primary' : 'bg-tertiary'}`}></div>
 
       {/* Profile Image */}
-      <div className={`relative shrink-0 ${compact ? '' : 'mb-6'}`}>
+      <div className={`relative shrink-0 ${compact ? 'mb-3' : 'mb-6'}`}>
         <div className={`rounded-full p-1 shadow-2xl transition-transform duration-500 group-hover:scale-105 ${compact ? 'w-14 h-14' : 'w-28 h-28 md:w-32 md:h-32'} ${
           member.isLeader 
             ? 'bg-gradient-to-tr from-primary via-primary-container to-primary' 
@@ -150,7 +144,7 @@ function TeamCard({ member, index, compact }) {
       </div>
 
       {/* Info */}
-      <div className={compact ? 'flex-1 min-w-0' : 'text-center space-y-4'}>
+      <div className={compact ? 'w-full' : 'text-center space-y-4'}>
         <div>
           <h3 className={`font-black text-on-surface tracking-tight ${compact ? 'text-sm' : 'text-xl'}`} style={{ fontFamily: 'Manrope' }}>{member.name}</h3>
           <p className={`font-black uppercase tracking-[0.15em] mt-0.5 ${compact ? 'text-[9px]' : 'text-[10px]'} ${member.isLeader ? 'text-primary' : 'text-tertiary'}`}>{member.role}</p>
