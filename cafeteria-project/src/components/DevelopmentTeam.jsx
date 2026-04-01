@@ -66,10 +66,16 @@ export default function DevelopmentTeam({ loginSlot }) {
                 </p>
               </div>
 
-              {/* All 3 members — equal size grid, photo top, info below */}
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                {teamMembers.map((member, i) => (
-                  <TeamCard key={i} member={member} index={i} compact />
+              {/* Team leader centered on top */}
+              <div className="flex justify-center mb-4">
+                <div className="w-full max-w-[180px]">
+                  <TeamCard member={teamMembers[0]} index={0} compact />
+                </div>
+              </div>
+              {/* Other two below in 2 columns */}
+              <div className="grid grid-cols-2 gap-4">
+                {teamMembers.slice(1).map((member, i) => (
+                  <TeamCard key={i} member={member} index={i + 1} compact />
                 ))}
               </div>
             </div>
