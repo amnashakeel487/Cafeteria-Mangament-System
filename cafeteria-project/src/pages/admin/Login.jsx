@@ -78,6 +78,21 @@ export default function Login() {
           </button>
         </form>
       </div>
+
+      <div className="mt-8 pt-6 border-t border-outline-variant/10 space-y-3">
+        <div className="flex items-center gap-3 text-xs text-on-surface-variant">
+          <span className="material-symbols-outlined text-primary text-sm">verified_user</span>
+          <span>Secured with JWT authentication</span>
+        </div>
+        <div className="flex items-center gap-3 text-xs text-on-surface-variant">
+          <span className="material-symbols-outlined text-tertiary text-sm">admin_panel_settings</span>
+          <span>Full system access — authorized personnel only</span>
+        </div>
+        <div className="flex items-center gap-3 text-xs text-on-surface-variant">
+          <span className="material-symbols-outlined text-secondary text-sm">support_agent</span>
+          <span>Need help? Contact your system administrator</span>
+        </div>
+      </div>
     </div>
   );
 
