@@ -144,7 +144,7 @@ export default function MenuBrowsing() {
                   <img 
                     src={item.image_url || DEFAULT_IMAGE} 
                     alt={item.name} 
-                    className={`transition-all duration-500 group-hover:scale-110 ${item.image_url ? 'w-full h-full object-cover' : 'h-24 w-auto object-contain opacity-60'}`}
+                    className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
                   />
                 )}
                 {qty > 0 && (
