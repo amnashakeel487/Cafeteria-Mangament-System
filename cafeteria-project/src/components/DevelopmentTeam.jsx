@@ -81,8 +81,10 @@ export default function DevelopmentTeam({ loginSlot }) {
             </div>
 
             {/* Right: login form */}
-            <div className="w-full lg:w-[420px] shrink-0">
-              {loginSlot}
+            <div className="w-full lg:w-[420px] shrink-0 self-stretch">
+              <div className="h-full">
+                {loginSlot}
+              </div>
             </div>
           </div>
         ) : (

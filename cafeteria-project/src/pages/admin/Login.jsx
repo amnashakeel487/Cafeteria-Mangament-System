@@ -35,44 +35,49 @@ export default function Login() {
   };
 
   const loginForm = (
-    <div className="bg-surface-container-high rounded-xl p-8 border border-outline-variant/10 shadow-2xl">
-      <div className="mb-8 text-center">
-        <h1 className="text-2xl font-extrabold editorial-text text-primary mb-1">COMSTAS Cafe</h1>
-        <p className="text-xs text-on-surface-variant font-label tracking-wide uppercase">Admin Console</p>
+    <div className="bg-surface-container-high rounded-xl p-8 border border-outline-variant/10 shadow-2xl h-full flex flex-col justify-between">
+      <div>
+        <div className="mb-8 text-center">
+          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-3 border border-primary/20">
+            <span className="material-symbols-outlined text-2xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>admin_panel_settings</span>
+          </div>
+          <h1 className="text-2xl font-extrabold editorial-text text-primary mb-1">COMSTAS Cafe</h1>
+          <p className="text-xs text-on-surface-variant font-label tracking-wide uppercase">Admin Console</p>
+        </div>
+
+        {error && (
+          <div className="mb-5 p-3 rounded-lg bg-error-container/20 border border-error/50 flex items-center space-x-3 text-error">
+            <span className="material-symbols-outlined text-sm">error</span>
+            <p className="text-sm font-bold">{error}</p>
+          </div>
+        )}
+
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-on-surface-variant">Email Address</label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">mail</span>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading} placeholder="admin@culinary.edu"
+                className="w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-primary/60 rounded-lg pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-primary/50 text-on-surface placeholder-on-surface-variant/30 transition-all font-label" required />
+            </div>
+          </div>
+          <div className="space-y-1.5">
+            <label className="text-xs font-bold text-on-surface-variant">Password</label>
+            <div className="relative">
+              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
+              <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} placeholder="••••••••"
+                className="w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-primary/60 rounded-lg pl-12 pr-12 py-3 text-sm focus:ring-1 focus:ring-primary/50 text-on-surface placeholder-on-surface-variant/30 transition-all font-label" required />
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-primary transition-colors">
+                <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
+              </button>
+            </div>
+          </div>
+          <button type="submit" disabled={isLoading}
+            className="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-3 rounded-lg font-bold flex items-center justify-center space-x-2 hover:opacity-90 active:scale-[0.98] transition-all">
+            {isLoading ? <span className="material-symbols-outlined animate-spin">refresh</span> : <><span>Sign In to Console</span><span className="material-symbols-outlined text-lg">arrow_forward</span></>}
+          </button>
+        </form>
       </div>
-
-      {error && (
-        <div className="mb-5 p-3 rounded-lg bg-error-container/20 border border-error/50 flex items-center space-x-3 text-error">
-          <span className="material-symbols-outlined text-sm">error</span>
-          <p className="text-sm font-bold">{error}</p>
-        </div>
-      )}
-
-      <form onSubmit={handleLogin} className="space-y-5">
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-on-surface-variant">Email Address</label>
-          <div className="relative">
-            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">mail</span>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading} placeholder="admin@culinary.edu"
-              className="w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-primary/60 rounded-lg pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-primary/50 text-on-surface placeholder-on-surface-variant/30 transition-all font-label" required />
-          </div>
-        </div>
-        <div className="space-y-1.5">
-          <label className="text-xs font-bold text-on-surface-variant">Password</label>
-          <div className="relative">
-            <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
-            <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} placeholder="••••••••"
-              className="w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-primary/60 rounded-lg pl-12 pr-12 py-3 text-sm focus:ring-1 focus:ring-primary/50 text-on-surface placeholder-on-surface-variant/30 transition-all font-label" required />
-            <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-primary transition-colors">
-              <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
-            </button>
-          </div>
-        </div>
-        <button type="submit" disabled={isLoading}
-          className="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-3 rounded-lg font-bold flex items-center justify-center space-x-2 hover:opacity-90 active:scale-[0.98] transition-all">
-          {isLoading ? <span className="material-symbols-outlined animate-spin">refresh</span> : <><span>Sign In to Console</span><span className="material-symbols-outlined text-lg">arrow_forward</span></>}
-        </button>
-      </form>
     </div>
   );
 
