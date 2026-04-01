@@ -31,7 +31,6 @@ export default function CafeteriaLogin() {
     }
   };
 
-  return (
   const loginForm = (
     <div className="bg-surface-container-high rounded-xl p-8 border border-outline-variant/10 shadow-2xl">
       <div className="mb-8 text-center">
