@@ -172,7 +172,7 @@ export default function MenuBrowsing() {
                   ) : (
                     <div className="flex items-center justify-between w-full">
                       <div className="flex items-center bg-[#0c0c1d] rounded-lg p-0.5 border border-[#594139]/20">
-                        <button onClick={() => removeFromCart(item.id)} className="h-7 w-7 flex items-center justify-center rounded hover:bg-[#38374a] text-[#e1bfb5] transition-colors"><span className="material-symbols-outlined text-base">math_minus</span></button>
+                        <button onClick={() => removeFromCart(item.id)} className="h-7 w-7 flex items-center justify-center rounded hover:bg-[#38374a] text-[#e1bfb5] transition-colors"><span className="material-symbols-outlined text-base">remove</span></button>
                         <span className="px-3 text-xs font-bold text-[#E3E0F8]">{qty}</span>
                         <button onClick={() => addToCart(item, cafeteriaId)} className="h-7 w-7 flex items-center justify-center rounded hover:bg-[#38374a] text-[#FFB59D] transition-colors"><span className="material-symbols-outlined text-base">add</span></button>
                       </div>
@@ -224,11 +224,17 @@ export default function MenuBrowsing() {
               {cart.map(item => (
                 <div key={item.id} className="flex gap-4 group items-center">
                   <div className="h-12 w-12 rounded-lg overflow-hidden bg-[#333345] shrink-0 border border-[#594139]/10">
-                    <img 
-                      src={item.image_url || DEFAULT_IMAGE} 
-                      alt={item.name} 
-                      className="h-full w-full object-cover" 
-                    />
+                    {isVideo(item.image_url) ? (
+                      <div className="h-full w-full flex items-center justify-center bg-[#1a1a2b]">
+                        <span className="material-symbols-outlined text-[#FFB59D] text-xl">play_circle</span>
+                      </div>
+                    ) : (
+                      <img
+                        src={item.image_url || DEFAULT_IMAGE}
+                        alt={item.name}
+                        className="h-full w-full object-cover"
+                      />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start gap-2">
