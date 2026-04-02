@@ -113,8 +113,10 @@ export default function StudentLayout() {
       </header>
 
       {/* Main Content Area */}
-      <main className="lg:pl-64 pt-16 px-4 md:px-6 lg:px-10 pb-20 lg:pb-12 bg-[#121222] min-h-screen">
-        <Outlet />
+      <main className="lg:pl-64 pt-20 px-4 md:px-8 lg:px-10 pb-20 lg:pb-12 bg-[#121222] min-h-screen">
+        <div className="pt-6">
+          <Outlet />
+        </div>
       </main>
 
       {/* Bottom Navigation (Mobile Only) */}
