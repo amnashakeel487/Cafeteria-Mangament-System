@@ -225,9 +225,14 @@ export default function MenuBrowsing() {
                 <div key={item.id} className="flex gap-4 group items-center">
                   <div className="h-12 w-12 rounded-lg overflow-hidden bg-[#333345] shrink-0 border border-[#594139]/10">
                     {isVideo(item.image_url) ? (
-                      <div className="h-full w-full flex items-center justify-center bg-[#1a1a2b]">
-                        <span className="material-symbols-outlined text-[#FFB59D] text-xl">play_circle</span>
-                      </div>
+                      <video
+                        src={item.image_url}
+                        className="h-full w-full object-cover"
+                        muted
+                        playsInline
+                        preload="metadata"
+                        onLoadedMetadata={e => { e.target.currentTime = 1; }}
+                      />
                     ) : (
                       <img
                         src={item.image_url || DEFAULT_IMAGE}
