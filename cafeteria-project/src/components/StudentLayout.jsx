@@ -92,7 +92,7 @@ export default function StudentLayout() {
             <span className="material-symbols-outlined">menu</span>
           </button>
 
-          <span className="text-xl font-bold text-[#FF6B35] tracking-tighter font-['Manrope']">COMSTAS Cafe</span>
+          <span className="text-xl font-bold text-[#FF6B35] font-['Manrope']">COMSTAS Cafe</span>
 
           {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center gap-6">
