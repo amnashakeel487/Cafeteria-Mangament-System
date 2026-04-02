@@ -5,7 +5,13 @@ import { useCart } from '../../context/CartContext';
 import DefaultImage from '../../assets/default_dish.png';
 
 const BASE = '';
-const DEFAULT_IMAGE = DefaultImage; // COMSATS Cafe logo as default image
+const DEFAULT_IMAGE = DefaultImage;
+
+const isVideo = (url) => {
+  if (!url) return false;
+  const lower = url.toLowerCase().split('?')[0];
+  return ['.mp4', '.webm', '.ogg', '.mov', '.avi', '.mkv'].some(ext => lower.includes(ext));
+};
 
 export default function CartCheckout() {
   const navigate = useNavigate();
@@ -180,12 +186,23 @@ export default function CartCheckout() {
           <div className="p-6 space-y-6">
             {cart.map(item => (
               <div key={item.id} className="flex items-center gap-4 group">
-                <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-[#333345] flex items-center justify-center p-2">
-                  <img 
-                    src={item.image_url || DEFAULT_IMAGE} 
-                    alt={item.name} 
-                    className={`transition-all duration-500 group-hover:scale-110 ${item.image_url ? 'w-full h-full object-cover' : 'h-10 w-auto object-contain opacity-50'}`}
-                  />
+                <div className="w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 bg-[#333345]">
+                  {isVideo(item.image_url) ? (
+                    <video
+                      src={item.image_url}
+                      className="w-full h-full object-cover"
+                      muted
+                      playsInline
+                      preload="metadata"
+                      onLoadedMetadata={e => { e.target.currentTime = 1; }}
+                    />
+                  ) : (
+                    <img
+                      src={item.image_url || DEFAULT_IMAGE}
+                      alt={item.name}
+                      className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                    />
+                  )}
                 </div>
                 
                 <div className="flex-grow min-w-0">
