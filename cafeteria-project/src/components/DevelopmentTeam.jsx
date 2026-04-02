@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import abdullahImg from '../assets/abdullah_avatar.png';
 import amnaImg from '../assets/amna_avatar.png';
-import maidaImg from '../assets/maida_avatar.png';
+import maidaImg from '../assets/maida_avatar.jpeg';
 
 const teamMembers = [
   {
