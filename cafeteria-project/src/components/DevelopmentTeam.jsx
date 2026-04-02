@@ -142,7 +142,7 @@ function TeamCard({ member, index, compact }) {
             ? 'bg-gradient-to-tr from-primary via-primary-container to-primary' 
             : 'bg-gradient-to-tr from-tertiary via-tertiary-container to-tertiary'
         }`}>
-          <img src={member.image} alt={member.name} className="w-full h-full rounded-full object-cover border-4 border-surface-container-high" />
+          <img src={member.image} alt={member.name} className="w-full h-full rounded-full object-cover object-top border-4 border-surface-container-high" />
         </div>
         <div className={`absolute -bottom-1 -right-1 rounded-2xl flex items-center justify-center shadow-lg transform rotate-12 transition-transform group-hover:rotate-0 duration-300 ${compact ? 'w-6 h-6' : 'w-10 h-10'} ${member.isLeader ? 'bg-primary text-on-primary' : 'bg-tertiary text-on-tertiary'}`}>
           <span className="material-symbols-outlined" style={{ fontSize: compact ? '12px' : '20px', fontVariationSettings: "'FILL' 1" }}>
