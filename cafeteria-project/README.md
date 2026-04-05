@@ -1,7 +1,8 @@
 # COMSATS Cafeteria Management System
 
 ## Login Page and Architects
-<img width="1891" height="889" alt="image" src="https://github.com/user-attachments/assets/4b2d1a1b-9274-44b0-8927-0fd15963cef7" />
+<img width="1889" height="894" alt="Screenshot 2026-04-05 204740" src="https://github.com/user-attachments/assets/5f7f48c9-3305-438f-87c4-1a3087eaa77e" />
+
 
 ## Admin Dashboard
 <img width="1891" height="884" alt="image" src="https://github.com/user-attachments/assets/4aa1cc41-e0cf-4bc4-a380-f9389dfb0cfc" />
