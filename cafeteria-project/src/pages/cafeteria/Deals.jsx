@@ -157,7 +157,7 @@ export default function CafeteriaDeals() {
                   </div>
                   {savings > 0 && (
                     <div className="absolute top-3 right-3 bg-primary text-on-primary px-2 py-1 rounded-full text-[10px] font-bold">
-                      Save Rs. ${savings.toFixed(2)}
+                      Save Rs. {savings.toFixed(2)}
                     </div>
                   )}
                 </div>
@@ -170,14 +170,14 @@ export default function CafeteriaDeals() {
                     {deal.deal_items?.map((item, i) => (
                       <div key={i} className="flex justify-between text-xs text-on-surface-variant">
                         <span className="flex items-center gap-1"><span className="material-symbols-outlined text-[12px] text-primary">restaurant</span>{item.item_name}</span>
-                        <span className="line-through opacity-50">Rs. ${Number(item.item_price).toFixed(2)}</span>
+                        <span className="line-through opacity-50">Rs. {Number(item.item_price).toFixed(2)}</span>
                       </div>
                     ))}
                   </div>
 
                   <div className="flex items-center gap-3 mb-4 pt-2 border-t border-outline-variant/10">
-                    <span className="text-xl font-extrabold text-primary">Rs. ${Number(deal.deal_price).toFixed(2)}</span>
-                    {total > 0 && <span className="text-sm text-on-surface-variant line-through">Rs. ${total.toFixed(2)}</span>}
+                    <span className="text-xl font-extrabold text-primary">Rs. {Number(deal.deal_price).toFixed(2)}</span>
+                    {total > 0 && <span className="text-sm text-on-surface-variant line-through">Rs. {total.toFixed(2)}</span>}
                     <span className="text-xs text-tertiary font-bold ml-auto">{deal.deal_items?.length || 0} items</span>
                   </div>
 
@@ -235,7 +235,7 @@ export default function CafeteriaDeals() {
                     </div>
                     {originalTotal > 0 && form.deal_price && (
                       <p className="text-xs text-tertiary mt-1">
-                        Original total: Rs. ${originalTotal.toFixed(2)} — Save Rs. ${(originalTotal - parseFloat(form.deal_price || 0)).toFixed(2)}
+                        Original total: Rs. {originalTotal.toFixed(2)} — Save Rs. {(originalTotal - parseFloat(form.deal_price || 0)).toFixed(2)}
                       </p>
                     )}
                   </div>
@@ -271,7 +271,7 @@ export default function CafeteriaDeals() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-bold text-on-surface truncate">{item.name}</p>
-                            <p className="text-xs text-on-surface-variant">Rs. ${Number(item.price).toFixed(2)}</p>
+                            <p className="text-xs text-on-surface-variant">Rs. {Number(item.price).toFixed(2)}</p>
                           </div>
                           {selected && <span className="material-symbols-outlined text-primary text-lg shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>}
                         </button>

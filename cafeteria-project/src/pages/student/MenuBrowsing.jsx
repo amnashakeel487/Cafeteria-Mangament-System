@@ -319,7 +319,7 @@ export default function MenuBrowsing() {
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start gap-2">
                       <p className="text-sm font-bold text-[#E3E0F8] leading-tight truncate">{item.name}</p>
-                      <p className="text-sm font-bold text-[#FFB59D] leading-tight">Rs. ${(item.price * item.qty).toFixed(2)}</p>
+                      <p className="text-sm font-bold text-[#FFB59D] leading-tight">Rs. {(item.price * item.qty).toFixed(2)}</p>
                     </div>
                     <div className="flex justify-between items-center mt-1 text-[#e1bfb5]">
                         <p className="text-[10px]">Qty: {item.qty}</p>
