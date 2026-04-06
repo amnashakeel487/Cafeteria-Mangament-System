@@ -134,8 +134,15 @@ export default function MenuBrowsing() {
                 const savings = originalTotal - Number(deal.deal_price);
                 return (
                   <div key={deal.id} className="group bg-gradient-to-br from-[#FF6B35]/10 to-[#28283a] border border-[#FF6B35]/20 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#FF6B35]/10 transition-all duration-300 flex flex-col">
-                    <div className="relative h-36 overflow-hidden bg-[#333345]">
-                      <img src={deal.image_url || DEFAULT_IMAGE} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                    <div className="relative h-36 overflow-hidden bg-[#1a1a2b]">
+                      {deal.image_url ? (
+                        <img src={deal.image_url} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                      ) : (
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                          <span className="material-symbols-outlined text-4xl text-[#FF6B35]/50" style={{ fontVariationSettings: "'FILL' 1" }}>local_offer</span>
+                          <span className="text-[#FFB59D] font-black text-sm uppercase tracking-widest">COMBO DEAL</span>
+                        </div>
+                      )}
                       <div className="absolute top-2 left-2 bg-[#FF6B35]/90 text-white px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
                         <span className="material-symbols-outlined text-[12px]">local_offer</span> COMBO
                       </div>
@@ -309,20 +316,14 @@ export default function MenuBrowsing() {
                 <div key={item.id} className="flex gap-4 group items-center">
                   <div className="h-12 w-12 rounded-lg overflow-hidden bg-[#333345] shrink-0 border border-[#594139]/10">
                     {isVideo(item.image_url) ? (
-                      <video
-                        src={item.image_url}
-                        className="h-full w-full object-cover"
-                        muted
-                        playsInline
-                        preload="metadata"
-                        onLoadedMetadata={e => { e.target.currentTime = 1; }}
-                      />
+                      <video src={item.image_url} className="h-full w-full object-cover" muted playsInline preload="metadata" onLoadedMetadata={e => { e.target.currentTime = 1; }} />
+                    ) : item.image_url ? (
+                      <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" />
                     ) : (
-                      <img
-                        src={item.image_url || DEFAULT_IMAGE}
-                        alt={item.name}
-                        className="h-full w-full object-cover"
-                      />
+                      <div className="h-full w-full flex flex-col items-center justify-center bg-[#1a1a2b] gap-0.5">
+                        <span className="material-symbols-outlined text-lg text-[#FF6B35]/60" style={{ fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+                        <span className="text-[#FFB59D] font-black text-[8px] uppercase tracking-wide leading-none">{item.category || 'Item'}</span>
+                      </div>
                     )}
                   </div>
                   <div className="flex-1 min-w-0">

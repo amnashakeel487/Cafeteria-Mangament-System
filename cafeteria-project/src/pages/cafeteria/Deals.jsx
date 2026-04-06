@@ -141,8 +141,15 @@ export default function CafeteriaDeals() {
             const savings = total - Number(deal.deal_price);
             return (
               <div key={deal.id} className={`group bg-surface-container-high rounded-xl overflow-hidden border transition-all duration-300 hover:shadow-2xl ${deal.active ? 'border-outline-variant/5' : 'border-outline-variant/5 opacity-60'}`}>
-                <div className="h-36 overflow-hidden relative bg-surface-container-highest">
-                  <img src={deal.image_url || DefaultImage} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                <div className="h-36 overflow-hidden relative bg-[#1a1a2b]">
+                  {deal.image_url ? (
+                    <img src={deal.image_url} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                      <span className="material-symbols-outlined text-4xl text-primary/40" style={{ fontVariationSettings: "'FILL' 1" }}>local_offer</span>
+                      <span className="text-primary font-black text-sm uppercase tracking-widest">COMBO DEAL</span>
+                    </div>
+                  )}
                   <div className="absolute top-3 left-3">
                     <span className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase ${deal.active ? 'bg-[#28A745]/20 text-[#28A745] border border-[#28A745]/30' : 'bg-error-container/20 text-error border border-error/30'}`}>
                       {deal.active ? 'Active' : 'Inactive'}
@@ -254,7 +261,13 @@ export default function CafeteriaDeals() {
                         <button key={item.id} type="button" onClick={() => toggleItem(item)}
                           className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${selected ? 'border-primary/50 bg-primary/10' : 'border-outline-variant/10 bg-surface-container-lowest hover:border-primary/30'}`}>
                           <div className="w-10 h-10 rounded-lg overflow-hidden bg-surface-container-highest shrink-0">
-                            <img src={item.image_url || DefaultImage} alt={item.name} className="w-full h-full object-cover" />
+                            {item.image_url ? (
+                              <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-surface-container-lowest">
+                                <span className="material-symbols-outlined text-sm text-primary/50" style={{ fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+                              </div>
+                            )}
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-bold text-on-surface truncate">{item.name}</p>

@@ -196,12 +196,17 @@ export default function CartCheckout() {
                       preload="metadata"
                       onLoadedMetadata={e => { e.target.currentTime = 1; }}
                     />
-                  ) : (
+                  ) : item.image_url ? (
                     <img
-                      src={item.image_url || DEFAULT_IMAGE}
+                      src={item.image_url}
                       alt={item.name}
                       className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
                     />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-[#1a1a2b] gap-1">
+                      <span className="material-symbols-outlined text-3xl text-[#FF6B35]/50" style={{ fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+                      <span className="text-[#FFB59D] font-black text-xs uppercase tracking-widest">{item.category || 'Item'}</span>
+                    </div>
                   )}
                 </div>
                 
