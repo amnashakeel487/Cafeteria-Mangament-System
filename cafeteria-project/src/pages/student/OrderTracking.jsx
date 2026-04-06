@@ -173,13 +173,13 @@ export default function OrderTracking() {
                                 <span className="text-[#FFB59D] font-bold">{item.quantity}x</span>
                                 <p className="font-semibold text-[#E3E0F8]">{item.item_name}</p>
                             </div>
-                            <span className="font-mono text-[#e1bfb5]">${Number(item.price).toFixed(2)}</span>
+                            <span className="font-mono text-[#e1bfb5]">Rs. ${Number(item.price).toFixed(2)}</span>
                         </div>
                     ))}
                 </div>
                 <div className="pt-4 border-t border-[#594139]/20 flex justify-between items-end">
                     <span className="font-['Inter'] text-[#e1bfb5]">Total Amount</span>
-                    <span className="text-xl font-bold text-[#FFB59D]">${Number(activeOrder.total_amount).toFixed(2)}</span>
+                    <span className="text-xl font-bold text-[#FFB59D]">Rs. ${Number(activeOrder.total_amount).toFixed(2)}</span>
                 </div>
             </div>
             

@@ -378,7 +378,7 @@ export default function CafeteriaMenu() {
             <div className="p-6 flex flex-col flex-1">
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-xl font-bold text-on-surface leading-tight" style={{ fontFamily: 'Manrope' }}>{item.name}</h3>
-                <span className="text-xl font-extrabold text-primary">${Number(item.price).toFixed(2)}</span>
+                <span className="text-xl font-extrabold text-primary">Rs. ${Number(item.price).toFixed(2)}</span>
               </div>
               {item.description && <p className="text-sm text-on-surface-variant mb-4 line-clamp-2">{item.description}</p>}
               <div className="mt-auto flex items-center justify-end border-t border-outline-variant/15 pt-4 gap-2">
@@ -439,7 +439,7 @@ export default function CafeteriaMenu() {
                   <div className="space-y-2">
                     <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest ml-1">Price (USD) *</label>
                     <div className="relative">
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">$</span>
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold">Rs.</span>
                       <input required type="number" step="0.01" min="0" value={form.price} onChange={e => setForm({ ...form, price: e.target.value })}
                         className="w-full bg-surface-container-lowest border-none rounded-xl pl-8 pr-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/40 outline-none" />
                     </div>
