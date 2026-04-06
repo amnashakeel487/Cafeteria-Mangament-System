@@ -66,10 +66,16 @@ export default function DevelopmentTeam({ loginSlot }) {
                 </p>
               </div>
 
-              {/* All three in one row */}
-              <div className="grid grid-cols-3 gap-3">
-                {teamMembers.map((member, i) => (
-                  <TeamCard key={i} member={member} index={i} compact />
+              {/* Team leader centered on top */}
+              <div className="flex justify-center mb-3">
+                <div className="w-full max-w-[180px]">
+                  <TeamCard member={teamMembers[0]} index={0} compact />
+                </div>
+              </div>
+              {/* Developers below in 2 columns */}
+              <div className="grid grid-cols-2 gap-3">
+                {teamMembers.slice(1).map((member, i) => (
+                  <TeamCard key={i} member={member} index={i + 1} compact />
                 ))}
               </div>
             </div>
