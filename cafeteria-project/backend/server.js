@@ -15,11 +15,13 @@ const cafeteriaMenuRoutes = require('./routes/cafeteriaMenu');
 const cafeteriaPaymentsRoutes = require('./routes/cafeteriaPayments');
 const cafeteriaOrdersRoutes = require('./routes/cafeteriaOrders');
 const cafeteriaProfileRoutes = require('./routes/cafeteriaProfile');
+const cafeteriaDealsRoutes = require('./routes/cafeteriaDeals');
 const studentAuthRoutes = require('./routes/studentAuth');
 const studentCafeteriasRoutes = require('./routes/studentCafeterias');
 const studentMenuRoutes = require('./routes/studentMenu');
 const studentOrdersRoutes = require('./routes/studentOrders');
 const studentProfileRoutes = require('./routes/studentProfile');
+const studentDealsRoutes = require('./routes/studentDeals');
 
 const cafeteriaAuth = require('./middleware/cafeteriaAuth');
 const studentAuth = require('./middleware/studentAuth');
@@ -46,6 +48,7 @@ app.use('/api/cafeteria/menu', cafeteriaAuth, cafeteriaMenuRoutes);
 app.use('/api/cafeteria/payments', cafeteriaAuth, cafeteriaPaymentsRoutes);
 app.use('/api/cafeteria/orders', cafeteriaAuth, cafeteriaOrdersRoutes);
 app.use('/api/cafeteria/profile', cafeteriaAuth, cafeteriaProfileRoutes);
+app.use('/api/cafeteria/deals', cafeteriaAuth, cafeteriaDealsRoutes);
 
 // --- Student Endpoints ---
 app.use('/api/student', studentAuthRoutes);
@@ -53,6 +56,7 @@ app.use('/api/student/cafeterias', studentAuth, studentCafeteriasRoutes);
 app.use('/api/student/menu', studentAuth, studentMenuRoutes);
 app.use('/api/student/orders', studentAuth, studentOrdersRoutes);
 app.use('/api/student/profile', studentAuth, studentProfileRoutes);
+app.use('/api/student/deals', studentAuth, studentDealsRoutes);
 
 app.get('/api/payments/public/:cafeteriaId', async (req, res) => {
     try {

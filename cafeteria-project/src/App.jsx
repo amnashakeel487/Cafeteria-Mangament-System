@@ -12,6 +12,7 @@ import CafeteriaLayout from './components/CafeteriaLayout';
 import CafeteriaLogin from './pages/cafeteria/Login';
 import CafeteriaDashboard from './pages/cafeteria/Dashboard';
 import CafeteriaMenu from './pages/cafeteria/Menu';
+import CafeteriaDeals from './pages/cafeteria/Deals';
 import CafeteriaPayments from './pages/cafeteria/Payments';
 import CafeteriaOrders from './pages/cafeteria/Orders';
 import CafeteriaHistory from './pages/cafeteria/History';
@@ -58,6 +59,7 @@ function App() {
             <Route path="/cafeteria/history" element={<CafeteriaHistory />} />
             <Route path="/cafeteria/payments" element={<CafeteriaPayments />} />
             <Route path="/cafeteria/menu" element={<CafeteriaMenu />} />
+            <Route path="/cafeteria/deals" element={<CafeteriaDeals />} />
             <Route path="/cafeteria/profile" element={<CafeteriaProfile />} />
           </Route>
         </Route>

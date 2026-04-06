@@ -32,6 +32,7 @@ export default function CafeteriaLayout() {
     { name: 'Dashboard', path: '/cafeteria/dashboard', icon: 'dashboard' },
     { name: 'Orders', path: '/cafeteria/orders', icon: 'receipt_long' },
     { name: 'Menu', path: '/cafeteria/menu', icon: 'restaurant_menu' },
+    { name: 'Deals', path: '/cafeteria/deals', icon: 'local_offer' },
     { name: 'History', path: '/cafeteria/history', icon: 'history' },
     { name: 'Payments', path: '/cafeteria/payments', icon: 'payments' },
     { name: 'Profile', path: '/cafeteria/profile', icon: 'account_circle' },

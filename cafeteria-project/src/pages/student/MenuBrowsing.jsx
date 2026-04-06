@@ -21,13 +21,13 @@ export default function MenuBrowsing() {
   const [cafeteria, setCafeteria] = useState(null);
   const [categories, setCategories] = useState([]);
   const [items, setItems] = useState([]);
+  const [deals, setDeals] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  
+
   const [filter, setFilter] = useState('All Items');
   const [search, setSearch] = useState('');
-  
-  // Use global cart
+
   const { cart, addToCart, removeFromCart, getCartQty, cartTotal, cartItemCount } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
 
@@ -35,12 +35,14 @@ export default function MenuBrowsing() {
     const fetchMenu = async () => {
       try {
         const token = localStorage.getItem('studentToken');
-        const res = await axios.get(`${BASE}/api/student/menu/${cafeteriaId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setCafeteria(res.data.cafeteria);
-        setCategories(res.data.categories);
-        setItems(res.data.items);
+        const [menuRes, dealsRes] = await Promise.all([
+          axios.get(`${BASE}/api/student/menu/${cafeteriaId}`, { headers: { Authorization: `Bearer ${token}` } }),
+          axios.get(`${BASE}/api/student/deals/${cafeteriaId}`, { headers: { Authorization: `Bearer ${token}` } }),
+        ]);
+        setCafeteria(menuRes.data.cafeteria);
+        setCategories(menuRes.data.categories);
+        setItems(menuRes.data.items);
+        setDeals(dealsRes.data || []);
       } catch (err) {
         setError('Failed to load menu details.');
       } finally {
@@ -113,6 +115,42 @@ export default function MenuBrowsing() {
             />
           </div>
         </header>
+
+        {/* Deals Section */}
+        {deals.length > 0 && (
+          <div className="mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="material-symbols-outlined text-[#FF6B35]" style={{ fontVariationSettings: "'FILL' 1" }}>local_offer</span>
+              <h2 className="text-xl font-bold text-[#E3E0F8]" style={{ fontFamily: 'Manrope' }}>Today's Deals</h2>
+              <span className="bg-[#FF6B35]/20 text-[#FF6B35] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest">{deals.length} offers</span>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {deals.map(deal => (
+                <div key={deal.id} className="group bg-gradient-to-br from-[#FF6B35]/10 to-[#28283a] border border-[#FF6B35]/20 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#FF6B35]/10 transition-all duration-300 flex flex-col">
+                  <div className="relative h-36 overflow-hidden bg-[#333345]">
+                    <img src={deal.image_url || DEFAULT_IMAGE} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                    {deal.original_price && (
+                      <div className="absolute top-2 right-2 bg-[#FF6B35] text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
+                        {Math.round((1 - deal.deal_price / deal.original_price) * 100)}% OFF
+                      </div>
+                    )}
+                    <div className="absolute top-2 left-2 bg-[#FF6B35]/90 text-white px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[12px]">local_offer</span> DEAL
+                    </div>
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col">
+                    <h3 className="font-bold text-[#E3E0F8] mb-1" style={{ fontFamily: 'Manrope' }}>{deal.title}</h3>
+                    {deal.description && <p className="text-xs text-[#e1bfb5] mb-3 line-clamp-2">{deal.description}</p>}
+                    <div className="flex items-center gap-2 mt-auto">
+                      <span className="text-lg font-extrabold text-[#FF6B35]">${Number(deal.deal_price).toFixed(2)}</span>
+                      {deal.original_price && <span className="text-sm text-[#e1bfb5] line-through">${Number(deal.original_price).toFixed(2)}</span>}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Category Tabs */}
         <div className="flex gap-4 mb-10 overflow-x-auto pb-4 custom-scrollbar">
