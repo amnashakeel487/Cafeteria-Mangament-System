@@ -277,9 +277,16 @@ export default function Students() {
                 <input value={currentStudent.contact} onChange={e => setCurrentStudent({...currentStudent, contact: e.target.value})} className="bg-surface-container-lowest border-none rounded-lg px-4 py-3 text-sm text-on-surface font-label focus:ring-2 focus:ring-primary/50 outline-none" placeholder="(555) 123-4567" />
               </div>
               <div className="space-y-1 flex flex-col">
-                <label className="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">Password {modalMode === 'edit' && "(Optional)"}</label>
+                <label className="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">Password {modalMode === 'edit' && "(Leave blank to keep current)"}</label>
                 <div className="relative">
-                  <input type={showPassword ? "text" : "password"} required={modalMode === 'add'} value={currentStudent.password} onChange={e => setCurrentStudent({...currentStudent, password: e.target.value})} className="w-full bg-surface-container-lowest border-none rounded-lg px-4 py-3 pr-12 text-sm text-on-surface font-label focus:ring-2 focus:ring-primary/50 outline-none" placeholder="••••••••" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    required={modalMode === 'add'}
+                    value={currentStudent.password}
+                    onChange={e => setCurrentStudent({...currentStudent, password: e.target.value})}
+                    className="w-full bg-surface-container-lowest border-none rounded-lg px-4 py-3 pr-12 text-sm text-on-surface font-label focus:ring-2 focus:ring-primary/50 outline-none"
+                    placeholder={modalMode === 'edit' ? 'Type new password to change...' : '••••••••'}
+                  />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
@@ -290,6 +297,9 @@ export default function Students() {
                     </span>
                   </button>
                 </div>
+                {modalMode === 'edit' && (
+                  <p className="text-[10px] text-on-surface-variant/50 mt-1">Current password is securely hashed. Enter a new one only if you want to change it.</p>
+                )}
               </div>
               <div className="pt-6 flex gap-3">
                 <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3.5 bg-surface-container hover:bg-surface-bright text-on-surface font-bold rounded-lg transition-colors text-sm">Cancel</button>
