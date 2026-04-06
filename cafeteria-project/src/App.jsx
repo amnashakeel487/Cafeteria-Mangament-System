@@ -19,6 +19,7 @@ import CafeteriaProfile from './pages/cafeteria/Profile';
 
 // Student Imports
 import StudentLogin from './pages/student/Login';
+import StudentRegister from './pages/student/Register';
 import StudentRoute from './components/StudentRoute';
 import StudentLayout from './components/StudentLayout';
 import StudentCafeterias from './pages/student/Cafeterias';
@@ -63,6 +64,7 @@ function App() {
 
         {/* Student Routes */}
         <Route path="/student/login" element={<StudentLogin />} />
+        <Route path="/student/register" element={<StudentRegister />} />
         <Route element={<StudentRoute />}>
           <Route element={<StudentLayout />}>
              <Route path="/student/cafeterias" element={<StudentCafeterias />} />

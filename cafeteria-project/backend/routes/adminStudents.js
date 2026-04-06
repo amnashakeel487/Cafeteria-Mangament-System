@@ -3,12 +3,12 @@ const bcrypt = require('bcryptjs');
 const supabase = require('../database');
 const router = express.Router();
 
-// Get all students
+// Get all students (approved + pending)
 router.get('/', async (req, res) => {
     try {
         const { data: rows, error } = await supabase
             .from('users')
-            .select('id, name, email, contact')
+            .select('id, name, email, contact, status')
             .eq('role', 'student')
             .order('id', { ascending: false });
 
@@ -16,6 +16,26 @@ router.get('/', async (req, res) => {
         res.json(rows);
     } catch (err) {
         res.status(500).json({ message: "Server error" });
+    }
+});
+
+// Approve or reject a pending student
+router.put('/:id/status', async (req, res) => {
+    try {
+        const { status } = req.body; // 'approved' or 'rejected'
+        if (!['approved', 'rejected'].includes(status)) {
+            return res.status(400).json({ message: 'Invalid status' });
+        }
+        const { error } = await supabase
+            .from('users')
+            .update({ status })
+            .eq('id', req.params.id)
+            .eq('role', 'student');
+
+        if (error) return res.status(500).json({ message: 'Database error' });
+        res.json({ message: `Student ${status}` });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
     }
 });
 

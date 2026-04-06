@@ -5,6 +5,33 @@ const supabase = require('../database');
 
 const router = express.Router();
 
+// Register (pending approval)
+router.post('/register', async (req, res) => {
+    const { name, email, password, contact } = req.body;
+    if (!name || !email || !password) {
+        return res.status(400).json({ message: 'Name, email and password are required' });
+    }
+    try {
+        const { data: existing } = await supabase
+            .from('users')
+            .select('id')
+            .eq('email', email.trim())
+            .maybeSingle();
+
+        if (existing) return res.status(409).json({ message: 'Email already registered' });
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const { error } = await supabase
+            .from('users')
+            .insert({ name, email: email.trim(), password: hashedPassword, role: 'student', contact: contact || null, status: 'pending' });
+
+        if (error) return res.status(500).json({ message: 'Registration failed: ' + error.message });
+        res.status(201).json({ message: 'Registration submitted. Awaiting admin approval.' });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -20,54 +47,26 @@ router.post('/login', async (req, res) => {
             .eq('role', 'student')
             .maybeSingle();
 
-        if (error) {
-            console.error('Database error on student login:', error);
-            return res.status(500).json({ message: 'Database error' });
-        }
+        if (error) return res.status(500).json({ message: 'Database error' });
 
         if (!student) {
-            // For demo purposes, auto-register students instead of failing if not found.
-            const hashedPassword = await bcrypt.hash(password, 10);
-            const newName = email.split('@')[0];
-            const { data: newStudentArray, error: insertError } = await supabase
-                .from('users')
-                .insert({
-                    name: newName,
-                    email: email.trim(),
-                    password: hashedPassword,
-                    role: 'student'
-                })
-                .select();
-
-            if (insertError) {
-                console.error('Insert error inside auto-register:', insertError);
-                return res.status(500).json({ message: 'Failed to auto-register student: ' + insertError.message });
-            }
-
-            const newStudent = newStudentArray[0];
-            const tokenPayload = { id: newStudent.id, name: newStudent.name, email: newStudent.email, role: 'student' };
-            const token = jwt.sign(tokenPayload, process.env.JWT_SECRET || 'secret_key', { expiresIn: '24h' });
-            return res.json({ token, student: tokenPayload });
+            return res.status(401).json({ message: 'Account not found. Please register first.' });
         }
 
-        // Validate password
+        // Block pending students
+        if (student.status === 'pending') {
+            return res.status(403).json({ message: 'Your account is pending admin approval.' });
+        }
+
         const isValid = await bcrypt.compare(password, student.password);
-        // Handle custom fallback: 'none' password was generated for generic Walk-in Customer
         if (!isValid && student.password !== password && student.password !== 'none') {
             return res.status(401).json({ message: 'Invalid credentials' });
         }
 
-        const tokenPayload = {
-            id: student.id,
-            name: student.name,
-            email: student.email,
-            role: 'student'
-        };
-
+        const tokenPayload = { id: student.id, name: student.name, email: student.email, role: 'student' };
         const token = jwt.sign(tokenPayload, process.env.JWT_SECRET || 'secret_key', { expiresIn: '24h' });
         res.json({ token, student: tokenPayload });
     } catch (err) {
-        console.error('Unexpected error during login:', err);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });

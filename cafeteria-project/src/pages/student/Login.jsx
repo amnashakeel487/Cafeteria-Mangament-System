@@ -77,6 +77,10 @@ export default function StudentLogin() {
         </button>
         <p className="text-xs text-center text-on-surface-variant">For demo purposes, logging in with any email will auto-register an account.</p>
       </form>
+      <p className="text-xs text-center text-on-surface-variant mt-4">
+        Don't have an account?{' '}
+        <button onClick={() => navigate('/student/register')} className="text-tertiary font-bold hover:underline">Register →</button>
+      </p>
     </div>
   );
 

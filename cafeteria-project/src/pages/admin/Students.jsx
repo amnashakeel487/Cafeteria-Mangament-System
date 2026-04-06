@@ -4,8 +4,9 @@ import axios from 'axios';
 export default function Students() {
   const [students, setStudents] = useState([]);
   const [search, setSearch] = useState('');
+  const [tab, setTab] = useState('approved'); // 'approved' | 'pending'
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
+  const [modalMode, setModalMode] = useState('add');
   const [currentStudent, setCurrentStudent] = useState({ id: null, name: '', email: '', password: '', contact: '' });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ text: '', type: '' });
@@ -24,6 +25,23 @@ export default function Students() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleApprove = async (id) => {
+    try {
+      await axios.put(`/api/admin/students/${id}/status`, { status: 'approved' }, axiosConfig);
+      showMessage('Student approved!', 'success');
+      fetchStudents();
+    } catch { showMessage('Failed to approve', 'error'); }
+  };
+
+  const handleReject = async (id) => {
+    if (!window.confirm('Reject and delete this registration?')) return;
+    try {
+      await axios.put(`/api/admin/students/${id}/status`, { status: 'rejected' }, axiosConfig);
+      showMessage('Registration rejected.', 'success');
+      fetchStudents();
+    } catch { showMessage('Failed to reject', 'error'); }
   };
 
   useEffect(() => {
@@ -80,11 +98,13 @@ export default function Students() {
     }
   };
 
-  const filteredStudents = students.filter(s => 
-    s.name.toLowerCase().includes(search.toLowerCase()) || 
-    s.email.toLowerCase().includes(search.toLowerCase()) ||
-    (s.id && s.id.toString().includes(search))
-  );
+  const filteredStudents = students.filter(s => {
+    const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) ||
+      s.email.toLowerCase().includes(search.toLowerCase()) ||
+      (s.id && s.id.toString().includes(search));
+    const matchTab = tab === 'pending' ? s.status === 'pending' : s.status !== 'pending';
+    return matchSearch && matchTab;
+  });
 
   return (
     <div className="pt-20 md:pt-28 px-4 md:px-10 pb-12 space-y-6 md:space-y-10 font-['Inter'] relative">
@@ -104,6 +124,19 @@ export default function Students() {
         <button onClick={() => handleOpenModal('add')} className="flex items-center gap-2 px-4 md:px-8 py-2.5 md:py-3 bg-gradient-to-br from-primary to-primary-container text-on-primary font-bold rounded-xl shadow-lg shadow-primary-container/20 hover:opacity-90 active:scale-95 transition-all text-sm w-fit">
           <span className="material-symbols-outlined text-lg">person_add</span>
           Add Student
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-2 bg-surface-container-low p-1 rounded-xl w-fit mb-6 md:mb-8">
+        <button onClick={() => setTab('approved')} className={`px-5 py-2 rounded-lg text-sm font-bold transition-all ${tab === 'approved' ? 'bg-surface-container-highest text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}>
+          Approved <span className="ml-1 text-[10px] bg-surface-container-lowest px-2 py-0.5 rounded-full">{students.filter(s => s.status !== 'pending').length}</span>
+        </button>
+        <button onClick={() => setTab('pending')} className={`px-5 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${tab === 'pending' ? 'bg-surface-container-highest text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}>
+          Pending Approval
+          {students.filter(s => s.status === 'pending').length > 0 && (
+            <span className="bg-error text-on-error text-[10px] px-2 py-0.5 rounded-full font-bold">{students.filter(s => s.status === 'pending').length}</span>
+          )}
         </button>
       </div>
 
@@ -145,13 +178,22 @@ export default function Students() {
                 </div>
               </div>
               <div className="flex gap-1 shrink-0">
-                <button onClick={() => handleOpenModal('edit', student)} className="p-2 text-on-surface-variant/40 hover:text-primary transition-colors"><span className="material-symbols-outlined text-lg">edit</span></button>
-                <button onClick={() => handleDelete(student.id)} className="p-2 text-on-surface-variant/40 hover:text-error transition-colors"><span className="material-symbols-outlined text-lg">delete</span></button>
+                {tab === 'pending' ? (
+                  <>
+                    <button onClick={() => handleApprove(student.id)} className="p-2 text-tertiary hover:bg-tertiary/10 rounded-lg transition-colors"><span className="material-symbols-outlined text-lg">check_circle</span></button>
+                    <button onClick={() => handleReject(student.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors"><span className="material-symbols-outlined text-lg">cancel</span></button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={() => handleOpenModal('edit', student)} className="p-2 text-on-surface-variant/40 hover:text-primary transition-colors"><span className="material-symbols-outlined text-lg">edit</span></button>
+                    <button onClick={() => handleDelete(student.id)} className="p-2 text-on-surface-variant/40 hover:text-error transition-colors"><span className="material-symbols-outlined text-lg">delete</span></button>
+                  </>
+                )}
               </div>
             </div>
           ))}
           {filteredStudents.length === 0 && !loading && (
-            <p className="px-4 py-10 text-center text-on-surface-variant text-sm">No students found.</p>
+            <p className="px-4 py-10 text-center text-on-surface-variant text-sm">{tab === 'pending' ? 'No pending registrations.' : 'No students found.'}</p>
           )}
         </div>
 
@@ -182,12 +224,23 @@ export default function Students() {
                   <td className="px-8 py-6 text-on-surface-variant font-medium text-sm">{student.email}</td>
                   <td className="px-8 py-6 text-on-surface-variant font-medium text-sm">{student.contact || 'N/A'}</td>
                   <td className="px-8 py-6">
-                    <span className="px-3 py-1 bg-tertiary/10 text-tertiary text-[10px] font-extrabold uppercase rounded-full tracking-widest">Active Plan</span>
+                    <span className={`px-3 py-1 text-[10px] font-extrabold uppercase rounded-full tracking-widest ${student.status === 'pending' ? 'bg-primary/10 text-primary' : 'bg-tertiary/10 text-tertiary'}`}>
+                      {student.status === 'pending' ? 'Pending' : 'Active'}
+                    </span>
                   </td>
                   <td className="px-8 py-6">
                     <div className="flex justify-end gap-2">
-                      <button onClick={() => handleOpenModal('edit', student)} className="p-2 text-on-surface-variant/40 hover:text-primary transition-colors"><span className="material-symbols-outlined text-xl">edit</span></button>
-                      <button onClick={() => handleDelete(student.id)} className="p-2 text-on-surface-variant/40 hover:text-error transition-colors"><span className="material-symbols-outlined text-xl">delete</span></button>
+                      {tab === 'pending' ? (
+                        <>
+                          <button onClick={() => handleApprove(student.id)} className="p-2 text-tertiary hover:bg-tertiary/10 rounded-lg transition-colors" title="Approve"><span className="material-symbols-outlined text-xl">check_circle</span></button>
+                          <button onClick={() => handleReject(student.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors" title="Reject"><span className="material-symbols-outlined text-xl">cancel</span></button>
+                        </>
+                      ) : (
+                        <>
+                          <button onClick={() => handleOpenModal('edit', student)} className="p-2 text-on-surface-variant/40 hover:text-primary transition-colors"><span className="material-symbols-outlined text-xl">edit</span></button>
+                          <button onClick={() => handleDelete(student.id)} className="p-2 text-on-surface-variant/40 hover:text-error transition-colors"><span className="material-symbols-outlined text-xl">delete</span></button>
+                        </>
+                      )}
                     </div>
                   </td>
                 </tr>
