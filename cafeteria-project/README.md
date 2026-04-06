@@ -3,6 +3,21 @@
 ## Login Page and Architects
 <img width="1891" height="889" alt="Screenshot 2026-04-05 203315" src="https://github.com/user-attachments/assets/787c7d85-b86a-47ec-921f-b9fb8edf47f7" />
 
+## Links
+### Admin Login: 
+https://cafeteria-mangament-system.vercel.app/admin/login
+username: amnashakeel606@gmail.com
+password: 12345
+
+### Student Login:
+https://cafeteria-mangament-system.vercel.app/student/login
+username: student@culinary.edu
+password: 12345
+
+### Cafeteria Login:
+https://cafeteria-mangament-system.vercel.app/cafeteria/login
+username: cafe@culinary.edu
+password: 12345
 
 
 ## Admin Dashboard
