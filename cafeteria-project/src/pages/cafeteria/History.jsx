@@ -179,7 +179,7 @@ export default function CafeteriaOrderHistory() {
               </div>
               <div className="text-right pl-4 border-l border-outline-variant/10">
                 <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-1.5">Total Amount</p>
-                <p className="text-xl font-extrabold text-primary" style={{ fontFamily: 'Manrope' }}>Rs. ${Number(order.total_amount).toFixed(2)}</p>
+                <p className="text-xl font-extrabold text-primary" style={{ fontFamily: 'Manrope' }}>Rs. {Number(order.total_amount).toFixed(2)}</p>
               </div>
             </div>
           </div>

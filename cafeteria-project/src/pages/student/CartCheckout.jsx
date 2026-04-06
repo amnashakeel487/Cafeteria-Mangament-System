@@ -220,7 +220,7 @@ export default function CartCheckout() {
                       <span className="text-xs font-bold w-4 text-center text-[#E3E0F8]">{item.qty}</span>
                       <button onClick={() => addToCart(item, cafeteriaId)} className="w-6 h-6 flex items-center justify-center text-[#FFB59D] hover:bg-[#38374a] rounded-full"><span className="material-symbols-outlined text-sm">add</span></button>
                     </div>
-                    <span className="font-['Manrope'] font-bold text-[#E3E0F8] tracking-tight">Rs. ${Number(item.price).toFixed(2)}</span>
+                    <span className="font-['Manrope'] font-bold text-[#E3E0F8] tracking-tight">Rs. {Number(item.price).toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -231,7 +231,7 @@ export default function CartCheckout() {
           <div className="bg-[#28283a]/50 p-6 space-y-3 border-t border-[#594139]/20">
             <div className="flex justify-between text-[#e1bfb5]">
               <span>Subtotal</span>
-              <span className="font-medium text-[#E3E0F8]">Rs. ${cartTotal.toFixed(2)}</span>
+              <span className="font-medium text-[#E3E0F8]">Rs. {cartTotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-[#e1bfb5]">
               <span>Delivery Fee</span>
@@ -239,7 +239,7 @@ export default function CartCheckout() {
             </div>
             <div className="pt-4 border-t border-[#594139]/20 flex justify-between items-end">
               <span className="font-['Manrope'] font-bold text-lg text-[#E3E0F8]">Total Amount</span>
-              <span className="font-['Manrope'] font-extrabold text-2xl text-[#FFB59D]">Rs. ${cartTotal.toFixed(2)}</span>
+              <span className="font-['Manrope'] font-extrabold text-2xl text-[#FFB59D]">Rs. {cartTotal.toFixed(2)}</span>
             </div>
           </div>
         </div>
