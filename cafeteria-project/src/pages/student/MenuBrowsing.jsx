@@ -56,7 +56,7 @@ export default function MenuBrowsing() {
     fetchMenu();
   }, [cafeteriaId]);
 
-  const filterTabs = ['All Items', ...categories.map(c => c.name), ...(deals.length > 0 ? ['🔥 Deals'] : [])];
+  const filterTabs = ['All Items', ...categories.map(c => c.name)];
   
   const filteredItems = items.filter(i => {
     const matchCat = filter === 'All Items' || i.category === filter;
