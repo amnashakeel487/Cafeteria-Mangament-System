@@ -35,18 +35,22 @@ export default function MenuBrowsing() {
     const fetchMenu = async () => {
       try {
         const token = localStorage.getItem('studentToken');
-        const [menuRes, dealsRes] = await Promise.all([
-          axios.get(`${BASE}/api/student/menu/${cafeteriaId}`, { headers: { Authorization: `Bearer ${token}` } }),
-          axios.get(`${BASE}/api/student/deals/${cafeteriaId}`, { headers: { Authorization: `Bearer ${token}` } }),
-        ]);
+        const menuRes = await axios.get(`${BASE}/api/student/menu/${cafeteriaId}`, { headers: { Authorization: `Bearer ${token}` } });
         setCafeteria(menuRes.data.cafeteria);
         setCategories(menuRes.data.categories);
         setItems(menuRes.data.items);
-        setDeals(dealsRes.data || []);
       } catch (err) {
         setError('Failed to load menu details.');
       } finally {
         setLoading(false);
+      }
+      // Fetch deals separately so menu still loads if deals fail
+      try {
+        const token = localStorage.getItem('studentToken');
+        const dealsRes = await axios.get(`${BASE}/api/student/deals/${cafeteriaId}`, { headers: { Authorization: `Bearer ${token}` } });
+        setDeals(dealsRes.data || []);
+      } catch {
+        setDeals([]); // silently fail — deals are optional
       }
     };
     fetchMenu();
