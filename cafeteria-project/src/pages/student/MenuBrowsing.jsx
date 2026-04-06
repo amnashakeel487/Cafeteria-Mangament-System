@@ -121,33 +121,66 @@ export default function MenuBrowsing() {
           <div className="mb-8">
             <div className="flex items-center gap-2 mb-4">
               <span className="material-symbols-outlined text-[#FF6B35]" style={{ fontVariationSettings: "'FILL' 1" }}>local_offer</span>
-              <h2 className="text-xl font-bold text-[#E3E0F8]" style={{ fontFamily: 'Manrope' }}>Today's Deals</h2>
+              <h2 className="text-xl font-bold text-[#E3E0F8]" style={{ fontFamily: 'Manrope' }}>Combo Deals</h2>
               <span className="bg-[#FF6B35]/20 text-[#FF6B35] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest">{deals.length} offers</span>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {deals.map(deal => (
-                <div key={deal.id} className="group bg-gradient-to-br from-[#FF6B35]/10 to-[#28283a] border border-[#FF6B35]/20 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#FF6B35]/10 transition-all duration-300 flex flex-col">
-                  <div className="relative h-36 overflow-hidden bg-[#333345]">
-                    <img src={deal.image_url || DEFAULT_IMAGE} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
-                    {deal.original_price && (
-                      <div className="absolute top-2 right-2 bg-[#FF6B35] text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
-                        {Math.round((1 - deal.deal_price / deal.original_price) * 100)}% OFF
+              {deals.map(deal => {
+                const originalTotal = deal.deal_items?.reduce((s, i) => s + Number(i.item_price), 0) || 0;
+                const savings = originalTotal - Number(deal.deal_price);
+                return (
+                  <div key={deal.id} className="group bg-gradient-to-br from-[#FF6B35]/10 to-[#28283a] border border-[#FF6B35]/20 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#FF6B35]/10 transition-all duration-300 flex flex-col">
+                    <div className="relative h-36 overflow-hidden bg-[#333345]">
+                      <img src={deal.image_url || DEFAULT_IMAGE} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                      <div className="absolute top-2 left-2 bg-[#FF6B35]/90 text-white px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
+                        <span className="material-symbols-outlined text-[12px]">local_offer</span> COMBO
                       </div>
-                    )}
-                    <div className="absolute top-2 left-2 bg-[#FF6B35]/90 text-white px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[12px]">local_offer</span> DEAL
+                      {savings > 0 && (
+                        <div className="absolute top-2 right-2 bg-[#28283a]/90 text-[#FFB59D] px-2 py-0.5 rounded-full text-[10px] font-bold">
+                          Save ${savings.toFixed(2)}
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-4 flex-1 flex flex-col">
+                      <h3 className="font-bold text-[#E3E0F8] mb-2" style={{ fontFamily: 'Manrope' }}>{deal.title}</h3>
+                      {/* Items included */}
+                      <div className="space-y-1 mb-3">
+                        {deal.deal_items?.map((item, i) => (
+                          <div key={i} className="flex justify-between text-xs text-[#e1bfb5]">
+                            <span className="flex items-center gap-1">
+                              <span className="material-symbols-outlined text-[11px] text-[#FF6B35]">restaurant</span>
+                              {item.item_name}
+                            </span>
+                            <span className="line-through opacity-50">${Number(item.item_price).toFixed(2)}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="flex items-center gap-2 mt-auto mb-3">
+                        <span className="text-lg font-extrabold text-[#FF6B35]">${Number(deal.deal_price).toFixed(2)}</span>
+                        {originalTotal > 0 && <span className="text-sm text-[#e1bfb5] line-through">${originalTotal.toFixed(2)}</span>}
+                      </div>
+                      <button
+                        onClick={() => {
+                          // Add deal as a single cart item
+                          const dealAsItem = {
+                            id: `deal-${deal.id}`,
+                            name: deal.title,
+                            price: deal.deal_price,
+                            image_url: deal.image_url,
+                            category: 'Deal',
+                            description: deal.deal_items?.map(i => i.item_name).join(' + '),
+                          };
+                          addToCart(dealAsItem, cafeteriaId);
+                        }}
+                        className="w-full bg-gradient-to-br from-[#FFB59D] to-[#FF6B35] text-[#5d1900] py-2 rounded-lg font-bold text-sm hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
+                      >
+                        <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
+                        Add Combo to Cart
+                      </button>
                     </div>
                   </div>
-                  <div className="p-4 flex-1 flex flex-col">
-                    <h3 className="font-bold text-[#E3E0F8] mb-1" style={{ fontFamily: 'Manrope' }}>{deal.title}</h3>
-                    {deal.description && <p className="text-xs text-[#e1bfb5] mb-3 line-clamp-2">{deal.description}</p>}
-                    <div className="flex items-center gap-2 mt-auto">
-                      <span className="text-lg font-extrabold text-[#FF6B35]">${Number(deal.deal_price).toFixed(2)}</span>
-                      {deal.original_price && <span className="text-sm text-[#e1bfb5] line-through">${Number(deal.original_price).toFixed(2)}</span>}
-                    </div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}

@@ -2,12 +2,11 @@ const express = require('express');
 const supabase = require('../database');
 const router = express.Router();
 
-// GET active deals for a cafeteria
 router.get('/:cafeteriaId', async (req, res) => {
     try {
         const { data, error } = await supabase
             .from('deals')
-            .select('*')
+            .select('*, deal_items(*)')
             .eq('cafeteria_id', req.params.cafeteriaId)
             .eq('active', true)
             .order('id', { ascending: false });
