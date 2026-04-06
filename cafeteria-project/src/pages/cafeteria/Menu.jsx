@@ -365,16 +365,16 @@ export default function CafeteriaMenu() {
                 />
               ) : (
                 <>
-                  <img 
-                    src={item.image_url || DEFAULT_IMAGE} 
-                    alt={item.name}
-                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                  />
-                  {!item.image_url && (
-                    <div className="absolute inset-0 flex items-end justify-center pb-4">
-                      <span className="bg-surface-container-highest/80 backdrop-blur-sm text-primary font-black text-sm px-4 py-1.5 rounded-full uppercase tracking-widest border border-primary/20">
-                        {item.category}
-                      </span>
+                  {item.image_url ? (
+                    <img 
+                      src={item.image_url} 
+                      alt={item.name}
+                      className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex flex-col items-center justify-center bg-surface-container-highest gap-3">
+                      <span className="material-symbols-outlined text-5xl text-primary/40" style={{ fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+                      <span className="text-primary font-black text-lg uppercase tracking-widest">{item.category}</span>
                     </div>
                   )}
                 </>

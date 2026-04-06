@@ -217,16 +217,16 @@ export default function MenuBrowsing() {
                   <video src={item.image_url} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500" autoPlay muted loop />
                 ) : (
                   <>
-                    <img 
-                      src={item.image_url || DEFAULT_IMAGE} 
-                      alt={item.name} 
-                      className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
-                    />
-                    {!item.image_url && (
-                      <div className="absolute inset-0 flex items-end justify-center pb-3">
-                        <span className="bg-[#0c0c1d]/80 backdrop-blur-sm text-[#FFB59D] font-black text-xs px-3 py-1 rounded-full uppercase tracking-widest border border-[#FF6B35]/20">
-                          {item.category}
-                        </span>
+                    {item.image_url ? (
+                      <img 
+                        src={item.image_url} 
+                        alt={item.name} 
+                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-[#1a1a2b] gap-2">
+                        <span className="material-symbols-outlined text-4xl text-[#FF6B35]/50" style={{ fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+                        <span className="text-[#FFB59D] font-black text-base uppercase tracking-widest">{item.category}</span>
                       </div>
                     )}
                   </>
