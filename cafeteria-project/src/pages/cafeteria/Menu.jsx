@@ -364,11 +364,20 @@ export default function CafeteriaMenu() {
                   autoPlay muted loop 
                 />
               ) : (
-                <img 
-                  src={item.image_url || DEFAULT_IMAGE} 
-                  alt={item.name}
-                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
-                />
+                <>
+                  <img 
+                    src={item.image_url || DEFAULT_IMAGE} 
+                    alt={item.name}
+                    className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
+                  />
+                  {!item.image_url && (
+                    <div className="absolute inset-0 flex items-end justify-center pb-4">
+                      <span className="bg-surface-container-highest/80 backdrop-blur-sm text-primary font-black text-sm px-4 py-1.5 rounded-full uppercase tracking-widest border border-primary/20">
+                        {item.category}
+                      </span>
+                    </div>
+                  )}
+                </>
               )}
               <div className={`absolute top-4 left-4 backdrop-blur-md px-3 py-1 rounded-full ${style.badge}`}>
                 <span className={`text-[10px] font-bold tracking-widest uppercase ${style.pill}`}>{item.category}</span>
