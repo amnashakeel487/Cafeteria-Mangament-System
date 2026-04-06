@@ -56,7 +56,7 @@ export default function MenuBrowsing() {
     fetchMenu();
   }, [cafeteriaId]);
 
-  const filterTabs = ['All Items', ...categories.map(c => c.name)];
+  const filterTabs = ['All Items', ...categories.map(c => c.name), ...(deals.length > 0 ? ['🔥 Deals'] : [])];
   
   const filteredItems = items.filter(i => {
     const matchCat = filter === 'All Items' || i.category === filter;
@@ -120,82 +120,6 @@ export default function MenuBrowsing() {
           </div>
         </header>
 
-        {/* Deals Section */}
-        {deals.length > 0 && (
-          <div className="mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="material-symbols-outlined text-[#FF6B35]" style={{ fontVariationSettings: "'FILL' 1" }}>local_offer</span>
-              <h2 className="text-xl font-bold text-[#E3E0F8]" style={{ fontFamily: 'Manrope' }}>Combo Deals</h2>
-              <span className="bg-[#FF6B35]/20 text-[#FF6B35] text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-widest">{deals.length} offers</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {deals.map(deal => {
-                const originalTotal = deal.deal_items?.reduce((s, i) => s + Number(i.item_price), 0) || 0;
-                const savings = originalTotal - Number(deal.deal_price);
-                return (
-                  <div key={deal.id} className="group bg-gradient-to-br from-[#FF6B35]/10 to-[#28283a] border border-[#FF6B35]/20 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#FF6B35]/10 transition-all duration-300 flex flex-col">
-                    <div className="relative h-36 overflow-hidden bg-[#1a1a2b]">
-                      {deal.image_url ? (
-                        <img src={deal.image_url} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
-                      ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center gap-2">
-                          <span className="material-symbols-outlined text-4xl text-[#FF6B35]/50" style={{ fontVariationSettings: "'FILL' 1" }}>local_offer</span>
-                          <span className="text-[#FFB59D] font-black text-sm uppercase tracking-widest">COMBO DEAL</span>
-                        </div>
-                      )}
-                      <div className="absolute top-2 left-2 bg-[#FF6B35]/90 text-white px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
-                        <span className="material-symbols-outlined text-[12px]">local_offer</span> COMBO
-                      </div>
-                      {savings > 0 && (
-                        <div className="absolute top-2 right-2 bg-[#28283a]/90 text-[#FFB59D] px-2 py-0.5 rounded-full text-[10px] font-bold">
-                          Save Rs. ${savings.toFixed(2)}
-                        </div>
-                      )}
-                    </div>
-                    <div className="p-4 flex-1 flex flex-col">
-                      <h3 className="font-bold text-[#E3E0F8] mb-2" style={{ fontFamily: 'Manrope' }}>{deal.title}</h3>
-                      {/* Items included */}
-                      <div className="space-y-1 mb-3">
-                        {deal.deal_items?.map((item, i) => (
-                          <div key={i} className="flex justify-between text-xs text-[#e1bfb5]">
-                            <span className="flex items-center gap-1">
-                              <span className="material-symbols-outlined text-[11px] text-[#FF6B35]">restaurant</span>
-                              {item.item_name}
-                            </span>
-                            <span className="line-through opacity-50">Rs. ${Number(item.item_price).toFixed(2)}</span>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="flex items-center gap-2 mt-auto mb-3">
-                        <span className="text-lg font-extrabold text-[#FF6B35]">Rs. ${Number(deal.deal_price).toFixed(2)}</span>
-                        {originalTotal > 0 && <span className="text-sm text-[#e1bfb5] line-through">Rs. ${originalTotal.toFixed(2)}</span>}
-                      </div>
-                      <button
-                        onClick={() => {
-                          // Add deal as a single cart item
-                          const dealAsItem = {
-                            id: `deal-${deal.id}`,
-                            name: deal.title,
-                            price: deal.deal_price,
-                            image_url: deal.image_url,
-                            category: 'Deal',
-                            description: deal.deal_items?.map(i => i.item_name).join(' + '),
-                          };
-                          addToCart(dealAsItem, cafeteriaId);
-                        }}
-                        className="w-full bg-gradient-to-br from-[#FFB59D] to-[#FF6B35] text-[#5d1900] py-2 rounded-lg font-bold text-sm hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
-                      >
-                        <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
-                        Add Combo to Cart
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
         {/* Category Tabs */}
         <div className="flex gap-4 mb-10 overflow-x-auto pb-4 custom-scrollbar">
           {filterTabs.map(tab => (
@@ -211,10 +135,75 @@ export default function MenuBrowsing() {
               {tab}
             </button>
           ))}
+          {deals.length > 0 && (
+            <button
+              onClick={() => setFilter('__deals__')}
+              className={`whitespace-nowrap px-8 py-3 rounded-xl transition-all active:scale-95 font-bold flex items-center gap-2 ${
+                filter === '__deals__'
+                  ? 'bg-gradient-to-br from-[#FFB59D] to-[#FF6B35] text-[#5d1900] shadow-lg shadow-[#FF6B35]/20'
+                  : 'bg-[#FF6B35]/10 text-[#FFB59D] border border-[#FF6B35]/30 hover:bg-[#FF6B35]/20'
+              }`}
+            >
+              🔥 Deals
+              <span className="bg-[#FF6B35] text-white text-[10px] font-black px-1.5 py-0.5 rounded-full">{deals.length}</span>
+            </button>
+          )}
         </div>
 
-        {/* Menu Grid */}
-        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {/* Deals Grid */}
+        {filter === '__deals__' ? (
+          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {deals.map(deal => {
+              const originalTotal = deal.deal_items?.reduce((s, i) => s + Number(i.item_price), 0) || 0;
+              const savings = originalTotal - Number(deal.deal_price);
+              return (
+                <div key={deal.id} className="group bg-gradient-to-br from-[#FF6B35]/10 to-[#28283a] border border-[#FF6B35]/20 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#FF6B35]/10 transition-all duration-300 flex flex-col">
+                  <div className="relative h-40 overflow-hidden bg-[#1a1a2b]">
+                    {deal.image_url ? (
+                      <img src={deal.image_url} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                    ) : (
+                      <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+                        <span className="material-symbols-outlined text-4xl text-[#FF6B35]/50" style={{ fontVariationSettings: "'FILL' 1" }}>local_offer</span>
+                        <span className="text-[#FFB59D] font-black text-sm uppercase tracking-widest">COMBO DEAL</span>
+                      </div>
+                    )}
+                    <div className="absolute top-2 left-2 bg-[#FF6B35]/90 text-white px-2 py-0.5 rounded-full text-[10px] font-bold flex items-center gap-1">
+                      <span className="material-symbols-outlined text-[12px]">local_offer</span> COMBO
+                    </div>
+                    {savings > 0 && (
+                      <div className="absolute top-2 right-2 bg-[#28283a]/90 text-[#FFB59D] px-2 py-0.5 rounded-full text-[10px] font-bold">
+                        Save Rs. {savings.toFixed(2)}
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-4 flex-1 flex flex-col">
+                    <h3 className="font-bold text-[#E3E0F8] mb-2" style={{ fontFamily: 'Manrope' }}>{deal.title}</h3>
+                    <div className="space-y-1 mb-3">
+                      {deal.deal_items?.map((item, i) => (
+                        <div key={i} className="flex justify-between text-xs text-[#e1bfb5]">
+                          <span className="flex items-center gap-1"><span className="material-symbols-outlined text-[11px] text-[#FF6B35]">restaurant</span>{item.item_name}</span>
+                          <span className="line-through opacity-50">Rs. {Number(item.item_price).toFixed(2)}</span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2 mt-auto mb-3">
+                      <span className="text-lg font-extrabold text-[#FF6B35]">Rs. {Number(deal.deal_price).toFixed(2)}</span>
+                      {originalTotal > 0 && <span className="text-sm text-[#e1bfb5] line-through">Rs. {originalTotal.toFixed(2)}</span>}
+                    </div>
+                    <button
+                      onClick={() => addToCart({ id: `deal-${deal.id}`, name: deal.title, price: deal.deal_price, image_url: deal.image_url, category: 'Deal', description: deal.deal_items?.map(i => i.item_name).join(' + ') }, cafeteriaId)}
+                      className="w-full bg-gradient-to-br from-[#FFB59D] to-[#FF6B35] text-[#5d1900] py-2 rounded-lg font-bold text-sm hover:opacity-90 active:scale-95 transition-all flex items-center justify-center gap-2"
+                    >
+                      <span className="material-symbols-outlined text-sm">add_shopping_cart</span>
+                      Add Combo to Cart
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </section>
+        ) : (
+          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredItems.map(item => {
             const qty = getCartQty(item.id);
             return (
@@ -251,7 +240,7 @@ export default function MenuBrowsing() {
               <div className="p-3 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-1 font-['Manrope']">
                   <h3 className="text-sm font-bold text-[#E3E0F8] group-hover:text-[#FFB59D] transition-colors line-clamp-1">{item.name}</h3>
-                  <span className="text-sm font-bold text-[#FFB59D]">Rs. ${Number(item.price).toFixed(2)}</span>
+                  <span className="text-sm font-bold text-[#FFB59D]">Rs. {Number(item.price).toFixed(2)}</span>
                 </div>
                 <p className="text-[#e1bfb5] text-[11px] mb-3 flex-1 line-clamp-2">{item.description}</p>
                 
@@ -281,6 +270,7 @@ export default function MenuBrowsing() {
             </div>
           )}
         </section>
+        )}
       </div>
 
       {/* Floating Sidebar Cart Preview (Desktop visible, Mobile toggleable) */}
@@ -297,7 +287,7 @@ export default function MenuBrowsing() {
                 <span className="font-bold text-[#E3E0F8]">Your Order ({cartItemCount})</span>
              </div>
              <div className="flex items-center gap-4">
-                <span className="font-bold text-[#FFB59D]">Rs. ${cartTotal.toFixed(2)}</span>
+                <span className="font-bold text-[#FFB59D]">Rs. {cartTotal.toFixed(2)}</span>
                 <span className="material-symbols-outlined text-[#e1bfb5] transition-transform" style={{ transform: cartOpen ? 'rotate(180deg)' : 'none' }}>expand_less</span>
              </div>
           </div>
@@ -346,7 +336,7 @@ export default function MenuBrowsing() {
             <div className="pt-6 border-t border-[#594139]/15">
               <div className="flex justify-between items-center mb-6">
                 <p className="text-[#e1bfb5] font-medium text-sm">Subtotal</p>
-                <p className="text-2xl font-bold text-[#E3E0F8] font-['Manrope'] tracking-tight">Rs. ${cartTotal.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-[#E3E0F8] font-['Manrope'] tracking-tight">Rs. {cartTotal.toFixed(2)}</p>
               </div>
               <button 
                 onClick={() => navigate('/student/cart')}
