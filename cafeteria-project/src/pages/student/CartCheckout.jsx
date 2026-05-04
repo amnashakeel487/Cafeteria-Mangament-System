@@ -239,7 +239,7 @@ export default function CartCheckout() {
             </div>
             <div className="pt-4 border-t border-[#594139]/20 flex justify-between items-end">
               <span className="font-['Manrope'] font-bold text-lg text-[#E3E0F8]">Total Amount</span>
-              <span className="font-['Manrope'] font-extrabold text-2xl text-[#FFB59D]">Rs. {cartTotal.toFixed(2)}</span>
+              <span className="font-['Manrope'] font-extrabold text-2xl text-[#FFB59D]">Rs. ${cartTotal.toFixed(2)}</span>
             </div>
           </div>
         </div>

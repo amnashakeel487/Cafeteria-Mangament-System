@@ -152,12 +152,12 @@ export default function CafeteriaDashboard() {
           <div className="relative z-10">
             <p className="text-on-surface-variant font-medium text-xs mb-1 uppercase tracking-widest">Total Revenue</p>
             <h2 className="font-headline text-3xl md:text-5xl font-extrabold text-on-surface">
-              {loading ? '—' : `Rs. {Number(stats.totalRevenue).toFixed(2)}`}
+              {loading ? '—' : `Rs. ${Number(stats.totalRevenue).toFixed(2)}`}
             </h2>
             <div className="mt-4 flex items-center space-x-6">
               <div className="flex items-center text-tertiary space-x-1">
                 <span className="material-symbols-outlined text-sm">today</span>
-                <span className="text-sm font-bold">Today: Rs. {loading ? '0' : Number(stats.todayRevenue).toFixed(2)}</span>
+                <span className="text-sm font-bold">Today: Rs. ${loading ? '0' : Number(stats.todayRevenue).toFixed(2)}</span>
               </div>
               <div className="flex items-center text-primary space-x-1">
                 <span className="material-symbols-outlined text-sm">receipt_long</span>
@@ -183,7 +183,7 @@ export default function CafeteriaDashboard() {
         <StatCard label="Pending Orders"   value={stats.pendingOrders}   sub="Awaiting preparation" accent="text-primary" />
         <StatCard label="Completed Orders" value={stats.completedOrders} sub="Successfully served"  accent="text-tertiary" />
         <StatCard label="Today's Orders"   value={stats.todayOrders}     sub="Orders placed today"  />
-        <StatCard label="Today's Revenue"  value={`Rs. {Number(stats.todayRevenue).toFixed(2)}`} sub="Earned today" accent="text-primary" />
+        <StatCard label="Today's Revenue"  value={`Rs. ${Number(stats.todayRevenue).toFixed(2)}`} sub="Earned today" accent="text-primary" />
       </div>
 
       {/* Live Orders Table */}
@@ -248,7 +248,7 @@ export default function CafeteriaDashboard() {
                       {order.items?.map(i => i.item_name).join(', ') || 'Manual Items'}
                     </p>
                   </td>
-                  <td className="px-6 py-5 font-bold text-on-surface">Rs. {Number(order.total_amount).toFixed(2)}</td>
+                  <td className="px-6 py-5 font-bold text-on-surface">Rs. ${Number(order.total_amount).toFixed(2)}</td>
                   <td className="px-6 py-5">
                     <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${STATUS_STYLES[order.status] || STATUS_STYLES.pending}`}>
                       {order.status || 'pending'}
@@ -336,7 +336,7 @@ export default function CafeteriaDashboard() {
                 <div className="p-6 bg-surface-container-highest mt-auto border-t border-outline-variant/10 space-y-4">
                   <div className="flex justify-between items-end">
                     <span className="text-sm text-on-surface-variant uppercase tracking-widest font-bold">Total</span>
-                    <span className="text-3xl font-extrabold text-[#FF6B35]" style={{ fontFamily: 'Manrope' }}>Rs. {cartTotal.toFixed(2)}</span>
+                    <span className="text-3xl font-extrabold text-[#FF6B35]" style={{ fontFamily: 'Manrope' }}>Rs. ${cartTotal.toFixed(2)}</span>
                   </div>
                   <button 
                     onClick={handleSubmitManualOrder}

@@ -387,7 +387,7 @@ export default function CafeteriaMenu() {
             <div className="p-6 flex flex-col flex-1">
               <div className="flex justify-between items-start mb-2">
                 <h3 className="text-xl font-bold text-on-surface leading-tight" style={{ fontFamily: 'Manrope' }}>{item.name}</h3>
-                <span className="text-xl font-extrabold text-primary">Rs. {Number(item.price).toFixed(2)}</span>
+                <span className="text-xl font-extrabold text-primary">Rs. ${Number(item.price).toFixed(2)}</span>
               </div>
               {item.description && <p className="text-sm text-on-surface-variant mb-4 line-clamp-2">{item.description}</p>}
               <div className="mt-auto flex items-center justify-end border-t border-outline-variant/15 pt-4 gap-2">

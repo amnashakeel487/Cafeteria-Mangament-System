@@ -164,7 +164,7 @@ export default function Orders() {
                   <td className="px-8 py-6">
                     <span className="text-sm font-bold text-on-surface flex items-center gap-2"><span className="material-symbols-outlined text-sm text-tertiary">store</span>{order.cafeteria_name}</span>
                   </td>
-                  <td className="px-8 py-6 font-extrabold text-sm text-primary">Rs. {Number(order.total_amount).toFixed(2)}</td>
+                  <td className="px-8 py-6 font-extrabold text-sm text-primary">Rs. ${Number(order.total_amount).toFixed(2)}</td>
                   <td className="px-8 py-6 text-sm font-medium text-on-surface-variant">{new Date(order.date).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</td>
                   <td className="px-8 py-6 text-right">
                     <span className={`px-4 py-1.5 text-[10px] font-extrabold rounded-full uppercase tracking-widest ${getStatusColor(order.status)}`}>{order.status || 'Pending'}</span>

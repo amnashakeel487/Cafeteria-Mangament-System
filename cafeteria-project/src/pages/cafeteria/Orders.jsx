@@ -158,7 +158,7 @@ export default function CafeteriaOrders() {
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold text-on-surface">Order #{order.id}</p>
                       <p className="text-[10px] text-on-surface-variant truncate">
-                        {order.student_name} · Rs. {Number(order.total_amount).toFixed(2)}
+                        {order.student_name} · Rs. ${Number(order.total_amount).toFixed(2)}
                       </p>
                     </div>
                     <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded-full ${STATUS_COLORS[order.status] || ''}`}>
@@ -281,7 +281,7 @@ export default function CafeteriaOrders() {
                           {order.items.map((item, i) => (
                             <li key={i} className="flex justify-between items-center">
                               <span className="text-on-surface">{item.item_name}</span>
-                              <span className="text-on-surface-variant text-xs ml-3 shrink-0">×{item.quantity} · Rs. {Number(item.price).toFixed(2)}</span>
+                              <span className="text-on-surface-variant text-xs ml-3 shrink-0">×{item.quantity} · Rs. ${Number(item.price).toFixed(2)}</span>
                             </li>
                           ))}
                         </ul>
@@ -361,7 +361,7 @@ export default function CafeteriaOrders() {
                     </div>
                     <div>
                       <p className="text-sm font-bold">Order #{order.id}</p>
-                      <p className="text-[10px] text-on-surface-variant">{order.student_name} · Rs. {Number(order.total_amount).toFixed(2)}</p>
+                      <p className="text-[10px] text-on-surface-variant">{order.student_name} · Rs. ${Number(order.total_amount).toFixed(2)}</p>
                     </div>
                   </div>
                   {order.payment_screenshot ? (
