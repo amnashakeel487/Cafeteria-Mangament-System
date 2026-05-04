@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 
 export default function StudentLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -103,6 +104,7 @@ export default function StudentLayout() {
         </div>
 
         <div className="flex items-center gap-3 text-[#FF6B35]">
+          <ThemeToggle />
           <button onClick={() => navigate('/student/cart')} className="relative p-2 hover:bg-[#38374A]/40 rounded-full transition-colors active:scale-95">
             <span className="material-symbols-outlined">shopping_cart</span>
           </button>

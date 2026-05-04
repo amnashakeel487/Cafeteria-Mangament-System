@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 
 export default function Topbar({ setMobileMenuOpen }) {
   return (
@@ -14,7 +15,8 @@ export default function Topbar({ setMobileMenuOpen }) {
           <input className="w-full bg-surface-container-lowest border-none rounded-xl pl-12 pr-4 py-2.5 text-sm focus:ring-1 focus:ring-primary/50 text-on-surface placeholder-on-surface-variant/30" placeholder="Search students, venues, or orders..." type="text"/>
         </div>
       </div>
-      <div className="flex items-center space-x-6">
+      <div className="flex items-center space-x-4">
+        <ThemeToggle />
         <button className="relative text-[#E3E0F8] opacity-70 hover:text-[#FFB59D] transition-all">
           <span className="material-symbols-outlined">notifications</span>
           <span className="absolute top-0 right-0 w-2 h-2 bg-primary-container rounded-full"></span>

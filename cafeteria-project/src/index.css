@@ -10,7 +10,50 @@
     font-family: 'Inter', sans-serif;
     background-color: #121222;
     @apply text-on-surface;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
+
+  /* Light mode overrides */
+  html.light {
+    --color-surface: #f5f5f7;
+    --color-surface-container: #ffffff;
+    --color-surface-container-high: #e8e8f0;
+    --color-surface-container-highest: #dcdce8;
+    --color-surface-container-low: #efeff5;
+    --color-surface-container-lowest: #ffffff;
+    --color-surface-bright: #d0d0e0;
+    --color-on-surface: #1a1a2b;
+    --color-on-surface-variant: #4a3a35;
+    --color-outline-variant: #c0b0a8;
+  }
+
+  html.light body {
+    background-color: #f5f5f7;
+    color: #1a1a2b;
+  }
+
+  html.light .bg-surface { background-color: #f5f5f7 !important; }
+  html.light .bg-surface-container { background-color: #ffffff !important; }
+  html.light .bg-surface-container-high { background-color: #e8e8f0 !important; }
+  html.light .bg-surface-container-highest { background-color: #dcdce8 !important; }
+  html.light .bg-surface-container-low { background-color: #efeff5 !important; }
+  html.light .bg-surface-container-lowest { background-color: #ffffff !important; }
+  html.light .bg-surface-bright { background-color: #d0d0e0 !important; }
+  html.light .text-on-surface { color: #1a1a2b !important; }
+  html.light .text-on-surface-variant { color: #4a3a35 !important; }
+  html.light .border-outline-variant\/5 { border-color: rgba(192,176,168,0.3) !important; }
+  html.light .border-outline-variant\/10 { border-color: rgba(192,176,168,0.4) !important; }
+  html.light .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15) !important; }
+
+  /* Student portal light mode */
+  html.light .bg-\[\#121222\] { background-color: #f5f5f7 !important; }
+  html.light .bg-\[\#1E1E2F\] { background-color: #ffffff !important; }
+  html.light .bg-\[\#1A1A2B\] { background-color: #f0f0f8 !important; }
+  html.light .bg-\[\#28283a\] { background-color: #e8e8f0 !important; }
+  html.light .bg-\[\#333345\] { background-color: #dcdce8 !important; }
+  html.light .bg-\[\#0c0c1d\] { background-color: #f0f0f8 !important; }
+  html.light .text-\[\#E3E0F8\] { color: #1a1a2b !important; }
+  html.light .text-\[\#e1bfb5\] { color: #5a4a45 !important; }
 }
 
 @layer utilities {

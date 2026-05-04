@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
+import ThemeToggle from './ThemeToggle';
 
 export default function CafeteriaLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -116,6 +117,7 @@ export default function CafeteriaLayout() {
             </span>
           </div>
           <div className="flex items-center space-x-3">
+            <ThemeToggle />
             <button className="p-2 text-on-surface-variant hover:bg-surface-container-highest rounded-full transition-all">
               <span className="material-symbols-outlined">notifications</span>
             </button>
