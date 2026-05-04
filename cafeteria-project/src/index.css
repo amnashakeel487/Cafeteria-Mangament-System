@@ -13,47 +13,97 @@
     transition: background-color 0.3s ease, color 0.3s ease;
   }
 
-  /* Light mode overrides */
-  html.light {
-    --color-surface: #f5f5f7;
-    --color-surface-container: #ffffff;
-    --color-surface-container-high: #e8e8f0;
-    --color-surface-container-highest: #dcdce8;
-    --color-surface-container-low: #efeff5;
-    --color-surface-container-lowest: #ffffff;
-    --color-surface-bright: #d0d0e0;
-    --color-on-surface: #1a1a2b;
-    --color-on-surface-variant: #4a3a35;
-    --color-outline-variant: #c0b0a8;
-  }
-
+  /* ── LIGHT MODE ── */
   html.light body {
-    background-color: #f5f5f7;
-    color: #1a1a2b;
+    background-color: #f0f2f8;
+    color: #1a1a2e;
   }
 
-  html.light .bg-surface { background-color: #f5f5f7 !important; }
-  html.light .bg-surface-container { background-color: #ffffff !important; }
-  html.light .bg-surface-container-high { background-color: #e8e8f0 !important; }
-  html.light .bg-surface-container-highest { background-color: #dcdce8 !important; }
-  html.light .bg-surface-container-low { background-color: #efeff5 !important; }
-  html.light .bg-surface-container-lowest { background-color: #ffffff !important; }
-  html.light .bg-surface-bright { background-color: #d0d0e0 !important; }
-  html.light .text-on-surface { color: #1a1a2b !important; }
-  html.light .text-on-surface-variant { color: #4a3a35 !important; }
-  html.light .border-outline-variant\/5 { border-color: rgba(192,176,168,0.3) !important; }
-  html.light .border-outline-variant\/10 { border-color: rgba(192,176,168,0.4) !important; }
-  html.light .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.15) !important; }
+  /* Backgrounds */
+  html.light .bg-surface,
+  html.light .bg-\[\#121222\] { background-color: #f0f2f8 !important; }
 
-  /* Student portal light mode */
-  html.light .bg-\[\#121222\] { background-color: #f5f5f7 !important; }
-  html.light .bg-\[\#1E1E2F\] { background-color: #ffffff !important; }
-  html.light .bg-\[\#1A1A2B\] { background-color: #f0f0f8 !important; }
-  html.light .bg-\[\#28283a\] { background-color: #e8e8f0 !important; }
-  html.light .bg-\[\#333345\] { background-color: #dcdce8 !important; }
-  html.light .bg-\[\#0c0c1d\] { background-color: #f0f0f8 !important; }
-  html.light .text-\[\#E3E0F8\] { color: #1a1a2b !important; }
-  html.light .text-\[\#e1bfb5\] { color: #5a4a45 !important; }
+  html.light .bg-surface-container,
+  html.light .bg-\[\#1e1e2f\] { background-color: #ffffff !important; }
+
+  html.light .bg-surface-container-high,
+  html.light .bg-\[\#28283a\] { background-color: #ffffff !important; box-shadow: 0 1px 4px rgba(0,0,0,0.08) !important; }
+
+  html.light .bg-surface-container-highest,
+  html.light .bg-\[\#333345\] { background-color: #eef0f8 !important; }
+
+  html.light .bg-surface-container-low,
+  html.light .bg-\[\#1a1a2b\] { background-color: #f5f6fc !important; }
+
+  html.light .bg-surface-container-lowest,
+  html.light .bg-\[\#0c0c1d\] { background-color: #eef0f8 !important; }
+
+  html.light .bg-surface-bright,
+  html.light .bg-\[\#38374a\] { background-color: #e4e6f2 !important; }
+
+  /* Sidebar & Header */
+  html.light .bg-\[\#1A1A2B\] { background-color: #ffffff !important; box-shadow: 2px 0 12px rgba(0,0,0,0.08) !important; }
+  html.light .bg-\[\#1E1E2F\]\/90,
+  html.light .bg-\[\#1E1E2F\] { background-color: rgba(255,255,255,0.95) !important; box-shadow: 0 2px 12px rgba(0,0,0,0.08) !important; }
+
+  /* Text */
+  html.light .text-on-surface,
+  html.light .text-\[\#E3E0F8\],
+  html.light .text-\[\#e3e0f8\] { color: #1a1a2e !important; }
+
+  html.light .text-on-surface-variant,
+  html.light .text-\[\#e1bfb5\],
+  html.light .text-\[\#E1BFB5\] { color: #5a5a7a !important; }
+
+  html.light .text-\[\#E1BFB5\]\/70 { color: rgba(90,90,122,0.7) !important; }
+
+  /* Borders */
+  html.light .border-outline-variant\/5 { border-color: rgba(0,0,0,0.06) !important; }
+  html.light .border-outline-variant\/10 { border-color: rgba(0,0,0,0.08) !important; }
+  html.light .border-outline-variant\/20 { border-color: rgba(0,0,0,0.12) !important; }
+  html.light .border-\[\#594139\]\/10,
+  html.light .border-\[\#594139\]\/20,
+  html.light .border-\[\#594139\]\/30 { border-color: rgba(0,0,0,0.08) !important; }
+
+  /* Dividers */
+  html.light .divide-outline-variant\/5 > * + * { border-color: rgba(0,0,0,0.06) !important; }
+
+  /* Sidebar nav active state */
+  html.light .bg-\[\#FF6B35\]\/15 { background-color: rgba(255,107,53,0.12) !important; }
+
+  /* Hover states */
+  html.light .hover\:bg-\[\#38374A\]\/20:hover { background-color: rgba(0,0,0,0.05) !important; }
+  html.light .hover\:bg-surface-bright\/40:hover { background-color: rgba(0,0,0,0.06) !important; }
+  html.light .hover\:bg-surface-container-highest:hover { background-color: #eef0f8 !important; }
+
+  /* Input fields */
+  html.light input,
+  html.light textarea,
+  html.light select {
+    background-color: #f5f6fc !important;
+    color: #1a1a2e !important;
+    border-color: rgba(0,0,0,0.12) !important;
+  }
+  html.light input::placeholder,
+  html.light textarea::placeholder { color: rgba(90,90,122,0.5) !important; }
+
+  /* Table rows */
+  html.light .hover\:bg-surface-container-highest\/40:hover { background-color: rgba(238,240,248,0.8) !important; }
+  html.light .hover\:bg-surface-container-highest\/60:hover { background-color: rgba(238,240,248,0.9) !important; }
+
+  /* Cards shadow */
+  html.light .shadow-2xl { box-shadow: 0 4px 24px rgba(0,0,0,0.08) !important; }
+  html.light .shadow-md { box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important; }
+
+  /* Backdrop blur headers */
+  html.light .backdrop-blur-xl { backdrop-filter: blur(20px) !important; }
+
+  /* Student portal specific */
+  html.light .bg-\[\#28283a\] { background-color: #ffffff !important; }
+  html.light .bg-\[\#333345\] { background-color: #eef0f8 !important; }
+  html.light .bg-\[\#1a1a2b\] { background-color: #f5f6fc !important; }
+  html.light .border-\[\#594139\]\/15 { border-color: rgba(0,0,0,0.07) !important; }
+  html.light .border-\[\#594139\]\/20 { border-color: rgba(0,0,0,0.08) !important; }
 }
 
 @layer utilities {
