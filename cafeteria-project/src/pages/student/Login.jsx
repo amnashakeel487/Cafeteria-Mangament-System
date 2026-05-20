@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import DevelopmentTeam from '../../components/DevelopmentTeam';
-
 export default function StudentLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -86,7 +84,7 @@ export default function StudentLogin() {
 
   return (
     <div className="min-h-screen bg-surface flex items-center justify-center p-4 text-on-surface font-['Inter']">
-      <DevelopmentTeam loginSlot={loginForm} />
+      <div className="w-full max-w-[420px]">{loginForm}</div>
     </div>
   );
 }

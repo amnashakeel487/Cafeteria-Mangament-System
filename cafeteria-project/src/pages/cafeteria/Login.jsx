@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import DevelopmentTeam from '../../components/DevelopmentTeam';
-
 export default function CafeteriaLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -83,7 +81,7 @@ export default function CafeteriaLogin() {
 
   return (
     <div className="min-h-screen bg-surface flex items-center justify-center p-4 text-on-surface font-['Inter']">
-      <DevelopmentTeam loginSlot={loginForm} />
+      <div className="w-full max-w-[420px]">{loginForm}</div>
     </div>
   );
 }

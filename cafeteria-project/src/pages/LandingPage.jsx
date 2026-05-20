@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import ThemeToggle from '../components/ThemeToggle';
+import DevelopmentTeam from '../components/DevelopmentTeam';
 
 // Portal routes (must match App.jsx)
 const ROUTES = {
@@ -439,6 +440,11 @@ export default function LandingPage() {
             />
           </div>
         </div>
+      </section>
+
+      {/* ── DEVELOPER TEAM ── */}
+      <section id="team" className="px-4 sm:px-6 pb-8 sm:pb-12">
+        <DevelopmentTeam />
       </section>
 
       {/* ── FOOTER ── */}
