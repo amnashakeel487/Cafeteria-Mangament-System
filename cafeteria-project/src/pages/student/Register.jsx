@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
 
 export default function StudentRegister() {
   const [form, setForm] = useState({ name: '', email: '', password: '', contact: '' });
@@ -101,8 +103,11 @@ export default function StudentRegister() {
   );
 
   return (
-    <div className="min-h-screen bg-surface flex items-center justify-center p-4 text-on-surface font-['Inter']">
-      <div className="w-full max-w-[420px]">{registerForm}</div>
-    </div>
+    <>
+      <PageSEO {...PAGE_SEO.studentRegister} />
+      <main className="min-h-screen bg-surface flex items-center justify-center p-4 text-on-surface font-['Inter']">
+        <div className="w-full max-w-[420px]">{registerForm}</div>
+      </main>
+    </>
   );
 }

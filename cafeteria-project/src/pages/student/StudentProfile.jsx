@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 const BASE = '';
 
@@ -162,7 +165,9 @@ export default function StudentProfile() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto space-y-6 md:space-y-10 font-['Inter']">
+    <>
+      <PageSEO {...PAGE_SEO.studentProfile} />
+    <section className="max-w-5xl mx-auto space-y-6 md:space-y-10 font-['Inter']" aria-label="Student profile">
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-4">
         <div>
@@ -196,7 +201,7 @@ export default function StudentProfile() {
                   isVideo(profileImage) ? (
                     <video src={profileImage} className="w-full h-full object-cover" autoPlay muted loop />
                   ) : (
-                    <img src={profileImage} className="w-full h-full object-cover" alt="Student" />
+                    <LazyImage src={profileImage} className="w-full h-full object-cover" alt="Student profile photo" />
                   )
                 ) : (
                   <span className="material-symbols-outlined text-5xl text-[#e1bfb5]/40">person</span>
@@ -407,6 +412,7 @@ export default function StudentProfile() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
+    </>
   );
 }

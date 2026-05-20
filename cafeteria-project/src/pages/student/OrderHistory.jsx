@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
 import { useCart } from '../../context/CartContext';
 
 const BASE = '';
@@ -77,7 +79,9 @@ export default function OrderHistory() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto font-['Inter']">
+    <>
+      <PageSEO {...PAGE_SEO.studentOrders} />
+    <section className="max-w-6xl mx-auto font-['Inter']" aria-label="Order history">
       {/* Header */}
       <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
@@ -218,6 +222,7 @@ export default function OrderHistory() {
           })}
         </div>
       )}
-    </div>
+    </section>
+    </>
   );
 }

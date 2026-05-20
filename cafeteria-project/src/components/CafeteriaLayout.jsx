@@ -81,7 +81,7 @@ export default function CafeteriaLayout() {
                    ['.mp4', '.webm', '.ogg', '.mov'].some(ext => cafeteria.profile_picture.toLowerCase().split('?')[0].endsWith(ext)) ? (
                     <video src={cafeteria.profile_picture} className="w-full h-full object-cover" autoPlay muted loop />
                   ) : (
-                    <img src={cafeteria.profile_picture} className="w-full h-full object-cover" alt="Profile" />
+                    <img src={cafeteria.profile_picture} className="w-full h-full object-cover" alt={`${cafeteria.name || 'Cafeteria'} staff profile`} loading="lazy" decoding="async" />
                   )
                 ) : (
                   <span className="material-symbols-outlined text-primary/70">restaurant</span>
@@ -127,7 +127,7 @@ export default function CafeteriaLayout() {
                    ['.mp4', '.webm', '.ogg', '.mov'].some(ext => cafeteria.profile_picture.toLowerCase().split('?')[0].endsWith(ext)) ? (
                     <video src={cafeteria.profile_picture} className="w-full h-full object-cover" autoPlay muted loop />
                   ) : (
-                    <img src={cafeteria.profile_picture} className="w-full h-full object-cover" alt="Profile" />
+                    <img src={cafeteria.profile_picture} className="w-full h-full object-cover" alt={`${cafeteria.name || 'Cafeteria'} staff profile`} loading="lazy" decoding="async" />
                   )
                 ) : (
                   <span className="material-symbols-outlined text-sm">person</span>

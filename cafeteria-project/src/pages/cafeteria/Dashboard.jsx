@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 const STATUS_STYLES = {
   pending:    'bg-primary-container/20 text-primary border border-primary/30',
@@ -123,6 +126,8 @@ export default function CafeteriaDashboard() {
   );
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.cafeDashboard} />
     <section className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-10 pt-6 md:pt-10">
       {toast.visible && (
         <div className={`fixed bottom-8 right-8 px-6 py-3 rounded-lg shadow-2xl z-50 flex items-center gap-2 font-bold animate-pulse text-white
@@ -280,7 +285,7 @@ export default function CafeteriaDashboard() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {menuItems.map(item => (
                     <div key={item.id} className="bg-surface-container-lowest rounded-xl p-4 border border-outline-variant/5 flex gap-4 hover:border-primary/30 transition-colors">
-                       <img src={item.image_url ? item.image_url : 'https://placehold.co/100?text=No+Image'} alt={item.name} className="w-16 h-16 rounded-lg object-cover" />
+                       <LazyImage src={item.image_url ? item.image_url : 'https://placehold.co/100?text=No+Image'} alt={item.name || 'Menu item'} className="w-16 h-16 rounded-lg object-cover" />
                        <div className="flex-1 flex flex-col justify-between">
                          <p className="font-bold text-sm text-on-surface leading-snug">{item.name}</p>
                          <div className="flex justify-between items-end mt-2">
@@ -353,5 +358,6 @@ export default function CafeteriaDashboard() {
       )}
 
     </section>
+    </>
   );
 }

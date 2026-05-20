@@ -3,6 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../../context/CartContext';
 import DefaultImage from '../../assets/default_dish.png';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 const BASE = '';
 const DEFAULT_IMAGE = DefaultImage; // COMSATS Cafe logo as default image
@@ -83,7 +86,18 @@ export default function MenuBrowsing() {
     );
   }
 
+  const menuSeo = cafeteria
+    ? {
+        ...PAGE_SEO.studentMenu,
+        title: `${cafeteria.name} Menu`,
+        description: `Browse ${cafeteria.name} menu items, deals, and order online on COMSTAS Cafe.`,
+        path: `/student/menu/${cafeteriaId}`,
+      }
+    : { ...PAGE_SEO.studentMenu, path: `/student/menu/${cafeteriaId}` };
+
   return (
+    <>
+      <PageSEO {...menuSeo} />
     <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 relative font-['Inter']">
       
       <div className="flex-1">
@@ -160,7 +174,7 @@ export default function MenuBrowsing() {
                 <div key={deal.id} className="group bg-gradient-to-br from-[#FF6B35]/10 to-[#28283a] border border-[#FF6B35]/20 rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#FF6B35]/10 transition-all duration-300 flex flex-col">
                   <div className="relative h-40 overflow-hidden bg-[#1a1a2b]">
                     {deal.image_url ? (
-                      <img src={deal.image_url} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                      <LazyImage src={deal.image_url} alt={`${deal.title} deal`} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                         <span className="material-symbols-outlined text-4xl text-[#FF6B35]/50" style={{ fontVariationSettings: "'FILL' 1" }}>local_offer</span>
@@ -214,9 +228,9 @@ export default function MenuBrowsing() {
                 ) : (
                   <>
                     {item.image_url ? (
-                      <img 
-                        src={item.image_url} 
-                        alt={item.name} 
+                      <LazyImage
+                        src={item.image_url}
+                        alt={`${item.name} menu item`}
                         className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
                       />
                     ) : (
@@ -308,7 +322,7 @@ export default function MenuBrowsing() {
                     {isVideo(item.image_url) ? (
                       <video src={item.image_url} className="h-full w-full object-cover" muted playsInline preload="metadata" onLoadedMetadata={e => { e.target.currentTime = 1; }} />
                     ) : item.image_url ? (
-                      <img src={item.image_url} alt={item.name} className="h-full w-full object-cover" />
+                      <LazyImage src={item.image_url} alt={`${item.name} dish`} className="h-full w-full object-cover" />
                     ) : (
                       <div className="h-full w-full flex flex-col items-center justify-center bg-[#1a1a2b] gap-0.5">
                         <span className="material-symbols-outlined text-lg text-[#FF6B35]/60" style={{ fontVariationSettings: "'FILL' 1" }}>restaurant</span>
@@ -350,5 +364,6 @@ export default function MenuBrowsing() {
         </div>
       )}
     </div>
+    </>
   );
 }

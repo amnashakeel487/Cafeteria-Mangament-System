@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -59,7 +61,9 @@ export default function Orders() {
   };
 
   return (
-    <div className="pt-20 md:pt-28 px-4 md:px-10 pb-12 font-['Inter'] relative min-h-screen">
+    <>
+      <PageSEO {...PAGE_SEO.adminOrders} />
+    <section className="pt-20 md:pt-28 px-4 md:px-10 pb-12 font-['Inter'] relative min-h-screen" aria-label="All orders">
       {/* Page Title */}
       <div className="flex flex-col gap-4 mb-6 md:mb-10">
         <div>
@@ -178,6 +182,7 @@ export default function Orders() {
           </table>
         </div>
       </div>
-    </div>
+    </section>
+    </>
   );
 }

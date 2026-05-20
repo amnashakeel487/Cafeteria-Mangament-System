@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
 
 const BANKS = [
   'Habib Bank Limited (HBL)',
@@ -124,6 +126,8 @@ export default function CafeteriaPayments() {
   );
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.cafePayments} />
     <section className="p-8 max-w-7xl mx-auto pt-10">
       {/* Toast */}
       {toast.visible && (
@@ -338,5 +342,6 @@ export default function CafeteriaPayments() {
         </div>
       </div>
     </section>
+    </>
   );
 }

@@ -85,7 +85,7 @@ export default function Sidebar({ mobileMenuOpen, setMobileMenuOpen }) {
                   isVideo(admin.profile_image) ? (
                     <video src={admin.profile_image} className="w-full h-full object-cover" autoPlay muted loop />
                   ) : (
-                    <img src={admin.profile_image} alt="Admin" className="w-full h-full object-cover" />
+                    <img src={admin.profile_image} alt="Administrator profile" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                   )
                ) : (
                   <span className="material-symbols-outlined">account_circle</span>

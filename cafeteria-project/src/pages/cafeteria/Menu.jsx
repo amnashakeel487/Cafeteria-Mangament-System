@@ -2,6 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import DefaultImage from '../../assets/default_dish.png';
 import { supabase, BUCKET } from '../../supabaseClient';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 const CAT_COLORS = [
   { badge: 'bg-tertiary/20 text-tertiary border border-tertiary/30', pill: 'text-tertiary' },
@@ -291,6 +294,8 @@ export default function CafeteriaMenu() {
   const filterTabs = ['All', ...categoryNames];
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.cafeMenu} />
     <section className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 pt-6 md:pt-10">
       {toast.visible && (
         <div onClick={() => setToast({ ...toast, visible: false })}
@@ -366,9 +371,9 @@ export default function CafeteriaMenu() {
               ) : (
                 <>
                   {item.image_url ? (
-                    <img 
-                      src={item.image_url} 
-                      alt={item.name}
+                    <LazyImage
+                      src={item.image_url}
+                      alt={`${item.name} menu item`}
                       className="w-full h-full object-cover transition-all duration-700 group-hover:scale-110"
                     />
                   ) : (
@@ -471,7 +476,7 @@ export default function CafeteriaMenu() {
                         ) : isVideo(imagePreview) ? (
                           <video src={getMediaSrc(imagePreview)} className="w-full h-full object-cover rounded-lg" autoPlay muted loop />
                         ) : (
-                          <img src={imagePreview} alt="p" className="w-full h-full object-cover rounded-lg" />
+                          <LazyImage src={imagePreview} alt="Menu item preview" className="w-full h-full object-cover rounded-lg" loading="eager" />
                         )}
                         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity rounded-lg">
                           <span className="material-symbols-outlined text-white">edit</span>
@@ -551,5 +556,6 @@ export default function CafeteriaMenu() {
       )}
 
     </section>
+    </>
   );
 }

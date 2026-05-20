@@ -1,5 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 const BASE = '';
 
@@ -191,6 +194,8 @@ export default function CafeteriaProfile() {
   }
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.cafeProfile} />
     <section className="p-4 md:p-8 max-w-5xl mx-auto space-y-6 md:space-y-8 pt-6 md:pt-10 pb-20">
       {/* Toast */}
       {toast.visible && (
@@ -220,7 +225,7 @@ export default function CafeteriaProfile() {
                   isVideo(profile.profile_picture) ? (
                     <video src={profile.profile_picture} className="w-32 h-32 rounded-full border-4 border-primary-container object-cover" autoPlay muted loop />
                   ) : (
-                    <img src={profile.profile_picture} alt="Profile" className="w-32 h-32 rounded-full border-4 border-primary-container object-cover" />
+                    <LazyImage src={profile.profile_picture} alt="Cafeteria profile photo" className="w-32 h-32 rounded-full border-4 border-primary-container object-cover" loading="eager" />
                   )
                 ) : (
                   <div className="w-32 h-32 rounded-full border-4 border-primary-container bg-surface-container-lowest flex items-center justify-center text-primary text-4xl">
@@ -391,5 +396,6 @@ export default function CafeteriaProfile() {
         </div>
       </div>
     </section>
+    </>
   );
 }

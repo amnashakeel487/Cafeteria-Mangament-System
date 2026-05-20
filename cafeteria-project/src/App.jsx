@@ -32,6 +32,8 @@ import StudentProfile from './pages/student/StudentProfile';
 
 import { CartProvider } from './context/CartContext';
 import LandingPage from './pages/LandingPage';
+import About from './pages/About';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -39,6 +41,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/admin/login" element={<Login />} />
         
         <Route path="/admin" element={<AdminRoute />}>

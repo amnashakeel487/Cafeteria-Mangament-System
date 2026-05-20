@@ -1,0 +1,10 @@
+# SEO: robots.txt — tells crawlers which paths to index and where the sitemap lives.
+# https://cafeteria-mangament-system.vercel.app
+
+User-agent: *
+Allow: /
+
+# API routes are not useful for search indexing
+Disallow: /api/
+
+Sitemap: https://cafeteria-mangament-system.vercel.app/sitemap.xml

@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
 
 const BASE = '';
 
@@ -66,6 +68,8 @@ export default function CafeteriaOrderHistory() {
   });
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.cafeHistory} />
     <section className="p-8 max-w-6xl mx-auto space-y-8 pt-10 pb-20">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
@@ -186,5 +190,6 @@ export default function CafeteriaOrderHistory() {
         ))}
       </div>
     </section>
+    </>
   );
 }

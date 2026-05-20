@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import LoginPageLayout, { LoginErrorAlert, LoginFormField, getVariantStyles } from '../../components/LoginPageLayout';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
 
 export default function CafeteriaLogin() {
   const [email, setEmail] = useState('');
@@ -34,6 +36,8 @@ export default function CafeteriaLogin() {
   };
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.cafeLogin} />
     <LoginPageLayout
       variant="cafe"
       heading="Cafe Owner Login ☕"
@@ -122,5 +126,6 @@ export default function CafeteriaLogin() {
         </LoginFormField>
       </form>
     </LoginPageLayout>
+    </>
   );
 }

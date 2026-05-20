@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
@@ -56,6 +59,8 @@ export default function Dashboard() {
   };
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.adminDashboard} />
     <section className="pt-20 md:pt-28 px-4 md:px-8 pb-12 space-y-6 md:space-y-10">
       {/* Page Header */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-3">
@@ -244,7 +249,7 @@ export default function Dashboard() {
         </div>
 
         <div className="relative rounded-xl overflow-hidden group">
-          <img alt="Featured Cafeteria" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY1jMEYh2_-hcttV-KV6AljH1Gd6EiXB_XQ64cUNA_pxrOkqN-j78iiFPu7ute7EXAaTQiko6klpt02Ud7p0z2OzqcH20dd2UxaCKdcb90SFD-yYva-JNypQXLJGrgmO2rsnSaoMcLC8OF2xxrt_rnOLNT1hADYLD1_qYFQQnDDkG2vNoZH7583FPWCxAbshXdit-SEEnImc3CNuNSNsckNrIc8Jpn77BQh22hWgXo7QjfOsu-KCmFe-ES6EWN70n28wy37dMQ-Q"/>
+          <LazyImage alt="Featured campus cafeteria dining hall" className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBY1jMEYh2_-hcttV-KV6AljH1Gd6EiXB_XQ64cUNA_pxrOkqN-j78iiFPu7ute7EXAaTQiko6klpt02Ud7p0z2OzqcH20dd2UxaCKdcb90SFD-yYva-JNypQXLJGrgmO2rsnSaoMcLC8OF2xxrt_rnOLNT1hADYLD1_qYFQQnDDkG2vNoZH7583FPWCxAbshXdit-SEEnImc3CNuNSNsckNrIc8Jpn77BQh22hWgXo7QjfOsu-KCmFe-ES6EWN70n28wy37dMQ-Q"/>
           <div className="absolute inset-0 bg-gradient-to-t from-[#0c0c1d] via-[#0c0c1d]/40 to-transparent"></div>
           <div className="relative h-full p-8 flex flex-col justify-end">
             <span className="bg-primary px-3 py-1 rounded text-[10px] font-bold text-on-primary w-fit mb-2 uppercase tracking-widest">Top Rated Venue</span>
@@ -267,5 +272,6 @@ export default function Dashboard() {
       </div>
 
     </section>
+    </>
   );
 }

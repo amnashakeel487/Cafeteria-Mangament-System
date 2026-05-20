@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 export default function Profile() {
   const savedAdmin = JSON.parse(localStorage.getItem('adminData') || '{}');
@@ -167,7 +170,9 @@ export default function Profile() {
   }
 
   return (
-    <section className="pt-20 md:pt-28 pb-12 px-4 md:px-10 relative">
+    <>
+      <PageSEO {...PAGE_SEO.adminProfile} />
+    <section className="pt-20 md:pt-28 pb-12 px-4 md:px-10 relative" aria-label="Admin profile">
       <div className="max-w-6xl mx-auto">
         
         {/* Toast Notification */}
@@ -317,7 +322,7 @@ export default function Profile() {
                         isVideo(profile.profile_image) ? (
                             <video src={profile.profile_image} className="w-full h-full object-cover" autoPlay muted loop />
                         ) : (
-                            <img src={profile.profile_image} className="w-full h-full object-cover" alt="Profile" />
+                            <LazyImage src={profile.profile_image} className="w-full h-full object-cover" alt="Administrator profile photo" loading="eager" />
                         )
                      ) : (
                         <span className="material-symbols-outlined text-6xl text-primary/50">account_circle</span>
@@ -370,5 +375,6 @@ export default function Profile() {
         </div>
       </div>
     </section>
+    </>
   );
 }

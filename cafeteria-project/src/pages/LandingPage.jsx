@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import ThemeToggle from '../components/ThemeToggle';
 import DevelopmentTeam from '../components/DevelopmentTeam';
+import PageSEO from '../seo/PageSEO';
+import { PAGE_SEO } from '../seo/siteConfig';
 
 // Portal routes (must match App.jsx)
 const ROUTES = {
@@ -235,6 +237,9 @@ export default function LandingPage() {
   }, []);
 
   return (
+    <>
+      {/* SEO: Dynamic meta for home route */}
+      <PageSEO {...PAGE_SEO.home} />
     <div className="min-h-screen bg-surface text-on-surface font-body overflow-x-hidden">
       <LandingNavbar scrolled={scrolled} />
 
@@ -491,6 +496,16 @@ export default function LandingPage() {
                   Student Registration
                 </Link>
               </li>
+              <li>
+                <Link to="/about" className="text-on-surface-variant hover:text-on-surface transition-colors">
+                  About Us
+                </Link>
+              </li>
+              <li>
+                <Link to="/contact" className="text-on-surface-variant hover:text-on-surface transition-colors">
+                  Contact
+                </Link>
+              </li>
             </ul>
           </div>
         </div>
@@ -500,5 +515,6 @@ export default function LandingPage() {
         </div>
       </footer>
     </div>
+    </>
   );
 }

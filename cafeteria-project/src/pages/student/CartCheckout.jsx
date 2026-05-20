@@ -3,6 +3,9 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../../context/CartContext';
 import DefaultImage from '../../assets/default_dish.png';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 const BASE = '';
 const DEFAULT_IMAGE = DefaultImage;
@@ -168,6 +171,8 @@ export default function CartCheckout() {
   }
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.studentCart} />
     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-10 font-['Inter']">
       
       {/* Order Summary Section */}
@@ -197,9 +202,9 @@ export default function CartCheckout() {
                       onLoadedMetadata={e => { e.target.currentTime = 1; }}
                     />
                   ) : item.image_url ? (
-                    <img
+                    <LazyImage
                       src={item.image_url}
-                      alt={item.name}
+                      alt={`${item.name} in cart`}
                       className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
                     />
                   ) : (
@@ -374,7 +379,7 @@ export default function CartCheckout() {
                             {isVideo(screenshotUrl || (screenshot && URL.createObjectURL(screenshot))) ? (
                                 <video src={screenshotUrl || (screenshot && URL.createObjectURL(screenshot))} className="w-full h-full object-contain" controls autoPlay muted />
                             ) : (
-                                <img src={screenshotUrl || (screenshot && URL.createObjectURL(screenshot))} className="w-full h-full object-contain" alt="Receipt" />
+                                <LazyImage src={screenshotUrl || (screenshot && URL.createObjectURL(screenshot))} className="w-full h-full object-contain" alt="Payment receipt screenshot" loading="eager" />
                             )}
                             <button onClick={() => {setScreenshot(null); setScreenshotUrl('');}} className="absolute top-2 right-2 w-8 h-8 rounded-full bg-black/60 flex items-center justify-center text-white opacity-0 group-hover:opacity-100 transition-opacity">
                                 <span className="material-symbols-outlined text-sm">close</span>
@@ -400,5 +405,6 @@ export default function CartCheckout() {
       </div>
 
     </div>
+    </>
   );
 }

@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 const BASE = '';
 
@@ -74,6 +77,8 @@ export default function CafeteriaOrders() {
     : orders.filter(o => o.status === activeFilter);
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.cafeOrders} />
     <section className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 pt-6 md:pt-10">
       {/* Toast */}
       {toast.visible && (
@@ -90,7 +95,7 @@ export default function CafeteriaOrders() {
       {preview && (
         <div onClick={() => setPreview(null)}
           className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-8 cursor-zoom-out">
-          <img src={preview} alt="Payment screenshot" className="max-w-full max-h-full rounded-2xl shadow-2xl object-contain" />
+          <LazyImage src={preview} alt="Payment screenshot preview" className="max-w-full max-h-full rounded-2xl shadow-2xl object-contain" loading="eager" />
           <button onClick={() => setPreview(null)}
             className="absolute top-6 right-6 w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center text-on-surface hover:bg-error transition-colors">
             <span className="material-symbols-outlined">close</span>
@@ -179,7 +184,7 @@ export default function CafeteriaOrders() {
                   {order.payment_screenshot ? (
                     <div className="relative group cursor-zoom-in rounded-xl overflow-hidden"
                       onClick={() => setPreview(order.payment_screenshot)}>
-                      <img src={order.payment_screenshot} alt="Payment receipt"
+                      <LazyImage src={order.payment_screenshot} alt={`Payment receipt for order ${order.id}`}
                         className="w-full h-40 object-cover rounded-xl" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-xl">
                         <span className="text-xs font-bold text-white bg-black/60 px-3 py-1 rounded-full">Click to Expand</span>
@@ -366,7 +371,7 @@ export default function CafeteriaOrders() {
                   </div>
                   {order.payment_screenshot ? (
                     <div className="relative group cursor-zoom-in" onClick={() => setPreview(order.payment_screenshot)}>
-                      <img src={order.payment_screenshot} alt="receipt"
+                      <LazyImage src={order.payment_screenshot} alt={`Payment receipt order ${order.id}`}
                         className="w-full h-32 object-cover rounded-lg" />
                       <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
                         <span className="text-[10px] font-bold text-white bg-black/60 px-3 py-1 rounded-full">Click to Expand</span>
@@ -402,5 +407,6 @@ export default function CafeteriaOrders() {
         </div>
       )}
     </section>
+    </>
   );
 }

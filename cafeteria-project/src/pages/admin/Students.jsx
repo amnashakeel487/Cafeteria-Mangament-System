@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
 
 export default function Students() {
   const [students, setStudents] = useState([]);
@@ -107,7 +109,9 @@ export default function Students() {
   });
 
   return (
-    <div className="pt-20 md:pt-28 px-4 md:px-10 pb-12 space-y-6 md:space-y-10 font-['Inter'] relative">
+    <>
+      <PageSEO {...PAGE_SEO.adminStudents} />
+    <section className="pt-20 md:pt-28 px-4 md:px-10 pb-12 space-y-6 md:space-y-10 font-['Inter'] relative" aria-label="Manage students">
       {message.text && (
         <div className={`fixed top-20 right-4 md:right-10 p-3 md:p-4 rounded-xl shadow-lg shadow-black/30 z-[100] text-sm font-bold flex items-center gap-2 transition-all ${message.type === 'error' ? 'bg-error-container text-on-error' : 'bg-tertiary-container text-on-tertiary-container'}`}>
            <span className="material-symbols-outlined">{message.type === 'error' ? 'error' : 'check_circle'}</span>
@@ -311,6 +315,7 @@ export default function Students() {
           </div>
         </div>
       )}
-    </div>
+    </section>
+    </>
   );
 }

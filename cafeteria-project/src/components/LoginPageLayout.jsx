@@ -134,7 +134,7 @@ function VisualPanel({ variant }) {
 }
 
 /**
- * Two-column login shell: visual panel (left) + form panel (right).
+ * SEO: Semantic two-column login shell — <header> back link, <aside> visual panel, <main> form.
  * Children = form content; pass variant for customer vs cafe accent.
  */
 export default function LoginPageLayout({ variant, heading, subtext, children, footer }) {
@@ -143,9 +143,9 @@ export default function LoginPageLayout({ variant, heading, subtext, children, f
   return (
     <div className="min-h-screen bg-surface text-on-surface font-body flex flex-col">
       {/* Top bar: Back to Home */}
-      <div className="absolute top-0 left-0 right-0 z-20 p-4 sm:p-6">
+      <header className="absolute top-0 left-0 right-0 z-20 p-4 sm:p-6">
         <BackToHome accentHover={v.accentHover} />
-      </div>
+      </header>
 
       <div className="flex flex-1 flex-col lg:flex-row min-h-screen">
         <VisualPanel variant={variant} />

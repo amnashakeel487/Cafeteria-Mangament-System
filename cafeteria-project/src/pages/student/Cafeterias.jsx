@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 const BASE = '';
 
@@ -28,7 +31,9 @@ export default function StudentCafeterias() {
   }, []);
 
   return (
-    <div className="max-w-7xl mx-auto">
+    <>
+      <PageSEO {...PAGE_SEO.studentCafeterias} />
+    <section className="max-w-7xl mx-auto" aria-label="Campus cafeterias">
       {/* Hero Header Section */}
       <section className="mb-6 md:mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
@@ -57,10 +62,10 @@ export default function StudentCafeterias() {
             >
               <div className="h-40 md:h-56 w-full relative overflow-hidden bg-[#333345]">
                 {cafe.profile_picture ? (
-                  <img 
-                    src={cafe.profile_picture} 
-                    alt={cafe.name} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" 
+                  <LazyImage
+                    src={cafe.profile_picture}
+                    alt={`${cafe.name} cafeteria profile`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center">
@@ -106,7 +111,7 @@ export default function StudentCafeterias() {
         </div>
       )}
 
-      {/* Development Team */}
-    </div>
+    </section>
+    </>
   );
 }

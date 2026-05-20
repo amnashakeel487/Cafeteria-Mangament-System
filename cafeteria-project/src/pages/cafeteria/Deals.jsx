@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import DefaultImage from '../../assets/default_dish.png';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 const BASE = '';
 const emptyForm = { title: '', description: '', deal_price: '', image_url: '', active: true };
@@ -106,6 +109,8 @@ export default function CafeteriaDeals() {
   };
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.cafeDeals} />
     <section className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 pt-6 md:pt-10">
       {toast.visible && (
         <div onClick={() => setToast({ ...toast, visible: false })}
@@ -143,7 +148,7 @@ export default function CafeteriaDeals() {
               <div key={deal.id} className={`group bg-surface-container-high rounded-xl overflow-hidden border transition-all duration-300 hover:shadow-2xl ${deal.active ? 'border-outline-variant/5' : 'border-outline-variant/5 opacity-60'}`}>
                 <div className="h-36 overflow-hidden relative bg-[#1a1a2b]">
                   {deal.image_url ? (
-                    <img src={deal.image_url} alt={deal.title} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
+                    <LazyImage src={deal.image_url} alt={`${deal.title} deal`} className="w-full h-full object-cover group-hover:scale-105 transition-all duration-500" />
                   ) : (
                     <div className="w-full h-full flex flex-col items-center justify-center gap-2">
                       <span className="material-symbols-outlined text-4xl text-primary/40" style={{ fontVariationSettings: "'FILL' 1" }}>local_offer</span>
@@ -262,7 +267,7 @@ export default function CafeteriaDeals() {
                           className={`flex items-center gap-3 p-3 rounded-xl border text-left transition-all ${selected ? 'border-primary/50 bg-primary/10' : 'border-outline-variant/10 bg-surface-container-lowest hover:border-primary/30'}`}>
                           <div className="w-10 h-10 rounded-lg overflow-hidden bg-surface-container-highest shrink-0">
                             {item.image_url ? (
-                              <img src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                              <LazyImage src={item.image_url} alt={`${item.name} menu item`} className="w-full h-full object-cover" />
                             ) : (
                               <div className="w-full h-full flex items-center justify-center bg-surface-container-lowest">
                                 <span className="material-symbols-outlined text-sm text-primary/50" style={{ fontVariationSettings: "'FILL' 1" }}>restaurant</span>
@@ -299,5 +304,6 @@ export default function CafeteriaDeals() {
         </div>
       )}
     </section>
+    </>
   );
 }

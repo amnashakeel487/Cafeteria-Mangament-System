@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
+import LazyImage from '../../components/LazyImage';
 
 const BASE = '';
 
@@ -83,7 +86,9 @@ export default function OrderTracking() {
   );
 
   return (
-    <div className="max-w-6xl mx-auto space-y-10 font-['Inter']">
+    <>
+      <PageSEO {...PAGE_SEO.studentTrack} />
+    <section className="max-w-6xl mx-auto space-y-10 font-['Inter']" aria-label="Order tracking">
       
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -139,7 +144,7 @@ export default function OrderTracking() {
           <div className="h-64 rounded-xl overflow-hidden relative shadow-lg group border border-[#594139]/20">
             <div className="absolute inset-0 bg-[#0c0c1d]">
               {activeOrder.cafeteria_image ? (
-                  <img src={activeOrder.cafeteria_image} className="w-full h-full object-cover opacity-40 grayscale group-hover:scale-105 transition-transform duration-700" />
+                  <LazyImage src={activeOrder.cafeteria_image} alt={`${activeOrder.cafeteria_name || 'Cafeteria'} location`} className="w-full h-full object-cover opacity-40 grayscale group-hover:scale-105 transition-transform duration-700" />
               ) : (
                   <div className="w-full h-full flex items-center justify-center opacity-30 bg-[#333345]">
                       <span className="material-symbols-outlined text-[#e1bfb5] text-6xl">restaurant</span>
@@ -198,6 +203,7 @@ export default function OrderTracking() {
         </div>
 
       </div>
-    </div>
+    </section>
+    </>
   );
 }

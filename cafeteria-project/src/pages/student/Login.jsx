@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import LoginPageLayout, { LoginErrorAlert, LoginFormField, getVariantStyles } from '../../components/LoginPageLayout';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
 
 export default function StudentLogin() {
   const [email, setEmail] = useState('');
@@ -37,6 +39,8 @@ export default function StudentLogin() {
   };
 
   return (
+    <>
+      <PageSEO {...PAGE_SEO.studentLogin} />
     <LoginPageLayout
       variant="customer"
       heading="Welcome Back 👋"
@@ -132,5 +136,6 @@ export default function StudentLogin() {
         </LoginFormField>
       </form>
     </LoginPageLayout>
+    </>
   );
 }

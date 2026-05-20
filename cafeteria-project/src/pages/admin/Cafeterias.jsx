@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import PageSEO from '../../seo/PageSEO';
+import { PAGE_SEO } from '../../seo/siteConfig';
 
 export default function Cafeterias() {
   const [cafeterias, setCafeterias] = useState([]);
@@ -86,7 +88,9 @@ export default function Cafeterias() {
   );
 
   return (
-    <div className="pt-20 md:pt-28 px-4 md:px-10 pb-12 font-['Inter'] relative min-h-screen">
+    <>
+      <PageSEO {...PAGE_SEO.adminCafeterias} />
+    <section className="pt-20 md:pt-28 px-4 md:px-10 pb-12 font-['Inter'] relative min-h-screen" aria-label="Manage cafeterias">
       {message.text && (
         <div className={`fixed top-20 right-4 md:right-10 p-3 md:p-4 rounded-xl shadow-lg shadow-black/30 z-[100] text-sm font-bold flex items-center gap-2 transition-all ${message.type === 'error' ? 'bg-error-container text-on-error' : 'bg-tertiary-container text-on-tertiary-container'}`}>
            <span className="material-symbols-outlined">{message.type === 'error' ? 'error' : 'check_circle'}</span>
@@ -231,6 +235,7 @@ export default function Cafeterias() {
           </div>
         </div>
       )}
-    </div>
+    </section>
+    </>
   );
 }
