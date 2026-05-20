@@ -38,104 +38,120 @@ export default function StudentLogin() {
     }
   };
 
+  const inputBase = `w-full bg-[#28283a]/80 border border-outline-variant/20 rounded-xl pl-14 pr-5 py-4 text-sm text-on-surface placeholder-on-surface-variant/40 transition-all duration-300 font-label outline-none ${v.accentRing}`;
+
   return (
     <>
       <PageSEO {...PAGE_SEO.studentLogin} />
-    <LoginPageLayout
-      variant="customer"
-      heading="Welcome Back 👋"
-      subtext="Sign in to browse menus, place orders, and track your pickup."
-      footer={
-        <p className="text-xs text-center text-on-surface-variant">
-          Don&apos;t have an account?{' '}
+      <LoginPageLayout
+        variant="customer"
+        heading="Welcome Back 👋"
+        subtext="Sign in to browse menus, place orders, and track your pickup."
+        secondaryAction={
           <button
             type="button"
             onClick={() => navigate('/student/register')}
-            className="text-tertiary font-bold hover:underline"
+            className={`w-full py-3.5 rounded-xl font-bold text-sm border-2 transition-all duration-300 ${v.outlineBtn}`}
           >
-            Register →
+            Create New Account
           </button>
-        </p>
-      }
-    >
-      <LoginErrorAlert message={error} />
+        }
+      >
+        <LoginErrorAlert message={error} />
 
-      <form onSubmit={handleLogin} className="space-y-5">
-        <LoginFormField>
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-on-surface-variant">University Email</label>
+        <form onSubmit={handleLogin} className="space-y-5">
+          <LoginFormField>
+            <label htmlFor="student-email" className="block text-xs font-bold text-on-surface-variant mb-2 uppercase tracking-wide">
+              University Email
+            </label>
             <div className="relative group">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 group-focus-within:text-tertiary transition-colors">
-                school
+              <span
+                className={`material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-on-surface-variant/50 transition-colors ${v.inputIconFocus}`}
+              >
+                mail
               </span>
               <input
+                id="student-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
                 placeholder="student@university.edu"
-                className={`w-full bg-surface-container-lowest border border-outline-variant/15 rounded-lg pl-12 pr-4 py-3.5 text-sm text-on-surface placeholder-on-surface-variant/30 transition-all duration-300 font-label outline-none focus:ring-2 ${v.accentRing}`}
+                className={inputBase}
                 required
               />
             </div>
-          </div>
-        </LoginFormField>
+          </LoginFormField>
 
-        <LoginFormField>
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-on-surface-variant">Password</label>
+          <LoginFormField>
+            <div className="flex items-center justify-between mb-2">
+              <label htmlFor="student-password" className="text-xs font-bold text-on-surface-variant uppercase tracking-wide">
+                Password
+              </label>
+              <button
+                type="button"
+                className={`text-xs font-bold ${v.accentText} opacity-80 hover:opacity-100 transition-opacity`}
+              >
+                Forgot password?
+              </button>
+            </div>
             <div className="relative group">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 group-focus-within:text-tertiary transition-colors">
+              <span
+                className={`material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-on-surface-variant/50 transition-colors ${v.inputIconFocus}`}
+              >
                 lock
               </span>
               <input
+                id="student-password"
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
-                placeholder="••••••••"
-                className={`w-full bg-surface-container-lowest border border-outline-variant/15 rounded-lg pl-12 pr-12 py-3.5 text-sm text-on-surface placeholder-on-surface-variant/30 transition-all duration-300 font-label outline-none focus:ring-2 ${v.accentRing}`}
+                placeholder="Enter your password"
+                className={`${inputBase} pr-14`}
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-tertiary transition-colors"
+                className={`absolute right-5 top-1/2 -translate-y-1/2 text-on-surface-variant/50 transition-colors ${v.linkHover}`}
               >
                 <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
               </button>
             </div>
-          </div>
-        </LoginFormField>
+          </LoginFormField>
 
-        <LoginFormField>
-          <motion.button
-            type="submit"
-            disabled={isLoading}
-            whileHover={!isLoading ? { scale: 1.02, boxShadow: '0 0 28px rgba(89, 213, 251, 0.35)' } : {}}
-            whileTap={!isLoading ? { scale: 0.98 } : {}}
-            animate={isLoading ? { scale: [1, 1.02, 1] } : {}}
-            transition={isLoading ? { duration: 1.2, repeat: Infinity } : {}}
-            className={`w-full bg-gradient-to-br ${v.btnGradient} ${v.btnText} py-3.5 rounded-lg font-bold flex items-center justify-center gap-2 shadow-lg ${v.btnShadow} transition-all disabled:opacity-70`}
-          >
-            {isLoading ? (
-              <span className="material-symbols-outlined animate-spin">refresh</span>
-            ) : (
-              <>
-                <span>Sign In</span>
-                <span className="material-symbols-outlined text-lg">arrow_forward</span>
-              </>
-            )}
-          </motion.button>
-        </LoginFormField>
+          <LoginFormField>
+            <motion.button
+              type="submit"
+              disabled={isLoading}
+              whileHover={!isLoading ? { scale: 1.02 } : {}}
+              whileTap={!isLoading ? { scale: 0.98 } : {}}
+              animate={isLoading ? { boxShadow: ['0 0 0 rgba(89,213,251,0)', '0 0 24px rgba(89,213,251,0.4)', '0 0 0 rgba(89,213,251,0)'] } : {}}
+              transition={isLoading ? { duration: 1.5, repeat: Infinity } : {}}
+              className={`w-full ${v.btnGradient} ${v.btnText} py-4 rounded-xl font-bold flex items-center justify-center gap-3 ${v.btnShadow} transition-all disabled:opacity-60`}
+            >
+              {isLoading ? (
+                <span className="material-symbols-outlined animate-spin text-xl">refresh</span>
+              ) : (
+                <>
+                  <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
+                    school
+                  </span>
+                  <span className="flex-1">Sign In</span>
+                  <span className="material-symbols-outlined text-xl">arrow_forward</span>
+                </>
+              )}
+            </motion.button>
+          </LoginFormField>
 
-        <LoginFormField>
-          <p className="text-xs text-center text-on-surface-variant">
-            For demo purposes, logging in with any email will auto-register an account.
-          </p>
-        </LoginFormField>
-      </form>
-    </LoginPageLayout>
+          <LoginFormField>
+            <p className="text-xs text-center text-on-surface-variant/70 leading-relaxed px-2">
+              For demo purposes, logging in with any email will auto-register an account.
+            </p>
+          </LoginFormField>
+        </form>
+      </LoginPageLayout>
     </>
   );
 }
