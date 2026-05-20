@@ -31,13 +31,14 @@ import OrderHistory from './pages/student/OrderHistory';
 import StudentProfile from './pages/student/StudentProfile';
 
 import { CartProvider } from './context/CartContext';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   return (
     <CartProvider>
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/admin/dashboard" replace />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/admin/login" element={<Login />} />
         
         <Route path="/admin" element={<AdminRoute />}>
