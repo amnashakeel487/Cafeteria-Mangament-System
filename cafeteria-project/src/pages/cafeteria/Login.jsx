@@ -2,9 +2,19 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
-import LoginPageLayout, { LoginErrorAlert, LoginFormField, getVariantStyles } from '../../components/LoginPageLayout';
+import PortalLoginLayout, {
+  PortalLoginErrorAlert,
+  PortalLoginField,
+} from '../../components/PortalLoginLayout';
+import { PORTAL_THEMES, getInputFocusClass, getIconFocusClass, getSecondaryButtonClass } from '../../components/portalLoginThemes';
+import { MailIcon, LockIcon, EyeIcon, ArrowIcon } from '../../components/loginFormIcons';
 import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
+
+const themeKey = 'cafe';
+const t = PORTAL_THEMES[themeKey];
+const inputClass = getInputFocusClass(themeKey);
+const iconFocus = getIconFocusClass(themeKey);
 
 export default function CafeteriaLogin() {
   const [email, setEmail] = useState('');
@@ -13,7 +23,6 @@ export default function CafeteriaLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
-  const v = getVariantStyles('cafe');
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -35,37 +44,28 @@ export default function CafeteriaLogin() {
     }
   };
 
-  const inputBase = `w-full bg-[#28283a]/80 border border-outline-variant/20 rounded-xl pl-14 pr-5 py-4 text-sm text-on-surface placeholder-on-surface-variant/40 transition-all duration-300 outline-none ${v.accentRing}`;
-
   return (
     <>
       <PageSEO {...PAGE_SEO.cafeLogin} />
-      <LoginPageLayout
-        variant="cafe"
-        heading="Cafe Owner Login ☕"
-        subtext="Access your dashboard to manage menus, orders, and payments."
+      <PortalLoginLayout
+        themeKey={themeKey}
         secondaryAction={
-          <Link
-            to="/admin/login"
-            className={`w-full py-3.5 rounded-xl font-bold text-sm border-2 flex items-center justify-center gap-2 transition-all duration-300 ${v.outlineBtn}`}
-          >
+          <Link to="/admin/login" className={getSecondaryButtonClass(themeKey)}>
             <span className="material-symbols-outlined text-lg">admin_panel_settings</span>
             Admin Console
           </Link>
         }
       >
-        <LoginErrorAlert message={error} />
+        <PortalLoginErrorAlert message={error} />
 
-        <form onSubmit={handleLogin} className="space-y-5">
-          <LoginFormField>
-            <label htmlFor="cafe-email" className="block text-xs font-bold text-on-surface-variant mb-2 uppercase tracking-wide">
+        <form onSubmit={handleLogin}>
+          <PortalLoginField delay={4}>
+            <label htmlFor="cafe-email" className="block text-xs font-medium uppercase tracking-wide text-[#6b7280] mb-2 font-dm">
               Staff Email
             </label>
-            <div className="relative group">
-              <span
-                className={`material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-on-surface-variant/50 transition-colors ${v.inputIconFocus}`}
-              >
-                mail
+            <div className="relative flex items-center group">
+              <span className={`absolute left-3.5 text-[#6b7280] flex transition-colors ${iconFocus}`}>
+                <MailIcon />
               </span>
               <input
                 id="cafe-email"
@@ -74,29 +74,27 @@ export default function CafeteriaLogin() {
                 onChange={(e) => setEmail(e.target.value)}
                 disabled={isLoading}
                 placeholder="staff@cafeteria.edu"
-                className={inputBase}
+                className={inputClass}
                 required
               />
             </div>
-          </LoginFormField>
+          </PortalLoginField>
 
-          <LoginFormField>
+          <PortalLoginField delay={5}>
             <div className="flex items-center justify-between mb-2">
-              <label htmlFor="cafe-password" className="text-xs font-bold text-on-surface-variant uppercase tracking-wide">
+              <label htmlFor="cafe-password" className="text-xs font-medium uppercase tracking-wide text-[#6b7280] font-dm">
                 Password
               </label>
               <button
                 type="button"
-                className={`text-xs font-bold ${v.accentText} opacity-80 hover:opacity-100 transition-opacity`}
+                className="text-xs text-[#ffb59d] hover:text-[#ff6b35] bg-transparent border-0 cursor-pointer font-dm transition-colors"
               >
                 Forgot password?
               </button>
             </div>
-            <div className="relative group">
-              <span
-                className={`material-symbols-outlined absolute left-5 top-1/2 -translate-y-1/2 text-on-surface-variant/50 transition-colors ${v.inputIconFocus}`}
-              >
-                lock
+            <div className="relative flex items-center group">
+              <span className={`absolute left-3.5 text-[#6b7280] flex transition-colors ${iconFocus}`}>
+                <LockIcon />
               </span>
               <input
                 id="cafe-password"
@@ -104,45 +102,45 @@ export default function CafeteriaLogin() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 disabled={isLoading}
-                placeholder="Enter your password"
-                className={`${inputBase} pr-14`}
+                placeholder="••••••••"
+                className={`${inputClass} pr-11`}
                 required
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className={`absolute right-5 top-1/2 -translate-y-1/2 text-on-surface-variant/50 transition-colors ${v.linkHover}`}
+                className={`absolute right-3.5 flex p-0 bg-transparent border-0 cursor-pointer transition-colors ${showPassword ? 'text-[#ff6b35]' : 'text-[#6b7280] hover:text-[#ff6b35]'}`}
               >
-                <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
+                <EyeIcon />
               </button>
             </div>
-          </LoginFormField>
+          </PortalLoginField>
 
-          <LoginFormField>
+          <PortalLoginField delay={6}>
             <motion.button
               type="submit"
               disabled={isLoading}
-              whileHover={!isLoading ? { scale: 1.02 } : {}}
-              whileTap={!isLoading ? { scale: 0.98 } : {}}
-              animate={isLoading ? { boxShadow: ['0 0 0 rgba(255,107,53,0)', '0 0 24px rgba(255,107,53,0.45)', '0 0 0 rgba(255,107,53,0)'] } : {}}
+              whileHover={!isLoading ? { y: -2, boxShadow: t.btnHoverShadow } : {}}
+              whileTap={!isLoading ? { y: 0 } : {}}
+              animate={isLoading ? { boxShadow: t.btnLoadingShadow } : {}}
               transition={isLoading ? { duration: 1.5, repeat: Infinity } : {}}
-              className={`w-full ${v.btnGradient} ${v.btnText} py-4 rounded-xl font-bold flex items-center justify-center gap-3 ${v.btnShadow} transition-all disabled:opacity-60`}
+              className={`w-full py-[15px] rounded-[10px] border-0 font-syne text-[15px] font-bold tracking-wide cursor-pointer flex items-center justify-center gap-2.5 transition-all duration-250 disabled:opacity-70 disabled:cursor-not-allowed hover:brightness-105 ${t.btnGradient} ${t.btnText}`}
             >
               {isLoading ? (
                 <span className="material-symbols-outlined animate-spin text-xl">refresh</span>
               ) : (
                 <>
-                  <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                     restaurant
                   </span>
-                  <span className="flex-1">Access Staff Portal</span>
-                  <span className="material-symbols-outlined text-xl">arrow_forward</span>
+                  Access Staff Portal
+                  <ArrowIcon />
                 </>
               )}
             </motion.button>
-          </LoginFormField>
+          </PortalLoginField>
         </form>
-      </LoginPageLayout>
+      </PortalLoginLayout>
     </>
   );
 }

@@ -1,8 +1,26 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import axios from 'axios';
+import PortalLoginLayout, {
+  PortalLoginErrorAlert,
+  PortalLoginField,
+} from '../../components/PortalLoginLayout';
+import { PORTAL_THEMES, getInputFocusClass, getIconFocusClass } from '../../components/portalLoginThemes';
+import { MailIcon, LockIcon, EyeIcon, SignInLeftIcon, ArrowIcon } from '../../components/loginFormIcons';
 import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
+
+const themeKey = 'admin';
+const t = PORTAL_THEMES[themeKey];
+const inputClass = getInputFocusClass(themeKey);
+const iconFocus = getIconFocusClass(themeKey);
+
+const securityNotes = [
+  { icon: 'verified_user', text: 'Secured with JWT authentication', color: 'text-[#ff6b35]' },
+  { icon: 'admin_panel_settings', text: 'Full system access — authorized personnel only', color: 'text-[#59d5fb]' },
+  { icon: 'support_agent', text: 'Need help? Contact your system administrator', color: 'text-[#ffb59d]' },
+];
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -20,7 +38,7 @@ export default function Login() {
     try {
       const response = await axios.post('/api/admin/login', {
         email,
-        password
+        password,
       });
 
       if (response.data.token) {
@@ -35,74 +53,96 @@ export default function Login() {
     }
   };
 
-  const loginForm = (
-    <div className="bg-surface-container-high rounded-xl p-8 border border-outline-variant/10 shadow-2xl h-full flex flex-col justify-between">
-      <div>
-        <div className="mb-8 text-center">
-          <div className="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-3 border border-primary/20">
-            <span className="material-symbols-outlined text-2xl text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>admin_panel_settings</span>
-          </div>
-          <h1 className="text-2xl font-extrabold editorial-text text-primary mb-1">COMSTAS Cafe</h1>
-          <p className="text-xs text-on-surface-variant font-label tracking-wide uppercase">Admin Console</p>
-        </div>
-
-        {error && (
-          <div className="mb-5 p-3 rounded-lg bg-error-container/20 border border-error/50 flex items-center space-x-3 text-error">
-            <span className="material-symbols-outlined text-sm">error</span>
-            <p className="text-sm font-bold">{error}</p>
-          </div>
-        )}
-
-        <form onSubmit={handleLogin} className="space-y-5">
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-on-surface-variant">Email Address</label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">mail</span>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} disabled={isLoading} placeholder="admin@culinary.edu"
-                className="w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-primary/60 rounded-lg pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-primary/50 text-on-surface placeholder-on-surface-variant/30 transition-all font-label" required />
-            </div>
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-on-surface-variant">Password</label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
-              <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} disabled={isLoading} placeholder="••••••••"
-                className="w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-primary/60 rounded-lg pl-12 pr-12 py-3 text-sm focus:ring-1 focus:ring-primary/50 text-on-surface placeholder-on-surface-variant/30 transition-all font-label" required />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-primary transition-colors">
-                <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
-              </button>
-            </div>
-          </div>
-          <button type="submit" disabled={isLoading}
-            className="w-full bg-gradient-to-br from-primary to-primary-container text-on-primary py-3 rounded-lg font-bold flex items-center justify-center space-x-2 hover:opacity-90 active:scale-[0.98] transition-all">
-            {isLoading ? <span className="material-symbols-outlined animate-spin">refresh</span> : <><span>Sign In to Console</span><span className="material-symbols-outlined text-lg">arrow_forward</span></>}
-          </button>
-        </form>
-      </div>
-
-      <div className="mt-8 pt-6 border-t border-outline-variant/10 space-y-3">
-        <div className="flex items-center gap-3 text-xs text-on-surface-variant">
-          <span className="material-symbols-outlined text-primary text-sm">verified_user</span>
-          <span>Secured with JWT authentication</span>
-        </div>
-        <div className="flex items-center gap-3 text-xs text-on-surface-variant">
-          <span className="material-symbols-outlined text-tertiary text-sm">admin_panel_settings</span>
-          <span>Full system access — authorized personnel only</span>
-        </div>
-        <div className="flex items-center gap-3 text-xs text-on-surface-variant">
-          <span className="material-symbols-outlined text-secondary text-sm">support_agent</span>
-          <span>Need help? Contact your system administrator</span>
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <>
       <PageSEO {...PAGE_SEO.adminLogin} />
-      <main className="min-h-screen bg-surface flex items-center justify-center p-4 text-on-surface font-['Inter']">
-        <div className="w-full max-w-[420px]">{loginForm}</div>
-      </main>
+      <PortalLoginLayout themeKey={themeKey} showSecondary={false}>
+        <PortalLoginErrorAlert message={error} />
+
+        <form onSubmit={handleLogin}>
+          <PortalLoginField delay={4}>
+            <label htmlFor="admin-email" className="block text-xs font-medium uppercase tracking-wide text-[#6b7280] mb-2 font-dm">
+              Email Address
+            </label>
+            <div className="relative flex items-center group">
+              <span className={`absolute left-3.5 text-[#6b7280] flex transition-colors ${iconFocus}`}>
+                <MailIcon />
+              </span>
+              <input
+                id="admin-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+                placeholder="admin@culinary.edu"
+                className={inputClass}
+                required
+              />
+            </div>
+          </PortalLoginField>
+
+          <PortalLoginField delay={5}>
+            <label htmlFor="admin-password" className="block text-xs font-medium uppercase tracking-wide text-[#6b7280] mb-2 font-dm">
+              Password
+            </label>
+            <div className="relative flex items-center group">
+              <span className={`absolute left-3.5 text-[#6b7280] flex transition-colors ${iconFocus}`}>
+                <LockIcon />
+              </span>
+              <input
+                id="admin-password"
+                type={showPassword ? 'text' : 'password'}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+                placeholder="••••••••"
+                className={`${inputClass} pr-11`}
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className={`absolute right-3.5 flex p-0 bg-transparent border-0 cursor-pointer transition-colors ${showPassword ? 'text-[#ff6b35]' : 'text-[#6b7280] hover:text-[#ff6b35]'}`}
+              >
+                <EyeIcon />
+              </button>
+            </div>
+          </PortalLoginField>
+
+          <PortalLoginField delay={6}>
+            <motion.button
+              type="submit"
+              disabled={isLoading}
+              whileHover={!isLoading ? { y: -2, boxShadow: t.btnHoverShadow } : {}}
+              whileTap={!isLoading ? { y: 0 } : {}}
+              animate={isLoading ? { boxShadow: t.btnLoadingShadow } : {}}
+              transition={isLoading ? { duration: 1.5, repeat: Infinity } : {}}
+              className={`w-full py-[15px] rounded-[10px] border-0 font-syne text-[15px] font-bold tracking-wide cursor-pointer flex items-center justify-center gap-2.5 transition-all duration-250 disabled:opacity-70 disabled:cursor-not-allowed hover:brightness-105 ${t.btnGradient} ${t.btnText}`}
+            >
+              {isLoading ? (
+                <span className="material-symbols-outlined animate-spin text-xl">refresh</span>
+              ) : (
+                <>
+                  <SignInLeftIcon />
+                  Sign In to Console
+                  <ArrowIcon />
+                </>
+              )}
+            </motion.button>
+          </PortalLoginField>
+
+          <PortalLoginField delay={7}>
+            <div className="mt-6 pt-6 border-t border-white/[0.07] space-y-3">
+              {securityNotes.map((note) => (
+                <div key={note.text} className="flex items-center gap-3 text-xs text-[#6b7280] font-dm">
+                  <span className={`material-symbols-outlined text-sm shrink-0 ${note.color}`}>{note.icon}</span>
+                  <span>{note.text}</span>
+                </div>
+              ))}
+            </div>
+          </PortalLoginField>
+        </form>
+      </PortalLoginLayout>
     </>
   );
 }
