@@ -77,7 +77,7 @@ export default function PortalLoginLayout({
   const hasSecondary = showSecondary && secondaryAction;
 
   return (
-    <div className="min-h-screen h-screen overflow-hidden bg-[#0d1117] text-[#f1f5f9] font-dm">
+    <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-[#0d1117] text-[#f1f5f9] font-dm">
       <Link
         to="/"
         className="group fixed top-5 left-5 z-[100] flex items-center gap-2 px-[18px] py-[9px] rounded-full text-[13px] text-[#9ca3af] no-underline border border-white/[0.07] bg-white/[0.05] backdrop-blur-xl transition-all duration-250 hover:-translate-x-0.5 font-dm"
@@ -99,7 +99,7 @@ export default function PortalLoginLayout({
         Back to Home
       </Link>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:h-screen lg:overflow-hidden">
         {/* LEFT PANEL */}
         <motion.aside
           variants={panelLeft}
@@ -212,20 +212,22 @@ export default function PortalLoginLayout({
           variants={panelRight}
           initial="hidden"
           animate="visible"
-          className="relative flex flex-col justify-center items-center px-6 sm:px-14 py-12 lg:py-16 bg-[#0d1117] overflow-y-auto"
+          className="relative min-h-0 lg:h-full bg-[#0d1117] overflow-y-auto overflow-x-hidden"
         >
           <div
-            className="absolute top-0 left-0 right-0 h-[3px]"
+            className="absolute top-0 left-0 right-0 h-[3px] z-10 pointer-events-none"
             style={{ background: `linear-gradient(90deg, transparent, ${t.accent}, transparent)` }}
           />
 
-          <div className="w-full max-w-[400px]">
+          {/* min-h-full + justify-center: centers short forms without clipping tall ones */}
+          <div className="min-h-full flex flex-col justify-center items-center px-6 sm:px-14 py-12 pt-20 sm:pt-24 lg:py-16 lg:pt-16 pb-16">
+            <div className="w-full max-w-[400px]">
             <motion.div
               variants={fadeUp}
               custom={0}
               initial="hidden"
               animate="visible"
-              className="w-[54px] h-[54px] rounded-2xl flex items-center justify-center text-[26px] mb-6 border"
+              className="w-[54px] h-[54px] rounded-2xl flex items-center justify-center text-[26px] leading-none mb-6 border overflow-visible shrink-0"
               style={{ backgroundColor: `${t.accent}14`, borderColor: `${t.accent}33` }}
             >
               {t.formEmoji}
@@ -270,6 +272,7 @@ export default function PortalLoginLayout({
                 Back to Home
               </Link>
             </motion.div>
+            </div>
           </div>
         </motion.main>
       </div>
