@@ -1,22 +1,104 @@
 /**
- * SEO: Serve sitemap.xml as real XML (not SPA index.html).
- * Google Search Console requires application/xml — Vercel SPA fallback
- * can return HTML for /sitemap.xml; this serverless route fixes that.
+ * Serves /sitemap.xml as XML (never index.html).
+ * XML is inlined so Vercel serverless does not depend on reading public/ at runtime.
  */
-const fs = require('fs');
-const path = require('path');
+const SITEMAP_XML = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/about</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/contact</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/student/login</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/student/register</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/cafeteria/login</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/admin/login</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/student/cafeterias</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/student/cart</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/student/orders</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/student/track</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/cafeteria/dashboard</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/cafeteria/menu</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/cafeteria/orders</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://cafeteria-mangament-system.vercel.app/admin/dashboard</loc>
+    <lastmod>2026-05-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+</urlset>`;
 
 module.exports = (req, res) => {
-  try {
-    const sitemapPath = path.join(__dirname, '..', 'public', 'sitemap.xml');
-    const xml = fs.readFileSync(sitemapPath, 'utf8');
-
-    res.setHeader('Content-Type', 'application/xml; charset=utf-8');
-    res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=3600, must-revalidate');
-    res.status(200).send(xml);
-  } catch (err) {
-    console.error('Sitemap read error:', err);
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.status(500).send('Sitemap unavailable');
-  }
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
+  res.setHeader('Cache-Control', 'public, max-age=0, s-maxage=3600, must-revalidate');
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.status(200).send(SITEMAP_XML);
 };
