@@ -3,7 +3,7 @@ Allow: /
 
 Disallow: /api/
 
-Sitemap: https://cafeteria-mangament-system.vercel.app/sitemap.xml
+Sitemap: https://comsats-cafeteria.vercel.app/sitemap.xml
 `;
 
 module.exports = (req, res) => {

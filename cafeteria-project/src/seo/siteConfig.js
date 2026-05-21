@@ -3,7 +3,7 @@
  * Used by PageSEO (react-helmet-async) and referenced when building sitemap.xml.
  */
 
-export const SITE_URL = 'https://cafeteria-mangament-system.vercel.app';
+export const SITE_URL = 'https://comsats-cafeteria.vercel.app';
 export const SITE_NAME = 'COMSTAS Cafe';
 export const SITE_TAGLINE = 'Campus Cafeteria Management System';
 export const DEFAULT_AUTHOR = 'COMSTAS Cafe Engineering Team';

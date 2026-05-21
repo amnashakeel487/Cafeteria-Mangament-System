@@ -1,17 +1,17 @@
 # COMSATS Cafeteria Management System
 ## Links
 ### Admin Login: 
-https://cafeteria-mangament-system.vercel.app/admin/login
+https://comsats-cafeteria.vercel.app/admin/login
 username: amnashakeel606@gmail.com
 password: 12345
 
 ### Student Login:
-https://cafeteria-mangament-system.vercel.app/student/login
+https://comsats-cafeteria.vercel.app/student/login
 username: student@culinary.edu
 password: 12345
 
 ### Cafeteria Login:
-https://cafeteria-mangament-system.vercel.app/cafeteria/login
+https://comsats-cafeteria.vercel.app/cafeteria/login
 username: cafe@culinary.edu
 password: 12345
 
