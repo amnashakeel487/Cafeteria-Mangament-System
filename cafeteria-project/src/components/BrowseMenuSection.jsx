@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { supabase } from '../supabaseClient';
-import LazyImage from './LazyImage';
 import { formatPrice } from '../utils/currency';
+import { isDisplayableImageUrl } from '../utils/media';
 
 const FOOD_ICONS = ['lunch_dining', 'ramen_dining', 'local_pizza', 'bakery_dining', 'emoji_food_beverage', 'icecream'];
 
@@ -39,6 +39,34 @@ function isItemAvailable(item) {
   if (typeof item?.in_stock === 'boolean') return item.in_stock;
   if (typeof item?.status === 'string') return item.status.toLowerCase() !== 'out of stock';
   return true;
+}
+
+function MenuItemThumb({ imageUrl }) {
+  const [loadFailed, setLoadFailed] = useState(false);
+  const showImage = isDisplayableImageUrl(imageUrl) && !loadFailed;
+
+  if (!showImage) {
+    return (
+      <div className="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant/10 flex items-center justify-center shrink-0">
+        <span className="material-symbols-outlined text-on-surface-variant text-lg" aria-hidden>
+          restaurant
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div className="w-10 h-10 rounded-lg overflow-hidden border border-outline-variant/10 shrink-0 bg-surface-container-highest">
+      <img
+        src={imageUrl}
+        alt=""
+        loading="lazy"
+        decoding="async"
+        className="w-full h-full object-cover"
+        onError={() => setLoadFailed(true)}
+      />
+    </div>
+  );
 }
 
 export default function BrowseMenuSection() {
@@ -300,15 +328,7 @@ export default function BrowseMenuSection() {
 
                     <div className="mt-4 pt-4 border-t border-outline-variant/10 flex items-center justify-between">
                       <span className="text-xl font-extrabold text-primary">{formatPrice(item.price)}</span>
-                      {item.image_url ? (
-                        <div className="w-10 h-10 rounded-lg overflow-hidden border border-outline-variant/10">
-                          <LazyImage src={item.image_url} alt={`${item.name} preview`} className="w-full h-full object-cover" />
-                        </div>
-                      ) : (
-                        <div className="w-10 h-10 rounded-lg bg-surface-container-highest border border-outline-variant/10 flex items-center justify-center">
-                          <span className="material-symbols-outlined text-on-surface-variant text-lg">restaurant</span>
-                        </div>
-                      )}
+                      <MenuItemThumb imageUrl={item.image_url} />
                     </div>
                   </motion.article>
                 );
