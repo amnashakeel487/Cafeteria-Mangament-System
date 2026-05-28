@@ -15,7 +15,7 @@ export default function NotificationDropdown({ onClose }) {
 
   return (
     <div
-      className="absolute right-0 top-full mt-2 w-[380px] max-h-[480px] flex flex-col rounded-xl bg-[#1E1E2F]/95 border border-[#594139]/20 shadow-2xl backdrop-blur-xl z-50 overflow-hidden"
+      className="absolute right-0 top-full mt-2 w-[min(380px,calc(100vw-1.5rem))] max-h-[min(480px,calc(100vh-6rem))] flex flex-col rounded-xl bg-[#1E1E2F]/95 border border-[#594139]/20 shadow-2xl backdrop-blur-xl z-50 overflow-hidden"
       onClick={(e) => e.stopPropagation()}
     >
       <div className="flex items-center justify-between px-4 py-3 border-b border-[#594139]/15 flex-shrink-0">

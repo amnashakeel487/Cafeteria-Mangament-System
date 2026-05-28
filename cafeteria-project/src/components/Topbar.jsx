@@ -23,7 +23,7 @@ export default function Topbar({ setMobileMenuOpen }) {
           <span className="material-symbols-outlined">settings</span>
         </Link>
         <div className="h-8 w-[1px] bg-outline-variant/20 mx-2"></div>
-        <div className="flex items-center space-x-2">
+        <div className="hidden sm:flex items-center space-x-2">
           <span className="text-xs text-on-surface-variant">Status:</span>
           <span className="flex items-center text-xs text-tertiary">
             <span className="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>

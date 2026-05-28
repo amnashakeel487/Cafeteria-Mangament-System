@@ -87,9 +87,9 @@ export default function OrderHistory() {
       <PageSEO {...PAGE_SEO.studentOrders} />
     <section className="max-w-6xl mx-auto font-['Inter']" aria-label="Order history">
       {/* Header */}
-      <header className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <header className="mb-8 md:mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
         <div>
-          <h1 className="text-4xl font-extrabold text-[#E3E0F8] tracking-tight mb-2 font-['Manrope']">Order History</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#E3E0F8] tracking-tight mb-2 font-['Manrope']">Order History</h1>
           <p className="text-[#e1bfb5] max-w-lg">Review and manage your past culinary selections. Track your spending and quickly re-order your campus favorites.</p>
         </div>
         <div className="flex items-center gap-3">
@@ -99,7 +99,7 @@ export default function OrderHistory() {
 
       {/* Filters Bar */}
       <section className="bg-[#1E1E2F] rounded-xl p-4 mb-8 shadow-xl flex flex-wrap items-end gap-6 border border-[#594139]/20">
-        <div className="flex-1 min-w-[240px]">
+        <div className="w-full sm:flex-1 sm:min-w-[200px]">
           <label className="block text-xs font-bold text-[#e1bfb5] uppercase tracking-widest mb-1.5 ml-1">Search Orders</label>
           <div className="relative">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#e1bfb5] text-sm">search</span>
@@ -183,8 +183,8 @@ export default function OrderHistory() {
                 </div>
 
                 {/* Middle: items + total */}
-                <div className={`flex items-center gap-8 w-full md:w-auto px-4 md:px-0 ${order.status === 'cancelled' ? 'opacity-60' : ''}`}>
-                  <div className="text-left md:text-right flex-1 md:flex-none">
+                <div className={`flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 w-full md:w-auto border-t border-[#594139]/10 pt-4 sm:border-t-0 sm:pt-0 md:px-0 ${order.status === 'cancelled' ? 'opacity-60' : ''}`}>
+                  <div className="text-left sm:text-right flex-1 min-w-0">
                     <p className="text-xs text-[#e1bfb5] font-medium uppercase tracking-tighter">Items</p>
                     <p className="text-sm text-[#E3E0F8] truncate max-w-[200px]">{itemsSummary}</p>
                   </div>

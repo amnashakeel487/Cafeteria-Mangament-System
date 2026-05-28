@@ -119,7 +119,7 @@ export default function CafeteriaOrders() {
       {/* Screenshot fullscreen preview */}
       {preview && (
         <div onClick={() => setPreview(null)}
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-8 cursor-zoom-out">
+          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8 cursor-zoom-out">
           <LazyImage src={preview} alt="Payment screenshot preview" className="max-w-full max-h-full rounded-2xl shadow-2xl object-contain" loading="eager" />
           <button onClick={() => setPreview(null)}
             className="absolute top-6 right-6 w-10 h-10 bg-surface-container-highest rounded-full flex items-center justify-center text-on-surface hover:bg-error transition-colors">
@@ -148,14 +148,14 @@ export default function CafeteriaOrders() {
       </header>
 
       {/* Tabs */}
-      <div className="flex gap-2 bg-surface-container-low p-1 rounded-xl w-fit">
+      <div className="flex gap-2 bg-surface-container-low p-1 rounded-xl w-full max-w-full overflow-x-auto hide-scrollbar">
         <button onClick={() => setTab('all')}
-          className={`px-5 py-2 rounded-lg text-sm font-bold transition-all ${tab === 'all' ? 'bg-surface-container-highest text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}>
+          className={`shrink-0 px-4 sm:px-5 py-2 rounded-lg text-sm font-bold transition-all whitespace-nowrap ${tab === 'all' ? 'bg-surface-container-highest text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}>
           All Orders
           <span className="ml-2 bg-surface-container-lowest text-on-surface-variant text-[10px] px-2 py-0.5 rounded-full">{orders.length}</span>
         </button>
         <button onClick={() => setTab('verify')}
-          className={`px-5 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${tab === 'verify' ? 'bg-surface-container-highest text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}>
+          className={`shrink-0 px-4 sm:px-5 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 whitespace-nowrap ${tab === 'verify' ? 'bg-surface-container-highest text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}>
           Payment Verification
           {pending.length > 0 && (
             <span className="bg-[#DC3545] text-white text-[10px] px-2 py-0.5 rounded-full font-bold">{pending.length} PENDING</span>
@@ -253,12 +253,12 @@ export default function CafeteriaOrders() {
         <div className="grid grid-cols-12 gap-6">
           <div className="col-span-12 lg:col-span-8 space-y-6">
             {/* Status filter pills */}
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-bold text-on-surface" style={{ fontFamily: 'Manrope' }}>Orders Queue</h3>
-              <div className="flex gap-2 bg-surface-container-low p-1 rounded-lg">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+              <h3 className="text-xl font-bold text-on-surface shrink-0" style={{ fontFamily: 'Manrope' }}>Orders Queue</h3>
+              <div className="flex gap-2 bg-surface-container-low p-1 rounded-lg overflow-x-auto max-w-full hide-scrollbar">
                 {['all', 'pending', 'processing', 'completed', 'cancelled'].map(s => (
                   <button key={s} onClick={() => setActiveFilter(s)}
-                    className={`px-4 py-1.5 rounded-md text-xs font-bold uppercase tracking-wide transition-all capitalize
+                    className={`shrink-0 px-3 sm:px-4 py-1.5 rounded-md text-xs font-bold uppercase tracking-wide transition-all capitalize whitespace-nowrap
                       ${activeFilter === s ? 'bg-surface-container-highest text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}>
                     {s}
                   </button>
@@ -277,8 +277,8 @@ export default function CafeteriaOrders() {
                   className={`bg-surface-container-high rounded-xl p-6 transition-all hover:bg-surface-container-highest group
                     ${order.status === 'processing' ? 'border-l-4 border-[#FFC107]' : order.status === 'completed' ? 'border-l-4 border-[#28A745]' : ''}`}>
 
-                  <div className="flex justify-between items-start mb-5">
-                    <div className="flex items-center gap-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-5">
+                    <div className="flex items-center gap-4 min-w-0">
                       <div className={`w-12 h-12 rounded-full flex items-center justify-center
                         ${order.status === 'completed' ? 'bg-[#28A745]/10 text-[#28A745]' : 'bg-primary/10 text-primary'}`}>
                         <span className="material-symbols-outlined" style={{ fontVariationSettings: order.status === 'completed' ? "'FILL' 1" : "'FILL' 0" }}>
@@ -303,7 +303,7 @@ export default function CafeteriaOrders() {
                   </div>
 
                   {/* Order items + payment method */}
-                  <div className="grid grid-cols-2 gap-6 mb-5 bg-surface-container-lowest/60 rounded-xl p-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-5 bg-surface-container-lowest/60 rounded-xl p-4">
                     <div className="space-y-2">
                       <p className="text-[10px] font-bold uppercase tracking-widest text-on-surface-variant">Order Items</p>
                       {order.items && order.items.length > 0 ? (

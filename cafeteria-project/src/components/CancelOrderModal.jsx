@@ -6,7 +6,7 @@ export default function CancelOrderModal({ isOpen, onClose, onConfirm, loading, 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0c0c1d]/80 backdrop-blur-sm">
       <div
-        className="bg-[#1E1E2F] w-full max-w-md rounded-3xl p-8 border border-[#594139]/20 shadow-2xl"
+        className="bg-[#1E1E2F] w-full max-w-md max-h-[90vh] overflow-y-auto rounded-3xl p-5 sm:p-8 border border-[#594139]/20 shadow-2xl mx-2"
         role="dialog"
         aria-modal="true"
         aria-labelledby="cancel-order-title"

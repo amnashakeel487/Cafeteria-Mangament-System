@@ -183,7 +183,7 @@ export default function CartCheckout() {
             <span className="material-symbols-outlined text-sm">arrow_back</span>
             <span className="text-sm tracking-wide">Keep Browsing</span>
           </div>
-          <h1 className="font-['Manrope'] text-3xl font-extrabold text-[#E3E0F8] tracking-tight mb-2">Review Your Feast</h1>
+          <h1 className="font-['Manrope'] text-2xl sm:text-3xl font-extrabold text-[#E3E0F8] tracking-tight mb-2">Review Your Feast</h1>
           <p className="text-[#e1bfb5] font-medium">Order from <span className="text-[#FFB59D]">{cafeteria?.name || 'Loading...'}</span></p>
         </header>
 
@@ -253,7 +253,7 @@ export default function CartCheckout() {
 
       {/* Payment Placeholder Space */}
       <div className="lg:col-span-5 relative">
-          <div className="bg-[#1E1E2F] p-8 rounded-xl sticky top-24 space-y-8 shadow-2xl shadow-[#0c0c1d]/50 border border-[#594139]/20">
+          <div className="bg-[#1E1E2F] p-5 sm:p-8 rounded-xl lg:sticky lg:top-24 space-y-6 sm:space-y-8 shadow-2xl shadow-[#0c0c1d]/50 border border-[#594139]/20">
              <section>
                 <h2 className="font-['Manrope'] text-xl font-bold mb-6 flex items-center gap-2 text-[#E3E0F8]">
                     <span className="material-symbols-outlined text-[#FFB59D]">payments</span>

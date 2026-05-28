@@ -34,6 +34,15 @@ export default function MenuBrowsing() {
 
   const { cart, addToCart, removeFromCart, getCartQty, cartTotal, cartItemCount } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
+  const [isLgViewport, setIsLgViewport] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 1024px)');
+    const update = () => setIsLgViewport(mq.matches);
+    update();
+    mq.addEventListener('change', update);
+    return () => mq.removeEventListener('change', update);
+  }, []);
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -99,9 +108,9 @@ export default function MenuBrowsing() {
   return (
     <>
       <PageSEO {...menuSeo} />
-    <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 relative font-['Inter']">
+    <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 relative font-['Inter'] pb-28 lg:pb-0">
       
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         {/* Header Section */}
         <header className="mb-10">
           <button 
@@ -290,7 +299,7 @@ export default function MenuBrowsing() {
 
       {/* Floating Sidebar Cart Preview (Desktop visible, Mobile toggleable) */}
       {(cartItemCount > 0 || cartOpen) && (
-        <div className={`fixed lg:sticky top-[auto] bottom-0 lg:top-24 left-0 w-full lg:w-80 z-50 lg:z-10 transition-transform duration-300 ${cartOpen || window.innerWidth >= 1024 ? 'translate-y-0' : 'translate-y-[calc(100%-4rem)]'}`}>
+        <div className={`fixed lg:sticky top-[auto] bottom-16 lg:bottom-auto lg:top-24 left-0 right-0 lg:left-auto w-full lg:w-80 z-40 lg:z-10 transition-transform duration-300 ${cartOpen || isLgViewport ? 'translate-y-0' : 'translate-y-[calc(100%-4rem)]'}`}>
           
           {/* Mobile Cart Toggle Handle */}
           <div 
@@ -307,7 +316,7 @@ export default function MenuBrowsing() {
              </div>
           </div>
 
-          <div className={`bg-[#28283a] border-t lg:border border-[#594139]/15 lg:rounded-2xl shadow-2xl p-6 flex flex-col h-[60vh] lg:h-[calc(100vh-8rem)] ${!cartOpen && 'hidden lg:flex'}`}>
+          <div className={`bg-[#28283a] border-t lg:border border-[#594139]/15 lg:rounded-2xl shadow-2xl p-4 sm:p-6 flex flex-col max-h-[55vh] sm:max-h-[60vh] lg:max-h-none lg:h-[calc(100vh-8rem)] ${!cartOpen && !isLgViewport ? 'hidden' : 'flex'}`}>
             <div className="hidden lg:flex items-center justify-between mb-6">
               <div className="flex items-center gap-2">
                 <span className="material-symbols-outlined text-[#FFB59D]">shopping_bag</span>

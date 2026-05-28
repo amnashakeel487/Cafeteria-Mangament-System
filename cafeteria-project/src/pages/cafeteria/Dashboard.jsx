@@ -194,26 +194,56 @@ export default function CafeteriaDashboard() {
 
       {/* Live Orders Table */}
       <div className="space-y-5">
-        <div className="flex justify-between items-center">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
           <div>
-            <h3 className="text-2xl font-bold text-on-surface" style={{ fontFamily: 'Manrope' }}>Live Orders</h3>
+            <h3 className="text-xl sm:text-2xl font-bold text-on-surface" style={{ fontFamily: 'Manrope' }}>Live Orders</h3>
             <p className="text-on-surface-variant text-sm mt-1">Real-time queue · {cafeteria.name}</p>
           </div>
-          <div className="flex items-center gap-4">
-            <Link to="/cafeteria/orders" className="bg-surface-container-highest hover:bg-surface-bright px-4 py-2 rounded-lg text-sm font-bold transition-colors">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4">
+            <Link to="/cafeteria/orders" className="flex-1 sm:flex-none text-center bg-surface-container-highest hover:bg-surface-bright px-4 py-2 rounded-lg text-sm font-bold transition-colors">
               Filter
             </Link>
             <button 
               onClick={() => setIsModalOpen(true)}
-              className="bg-[#FF6B35] hover:bg-[#ff8555] text-white px-5 py-2 rounded-lg text-sm font-bold transition-all shadow-lg active:scale-95 flex items-center gap-2">
+              className="flex-1 sm:flex-none justify-center bg-[#FF6B35] hover:bg-[#ff8555] text-white px-4 sm:px-5 py-2 rounded-lg text-sm font-bold transition-all shadow-lg active:scale-95 flex items-center gap-2">
               <span className="material-symbols-outlined text-[18px]">add</span>
-              New Manual Order
+              <span className="whitespace-nowrap">New Manual Order</span>
             </button>
           </div>
         </div>
 
-        <div className="bg-surface-container rounded-xl overflow-hidden shadow-2xl shadow-[#0C0C1D]/40">
-          <table className="w-full text-left border-collapse">
+        {/* Mobile cards */}
+        <div className="md:hidden space-y-3">
+          {loading ? (
+            <div className="py-12 text-center">
+              <span className="material-symbols-outlined animate-spin text-3xl text-primary">refresh</span>
+            </div>
+          ) : orders.length === 0 ? (
+            <div className="py-12 text-center bg-surface-container rounded-xl">
+              <p className="text-on-surface-variant text-sm">No orders yet.</p>
+            </div>
+          ) : (
+            orders.slice(0, 8).map((order) => (
+              <div key={order.id} className="bg-surface-container-high rounded-xl p-4 border border-outline-variant/10 space-y-2">
+                <div className="flex justify-between items-start gap-2">
+                  <span className="font-bold text-on-surface text-sm">#{order.id}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${STATUS_STYLES[order.status] || STATUS_STYLES.pending}`}>
+                    {order.status || 'pending'}
+                  </span>
+                </div>
+                <p className="text-sm text-on-surface font-medium">{order.student_name}</p>
+                <p className="text-xs text-on-surface-variant line-clamp-2">
+                  {order.items?.map((i) => i.item_name).join(', ') || 'Manual Items'}
+                </p>
+                <p className="text-sm font-bold text-primary">{formatPrice(order.total_amount)}</p>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="hidden md:block bg-surface-container rounded-xl overflow-hidden shadow-2xl shadow-[#0C0C1D]/40">
+          <div className="overflow-x-auto">
+          <table className="w-full text-left border-collapse min-w-[640px]">
             <thead>
               <tr className="bg-surface-container-high/50 text-on-surface-variant text-[10px] uppercase tracking-[0.2em] font-bold">
                 <th className="px-6 py-4">Order ID</th>
@@ -264,6 +294,7 @@ export default function CafeteriaDashboard() {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       </div>
 

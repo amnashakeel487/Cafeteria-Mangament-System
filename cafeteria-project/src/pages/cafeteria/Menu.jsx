@@ -425,9 +425,9 @@ export default function CafeteriaMenu() {
 
       {/* Item Modal */}
       {(modal === 'add' || modal === 'edit') && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-surface-container-lowest/80 backdrop-blur-sm">
-          <div className="bg-[rgba(56,55,74,0.6)] backdrop-blur-2xl w-full max-w-2xl rounded-3xl p-8 border border-white/10 shadow-[0_48px_96px_rgba(0,0,0,0.6)]">
-            <div className="flex justify-between items-center mb-8">
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-surface-container-lowest/80 backdrop-blur-sm overflow-y-auto">
+          <div className="bg-[rgba(56,55,74,0.6)] backdrop-blur-2xl w-full max-w-2xl max-h-[92vh] sm:max-h-[90vh] overflow-y-auto rounded-t-3xl sm:rounded-3xl p-5 sm:p-8 border border-white/10 shadow-[0_48px_96px_rgba(0,0,0,0.6)]">
+            <div className="flex justify-between items-center mb-6 sm:mb-8">
               <h2 className="text-2xl font-bold text-on-surface" style={{ fontFamily: 'Manrope' }}>
                 {modal === 'edit' ? 'Edit Menu Entry' : 'Compose Menu Entry'}
               </h2>

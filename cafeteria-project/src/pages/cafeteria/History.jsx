@@ -71,10 +71,10 @@ export default function CafeteriaOrderHistory() {
   return (
     <>
       <PageSEO {...PAGE_SEO.cafeHistory} />
-    <section className="p-8 max-w-6xl mx-auto space-y-8 pt-10 pb-20">
+    <section className="p-4 sm:p-6 md:p-8 max-w-6xl mx-auto space-y-6 md:space-y-8 pt-6 md:pt-10 pb-20">
       <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <h1 className="text-4xl font-extrabold text-on-surface tracking-tight mb-2" style={{ fontFamily: 'Manrope' }}>Order History</h1>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-on-surface tracking-tight mb-2" style={{ fontFamily: 'Manrope' }}>Order History</h1>
           <p className="text-on-surface-variant max-w-lg text-sm">Review past culinary transactions, track revenue, and monitor cafeteria activity across all statuses.</p>
         </div>
         <div className="flex items-center gap-3">
@@ -90,7 +90,7 @@ export default function CafeteriaOrderHistory() {
 
       {/* Filters Bar */}
       <section className="bg-surface-container rounded-xl p-4 shadow-xl flex flex-wrap items-end gap-6">
-        <div className="flex-1 min-w-[240px]">
+        <div className="w-full sm:flex-1 sm:min-w-[200px]">
           <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1.5 ml-1">Search Records</label>
           <div className="relative">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-sm">search</span>
@@ -118,15 +118,15 @@ export default function CafeteriaOrderHistory() {
         </div>
         <div className="w-full xl:w-auto">
           <label className="block text-[10px] font-bold text-on-surface-variant uppercase tracking-widest mb-1.5 ml-1">Date Range</label>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2 w-full">
             <input 
               value={dateFrom} onChange={(e) => setDateFrom(e.target.value)}
-              className="bg-surface-container-lowest border-none rounded-lg px-3 py-2 text-sm text-on-surface focus:ring-2 focus:ring-primary-container" type="date"
+              className="w-full min-w-0 bg-surface-container-lowest border-none rounded-lg px-3 py-2 text-sm text-on-surface focus:ring-2 focus:ring-primary-container" type="date"
             />
-            <span className="text-on-surface-variant">to</span>
+            <span className="text-on-surface-variant text-center text-sm hidden sm:inline">to</span>
             <input 
               value={dateTo} onChange={(e) => setDateTo(e.target.value)}
-              className="bg-surface-container-lowest border-none rounded-lg px-3 py-2 text-sm text-on-surface focus:ring-2 focus:ring-primary-container" type="date"
+              className="w-full min-w-0 bg-surface-container-lowest border-none rounded-lg px-3 py-2 text-sm text-on-surface focus:ring-2 focus:ring-primary-container" type="date"
             />
           </div>
         </div>
@@ -171,8 +171,8 @@ export default function CafeteriaOrderHistory() {
               </div>
             </div>
             
-            <div className="flex items-center gap-8 w-full md:w-auto px-4 md:px-0 opacity-80">
-              <div className="text-left md:text-right flex-1 md:flex-none">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 w-full md:w-auto md:px-0 opacity-80 border-t border-outline-variant/10 pt-4 md:border-t-0 md:pt-0">
+              <div className="text-left sm:text-right flex-1 min-w-0">
                 <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-1.5">Items Summary</p>
                 <div className="text-sm text-on-surface space-y-1">
                   {order.items && order.items.length > 0 ? (
@@ -182,7 +182,7 @@ export default function CafeteriaOrderHistory() {
                   ) : <p className="italic text-on-surface-variant/50">No items</p>}
                 </div>
               </div>
-              <div className="text-right pl-4 border-l border-outline-variant/10">
+              <div className="text-left sm:text-right sm:pl-4 sm:border-l border-outline-variant/10">
                 <p className="text-[10px] text-on-surface-variant font-bold uppercase tracking-widest mb-1.5">Total Amount</p>
                 <p className="text-xl font-extrabold text-primary" style={{ fontFamily: 'Manrope' }}>{formatPrice(order.total_amount)}</p>
               </div>

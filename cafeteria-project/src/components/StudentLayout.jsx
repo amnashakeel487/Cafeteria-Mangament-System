@@ -96,7 +96,7 @@ export default function StudentLayout() {
             <span className="material-symbols-outlined">menu</span>
           </button>
 
-          <span className="text-xl font-bold text-[#FF6B35] font-['Manrope']">COMSTAS Cafe</span>
+          <span className="text-base sm:text-xl font-bold text-[#FF6B35] font-['Manrope'] truncate max-w-[140px] sm:max-w-none">COMSTAS Cafe</span>
 
           {/* Desktop Nav Links */}
           <nav className="hidden md:flex items-center gap-6">
@@ -119,7 +119,7 @@ export default function StudentLayout() {
       </header>
 
       {/* Main Content Area */}
-      <main className="lg:pl-64 pt-20 px-6 md:px-8 lg:pl-72 lg:pr-10 pb-20 lg:pb-12 bg-[#121222] min-h-screen">
+      <main className="pt-20 px-4 sm:px-6 md:px-8 lg:pl-64 lg:pr-10 pb-24 lg:pb-12 bg-[#121222] min-h-screen overflow-x-hidden">
         <div className="pt-6">
           <Outlet />
         </div>
