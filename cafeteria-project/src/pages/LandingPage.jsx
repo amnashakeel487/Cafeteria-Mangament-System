@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import ThemeToggle from '../components/ThemeToggle';
 import DevelopmentTeam from '../components/DevelopmentTeam';
+import BrowseMenuSection from '../components/BrowseMenuSection';
 import PageSEO from '../seo/PageSEO';
 import { PAGE_SEO } from '../seo/siteConfig';
 
@@ -408,6 +409,9 @@ export default function LandingPage() {
           </motion.ol>
         </div>
       </section>
+
+      {/* ── BROWSE MENU (PUBLIC) ── */}
+      <BrowseMenuSection />
 
       {/* ── PORTAL SELECTION ── */}
       <section id="portals" className="py-20 sm:py-28 px-4 sm:px-6 bg-surface-container-low/40">
