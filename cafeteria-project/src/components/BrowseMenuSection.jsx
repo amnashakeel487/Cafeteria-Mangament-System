@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { supabase } from '../supabaseClient';
 import LazyImage from './LazyImage';
+import { formatPrice } from '../utils/currency';
 
 const FOOD_ICONS = ['lunch_dining', 'ramen_dining', 'local_pizza', 'bakery_dining', 'emoji_food_beverage', 'icecream'];
 
@@ -38,12 +39,6 @@ function isItemAvailable(item) {
   if (typeof item?.in_stock === 'boolean') return item.in_stock;
   if (typeof item?.status === 'string') return item.status.toLowerCase() !== 'out of stock';
   return true;
-}
-
-function formatPrice(price) {
-  const parsed = Number(price);
-  if (Number.isNaN(parsed)) return 'Rs. 0';
-  return `Rs. ${parsed.toFixed(2)}`;
 }
 
 export default function BrowseMenuSection() {

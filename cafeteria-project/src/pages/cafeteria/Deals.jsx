@@ -4,6 +4,7 @@ import DefaultImage from '../../assets/default_dish.png';
 import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
 import LazyImage from '../../components/LazyImage';
+import { formatPrice } from '../../utils/currency';
 
 const BASE = '';
 const emptyForm = { title: '', description: '', deal_price: '', image_url: '', active: true };
@@ -162,7 +163,7 @@ export default function CafeteriaDeals() {
                   </div>
                   {savings > 0 && (
                     <div className="absolute top-3 right-3 bg-primary text-on-primary px-2 py-1 rounded-full text-[10px] font-bold">
-                      Save Rs. {savings.toFixed(2)}
+                      Save {formatPrice(savings)}
                     </div>
                   )}
                 </div>
@@ -175,14 +176,14 @@ export default function CafeteriaDeals() {
                     {deal.deal_items?.map((item, i) => (
                       <div key={i} className="flex justify-between text-xs text-on-surface-variant">
                         <span className="flex items-center gap-1"><span className="material-symbols-outlined text-[12px] text-primary">restaurant</span>{item.item_name}</span>
-                        <span className="line-through opacity-50">Rs. {Number(item.item_price).toFixed(2)}</span>
+                        <span className="line-through opacity-50">{formatPrice(item.item_price)}</span>
                       </div>
                     ))}
                   </div>
 
                   <div className="flex items-center gap-3 mb-4 pt-2 border-t border-outline-variant/10">
-                    <span className="text-xl font-extrabold text-primary">Rs. {Number(deal.deal_price).toFixed(2)}</span>
-                    {total > 0 && <span className="text-sm text-on-surface-variant line-through">Rs. ${total.toFixed(2)}</span>}
+                    <span className="text-xl font-extrabold text-primary">{formatPrice(deal.deal_price)}</span>
+                    {total > 0 && <span className="text-sm text-on-surface-variant line-through">{formatPrice(total)}</span>}
                     <span className="text-xs text-tertiary font-bold ml-auto">{deal.deal_items?.length || 0} items</span>
                   </div>
 
@@ -234,13 +235,13 @@ export default function CafeteriaDeals() {
                   <div>
                     <label className="text-xs font-bold text-on-surface-variant uppercase tracking-widest">Deal Price *</label>
                     <div className="relative mt-1">
-                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-sm">Rs.</span>
+                      <span className="absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant font-bold text-sm">Rs</span>
                       <input required type="number" step="0.01" min="0" value={form.deal_price} onChange={e => setForm({...form, deal_price: e.target.value})}
                         className="w-full bg-surface-container-lowest border-none rounded-xl pl-7 pr-4 py-3 text-on-surface focus:ring-2 focus:ring-primary/40 outline-none text-sm" placeholder="0.00" />
                     </div>
                     {originalTotal > 0 && form.deal_price && (
                       <p className="text-xs text-tertiary mt-1">
-                        Original total: Rs. ${originalTotal.toFixed(2)} — Save Rs. {(originalTotal - parseFloat(form.deal_price || 0)).toFixed(2)}
+                        Original total: {formatPrice(originalTotal)} — Save {formatPrice(originalTotal - parseFloat(form.deal_price || 0))}
                       </p>
                     )}
                   </div>
@@ -276,7 +277,7 @@ export default function CafeteriaDeals() {
                           </div>
                           <div className="flex-1 min-w-0">
                             <p className="text-sm font-bold text-on-surface truncate">{item.name}</p>
-                            <p className="text-xs text-on-surface-variant">Rs. ${Number(item.price).toFixed(2)}</p>
+                            <p className="text-xs text-on-surface-variant">{formatPrice(item.price)}</p>
                           </div>
                           {selected && <span className="material-symbols-outlined text-primary text-lg shrink-0" style={{ fontVariationSettings: "'FILL' 1" }}>check_circle</span>}
                         </button>

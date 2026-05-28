@@ -6,6 +6,7 @@ import { PAGE_SEO } from '../../seo/siteConfig';
 import { useCart } from '../../context/CartContext';
 import RefundStatusBadge from '../../components/RefundStatusBadge';
 import { cancelledByLabel } from '../../utils/orderCancellation';
+import { formatPrice } from '../../utils/currency';
 
 const BASE = '';
 
@@ -190,7 +191,7 @@ export default function OrderHistory() {
                   <div className="text-right">
                     <p className="text-xs text-[#e1bfb5] font-medium uppercase tracking-tighter">Total</p>
                     <p className={`text-xl font-bold ${order.status === 'cancelled' ? 'text-[#E3E0F8]' : 'text-[#FFB59D]'}`}>
-                      ${Number(order.total_amount).toFixed(2)}
+                      {formatPrice(order.total_amount)}
                     </p>
                   </div>
                 </div>

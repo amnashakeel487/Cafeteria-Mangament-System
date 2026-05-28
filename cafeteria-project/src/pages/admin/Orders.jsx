@@ -3,6 +3,7 @@ import axios from 'axios';
 import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
 import RefundStatusBadge from '../../components/RefundStatusBadge';
+import { formatPrice } from '../../utils/currency';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -176,8 +177,7 @@ export default function Orders() {
                       <span className="text-on-surface-variant font-bold">Cafeteria:</span> {order.cafeteria_name}
                     </p>
                     <p>
-                      <span className="text-on-surface-variant font-bold">Amount:</span> Rs.{' '}
-                      {Number(order.total_amount).toFixed(2)}
+                      <span className="text-on-surface-variant font-bold">Amount:</span> {formatPrice(order.total_amount)}
                     </p>
                     <p>
                       <span className="text-on-surface-variant font-bold">Cancelled by:</span> {order.cancelled_by}
@@ -311,7 +311,7 @@ export default function Orders() {
                     </div>
                     <div className="flex justify-between text-xs text-on-surface-variant">
                       <span>{new Date(order.date).toLocaleDateString()}</span>
-                      <span className="font-bold text-primary">Rs. {Number(order.total_amount).toFixed(2)}</span>
+                      <span className="font-bold text-primary">{formatPrice(order.total_amount)}</span>
                     </div>
                   </div>
                 ))}
@@ -353,7 +353,7 @@ export default function Orders() {
                             {order.cafeteria_name}
                           </span>
                         </td>
-                        <td className="px-8 py-6 font-extrabold text-sm text-primary">Rs. {Number(order.total_amount).toFixed(2)}</td>
+                        <td className="px-8 py-6 font-extrabold text-sm text-primary">{formatPrice(order.total_amount)}</td>
                         <td className="px-8 py-6 text-sm font-medium text-on-surface-variant">
                           {new Date(order.date).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}
                         </td>

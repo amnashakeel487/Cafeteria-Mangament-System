@@ -4,6 +4,7 @@ import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
 import LazyImage from '../../components/LazyImage';
 import { Link } from 'react-router-dom';
+import { formatPrice } from '../../utils/currency';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({ totalStudents: 0, totalCafeterias: 0, totalOrders: 0, totalRevenue: 0, newestStudents: [], topCafeteria: null, cafeteriaLoads: [] });
@@ -42,7 +43,7 @@ export default function Dashboard() {
     csvContent += `Total Students,${stats.totalStudents}\r\n`;
     csvContent += `Total Cafeterias,${stats.totalCafeterias}\r\n`;
     csvContent += `Total Orders,${stats.totalOrders}\r\n`;
-    csvContent += `Total Revenue,Rs. ${Number(stats.totalRevenue).toFixed(2)}\r\n\r\n`;
+    csvContent += `Total Revenue,${formatPrice(stats.totalRevenue)}\r\n\r\n`;
     
     if (stats.topCafeteria) {
        csvContent += "TOP VENUE,ORDERS\r\n";
@@ -115,7 +116,7 @@ export default function Dashboard() {
           <div className="space-y-2 md:space-y-4">
             <div>
               <p className="text-on-surface-variant text-xs font-label uppercase tracking-wider">Total Revenue</p>
-              <h3 className="text-2xl md:text-3xl font-extrabold editorial-text mt-1 text-primary">Rs. ${loading ? '0' : Number(stats.totalRevenue).toFixed(2)}</h3>
+              <h3 className="text-2xl md:text-3xl font-extrabold editorial-text mt-1 text-primary">{loading ? formatPrice(0) : formatPrice(stats.totalRevenue)}</h3>
             </div>
           </div>
         </div>
@@ -205,7 +206,7 @@ export default function Dashboard() {
                    <span className="material-symbols-outlined text-xs text-tertiary">restaurant</span>
                  </div>
                  <div>
-                   <p className="text-sm text-on-surface line-clamp-2"><span className="font-bold">{order.student_name}</span> spent <span className="text-primary font-bold">Rs. ${Number(order.total_amount).toFixed(2)}</span> at {order.cafeteria_name}.</p>
+                   <p className="text-sm text-on-surface line-clamp-2"><span className="font-bold">{order.student_name}</span> spent <span className="text-primary font-bold">{formatPrice(order.total_amount)}</span> at {order.cafeteria_name}.</p>
                    <div className="flex justify-between items-center mt-1">
                       <p className="text-[10px] text-on-surface-variant uppercase font-bold tracking-widest">{new Date(order.date).toLocaleString([], { dateStyle: 'short', timeStyle: 'short' })}</p>
                       <span className={`px-2 py-0.5 rounded uppercase tracking-widest text-[8px] font-bold ${order.status === 'completed' ? 'bg-tertiary/10 text-tertiary' : 'bg-surface-bright text-on-surface-variant'}`}>{order.status || 'Pending'}</span>

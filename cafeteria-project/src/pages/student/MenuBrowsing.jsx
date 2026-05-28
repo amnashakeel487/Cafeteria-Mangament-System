@@ -6,6 +6,7 @@ import DefaultImage from '../../assets/default_dish.png';
 import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
 import LazyImage from '../../components/LazyImage';
+import { formatPrice } from '../../utils/currency';
 
 const BASE = '';
 const DEFAULT_IMAGE = DefaultImage; // COMSATS Cafe logo as default image
@@ -186,7 +187,7 @@ export default function MenuBrowsing() {
                     </div>
                     {savings > 0 && (
                       <div className="absolute top-2 right-2 bg-[#28283a]/90 text-[#FFB59D] px-2 py-0.5 rounded-full text-[10px] font-bold">
-                        Save Rs. {savings.toFixed(2)}
+                        Save {formatPrice(savings)}
                       </div>
                     )}
                   </div>
@@ -196,13 +197,13 @@ export default function MenuBrowsing() {
                       {deal.deal_items?.map((item, i) => (
                         <div key={i} className="flex justify-between text-xs text-[#e1bfb5]">
                           <span className="flex items-center gap-1"><span className="material-symbols-outlined text-[11px] text-[#FF6B35]">restaurant</span>{item.item_name}</span>
-                          <span className="line-through opacity-50">Rs. {Number(item.item_price).toFixed(2)}</span>
+                          <span className="line-through opacity-50">{formatPrice(item.item_price)}</span>
                         </div>
                       ))}
                     </div>
                     <div className="flex items-center gap-2 mt-auto mb-3">
-                      <span className="text-lg font-extrabold text-[#FF6B35]">Rs. {Number(deal.deal_price).toFixed(2)}</span>
-                      {originalTotal > 0 && <span className="text-sm text-[#e1bfb5] line-through">Rs. ${originalTotal.toFixed(2)}</span>}
+                      <span className="text-lg font-extrabold text-[#FF6B35]">{formatPrice(deal.deal_price)}</span>
+                      {originalTotal > 0 && <span className="text-sm text-[#e1bfb5] line-through">{formatPrice(originalTotal)}</span>}
                     </div>
                     <button
                       onClick={() => addToCart({ id: `deal-${deal.id}`, name: deal.title, price: deal.deal_price, image_url: deal.image_url, category: 'Deal', description: deal.deal_items?.map(i => i.item_name).join(' + ') }, cafeteriaId)}
@@ -254,7 +255,7 @@ export default function MenuBrowsing() {
               <div className="p-3 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-1 font-['Manrope']">
                   <h3 className="text-sm font-bold text-[#E3E0F8] group-hover:text-[#FFB59D] transition-colors line-clamp-1">{item.name}</h3>
-                  <span className="text-sm font-bold text-[#FFB59D]">Rs. ${Number(item.price).toFixed(2)}</span>
+                  <span className="text-sm font-bold text-[#FFB59D]">{formatPrice(item.price)}</span>
                 </div>
                 <p className="text-[#e1bfb5] text-[11px] mb-3 flex-1 line-clamp-2">{item.description}</p>
                 
@@ -301,7 +302,7 @@ export default function MenuBrowsing() {
                 <span className="font-bold text-[#E3E0F8]">Your Order ({cartItemCount})</span>
              </div>
              <div className="flex items-center gap-4">
-                <span className="font-bold text-[#FFB59D]">Rs. ${cartTotal.toFixed(2)}</span>
+                <span className="font-bold text-[#FFB59D]">{formatPrice(cartTotal)}</span>
                 <span className="material-symbols-outlined text-[#e1bfb5] transition-transform" style={{ transform: cartOpen ? 'rotate(180deg)' : 'none' }}>expand_less</span>
              </div>
           </div>
@@ -333,7 +334,7 @@ export default function MenuBrowsing() {
                   <div className="flex-1 min-w-0">
                     <div className="flex justify-between items-start gap-2">
                       <p className="text-sm font-bold text-[#E3E0F8] leading-tight truncate">{item.name}</p>
-                      <p className="text-sm font-bold text-[#FFB59D] leading-tight">Rs. {(item.price * item.qty).toFixed(2)}</p>
+                      <p className="text-sm font-bold text-[#FFB59D] leading-tight">{formatPrice(item.price * item.qty)}</p>
                     </div>
                     <div className="flex justify-between items-center mt-1 text-[#e1bfb5]">
                         <p className="text-[10px]">Qty: {item.qty}</p>
@@ -350,7 +351,7 @@ export default function MenuBrowsing() {
             <div className="pt-6 border-t border-[#594139]/15">
               <div className="flex justify-between items-center mb-6">
                 <p className="text-[#e1bfb5] font-medium text-sm">Subtotal</p>
-                <p className="text-2xl font-bold text-[#E3E0F8] font-['Manrope'] tracking-tight">Rs. ${cartTotal.toFixed(2)}</p>
+                <p className="text-2xl font-bold text-[#E3E0F8] font-['Manrope'] tracking-tight">{formatPrice(cartTotal)}</p>
               </div>
               <button 
                 onClick={() => navigate('/student/cart')}
