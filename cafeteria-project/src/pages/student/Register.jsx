@@ -1,8 +1,35 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import axios from 'axios';
+import CustomerRegisterLayout from '../../components/CustomerRegisterLayout';
+import {
+  PortalLoginErrorAlert,
+  PortalLoginField,
+  PortalLoginSuccessAlert,
+} from '../../components/PortalLoginLayout';
+import {
+  ArrowIcon,
+  EyeIcon,
+  LockIcon,
+  MailIcon,
+  PersonIcon,
+  PhoneIcon,
+  UserPlusIcon,
+} from '../../components/loginFormIcons';
+import {
+  getIconFocusClass,
+  getInputFocusClass,
+  getPrimaryButtonClass,
+  getTheme,
+} from '../../components/portalLoginThemes';
 import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
+
+const inputClass = getInputFocusClass('customer');
+const iconFocus = getIconFocusClass('customer');
+const btnClass = getPrimaryButtonClass('customer');
+const theme = getTheme('customer');
 
 export default function StudentRegister() {
   const [form, setForm] = useState({ name: '', email: '', password: '', contact: '' });
@@ -19,8 +46,8 @@ export default function StudentRegister() {
     setSuccess('');
     try {
       await axios.post('/api/student/register', form);
-      setSuccess('Registration submitted! Please wait for admin approval before logging in.');
-      setTimeout(() => navigate('/student/login'), 3000);
+      setSuccess('Registration submitted! Please wait for admin approval before signing in.');
+      setTimeout(() => navigate('/student/login'), 3500);
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed.');
     } finally {
@@ -28,86 +55,140 @@ export default function StudentRegister() {
     }
   };
 
-  const registerForm = (
-    <div className="bg-surface-container-high rounded-xl p-8 border border-outline-variant/10 shadow-2xl h-full flex flex-col justify-between">
-      <div>
-        <div className="mb-6 text-center">
-          <div className="w-12 h-12 bg-surface-container-highest rounded-full flex items-center justify-center mx-auto mb-3 border border-outline-variant/10">
-            <span className="material-symbols-outlined text-2xl text-tertiary">person_add</span>
-          </div>
-          <h1 className="text-2xl font-extrabold text-on-surface mb-1" style={{ fontFamily: 'Manrope' }}>Create Account</h1>
-          <p className="text-xs text-on-surface-variant uppercase tracking-wide">Student Portal — COMSTAS Cafe</p>
-        </div>
-
-        {error && (
-          <div className="mb-4 p-3 rounded-lg bg-error-container/20 border border-error/50 flex items-center gap-2 text-error">
-            <span className="material-symbols-outlined text-sm">error</span>
-            <p className="text-sm font-bold">{error}</p>
-          </div>
-        )}
-        {success && (
-          <div className="mb-4 p-3 rounded-lg bg-tertiary/10 border border-tertiary/30 flex items-center gap-2 text-tertiary">
-            <span className="material-symbols-outlined text-sm">check_circle</span>
-            <p className="text-sm font-bold">{success}</p>
-          </div>
-        )}
-
-        <form onSubmit={handleRegister} className="space-y-4">
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-on-surface-variant">Full Name</label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">person</span>
-              <input type="text" value={form.name} onChange={e => setForm({...form, name: e.target.value})} placeholder="Your full name"
-                className="w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-tertiary/60 rounded-lg pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-tertiary/50 text-on-surface placeholder-on-surface-variant/30 transition-all outline-none" required />
-            </div>
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-on-surface-variant">University Email</label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">mail</span>
-              <input type="email" value={form.email} onChange={e => setForm({...form, email: e.target.value})} placeholder="student@university.edu"
-                className="w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-tertiary/60 rounded-lg pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-tertiary/50 text-on-surface placeholder-on-surface-variant/30 transition-all outline-none" required />
-            </div>
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-on-surface-variant">Contact (Optional)</label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">phone</span>
-              <input type="text" value={form.contact} onChange={e => setForm({...form, contact: e.target.value})} placeholder="+92 300 0000000"
-                className="w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-tertiary/60 rounded-lg pl-12 pr-4 py-3 text-sm focus:ring-1 focus:ring-tertiary/50 text-on-surface placeholder-on-surface-variant/30 transition-all outline-none" />
-            </div>
-          </div>
-          <div className="space-y-1.5">
-            <label className="text-xs font-bold text-on-surface-variant">Password</label>
-            <div className="relative">
-              <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50">lock</span>
-              <input type={showPassword ? 'text' : 'password'} value={form.password} onChange={e => setForm({...form, password: e.target.value})} placeholder="Min. 6 characters"
-                className="w-full bg-surface-container-lowest border border-outline-variant/15 focus:border-tertiary/60 rounded-lg pl-12 pr-12 py-3 text-sm focus:ring-1 focus:ring-tertiary/50 text-on-surface placeholder-on-surface-variant/30 transition-all outline-none" required minLength={6} />
-              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-on-surface-variant/50 hover:text-tertiary transition-colors">
-                <span className="material-symbols-outlined text-xl">{showPassword ? 'visibility_off' : 'visibility'}</span>
-              </button>
-            </div>
-          </div>
-          <button type="submit" disabled={isLoading}
-            className="w-full bg-gradient-to-br from-tertiary to-tertiary-container text-on-tertiary py-3 rounded-lg font-bold flex items-center justify-center gap-2 hover:opacity-90 active:scale-[0.98] transition-all">
-            {isLoading ? <span className="material-symbols-outlined animate-spin">refresh</span> : <><span>Submit Registration</span><span className="material-symbols-outlined text-lg">arrow_forward</span></>}
-          </button>
-        </form>
-      </div>
-
-      <p className="text-xs text-center text-on-surface-variant mt-6">
-        Already have an account?{' '}
-        <button onClick={() => navigate('/student/login')} className="text-tertiary font-bold hover:underline">Sign In →</button>
-      </p>
-    </div>
-  );
-
   return (
     <>
       <PageSEO {...PAGE_SEO.studentRegister} />
-      <main className="min-h-screen bg-surface flex items-center justify-center p-4 text-on-surface font-['Inter']">
-        <div className="w-full max-w-[420px]">{registerForm}</div>
-      </main>
+      <CustomerRegisterLayout onSignInClick={() => navigate('/student/login')}>
+        <PortalLoginErrorAlert message={error} />
+        <PortalLoginSuccessAlert message={success} accent="#ffb59d" />
+
+        <form onSubmit={handleRegister}>
+          <PortalLoginField delay={4}>
+            <label htmlFor="reg-name" className="block text-xs font-medium uppercase tracking-wide text-on-surface-variant mb-2 font-dm">
+              Full Name
+            </label>
+            <div className="relative flex items-center group">
+              <span className={`absolute left-3.5 text-on-surface-variant/60 flex transition-colors ${iconFocus}`}>
+                <PersonIcon />
+              </span>
+              <input
+                id="reg-name"
+                type="text"
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                disabled={isLoading || !!success}
+                placeholder="Your full name"
+                className={inputClass}
+                required
+              />
+            </div>
+          </PortalLoginField>
+
+          <PortalLoginField delay={5}>
+            <label htmlFor="reg-email" className="block text-xs font-medium uppercase tracking-wide text-on-surface-variant mb-2 font-dm">
+              University Email
+            </label>
+            <div className="relative flex items-center group">
+              <span className={`absolute left-3.5 text-on-surface-variant/60 flex transition-colors ${iconFocus}`}>
+                <MailIcon />
+              </span>
+              <input
+                id="reg-email"
+                type="email"
+                value={form.email}
+                onChange={(e) => setForm({ ...form, email: e.target.value })}
+                disabled={isLoading || !!success}
+                placeholder="you@comsats.edu.pk"
+                className={inputClass}
+                required
+              />
+            </div>
+          </PortalLoginField>
+
+          <PortalLoginField delay={6}>
+            <label htmlFor="reg-contact" className="block text-xs font-medium uppercase tracking-wide text-on-surface-variant mb-2 font-dm">
+              Contact <span className="normal-case text-on-surface-variant/50">(optional)</span>
+            </label>
+            <div className="relative flex items-center group">
+              <span className={`absolute left-3.5 text-on-surface-variant/60 flex transition-colors ${iconFocus}`}>
+                <PhoneIcon />
+              </span>
+              <input
+                id="reg-contact"
+                type="text"
+                value={form.contact}
+                onChange={(e) => setForm({ ...form, contact: e.target.value })}
+                disabled={isLoading || !!success}
+                placeholder="+92 300 0000000"
+                className={inputClass}
+              />
+            </div>
+          </PortalLoginField>
+
+          <PortalLoginField delay={7}>
+            <label htmlFor="reg-password" className="block text-xs font-medium uppercase tracking-wide text-on-surface-variant mb-2 font-dm">
+              Password
+            </label>
+            <div className="relative flex items-center group">
+              <span className={`absolute left-3.5 text-on-surface-variant/60 flex transition-colors ${iconFocus}`}>
+                <LockIcon />
+              </span>
+              <input
+                id="reg-password"
+                type={showPassword ? 'text' : 'password'}
+                value={form.password}
+                onChange={(e) => setForm({ ...form, password: e.target.value })}
+                disabled={isLoading || !!success}
+                placeholder="Min. 6 characters"
+                className={`${inputClass} pr-11`}
+                required
+                minLength={6}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                disabled={isLoading || !!success}
+                className={`absolute right-3.5 flex p-0 bg-transparent border-0 cursor-pointer transition-colors disabled:opacity-50 ${
+                  showPassword ? 'text-primary' : 'text-on-surface-variant/60 hover:text-primary'
+                }`}
+              >
+                <EyeIcon />
+              </button>
+            </div>
+          </PortalLoginField>
+
+          <PortalLoginField delay={8} className="mb-0">
+            <motion.button
+              type="submit"
+              disabled={isLoading || !!success}
+              whileHover={!isLoading && !success ? { y: -2, boxShadow: theme.btnHoverShadow } : {}}
+              whileTap={!isLoading && !success ? { y: 0 } : {}}
+              className={btnClass}
+            >
+              {isLoading ? (
+                <span className="material-symbols-outlined animate-spin text-xl">refresh</span>
+              ) : success ? (
+                <>
+                  <span className="material-symbols-outlined text-xl">check_circle</span>
+                  Submitted
+                </>
+              ) : (
+                <>
+                  <UserPlusIcon />
+                  Submit Registration
+                  <ArrowIcon />
+                </>
+              )}
+            </motion.button>
+          </PortalLoginField>
+
+          <PortalLoginField delay={9}>
+            <p className="text-center text-xs text-on-surface-variant mt-4 px-3.5 py-2.5 rounded-lg bg-surface-container/50 border border-outline-variant/15 leading-relaxed font-dm">
+              After you register, an administrator will approve your account. You&apos;ll receive access once approved.
+            </p>
+          </PortalLoginField>
+        </form>
+      </CustomerRegisterLayout>
     </>
   );
 }

@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import { NotificationProvider } from '../context/NotificationContext';
+import NotificationBell from './notifications/NotificationBell';
 
 export default function StudentLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -27,6 +29,7 @@ export default function StudentLayout() {
   };
 
   return (
+    <NotificationProvider role="student" recipientId={student?.id}>
     <div className="bg-[#121222] text-[#E3E0F8] min-h-screen font-['Inter']">
 
       {/* Mobile Overlay */}
@@ -105,6 +108,7 @@ export default function StudentLayout() {
 
         <div className="flex items-center gap-3 text-[#FF6B35]">
           <ThemeToggle />
+          <NotificationBell />
           <button onClick={() => navigate('/student/cart')} className="relative p-2 hover:bg-[#38374A]/40 rounded-full transition-colors active:scale-95">
             <span className="material-symbols-outlined">shopping_cart</span>
           </button>
@@ -141,5 +145,6 @@ export default function StudentLayout() {
         </button>
       </nav>
     </div>
+    </NotificationProvider>
   );
 }

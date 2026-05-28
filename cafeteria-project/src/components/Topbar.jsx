@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import NotificationBell from './notifications/NotificationBell';
 
 export default function Topbar({ setMobileMenuOpen }) {
   return (
@@ -17,10 +18,7 @@ export default function Topbar({ setMobileMenuOpen }) {
       </div>
       <div className="flex items-center space-x-4">
         <ThemeToggle />
-        <button className="relative text-[#E3E0F8] opacity-70 hover:text-[#FFB59D] transition-all">
-          <span className="material-symbols-outlined">notifications</span>
-          <span className="absolute top-0 right-0 w-2 h-2 bg-primary-container rounded-full"></span>
-        </button>
+        <NotificationBell />
         <Link to="/admin/profile" className="text-[#E3E0F8] opacity-70 hover:text-[#FFB59D] transition-all" title="Settings">
           <span className="material-symbols-outlined">settings</span>
         </Link>

@@ -5,6 +5,7 @@ const {
     buildCancellationUpdate,
     assertStudentCanCancel,
 } = require('../utils/orderCancellation');
+const { createNotification } = require('../utils/notificationService');
 
 const router = express.Router();
 
@@ -71,7 +72,27 @@ router.post('/', upload.single('screenshot'), async (req, res) => {
         if (itemsErr) {
             console.error('Order items insert error:', itemsErr);
         }
-        
+
+        try {
+            const studentName = req.user.name || 'A student';
+            const itemCount = parsedItems.reduce((sum, i) => sum + (Number(i.qty) || 1), 0);
+            await createNotification({
+                recipientType: 'cafeteria',
+                recipientId: cafeteria_id,
+                type: 'new_order',
+                title: '🔔 New Order Received!',
+                message: `Order #${orderId} from ${studentName} — Rs ${total_amount}`,
+                data: {
+                    orderId,
+                    studentName,
+                    total: total_amount,
+                    itemCount,
+                },
+            });
+        } catch (_) {
+            /* non-blocking */
+        }
+
         res.status(201).json({ message: 'Order created successfully', orderId });
     } catch (err) {
         console.error('Unexpected error:', err);
@@ -165,6 +186,21 @@ router.post('/:id/cancel', async (req, res) => {
             .single();
 
         if (updateErr) return res.status(500).json({ message: 'Failed to cancel order' });
+
+        try {
+            const studentName = req.user.name || 'A student';
+            await createNotification({
+                recipientType: 'cafeteria',
+                recipientId: order.cafeteria_id,
+                type: 'order_cancelled',
+                title: '❌ Order Cancelled by Student',
+                message: `Order #${orderId} was cancelled by ${studentName}`,
+                data: { orderId: order.id, studentName },
+            });
+        } catch (_) {
+            /* non-blocking */
+        }
+
         res.json({ message: 'Order cancelled successfully', order: updated });
     } catch (err) {
         console.error('Student cancel order error:', err);

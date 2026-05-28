@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const supabase = require('../database');
+const { createNotification } = require('../utils/notificationService');
 
 const router = express.Router();
 
@@ -21,11 +22,38 @@ router.post('/register', async (req, res) => {
         if (existing) return res.status(409).json({ message: 'Email already registered' });
 
         const hashedPassword = await bcrypt.hash(password, 10);
-        const { error } = await supabase
+        const { data: newStudent, error } = await supabase
             .from('users')
-            .insert({ name, email: email.trim(), password: hashedPassword, role: 'student', contact: contact || null, status: 'pending' });
+            .insert({
+                name,
+                email: email.trim(),
+                password: hashedPassword,
+                role: 'student',
+                contact: contact || null,
+                status: 'pending',
+            })
+            .select('id, name, email')
+            .single();
 
         if (error) return res.status(500).json({ message: 'Registration failed: ' + error.message });
+
+        try {
+            await createNotification({
+                recipientType: 'admin',
+                recipientId: 'admin',
+                type: 'new_registration',
+                title: '👤 New Student Registration',
+                message: `${name} has registered and is awaiting approval`,
+                data: {
+                    studentId: newStudent.id,
+                    studentName: name,
+                    studentEmail: email.trim(),
+                },
+            });
+        } catch (_) {
+            /* notification must not block registration */
+        }
+
         res.status(201).json({ message: 'Registration submitted. Awaiting admin approval.' });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });

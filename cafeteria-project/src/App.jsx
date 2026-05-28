@@ -29,6 +29,8 @@ import CartCheckout from './pages/student/CartCheckout';
 import OrderTracking from './pages/student/OrderTracking';
 import OrderHistory from './pages/student/OrderHistory';
 import StudentProfile from './pages/student/StudentProfile';
+import StudentNotificationsPage from './pages/student/NotificationsPage';
+import CafeteriaNotificationsPage from './pages/cafeteria/NotificationsPage';
 
 import { CartProvider } from './context/CartContext';
 import LandingPage from './pages/LandingPage';
@@ -66,6 +68,7 @@ function App() {
             <Route path="/cafeteria/menu" element={<CafeteriaMenu />} />
             <Route path="/cafeteria/deals" element={<CafeteriaDeals />} />
             <Route path="/cafeteria/profile" element={<CafeteriaProfile />} />
+            <Route path="/cafeteria/notifications" element={<CafeteriaNotificationsPage />} />
           </Route>
         </Route>
 
@@ -80,6 +83,7 @@ function App() {
              <Route path="/student/track" element={<OrderTracking />} />
              <Route path="/student/orders" element={<OrderHistory />} />
              <Route path="/student/profile" element={<StudentProfile />} />
+             <Route path="/student/notifications" element={<StudentNotificationsPage />} />
              <Route path="/student/home" element={<Navigate to="/student/cafeterias" replace />} />
           </Route>
         </Route>

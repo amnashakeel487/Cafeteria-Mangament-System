@@ -1,16 +1,17 @@
-/** Theme tokens for split-panel login pages (customer-login.html layout). */
+/** Theme tokens for split-panel login pages — aligned with landing page (surface / primary / tertiary). */
 
 export const PORTAL_THEMES = {
   customer: {
-    accent: '#06d6c7',
-    accentDim: '#04a89c',
-    accentGlow: 'rgba(6,214,199,0.18)',
-    accentHoverBg: 'rgba(6,214,199,0.08)',
-    accentBorderHover: 'rgba(6,214,199,0.3)',
-    orb1: 'bg-[#06d6c7]/[0.12]',
-    orb2: 'bg-[#0696c7]/[0.08]',
-    orb3: 'bg-[#06d6c7]/[0.06]',
-    leftPanelTint: 'bg-[#111827]',
+    accent: '#ffb59d',
+    accentDim: '#ff6b35',
+    accentTertiary: '#59d5fb',
+    accentGlow: 'rgba(255, 107, 53, 0.22)',
+    accentHoverBg: 'rgba(255, 181, 157, 0.08)',
+    accentBorderHover: 'rgba(255, 107, 53, 0.35)',
+    orb1: 'bg-primary-container/15',
+    orb2: 'bg-primary/12',
+    orb3: 'bg-tertiary/10',
+    leftPanelTint: 'bg-surface-container-low',
     centerEmoji: '🎓',
     portalLabel: 'Customer Portal',
     tagline: 'Fresh food, just a click away',
@@ -21,31 +22,50 @@ export const PORTAL_THEMES = {
       'Easy campus pickup',
     ],
     avatars: [
-      { initials: 'AK', className: 'bg-[#1d4ed8]' },
-      { initials: 'SH', className: 'bg-[#7c3aed]' },
-      { initials: 'MR', className: 'bg-[#059669]' },
-      { initials: 'ZB', className: 'bg-[#d97706]' },
+      { initials: 'AK', className: 'bg-primary-container' },
+      { initials: 'SH', className: 'bg-secondary-container' },
+      { initials: 'MR', className: 'bg-tertiary/80' },
+      { initials: 'ZB', className: 'bg-primary' },
     ],
     proofStrong: '500+ students',
     proofLine: 'ordering daily at COMSTAS campus',
     formEmoji: '👋',
     heading: 'Welcome Back',
     subtext: 'Sign in to browse menus, place orders,\nand track your pickup.',
-    btnGradient: 'bg-gradient-to-br from-[#06d6c7] to-[#0891b2]',
-    btnText: 'text-[#0a1a1a]',
-    btnHoverShadow: '0 8px 24px rgba(6,214,199,0.3)',
-    btnLoadingShadow: ['0 0 0 rgba(6,214,199,0)', '0 0 24px rgba(6,214,199,0.4)', '0 0 0 rgba(6,214,199,0)'],
+    btnGradient: 'bg-gradient-to-br from-primary-container to-[#ff6b35]',
+    btnText: 'text-on-primary',
+    btnHoverShadow: '0 8px 24px rgba(255, 107, 53, 0.35)',
+    btnLoadingShadow: [
+      '0 0 0 rgba(255, 107, 53, 0)',
+      '0 0 24px rgba(255, 107, 53, 0.45)',
+      '0 0 0 rgba(255, 107, 53, 0)',
+    ],
+    registerCopy: {
+      formEmoji: '✨',
+      heading: 'Create Account',
+      subtext:
+        'Register with your university email.\nYour account will be reviewed by an admin before you can sign in.',
+      features: [
+        'Free student registration',
+        'Admin-verified campus accounts',
+        'Browse menus from every cafeteria',
+        'Order & track once approved',
+      ],
+      proofStrong: 'Join 500+ students',
+      proofLine: 'already ordering on COMSTAS campus',
+    },
   },
   cafe: {
     accent: '#ff6b35',
     accentDim: '#e85a20',
+    accentTertiary: '#59d5fb',
     accentGlow: 'rgba(255,107,53,0.22)',
     accentHoverBg: 'rgba(255,107,53,0.08)',
     accentBorderHover: 'rgba(255,107,53,0.35)',
     orb1: 'bg-[#ff6b35]/[0.14]',
     orb2: 'bg-[#ffb59d]/[0.10]',
-    orb3: 'bg-[#f97316]/[0.08]',
-    leftPanelTint: 'bg-[#111827]',
+    orb3: 'bg-tertiary/10',
+    leftPanelTint: 'bg-surface-container-low',
     centerEmoji: '☕',
     portalLabel: 'Cafe Owner Portal',
     tagline: 'Manage your cafe with ease',
@@ -67,20 +87,21 @@ export const PORTAL_THEMES = {
     heading: 'Cafe Owner Login',
     subtext: 'Access your dashboard to manage menus,\norders, and payments.',
     btnGradient: 'bg-gradient-to-br from-[#ffb59d] via-[#ff6b35] to-[#e85a20]',
-    btnText: 'text-[#5f1900]',
+    btnText: 'text-on-primary',
     btnHoverShadow: '0 8px 24px rgba(255,107,53,0.35)',
     btnLoadingShadow: ['0 0 0 rgba(255,107,53,0)', '0 0 24px rgba(255,107,53,0.45)', '0 0 0 rgba(255,107,53,0)'],
   },
   admin: {
     accent: '#ff6b35',
     accentDim: '#ffb59d',
+    accentTertiary: '#59d5fb',
     accentGlow: 'rgba(255,107,53,0.2)',
     accentHoverBg: 'rgba(255,107,53,0.08)',
     accentBorderHover: 'rgba(255,107,53,0.35)',
     orb1: 'bg-[#ff6b35]/[0.12]',
     orb2: 'bg-[#59d5fb]/[0.08]',
     orb3: 'bg-[#ffb59d]/[0.07]',
-    leftPanelTint: 'bg-[#111827]',
+    leftPanelTint: 'bg-surface-container-low',
     centerEmoji: '🛡️',
     portalLabel: 'Admin Console',
     tagline: 'Full control of the cafeteria system',
@@ -102,43 +123,60 @@ export const PORTAL_THEMES = {
     heading: 'Admin Console',
     subtext: 'Sign in with your administrator credentials\nto access the full system.',
     btnGradient: 'bg-gradient-to-br from-[#ffb59d] to-[#ff6b35]',
-    btnText: 'text-[#5f1900]',
+    btnText: 'text-on-primary',
     btnHoverShadow: '0 8px 24px rgba(255,107,53,0.35)',
     btnLoadingShadow: ['0 0 0 rgba(255,107,53,0)', '0 0 24px rgba(255,107,53,0.45)', '0 0 0 rgba(255,107,53,0)'],
   },
 };
 
+const INPUT_BASE =
+  'w-full bg-surface-container-lowest border border-outline-variant/15 rounded-[10px] py-3.5 pl-11 pr-4 text-sm text-on-surface font-dm outline-none transition-all duration-250 placeholder:text-on-surface-variant/40 disabled:opacity-60 ';
+
 export function getInputFocusClass(themeKey) {
   const map = {
     customer:
-      'focus:border-[#06d6c7] focus:shadow-[0_0_0_3px_rgba(6,214,199,0.18)] focus:bg-[#06d6c7]/[0.03]',
-    cafe: 'focus:border-[#ff6b35] focus:shadow-[0_0_0_3px_rgba(255,107,53,0.22)] focus:bg-[#ff6b35]/[0.03]',
-    admin: 'focus:border-[#ff6b35] focus:shadow-[0_0_0_3px_rgba(255,107,53,0.2)] focus:bg-[#ff6b35]/[0.03]',
+      'focus:border-primary focus:shadow-[0_0_0_3px_rgba(255,181,157,0.2)] focus:bg-primary/[0.04]',
+    cafe: 'focus:border-primary-container focus:shadow-[0_0_0_3px_rgba(255,107,53,0.22)] focus:bg-primary-container/[0.04]',
+    admin: 'focus:border-primary-container focus:shadow-[0_0_0_3px_rgba(255,107,53,0.2)] focus:bg-primary-container/[0.04]',
   };
-  return (
-    'w-full bg-[#0d1117] border border-white/[0.07] rounded-[10px] py-3.5 pl-11 pr-4 text-sm text-[#f1f5f9] font-dm outline-none transition-all duration-250 placeholder:text-[#6b7280] disabled:opacity-60 ' +
-    (map[themeKey] || map.customer)
-  );
+  return INPUT_BASE + (map[themeKey] || map.customer);
 }
 
 export function getIconFocusClass(themeKey) {
   const map = {
-    customer: 'group-focus-within:text-[#06d6c7]',
-    cafe: 'group-focus-within:text-[#ff6b35]',
-    admin: 'group-focus-within:text-[#ff6b35]',
+    customer: 'group-focus-within:text-primary',
+    cafe: 'group-focus-within:text-primary-container',
+    admin: 'group-focus-within:text-primary-container',
   };
   return map[themeKey] || map.customer;
 }
 
 export function getSecondaryButtonClass(themeKey) {
   const map = {
-    customer:
-      'hover:border-[#06d6c7]/30 hover:bg-[#06d6c7]/[0.06] hover:text-[#06d6c7]',
-    cafe: 'hover:border-[#ff6b35]/35 hover:bg-[#ff6b35]/[0.06] hover:text-[#ff6b35]',
-    admin: 'hover:border-[#ff6b35]/35 hover:bg-[#ff6b35]/[0.06] hover:text-[#ff6b35]',
+    customer: 'hover:border-primary/35 hover:bg-primary/[0.06] hover:text-primary',
+    cafe: 'hover:border-primary-container/35 hover:bg-primary-container/[0.06] hover:text-primary-container',
+    admin: 'hover:border-primary-container/35 hover:bg-primary-container/[0.06] hover:text-primary-container',
   };
   return (
-    'w-full py-3.5 rounded-[10px] text-sm font-medium font-dm border border-white/[0.07] bg-white/[0.03] text-[#9ca3af] cursor-pointer transition-all duration-250 no-underline flex items-center justify-center gap-2 ' +
+    'w-full py-3.5 rounded-[10px] text-sm font-medium font-dm border border-outline-variant/15 bg-surface-container/50 text-on-surface-variant cursor-pointer transition-all duration-250 no-underline flex items-center justify-center gap-2 ' +
     (map[themeKey] || map.customer)
   );
+}
+
+export function getPrimaryButtonClass(themeKey) {
+  const t = PORTAL_THEMES[themeKey] || PORTAL_THEMES.customer;
+  return `w-full py-[15px] rounded-[10px] border-0 font-syne text-[15px] font-bold tracking-wide cursor-pointer flex items-center justify-center gap-2.5 transition-all duration-250 disabled:opacity-70 disabled:cursor-not-allowed hover:brightness-105 shadow-md shadow-primary/20 ${t.btnGradient} ${t.btnText}`;
+}
+
+export function getLinkAccentClass(themeKey) {
+  const map = {
+    customer: 'text-primary-container hover:text-primary',
+    cafe: 'text-primary-container hover:text-primary',
+    admin: 'text-primary-container hover:text-primary',
+  };
+  return map[themeKey] || map.customer;
+}
+
+export function getTheme(themeKey) {
+  return PORTAL_THEMES[themeKey] || PORTAL_THEMES.customer;
 }

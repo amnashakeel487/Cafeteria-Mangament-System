@@ -1,5 +1,6 @@
 const express = require('express');
 const supabase = require('../database');
+const { createNotification } = require('../utils/notificationService');
 const router = express.Router();
 
 const ORDER_FIELDS =
@@ -94,6 +95,26 @@ router.patch('/:id/refund', async (req, res) => {
             .single();
 
         if (updateErr) return res.status(500).json({ message: 'Database error' });
+
+        try {
+            const approved = refund_status === 'approved';
+            await createNotification({
+                recipientType: 'student',
+                recipientId: order.user_id,
+                type: 'refund_update',
+                title: approved ? '💰 Refund Approved' : '💰 Refund Update',
+                message: approved
+                    ? `Your refund for order #${order.id} has been approved.`
+                    : `Your refund for order #${order.id} was not approved.${refund_note ? ` Note: ${refund_note}` : ''}`,
+                data: {
+                    orderId: order.id,
+                    refund_status,
+                    refund_note: refund_note || null,
+                },
+            });
+        } catch (_) {
+            /* non-blocking */
+        }
 
         res.json({
             message: refund_status === 'approved' ? 'Refund approved' : 'Refund rejected',

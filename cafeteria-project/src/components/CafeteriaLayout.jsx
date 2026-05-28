@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
+import { NotificationProvider } from '../context/NotificationContext';
+import NotificationBell from './notifications/NotificationBell';
 
 export default function CafeteriaLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -39,7 +41,10 @@ export default function CafeteriaLayout() {
     { name: 'Profile', path: '/cafeteria/profile', icon: 'account_circle' },
   ];
 
+  const cafeteriaId = cafeteria?.id;
+
   return (
+    <NotificationProvider role="cafeteria" recipientId={cafeteriaId}>
     <div className="flex min-h-screen bg-surface text-on-surface font-['Manrope']">
       {/* Mobile Overlay */}
       <div 
@@ -118,9 +123,7 @@ export default function CafeteriaLayout() {
           </div>
           <div className="flex items-center space-x-3">
             <ThemeToggle />
-            <button className="p-2 text-on-surface-variant hover:bg-surface-container-highest rounded-full transition-all">
-              <span className="material-symbols-outlined">notifications</span>
-            </button>
+            <NotificationBell />
             <Link to="/cafeteria/profile" className="flex items-center gap-2 group p-1 pr-3 rounded-full hover:bg-surface-container-highest transition-all">
               <div className="w-8 h-8 rounded-full border border-outline-variant/30 overflow-hidden bg-surface-container flex items-center justify-center">
                  {cafeteria.profile_picture ? (
@@ -143,5 +146,6 @@ export default function CafeteriaLayout() {
         </div>
       </main>
     </div>
+    </NotificationProvider>
   );
 }

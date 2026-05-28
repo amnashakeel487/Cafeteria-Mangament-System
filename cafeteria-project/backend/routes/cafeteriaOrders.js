@@ -5,7 +5,28 @@ const {
     buildCancellationUpdate,
     assertCafeteriaCanCancel,
 } = require('../utils/orderCancellation');
+const { createNotification, getStatusNotification } = require('../utils/notificationService');
 const router = express.Router();
+
+async function notifyStudentOrderStatus(order, status, cafeteriaName, cancellationReason) {
+    try {
+        const { title, message } = getStatusNotification(status, cafeteriaName, cancellationReason);
+        await createNotification({
+            recipientType: 'student',
+            recipientId: order.user_id,
+            type: 'order_status',
+            title,
+            message,
+            data: {
+                orderId: order.id,
+                status,
+                cafeteriaName: cafeteriaName || null,
+            },
+        });
+    } catch (_) {
+        /* non-blocking */
+    }
+}
 
 const ORDER_SELECT =
     'id, total_amount, status, payment_method, payment_screenshot, payment_status, created_at, cancellation_reason, cancelled_by, cancelled_at, refund_status, refund_note';
@@ -119,7 +140,10 @@ router.put('/:id/payment', async (req, res) => {
             .eq('id', order.id);
 
         if (updateErr) return res.status(500).json({ message: 'Database error' });
-        
+
+        const cafeName = req.cafeteria.name || 'the cafeteria';
+        await notifyStudentOrderStatus(order, newStatus, cafeName, action === 'reject' ? reject_reason : null);
+
         res.json({
             message: action === 'approve' ? 'Payment approved. Order moved to processing.' : 'Payment rejected. Order cancelled.',
             payment_status: newPaymentStatus,
@@ -169,6 +193,15 @@ router.post('/:id/cancel', async (req, res) => {
             .single();
 
         if (updateErr) return res.status(500).json({ message: 'Database error' });
+
+        const cafeName = req.cafeteria.name || 'the cafeteria';
+        await notifyStudentOrderStatus(
+            order,
+            'cancelled',
+            cafeName,
+            String(cancellation_reason).trim()
+        );
+
         res.json({ message: `Order #${order.id} has been cancelled`, order: updated });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
@@ -182,6 +215,15 @@ router.put('/:id/status', async (req, res) => {
         const allowed = ['pending', 'processing', 'completed', 'cancelled'];
         if (!allowed.includes(status)) return res.status(400).json({ message: 'Invalid status' });
 
+        const { data: order, error: fetchErr } = await supabase
+            .from('orders')
+            .select('id, user_id, cafeteria_id, status')
+            .eq('id', req.params.id)
+            .eq('cafeteria_id', req.cafeteria.id)
+            .maybeSingle();
+
+        if (fetchErr || !order) return res.status(404).json({ message: 'Order not found' });
+
         const { error } = await supabase
             .from('orders')
             .update({ status })
@@ -189,6 +231,10 @@ router.put('/:id/status', async (req, res) => {
             .eq('cafeteria_id', req.cafeteria.id);
 
         if (error) return res.status(500).json({ message: 'Database error' });
+
+        const cafeName = req.cafeteria.name || 'the cafeteria';
+        await notifyStudentOrderStatus(order, status, cafeName, null);
+
         res.json({ message: 'Order status updated.', status });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
