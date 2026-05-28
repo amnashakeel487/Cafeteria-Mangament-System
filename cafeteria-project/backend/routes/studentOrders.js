@@ -1,6 +1,10 @@
 const express = require('express');
 const supabase = require('../database');
 const { createUpload, uploadToSupabase } = require('../uploadHelper');
+const {
+    buildCancellationUpdate,
+    assertStudentCanCancel,
+} = require('../utils/orderCancellation');
 
 const router = express.Router();
 
@@ -124,6 +128,46 @@ router.get('/', async (req, res) => {
         res.json(ordersWithItems);
     } catch (err) {
         console.error('Unexpected error:', err);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
+// POST cancel order (student)
+router.post('/:id/cancel', async (req, res) => {
+    try {
+        const student_id = req.user.id;
+        const orderId = req.params.id;
+
+        const { data: order, error: fetchErr } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('id', orderId)
+            .eq('user_id', student_id)
+            .maybeSingle();
+
+        if (fetchErr) return res.status(500).json({ message: 'Database error' });
+        if (!order) return res.status(404).json({ message: 'Order not found' });
+
+        const check = assertStudentCanCancel(order);
+        if (!check.ok) return res.status(check.status).json({ message: check.message });
+
+        const updates = buildCancellationUpdate({
+            cancelledBy: 'student',
+            paymentMethod: order.payment_method,
+        });
+
+        const { data: updated, error: updateErr } = await supabase
+            .from('orders')
+            .update(updates)
+            .eq('id', orderId)
+            .eq('user_id', student_id)
+            .select()
+            .single();
+
+        if (updateErr) return res.status(500).json({ message: 'Failed to cancel order' });
+        res.json({ message: 'Order cancelled successfully', order: updated });
+    } catch (err) {
+        console.error('Student cancel order error:', err);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });

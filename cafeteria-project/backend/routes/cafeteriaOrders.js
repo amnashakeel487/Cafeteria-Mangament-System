@@ -1,7 +1,14 @@
 const express = require('express');
 const supabase = require('../database');
 const { createUpload, uploadToSupabase } = require('../uploadHelper');
+const {
+    buildCancellationUpdate,
+    assertCafeteriaCanCancel,
+} = require('../utils/orderCancellation');
 const router = express.Router();
+
+const ORDER_SELECT =
+    'id, total_amount, status, payment_method, payment_screenshot, payment_status, created_at, cancellation_reason, cancelled_by, cancelled_at, refund_status, refund_note';
 
 const upload = createUpload('screenshot', 5);
 
@@ -14,7 +21,7 @@ router.get('/pending', async (req, res) => {
     try {
         const { data: orders, error } = await supabase
             .from('orders')
-            .select('id, total_amount, status, payment_method, payment_screenshot, payment_status, created_at, users!inner(name, email, id)')
+            .select(`${ORDER_SELECT}, users!inner(name, email, id)`)
             .eq('cafeteria_id', req.cafeteria.id)
             .eq('payment_status', 'pending')
             .neq('payment_method', 'cash')
@@ -43,7 +50,7 @@ router.get('/', async (req, res) => {
         
         let query = supabase
             .from('orders')
-            .select('id, total_amount, status, payment_method, payment_screenshot, payment_status, created_at, users!inner(name, email, id)')
+            .select(`${ORDER_SELECT}, users!inner(name, email, id)`)
             .eq('cafeteria_id', req.cafeteria.id);
             
         if (status) query = query.eq('status', status);
@@ -118,6 +125,51 @@ router.put('/:id/payment', async (req, res) => {
             payment_status: newPaymentStatus,
             status: newStatus
         });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// POST cancel order (cafeteria staff)
+router.post('/:id/cancel', async (req, res) => {
+    try {
+        const { cancellation_reason } = req.body;
+        if (!cancellation_reason || !String(cancellation_reason).trim()) {
+            return res.status(400).json({ message: 'Cancellation reason is required' });
+        }
+        if (String(cancellation_reason).trim().length < 10) {
+            return res.status(400).json({ message: 'Cancellation reason must be at least 10 characters' });
+        }
+
+        const { data: order, error: orderErr } = await supabase
+            .from('orders')
+            .select('*')
+            .eq('id', req.params.id)
+            .eq('cafeteria_id', req.cafeteria.id)
+            .maybeSingle();
+
+        if (orderErr) return res.status(500).json({ message: 'Database error' });
+        if (!order) return res.status(404).json({ message: 'Order not found' });
+
+        const check = assertCafeteriaCanCancel(order);
+        if (!check.ok) return res.status(check.status).json({ message: check.message });
+
+        const updates = buildCancellationUpdate({
+            cancelledBy: 'cafeteria',
+            cancellationReason: String(cancellation_reason).trim(),
+            paymentMethod: order.payment_method,
+        });
+
+        const { data: updated, error: updateErr } = await supabase
+            .from('orders')
+            .update(updates)
+            .eq('id', order.id)
+            .eq('cafeteria_id', req.cafeteria.id)
+            .select()
+            .single();
+
+        if (updateErr) return res.status(500).json({ message: 'Database error' });
+        res.json({ message: `Order #${order.id} has been cancelled`, order: updated });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
     }

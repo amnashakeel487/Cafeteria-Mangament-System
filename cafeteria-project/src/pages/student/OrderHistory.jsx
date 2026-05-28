@@ -4,6 +4,8 @@ import axios from 'axios';
 import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
 import { useCart } from '../../context/CartContext';
+import RefundStatusBadge from '../../components/RefundStatusBadge';
+import { cancelledByLabel } from '../../utils/orderCancellation';
 
 const BASE = '';
 
@@ -28,6 +30,7 @@ export default function OrderHistory() {
   // Filters
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [reasonOrder, setReasonOrder] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -157,6 +160,9 @@ export default function OrderHistory() {
                       <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${status.bg} ${status.text} border ${status.border}`}>
                         {status.label}
                       </span>
+                      {order.status === 'cancelled' && order.payment_method === 'online' && (
+                        <RefundStatusBadge refundStatus={order.refund_status} />
+                      )}
                     </div>
                     <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#e1bfb5]">
                       <span className="flex items-center gap-1.5">
@@ -200,9 +206,13 @@ export default function OrderHistory() {
                       Re-order
                     </button>
                   ) : order.status === 'cancelled' ? (
-                    <button className="flex-1 md:flex-none px-5 py-2.5 border border-[#FF6B35]/30 text-[#FF6B35] text-sm font-bold rounded-lg hover:bg-[#FF6B35]/10 transition-all flex items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setReasonOrder(order)}
+                      className="flex-1 md:flex-none px-5 py-2.5 border border-[#FF6B35]/30 text-[#FF6B35] text-sm font-bold rounded-lg hover:bg-[#FF6B35]/10 transition-all flex items-center justify-center gap-2"
+                    >
                       <span className="material-symbols-outlined text-sm">receipt</span>
-                      View Reason
+                      View Details
                     </button>
                   ) : (
                     <button
@@ -220,6 +230,37 @@ export default function OrderHistory() {
               </div>
             );
           })}
+        </div>
+      )}
+
+      {reasonOrder && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0c0c1d]/80 backdrop-blur-sm">
+          <div className="bg-[#1E1E2F] w-full max-w-md rounded-3xl p-8 border border-[#594139]/20 shadow-2xl">
+            <h2 className="text-xl font-bold text-[#E3E0F8] mb-4 font-['Manrope']">Cancelled Order</h2>
+            <p className="text-sm text-[#e1bfb5] mb-2">{cancelledByLabel(reasonOrder.cancelled_by)}</p>
+            {reasonOrder.cancellation_reason && (
+              <p className="text-sm text-[#E3E0F8] mb-4">
+                <span className="font-bold text-[#FFB59D]">Reason:</span> {reasonOrder.cancellation_reason}
+              </p>
+            )}
+            {reasonOrder.payment_method === 'online' && (
+              <div className="mb-4">
+                <RefundStatusBadge refundStatus={reasonOrder.refund_status} />
+                {reasonOrder.refund_status === 'rejected' && reasonOrder.refund_note && (
+                  <p className="text-xs text-[#ffb4ab] mt-2 p-2 rounded-lg bg-[#93000a]/20 border border-[#93000a]/40">
+                    {reasonOrder.refund_note}
+                  </p>
+                )}
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => setReasonOrder(null)}
+              className="w-full py-2.5 rounded-lg font-bold bg-[#FFB59D] text-[#5d1900] hover:opacity-90"
+            >
+              Close
+            </button>
+          </div>
         </div>
       )}
     </section>

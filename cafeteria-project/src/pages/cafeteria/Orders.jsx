@@ -3,6 +3,9 @@ import axios from 'axios';
 import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
 import LazyImage from '../../components/LazyImage';
+import CafeteriaCancelModal from '../../components/CafeteriaCancelModal';
+import RefundStatusBadge from '../../components/RefundStatusBadge';
+import { canCafeteriaCancelOrder } from '../../utils/orderCancellation';
 
 const BASE = '';
 
@@ -30,6 +33,8 @@ export default function CafeteriaOrders() {
   const [activeFilter, setActiveFilter] = useState('all'); // for queue tab
   const [toast, setToast] = useState({ visible: false, message: '', type: '' });
   const [preview, setPreview] = useState(null); // fullscreen image
+  const [cancelTarget, setCancelTarget] = useState(null);
+  const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => { fetchAll(); }, []);
 
@@ -54,6 +59,25 @@ export default function CafeteriaOrders() {
       fetchAll();
     } catch (err) {
       showToast(err.response?.data?.message || 'Action failed.', 'error');
+    }
+  };
+
+  const handleCafeteriaCancel = async (reason) => {
+    if (!cancelTarget) return;
+    setCancelling(true);
+    try {
+      await axios.post(
+        `${BASE}/api/cafeteria/orders/${cancelTarget.id}/cancel`,
+        { cancellation_reason: reason },
+        axiosConfig
+      );
+      showToast(`Order #${cancelTarget.id} has been cancelled`, 'success');
+      setCancelTarget(null);
+      fetchAll();
+    } catch (err) {
+      showToast(err.response?.data?.message || 'Cancellation failed.', 'error');
+    } finally {
+      setCancelling(false);
     }
   };
 
@@ -231,7 +255,7 @@ export default function CafeteriaOrders() {
             <div className="flex items-center justify-between">
               <h3 className="text-xl font-bold text-on-surface" style={{ fontFamily: 'Manrope' }}>Orders Queue</h3>
               <div className="flex gap-2 bg-surface-container-low p-1 rounded-lg">
-                {['all', 'pending', 'processing', 'completed'].map(s => (
+                {['all', 'pending', 'processing', 'completed', 'cancelled'].map(s => (
                   <button key={s} onClick={() => setActiveFilter(s)}
                     className={`px-4 py-1.5 rounded-md text-xs font-bold uppercase tracking-wide transition-all capitalize
                       ${activeFilter === s ? 'bg-surface-container-highest text-primary' : 'text-on-surface-variant hover:text-on-surface'}`}>
@@ -312,8 +336,32 @@ export default function CafeteriaOrders() {
                     </div>
                   </div>
 
+                  {order.status === 'cancelled' && (
+                    <div className="mb-4 p-3 rounded-lg bg-error/5 border border-error/20 text-sm space-y-2">
+                      <p className="text-on-surface-variant">
+                        <span className="font-bold">Cancelled by:</span>{' '}
+                        {order.cancelled_by === 'student' ? 'Student' : 'Cafeteria'}
+                      </p>
+                      {order.cancellation_reason && (
+                        <p className="text-on-surface-variant">
+                          <span className="font-bold">Reason:</span> {order.cancellation_reason}
+                        </p>
+                      )}
+                      {order.payment_method === 'online' && <RefundStatusBadge refundStatus={order.refund_status} />}
+                    </div>
+                  )}
+
                   {/* Action buttons based on status */}
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 flex-wrap">
+                    {canCafeteriaCancelOrder(order) && (
+                      <button
+                        type="button"
+                        onClick={() => setCancelTarget(order)}
+                        className="px-4 py-2 rounded-lg text-sm font-bold border border-error/40 text-error hover:bg-error/10 transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    )}
                     {order.status === 'pending' && (
                       <>
                         <button onClick={() => handleStatusChange(order.id, 'processing')}
@@ -406,6 +454,14 @@ export default function CafeteriaOrders() {
           </div>
         </div>
       )}
+
+      <CafeteriaCancelModal
+        isOpen={!!cancelTarget}
+        onClose={() => !cancelling && setCancelTarget(null)}
+        onConfirm={handleCafeteriaCancel}
+        loading={cancelling}
+        orderId={cancelTarget?.id}
+      />
     </section>
     </>
   );
