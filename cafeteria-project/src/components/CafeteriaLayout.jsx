@@ -10,8 +10,15 @@ export default function CafeteriaLayout() {
   const navigate = useNavigate();
 
   const [cafeteria, setCafeteria] = useState(() => {
-    const data = localStorage.getItem('cafeteriaData');
-    return data ? JSON.parse(data) : { name: 'Staff Portal', location: '', profile_picture: null };
+    try {
+      const data = localStorage.getItem('cafeteriaData');
+      return data
+        ? JSON.parse(data)
+        : { name: 'Staff Portal', location: '', profile_picture: null };
+    } catch {
+      localStorage.removeItem('cafeteriaData');
+      return { name: 'Staff Portal', location: '', profile_picture: null };
+    }
   });
 
   useEffect(() => {

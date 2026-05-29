@@ -7,7 +7,7 @@ import LazyImage from '../../components/LazyImage';
 import { formatPrice } from '../../utils/currency';
 import MenuAvailabilityWidget from '../../components/availability/MenuAvailabilityWidget';
 import StatCard from '../../components/analytics/StatCard';
-import MiniSparkline from '../../components/analytics/MiniSparkline';
+import SimpleSparkline from '../../components/analytics/SimpleSparkline';
 
 const STATUS_STYLES = {
   pending:    'bg-primary-container/20 text-primary border border-primary/30',
@@ -16,8 +16,18 @@ const STATUS_STYLES = {
   cancelled:  'bg-error-container/20 text-error border border-error/30',
 };
 
+function readCafeteriaFromStorage() {
+  try {
+    const raw = localStorage.getItem('cafeteriaData');
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    localStorage.removeItem('cafeteriaData');
+    return {};
+  }
+}
+
 export default function CafeteriaDashboard() {
-  const cafeteria = JSON.parse(localStorage.getItem('cafeteriaData') || '{}');
+  const cafeteria = readCafeteriaFromStorage();
 
   const [stats, setStats] = useState({
     totalOrders: 0, totalRevenue: 0,
@@ -214,7 +224,7 @@ export default function CafeteriaDashboard() {
             loading={loading}
             trend={analyticsToday ? `${analyticsToday.revenueGrowth >= 0 ? '+' : ''}${analyticsToday.revenueGrowth}% vs yesterday` : undefined}
             trendValue={analyticsToday?.revenueGrowth}
-            sparkline={<MiniSparkline data={sparkTrend} />}
+            sparkline={<SimpleSparkline data={sparkTrend} />}
           />
           <StatCard
             title="Today's Orders"
