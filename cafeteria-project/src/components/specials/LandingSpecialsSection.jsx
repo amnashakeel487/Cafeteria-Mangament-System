@@ -175,7 +175,7 @@ export default function LandingSpecialsSection() {
   return (
     <section
       id="todays-specials"
-      className="relative overflow-hidden py-16 sm:py-24 px-4 sm:px-6 lg:px-8"
+      className="relative overflow-hidden pt-12 sm:pt-16 pb-8 sm:pb-10 px-4 sm:px-6 lg:px-8"
     >
       <div className="pointer-events-none absolute inset-0 landing-dot-grid opacity-30" aria-hidden />
       <div className="landing-orb-pulse absolute -left-32 top-0 h-[400px] w-[400px] rounded-full bg-primary/10 blur-[100px]" />

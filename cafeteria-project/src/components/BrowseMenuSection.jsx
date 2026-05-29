@@ -199,7 +199,7 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
   }, [menuItems, searchQuery, selectedCategory, availableOnly]);
 
   return (
-    <section id="browse-menu" className="py-20 sm:py-28 px-4 sm:px-6 bg-surface-container-low/30">
+    <section id="browse-menu" className="pt-8 sm:pt-10 pb-14 sm:pb-20 px-4 sm:px-6 bg-surface-container-low/30">
       {availToast && (
         <div className="fixed top-20 right-4 z-[80] max-w-sm px-4 py-3 rounded-xl bg-surface-container-high/95 border border-outline-variant/20 shadow-2xl flex items-center gap-2">
           <span>{availToast.icon}</span>
@@ -213,19 +213,19 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="text-center mb-12"
+          className="text-center mb-6 sm:mb-7"
         >
-          <span className="text-xs font-black uppercase tracking-[0.2em] text-tertiary mb-3 block">Public Preview</span>
+          <span className="text-xs font-black uppercase tracking-[0.2em] text-tertiary mb-2 block">Public Preview</span>
           <h2 className="text-3xl sm:text-4xl font-black editorial-text text-on-surface" style={{ fontFamily: 'Manrope' }}>
             Explore Our <span className="text-primary">Menu</span>
           </h2>
-          <p className="text-on-surface-variant text-sm mt-3">No account needed - browse what&apos;s cooking today.</p>
+          <p className="text-on-surface-variant text-sm mt-2">No account needed - browse what&apos;s cooking today.</p>
           <motion.div
             initial={{ width: 0, opacity: 0 }}
             whileInView={{ width: 140, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="h-1 rounded-full bg-gradient-to-r from-tertiary to-primary mx-auto mt-5"
+            className="h-1 rounded-full bg-gradient-to-r from-tertiary to-primary mx-auto mt-3"
           />
         </motion.div>
 
@@ -235,7 +235,7 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
           whileInView="visible"
           viewport={{ once: true, margin: '-40px' }}
           variants={cardStagger}
-          className="flex gap-4 overflow-x-auto pb-2 mb-8 hide-scrollbar"
+          className="flex gap-4 overflow-x-auto pb-2 mb-5 hide-scrollbar"
         >
           {loadingCafeterias &&
             Array.from({ length: 4 }).map((_, i) => (
@@ -297,7 +297,7 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
 
         {/* Search + category filters */}
         {!loadingCafeterias && selectedCafeteria && (
-          <div className="mb-7 space-y-4">
+          <div className="mb-5 space-y-3">
             <div className="relative group">
               <span className="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">
                 search
