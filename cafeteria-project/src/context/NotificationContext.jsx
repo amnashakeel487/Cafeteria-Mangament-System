@@ -28,7 +28,7 @@ function NotificationToast({ toast, onDismiss }) {
       }`}
       role="alert"
     >
-      <div className="flex gap-3 p-4 rounded-xl bg-[#1E1E2F]/95 border border-[#594139]/20 shadow-2xl backdrop-blur-xl">
+      <div className="flex gap-3 p-4 rounded-xl bg-[#1E1E2F] border border-[#594139]/30 shadow-2xl">
         <span className="text-2xl flex-shrink-0">{getNotificationIcon(toast.type)}</span>
         <div className="min-w-0 flex-1">
           <p className="font-bold text-[#E3E0F8] text-sm">{toast.title}</p>

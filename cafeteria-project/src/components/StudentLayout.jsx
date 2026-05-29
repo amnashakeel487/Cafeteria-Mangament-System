@@ -103,7 +103,7 @@ function StudentLayoutInner() {
       </aside>
 
       {/* TopNavBar */}
-      <header className="fixed top-0 w-full z-[60] flex items-center justify-between gap-2 px-2 sm:px-4 md:px-6 bg-[#1E1E2F] h-14 sm:h-16 shadow-2xl shadow-[#0c0c1d]/50">
+      <header className="fixed top-0 w-full z-[60] flex items-center justify-between gap-2 px-2 sm:px-4 md:px-6 bg-[#1E1E2F] h-14 sm:h-16 shadow-2xl shadow-[#0c0c1d]/50 overflow-visible">
         <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
           {/* Hamburger — mobile only */}
           <button

@@ -124,7 +124,7 @@ export default function CafeteriaLayout() {
       {/* Main */}
       <main className="flex-1 md:ml-64 min-h-screen w-full overflow-x-hidden">
         {/* Topbar */}
-        <header className="bg-[#1E1E2F]/90 backdrop-blur-xl fixed top-0 w-full md:w-[calc(100%-16rem)] z-[60] h-14 sm:h-16 flex items-center justify-between gap-2 px-2 sm:px-4 md:px-8 border-b border-outline-variant/5 shadow-[0_8px_32px_rgba(12,12,29,0.5)]">
+        <header className="bg-[#1E1E2F] fixed top-0 w-full md:w-[calc(100%-16rem)] z-[60] h-14 sm:h-16 flex items-center justify-between gap-2 px-2 sm:px-4 md:px-8 border-b border-outline-variant/5 shadow-[0_8px_32px_rgba(12,12,29,0.5)] overflow-visible">
           <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
             <button
               type="button"

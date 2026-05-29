@@ -23,7 +23,15 @@ export default function NotificationItem({ notification, compact = false, onNavi
     <div
       className={`group relative flex gap-3 p-3 rounded-lg border-l-4 cursor-pointer transition-colors ${
         getNotificationAccent(notification.type)
-      } ${unread ? 'bg-[#38374A]/25' : 'bg-[#1A1A2B]/50 opacity-80'} hover:bg-[#38374A]/40`}
+      } ${
+        compact
+          ? unread
+            ? 'bg-[#28283a] hover:bg-[#333345]'
+            : 'bg-[#1A1A2B] hover:bg-[#28283a]'
+          : unread
+            ? 'bg-[#38374A]/25'
+            : 'bg-[#1A1A2B]/50 opacity-80'
+      } ${!compact ? 'hover:bg-[#38374A]/40' : ''}`}
       onClick={handleClick}
       onKeyDown={(e) => e.key === 'Enter' && handleClick()}
       role="button"

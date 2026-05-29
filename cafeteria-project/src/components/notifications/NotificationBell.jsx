@@ -31,7 +31,7 @@ export default function NotificationBell() {
   }, [open]);
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div className={`relative ${open ? 'z-[100]' : ''}`} ref={containerRef}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
@@ -53,7 +53,7 @@ export default function NotificationBell() {
         <>
           <button
             type="button"
-            className="fixed inset-0 z-[55] sm:hidden bg-black/40"
+            className="fixed inset-0 z-[90] sm:hidden bg-black/50"
             aria-label="Close notifications"
             onClick={() => setOpen(false)}
           />
