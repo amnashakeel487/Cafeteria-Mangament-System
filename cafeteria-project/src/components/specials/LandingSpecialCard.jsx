@@ -12,6 +12,12 @@ import {
 const CARD_BASE =
   'group relative w-full overflow-hidden rounded-xl border border-outline-variant/10 bg-surface-container-high shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/10';
 
+/** Landing theme accent — light orange (primary palette) */
+const ACCENT_BAR = 'from-primary via-primary-container to-primary/50';
+const BTN_ORANGE =
+  'inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-primary to-primary-container px-5 py-2.5 text-sm font-bold text-on-primary shadow-md shadow-primary/25 transition-transform duration-300 group-hover:translate-x-0.5';
+const PRICE_ORANGE = 'text-primary';
+
 function PriceBlock({ special, isDiscount, original, specialPrice, savings, size = 'md' }) {
   const priceCls = size === 'lg' ? 'text-3xl sm:text-4xl' : 'text-xl';
   const hasPrice =
@@ -24,7 +30,7 @@ function PriceBlock({ special, isDiscount, original, specialPrice, savings, size
     return (
       <div className={`mt-4 flex flex-wrap items-end gap-2 ${size === 'lg' ? 'mt-0' : ''}`}>
         <span className="text-sm text-on-surface-variant line-through">{formatPrice(original)}</span>
-        <span className={`font-black text-primary ${priceCls}`}>{formatPrice(specialPrice)}</span>
+        <span className={`font-black ${PRICE_ORANGE} ${priceCls}`}>{formatPrice(specialPrice)}</span>
         {savings != null && savings > 0 && (
           <span className="rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
             Save {formatPrice(savings)}!
@@ -35,17 +41,15 @@ function PriceBlock({ special, isDiscount, original, specialPrice, savings, size
   }
 
   return (
-    <p className={`mt-4 font-black text-primary ${priceCls} ${size === 'lg' ? 'mt-0' : ''}`}>
+    <p className={`mt-4 font-black ${PRICE_ORANGE} ${priceCls} ${size === 'lg' ? 'mt-0' : ''}`}>
       {formatPrice(specialPrice ?? original)}
     </p>
   );
 }
 
-function TypeBadge({ theme, type }) {
+function TypeBadge({ type }) {
   return (
-    <span
-      className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10px] font-bold ${theme.badgeBg} ${theme.badgeBorder} ${theme.badgeText}`}
-    >
+    <span className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/12 px-2.5 py-1 text-[10px] font-bold text-primary">
       {LANDING_TYPE_LABELS[type] || type}
     </span>
   );
@@ -109,10 +113,10 @@ export default function LandingSpecialCard({
     return (
       <motion.article
         {...motionProps}
-        className={`${CARD_BASE} ${theme.borderTint} ${theme.borderHover}`}
+        className={`${CARD_BASE} border-primary/20 group-hover:border-primary/35`}
       >
-        <div className={`h-[3px] w-full bg-gradient-to-r ${theme.bar}`} />
-        <div className="pointer-events-none absolute inset-0" style={{ backgroundColor: theme.tint }} />
+        <div className={`h-[3px] w-full bg-gradient-to-r ${ACCENT_BAR}`} />
+        <div className="pointer-events-none absolute inset-0 bg-primary/[0.03]" />
 
         {isDiscount && special.discount_percentage != null && (
           <div className="absolute right-4 top-6 z-10 flex h-11 w-11 -rotate-6 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-500/15 text-[10px] font-black leading-tight text-emerald-300">
@@ -126,7 +130,7 @@ export default function LandingSpecialCard({
           {/* Left ~60% */}
           <div className="min-w-0 flex-1 lg:w-[60%]">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-              <TypeBadge theme={theme} type={special.special_type} />
+              <TypeBadge type={special.special_type} />
               {special.is_featured && (
                 <span className="rounded-full border border-primary/25 bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
                   ✨ Featured
@@ -174,7 +178,7 @@ export default function LandingSpecialCard({
               size="lg"
             />
             {item && <AvailabilityBadgeFromItem item={item} />}
-            <span className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-br from-tertiary to-tertiary-container px-5 py-2.5 text-sm font-bold text-on-tertiary shadow-md shadow-tertiary/20 transition-transform duration-300 group-hover:translate-x-0.5">
+            <span className={BTN_ORANGE}>
               View Menu
               <span className="material-symbols-outlined text-base">arrow_forward</span>
             </span>
@@ -196,10 +200,10 @@ export default function LandingSpecialCard({
   return (
     <motion.article
       {...motionProps}
-      className={`${CARD_BASE} flex min-h-[220px] flex-col ${theme.borderTint} ${theme.borderHover}`}
+      className={`${CARD_BASE} flex min-h-[220px] flex-col border-primary/20 group-hover:border-primary/35`}
     >
-      <div className={`h-[3px] w-full bg-gradient-to-r ${theme.bar}`} />
-      <div className="pointer-events-none absolute inset-0" style={{ backgroundColor: theme.tint }} />
+      <div className={`h-[3px] w-full bg-gradient-to-r ${ACCENT_BAR}`} />
+      <div className="pointer-events-none absolute inset-0 bg-primary/[0.03]" />
 
       {isDiscount && special.discount_percentage != null && (
         <div className="absolute right-3 top-5 z-10 flex h-11 w-11 -rotate-6 items-center justify-center rounded-full border border-emerald-500/30 bg-emerald-500/15 text-[10px] font-black leading-tight text-emerald-300">
@@ -211,7 +215,7 @@ export default function LandingSpecialCard({
 
       <div className="relative flex flex-1 flex-col p-5 sm:p-6">
         <div className="mb-4 flex items-start justify-between gap-2 pr-10">
-          <TypeBadge theme={theme} type={special.special_type} />
+          <TypeBadge type={special.special_type} />
           {special.is_featured && (
             <span className="rounded-full border border-primary/25 bg-primary/10 px-2 py-0.5 text-[10px] font-bold text-primary">
               ✨ Featured

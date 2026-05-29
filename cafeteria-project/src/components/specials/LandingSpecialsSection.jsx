@@ -265,36 +265,21 @@ export default function LandingSpecialsSection() {
           </div>
         )}
 
-        {/* Footer CTA — matches customer PortalCard button */}
+        {/* Footer stats */}
         {!loading && !showEmpty && (
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className={`mt-12 flex flex-col items-center gap-6 sm:flex-row sm:justify-between ${hasMoreThanSix ? 'relative z-10 -mt-8' : ''}`}
+            className={`mt-10 text-center sm:text-left ${hasMoreThanSix ? 'relative z-10 -mt-8' : ''}`}
           >
-            <div className="text-center sm:text-left">
-              <p className="text-sm text-on-surface-variant">
-                Showing {displaySpecials.length} of {totalTodayCount} specials today
-              </p>
-              <p className="mt-1 flex items-center justify-center gap-2 text-xs text-on-surface-variant/80 sm:justify-start">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                Updates in real-time
-              </p>
-            </div>
-
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-              <Link
-                to="/specials"
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-br from-tertiary to-tertiary-container px-8 py-4 text-base font-bold text-on-tertiary shadow-lg shadow-tertiary/20 transition-all hover:scale-[1.02] active:scale-[0.98] sm:w-auto"
-              >
-                <span className="text-xl">🍽️</span>
-                View All Today&apos;s Specials
-                <span className="material-symbols-outlined transition-transform duration-300 group-hover:translate-x-1">
-                  arrow_forward
-                </span>
-              </Link>
-            </motion.div>
+            <p className="text-sm text-on-surface-variant">
+              Showing {displaySpecials.length} of {totalTodayCount} specials today
+            </p>
+            <p className="mt-1 flex items-center justify-center gap-2 text-xs text-on-surface-variant/80 sm:justify-start">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+              Updates in real-time
+            </p>
           </motion.div>
         )}
       </div>
