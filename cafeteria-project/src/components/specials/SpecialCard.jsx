@@ -7,6 +7,7 @@ import { getTimeAgo } from '../../utils/notificationHelpers';
 import SpecialTypeBadge from './SpecialTypeBadge';
 import { AvailabilityBadgeFromItem } from '../availability/AvailabilityBadge';
 import { useCart } from '../../context/CartContext';
+import LandingSpecialCard from './LandingSpecialCard';
 
 const ACCENT_BORDER = {
   special: 'hover:border-amber-500/50 hover:shadow-amber-500/10',
@@ -22,8 +23,16 @@ export default function SpecialCard({
   compact = false,
   animate = true,
   publicView = false,
+  variant = 'default',
+  index = 0,
   onAddToCart,
 }) {
+  if (variant === 'landing') {
+    return (
+      <LandingSpecialCard special={special} index={index} showCafeteriaName={showCafeteriaName} />
+    );
+  }
+
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const [expanded, setExpanded] = useState(false);
