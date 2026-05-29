@@ -65,7 +65,40 @@ function scheduleMidnightReset() {
     { timezone: 'Asia/Karachi' }
   );
 
+  cron.schedule(
+    '0 1 * * *',
+    async () => {
+      try {
+        await runOldSpecialsCleanup();
+      } catch (error) {
+        console.error('Old specials cleanup failed:', error?.message || error);
+      }
+    },
+    { timezone: 'Asia/Karachi' }
+  );
+
   console.log('Midnight availability reset scheduled (Asia/Karachi)');
 }
 
-module.exports = { scheduleMidnightReset, runMidnightAvailabilityReset };
+async function runOldSpecialsCleanup() {
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+  const dateStr = thirtyDaysAgo.toISOString().split('T')[0];
+  const { error, count } = await supabase
+    .from('daily_specials')
+    .delete()
+    .lt('valid_date', dateStr)
+    .select('*', { count: 'exact', head: true });
+  if (error) {
+    console.warn('Specials cleanup error:', error.message);
+    return { deleted: 0 };
+  }
+  console.log(`Old daily specials cleaned up (before ${dateStr})`);
+  return { deleted: count };
+}
+
+module.exports = {
+  scheduleMidnightReset,
+  runMidnightAvailabilityReset,
+  runOldSpecialsCleanup,
+};

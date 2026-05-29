@@ -3,9 +3,11 @@ import { Link, useLocation, useNavigate, Outlet } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import { NotificationProvider } from '../context/NotificationContext';
 import NotificationBell from './notifications/NotificationBell';
+import { fetchCafeteriaSpecials } from '../utils/specialsApi';
 
 export default function CafeteriaLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [specialsBadge, setSpecialsBadge] = useState(0);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -34,6 +36,12 @@ export default function CafeteriaLayout() {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
+  useEffect(() => {
+    fetchCafeteriaSpecials(undefined, 'active')
+      .then((rows) => setSpecialsBadge(Array.isArray(rows) ? rows.length : 0))
+      .catch(() => setSpecialsBadge(0));
+  }, [location.pathname]);
+
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to log out of the Staff Portal?')) {
       localStorage.removeItem('cafeteriaToken');
@@ -47,8 +55,9 @@ export default function CafeteriaLayout() {
     { name: 'Analytics', path: '/cafeteria/analytics', icon: 'bar_chart' },
     { name: 'Orders', path: '/cafeteria/orders', icon: 'receipt_long' },
     { name: 'Menu', path: '/cafeteria/menu', icon: 'restaurant_menu' },
-    { name: 'Ratings & Reviews', path: '/cafeteria/ratings', icon: 'star' },
+    { name: 'Daily Specials', path: '/cafeteria/specials', icon: 'campaign', badge: specialsBadge },
     { name: 'Deals', path: '/cafeteria/deals', icon: 'local_offer' },
+    { name: 'Ratings & Reviews', path: '/cafeteria/ratings', icon: 'star' },
     { name: 'History', path: '/cafeteria/history', icon: 'history' },
     { name: 'Payments', path: '/cafeteria/payments', icon: 'payments' },
     { name: 'Profile', path: '/cafeteria/profile', icon: 'account_circle' },
@@ -85,7 +94,12 @@ export default function CafeteriaLayout() {
                 }
               >
                 <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>{link.icon}</span>
-                <span className={isActive ? 'font-semibold' : ''}>{link.name}</span>
+                <span className={`flex-1 ${isActive ? 'font-semibold' : ''}`}>{link.name}</span>
+                {link.badge > 0 && (
+                  <span className="bg-rose-500/20 text-rose-300 text-[10px] font-bold px-2 py-0.5 rounded-full min-w-[1.25rem] text-center">
+                    {link.badge}
+                  </span>
+                )}
               </Link>
             );
           })}

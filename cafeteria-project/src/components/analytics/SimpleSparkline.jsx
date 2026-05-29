@@ -21,8 +21,8 @@ export default function SimpleSparkline({ data = [], color = '#06d6c7' }) {
   return (
     <svg
       viewBox={`0 0 ${width} ${height}`}
-      className="w-full h-10"
-      preserveAspectRatio="none"
+      className="w-full h-full max-h-10"
+      preserveAspectRatio="xMidYMid meet"
       aria-hidden
     >
       <polygon points={areaPoints} fill={color} fillOpacity="0.15" />

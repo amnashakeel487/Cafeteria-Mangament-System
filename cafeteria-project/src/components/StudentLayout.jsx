@@ -4,6 +4,7 @@ import ThemeToggle from './ThemeToggle';
 import { NotificationProvider } from '../context/NotificationContext';
 import { useFavorites } from '../context/FavoritesContext';
 import NotificationBell from './notifications/NotificationBell';
+import { fetchStudentTodaySpecials } from '../utils/specialsApi';
 
 function StudentLayoutInner() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -11,6 +12,13 @@ function StudentLayoutInner() {
   const navigate = useNavigate();
   const student = JSON.parse(localStorage.getItem('studentData') || '{}');
   const { favoriteCount, clearFavorites } = useFavorites();
+  const [specialsCount, setSpecialsCount] = useState(0);
+
+  useEffect(() => {
+    fetchStudentTodaySpecials()
+      .then((data) => setSpecialsCount(Array.isArray(data) ? data.length : 0))
+      .catch(() => setSpecialsCount(0));
+  }, [location.pathname]);
 
   const handleLogout = () => {
     clearFavorites();
@@ -21,6 +29,7 @@ function StudentLayoutInner() {
 
   const navLinks = [
     { name: 'Cafeterias', path: '/student/cafeterias', icon: 'restaurant' },
+    { name: "Today's Specials", path: '/student/specials', icon: 'campaign', badge: specialsCount },
     { name: 'My Favorites', path: '/student/favorites', icon: 'favorite', badge: favoriteCount },
     { name: 'My Orders', path: '/student/orders', icon: 'receipt_long' },
     { name: 'Track Order', path: '/student/track', icon: 'local_shipping' },

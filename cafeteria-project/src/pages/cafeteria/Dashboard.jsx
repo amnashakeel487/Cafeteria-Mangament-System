@@ -212,9 +212,9 @@ export default function CafeteriaDashboard() {
         </div>
       </div>
 
-      {/* Stat Row */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-5">
+      {/* KPI metrics — full-width row with comfortable spacing */}
+      <section aria-label="Today's overview" className="space-y-5 md:space-y-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
           <StatCard
             title="Today's Revenue"
             value={analyticsToday?.totalRevenue ?? stats.todayRevenue}
@@ -235,11 +235,26 @@ export default function CafeteriaDashboard() {
             trend={analyticsToday ? `${analyticsToday.orderGrowth >= 0 ? '+' : ''}${analyticsToday.orderGrowth}% vs yesterday` : undefined}
             trendValue={analyticsToday?.orderGrowth}
           />
-          <StatCard title="Pending Orders" value={stats.pendingOrders} subtitle="Awaiting preparation" color="primary" icon="schedule" loading={loading} />
-          <StatCard title="Completed Orders" value={stats.completedOrders} subtitle="Successfully served" color="amber" icon="check_circle" loading={loading} />
+          <StatCard
+            title="Pending Orders"
+            value={stats.pendingOrders}
+            subtitle="Awaiting preparation"
+            color="primary"
+            icon="schedule"
+            loading={loading}
+          />
+          <StatCard
+            title="Completed Orders"
+            value={stats.completedOrders}
+            subtitle="Successfully served"
+            color="amber"
+            icon="check_circle"
+            loading={loading}
+          />
         </div>
+
         <MenuAvailabilityWidget axiosConfig={axiosConfig} />
-      </div>
+      </section>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
         <div className="md:col-span-2 bg-surface-container-high rounded-xl p-6 border border-outline-variant/10">

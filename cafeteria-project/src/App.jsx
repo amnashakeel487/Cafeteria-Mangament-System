@@ -46,6 +46,9 @@ const OrderHistory = lazy(() => import('./pages/student/OrderHistory'));
 const FavoritesPage = lazy(() => import('./pages/student/FavoritesPage'));
 const StudentProfile = lazy(() => import('./pages/student/StudentProfile'));
 const StudentNotificationsPage = lazy(() => import('./pages/student/NotificationsPage'));
+const SpecialsPage = lazy(() => import('./pages/SpecialsPage'));
+const TodaysSpecialsPage = lazy(() => import('./pages/student/TodaysSpecialsPage'));
+const DailySpecialsManager = lazy(() => import('./pages/cafeteria/DailySpecialsManager'));
 
 function App() {
   return (
@@ -57,6 +60,7 @@ function App() {
               <Route path="/" element={<LandingPage />} />
               <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/specials" element={<SpecialsPage />} />
               <Route path="/admin/login" element={<Login />} />
 
               <Route path="/admin" element={<AdminRoute />}>
@@ -82,6 +86,7 @@ function App() {
                   <Route path="/cafeteria/deals" element={<CafeteriaDeals />} />
                   <Route path="/cafeteria/profile" element={<CafeteriaProfile />} />
                   <Route path="/cafeteria/notifications" element={<CafeteriaNotificationsPage />} />
+                  <Route path="/cafeteria/specials" element={<DailySpecialsManager />} />
                 </Route>
               </Route>
 
@@ -98,6 +103,7 @@ function App() {
                   <Route path="/student/orders" element={<OrderHistory />} />
                   <Route path="/student/profile" element={<StudentProfile />} />
                   <Route path="/student/notifications" element={<StudentNotificationsPage />} />
+                  <Route path="/student/specials" element={<TodaysSpecialsPage />} />
                   <Route path="/student/home" element={<Navigate to="/student/cafeterias" replace />} />
                 </Route>
               </Route>

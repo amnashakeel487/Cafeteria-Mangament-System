@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import ThemeToggle from '../components/ThemeToggle';
 import DevelopmentTeam from '../components/DevelopmentTeam';
 import BrowseMenuSection from '../components/BrowseMenuSection';
+import LandingSpecialsSection from '../components/specials/LandingSpecialsSection';
 import TopRatedCafeterias from '../components/landing/TopRatedCafeterias';
 import PageSEO from '../seo/PageSEO';
 import { PAGE_SEO } from '../seo/siteConfig';
@@ -330,6 +331,8 @@ export default function LandingPage() {
           </motion.div>
         </motion.div>
       </section>
+
+      <LandingSpecialsSection />
 
       {/* ── FEATURES ── */}
       <section id="features" className="py-20 sm:py-28 px-4 sm:px-6 bg-surface-container-low/30">

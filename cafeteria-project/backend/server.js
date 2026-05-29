@@ -27,6 +27,12 @@ const ratingsRouter = require('./routes/ratings');
 const favoritesRouter = require('./routes/favorites');
 const availabilityRouter = require('./routes/availability');
 const cafeteriaAnalyticsRouter = require('./routes/cafeteriaAnalytics');
+const {
+  router: dailySpecialsRouter,
+  createCafeteriaRouter: dailySpecialsCafeteriaRouter,
+  createStudentRouter: dailySpecialsStudentRouter,
+  createAdminRouter: dailySpecialsAdminRouter,
+} = require('./routes/dailySpecials');
 const { scheduleMidnightReset, runMidnightAvailabilityReset } = require('./utils/midnightReset');
 
 const cafeteriaAuth = require('./middleware/cafeteriaAuth');
@@ -82,6 +88,11 @@ app.use(
   buildNotificationRouter({ recipientType: 'admin', getRecipientId: () => 'admin' })
 );
 app.use('/api/ratings', ratingsRouter);
+
+app.use('/api/specials', dailySpecialsRouter);
+app.use('/api/specials/cafeteria', dailySpecialsCafeteriaRouter(cafeteriaAuth));
+app.use('/api/specials/student', dailySpecialsStudentRouter(studentAuth));
+app.use('/api/specials/admin', dailySpecialsAdminRouter(auth));
 
 app.get('/api/payments/public/:cafeteriaId', async (req, res) => {
     try {

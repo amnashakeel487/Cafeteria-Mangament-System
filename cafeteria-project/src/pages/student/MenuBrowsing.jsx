@@ -17,6 +17,7 @@ import { AvailabilityBadgeFromItem } from '../../components/availability/Availab
 import SoldOutOverlay from '../../components/availability/SoldOutOverlay';
 import { useMenuAvailabilityRealtime } from '../../hooks/useMenuAvailabilityRealtime';
 import { isMenuItemAvailable } from '../../utils/isMenuItemAvailable';
+import CafeteriaMenuSpecialsBanner from '../../components/specials/CafeteriaMenuSpecialsBanner';
 
 const BASE = '';
 const DEFAULT_IMAGE = DefaultImage; // COMSATS Cafe logo as default image
@@ -221,6 +222,8 @@ export default function MenuBrowsing() {
             Available only
           </label>
         </header>
+
+        <CafeteriaMenuSpecialsBanner cafeteriaId={cafeteriaId} cafeteriaName={cafeteria.name} />
 
         {/* Category Tabs */}
         <div className="flex gap-4 mb-10 overflow-x-auto pb-4 custom-scrollbar">
