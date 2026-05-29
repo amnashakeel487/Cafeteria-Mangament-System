@@ -58,7 +58,13 @@ export default function StudentRegister() {
         },
       });
     } catch (err) {
-      setError(err.response?.data?.message || 'Registration failed.');
+      if (!err.response) {
+        setError(
+          'Cannot reach the API. Start the backend (cd backend && node server.js) while using npm run dev, or deploy with Vercel env variables set.'
+        );
+      } else {
+        setError(err.response?.data?.message || `Registration failed (${err.response.status}).`);
+      }
     } finally {
       setIsLoading(false);
     }

@@ -44,7 +44,16 @@ router.post('/register', async (req, res) => {
             .select('id, name, email')
             .single();
 
-        if (error) return res.status(500).json({ message: 'Registration failed: ' + error.message });
+        if (error) {
+            console.error('Student register DB error:', error);
+            const hint =
+                error.message?.includes('status') || error.code === '42703'
+                    ? ' Run Supabase migrations (users.status column).'
+                    : '';
+            return res.status(500).json({
+                message: 'Registration failed: ' + error.message + hint,
+            });
+        }
 
         try {
             await createNotification({
@@ -72,10 +81,13 @@ router.post('/register', async (req, res) => {
             });
             if (emailResult.success) {
                 emailSent = true;
-                await supabase
+                const { error: flagErr } = await supabase
                     .from('users')
                     .update({ registration_email_sent: true })
                     .eq('id', newStudent.id);
+                if (flagErr) {
+                    console.warn('registration_email_sent update skipped:', flagErr.message);
+                }
             }
         } catch (emailError) {
             console.error('Email failed (non-critical):', emailError?.message || emailError);
