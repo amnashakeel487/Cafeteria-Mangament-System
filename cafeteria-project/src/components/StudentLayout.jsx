@@ -51,26 +51,30 @@ function StudentLayoutInner() {
 
       {/* Mobile Overlay */}
       <div
-        className={`lg:hidden fixed inset-0 bg-black/60 z-40 transition-opacity duration-300 ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        className={`lg:hidden fixed inset-0 bg-black/60 z-[54] transition-opacity duration-300 ${sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         onClick={() => setSidebarOpen(false)}
       />
 
-      {/* Sidebar */}
-      <aside className={`fixed left-0 top-14 sm:top-16 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] w-64 bg-[#1A1A2B] flex flex-col p-4 z-40 transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:top-16 lg:h-[calc(100vh-64px)]`}>
+      {/* Sidebar — bottom inset on mobile so footer clears the bottom tab bar */}
+      <aside
+        className={`fixed left-0 top-14 sm:top-16 bottom-14 sm:bottom-16 lg:bottom-0 w-64 bg-[#1A1A2B] flex flex-col p-4 z-[55] transition-transform duration-300 overflow-hidden ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0 lg:top-16 lg:h-[calc(100vh-64px)]`}
+      >
         {/* Mobile sidebar header */}
-        <div className="lg:hidden flex items-center justify-between px-2 mb-6 pt-2">
+        <div className="lg:hidden shrink-0 flex items-center justify-between px-2 mb-4 pt-2">
           <span className="text-lg font-black text-[#FF6B35] font-['Manrope']">COMSTAS Cafe</span>
           <button onClick={() => setSidebarOpen(false)} className="p-1 text-[#E1BFB5]/70 hover:text-[#E3E0F8]">
             <span className="material-symbols-outlined">close</span>
           </button>
         </div>
 
-        <div className="mb-8 px-4 py-2 hidden lg:block">
+        <div className="mb-6 px-4 py-2 hidden lg:block shrink-0">
           <h3 className="text-lg font-black text-[#E3E0F8] font-['Inter']">University Portal</h3>
           <p className="text-xs text-[#E1BFB5]/70">Student Account</p>
         </div>
 
-        <nav className="flex-1 space-y-2">
+        <nav className="flex-1 min-h-0 overflow-y-auto space-y-2 -mx-1 px-1 custom-scrollbar">
           {navLinks.map((link) => {
             const isActive = location.pathname.startsWith(link.path);
             return (
@@ -95,16 +99,27 @@ function StudentLayoutInner() {
           })}
         </nav>
 
-        <div className="mt-auto space-y-2 pt-4 border-t border-[#594139]/10">
+        <div className="shrink-0 space-y-2 pt-4 mt-2 border-t border-[#594139]/10 bg-[#1A1A2B]">
           <div className="lg:hidden flex items-center justify-between px-4 py-2.5 rounded-lg bg-[#38374A]/15">
             <span className="text-sm text-[#E1BFB5]/80">Theme</span>
             <ThemeToggle compact />
           </div>
-          <Link to="/student/settings" onClick={() => setSidebarOpen(false)} className="flex items-center gap-3 px-4 py-3 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide rounded-lg">
+          <Link
+            to="/student/settings"
+            onClick={() => setSidebarOpen(false)}
+            className="flex items-center gap-3 px-4 py-3 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide rounded-lg"
+          >
             <span className="material-symbols-outlined">settings</span>
             Settings
           </Link>
-          <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide rounded-lg">
+          <button
+            type="button"
+            onClick={() => {
+              setSidebarOpen(false);
+              handleLogout();
+            }}
+            className="w-full flex items-center gap-3 px-4 py-3 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide rounded-lg"
+          >
             <span className="material-symbols-outlined">logout</span>
             Logout
           </button>
