@@ -153,7 +153,7 @@ function StudentLayoutInner() {
       </header>
 
       {/* Main Content Area */}
-      <main className="pt-14 sm:pt-20 px-3 sm:px-6 md:px-8 lg:pl-64 lg:pr-10 pb-[4.25rem] sm:pb-24 lg:pb-12 bg-[#121222] min-h-screen overflow-x-hidden">
+      <main className="pt-14 sm:pt-20 px-3 sm:px-6 md:px-8 lg:pl-[calc(16rem+2rem)] lg:pr-10 pb-[4.25rem] sm:pb-24 lg:pb-12 bg-[#121222] min-h-screen overflow-x-hidden">
         <div className="pt-2 sm:pt-6 mobile-compact">
           <Outlet />
         </div>
