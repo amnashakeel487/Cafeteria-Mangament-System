@@ -8,6 +8,7 @@ import RefundStatusBadge from '../../components/RefundStatusBadge';
 import { cancelledByLabel } from '../../utils/orderCancellation';
 import { formatPrice } from '../../utils/currency';
 import RateOrderModal from '../../components/ratings/RateOrderModal';
+import SaveOrderItemsButton from '../../components/favorites/SaveOrderItemsButton';
 import { checkOrderRatings } from '../../utils/ratingsApi';
 
 const BASE = '';
@@ -230,6 +231,9 @@ export default function OrderHistory() {
 
                 {/* Right: actions */}
                 <div className="flex items-center gap-2 w-full md:w-auto flex-wrap">
+                  {order.status === 'completed' && (
+                    <SaveOrderItemsButton order={order} />
+                  )}
                   {order.status === 'completed' && (() => {
                     const rs = reviewStatus[order.id];
                     if (rs?.fullyReviewed) {

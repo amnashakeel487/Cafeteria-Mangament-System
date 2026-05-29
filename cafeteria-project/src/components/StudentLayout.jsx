@@ -2,15 +2,18 @@ import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import { NotificationProvider } from '../context/NotificationContext';
+import { useFavorites } from '../context/FavoritesContext';
 import NotificationBell from './notifications/NotificationBell';
 
-export default function StudentLayout() {
+function StudentLayoutInner() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
   const student = JSON.parse(localStorage.getItem('studentData') || '{}');
+  const { favoriteCount, clearFavorites } = useFavorites();
 
   const handleLogout = () => {
+    clearFavorites();
     localStorage.removeItem('studentToken');
     localStorage.removeItem('studentData');
     navigate('/student/login');
@@ -18,6 +21,7 @@ export default function StudentLayout() {
 
   const navLinks = [
     { name: 'Cafeterias', path: '/student/cafeterias', icon: 'restaurant' },
+    { name: 'My Favorites', path: '/student/favorites', icon: 'favorite', badge: favoriteCount },
     { name: 'My Orders', path: '/student/orders', icon: 'receipt_long' },
     { name: 'Track Order', path: '/student/track', icon: 'local_shipping' },
     { name: 'Profile', path: '/student/profile', icon: 'person' },
@@ -71,7 +75,12 @@ export default function StudentLayout() {
                 }`}
               >
                 <span className="material-symbols-outlined" style={isActive ? { fontVariationSettings: "'FILL' 1" } : {}}>{link.icon}</span>
-                {link.name}
+                <span className="flex-1 text-left">{link.name}</span>
+                {link.badge > 0 && (
+                  <span className="bg-rose-500/20 text-rose-300 text-[10px] font-bold px-2 py-0.5 rounded-full min-w-[1.25rem] text-center">
+                    {link.badge}
+                  </span>
+                )}
               </button>
             );
           })}
@@ -173,3 +182,5 @@ export default function StudentLayout() {
     </NotificationProvider>
   );
 }
+
+export default StudentLayoutInner;

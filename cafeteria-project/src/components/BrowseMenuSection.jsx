@@ -5,6 +5,9 @@ import { supabase } from '../supabaseClient';
 import { formatPrice } from '../utils/currency';
 import { isDisplayableImageUrl } from '../utils/media';
 import StarDisplay from './ratings/StarDisplay';
+import FavoriteButton from './favorites/FavoriteButton';
+import { useFavorites } from '../context/FavoritesContext';
+import { useNavigate } from 'react-router-dom';
 
 const FOOD_ICONS = ['lunch_dining', 'ramen_dining', 'local_pizza', 'bakery_dining', 'emoji_food_beverage', 'icecream'];
 
@@ -71,6 +74,8 @@ function MenuItemThumb({ imageUrl }) {
 }
 
 export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
+  const navigate = useNavigate();
+  const { showToast } = useFavorites();
   const [cafeterias, setCafeterias] = useState([]);
   const [selectedCafeteria, setSelectedCafeteria] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
@@ -315,9 +320,22 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.03 }}
                     whileHover={{ y: -4 }}
-                    className="group rounded-xl border border-outline-variant/10 bg-surface-container-high p-5 shadow-lg hover:shadow-primary/10 transition-shadow duration-300"
+                    className="group relative rounded-xl border border-outline-variant/10 bg-surface-container-high p-5 shadow-lg hover:shadow-primary/10 transition-shadow duration-300"
                   >
-                    <div className="flex items-start justify-between gap-3">
+                    {selectedCafeteria && (
+                      <div className="absolute top-3 right-3 z-10">
+                        <FavoriteButton
+                          menuItem={item}
+                          cafeteriaId={selectedCafeteria.id}
+                          size="sm"
+                          onGuestClick={() => {
+                            showToast('Sign in to save favorites →', 'error');
+                            setTimeout(() => navigate('/student/login'), 600);
+                          }}
+                        />
+                      </div>
+                    )}
+                    <div className="flex items-start justify-between gap-3 pr-10">
                       <div className="min-w-0">
                         <h3 className="text-lg font-extrabold text-on-surface editorial-text line-clamp-1" style={{ fontFamily: 'Manrope' }}>
                           {item.name}

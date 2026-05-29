@@ -24,6 +24,7 @@ const studentProfileRoutes = require('./routes/studentProfile');
 const studentDealsRoutes = require('./routes/studentDeals');
 const { buildRouter: buildNotificationRouter } = require('./routes/notificationRoutes');
 const ratingsRouter = require('./routes/ratings');
+const favoritesRouter = require('./routes/favorites');
 
 const cafeteriaAuth = require('./middleware/cafeteriaAuth');
 const studentAuth = require('./middleware/studentAuth');
@@ -59,6 +60,7 @@ app.use('/api/student/menu', studentAuth, studentMenuRoutes);
 app.use('/api/student/orders', studentAuth, studentOrdersRoutes);
 app.use('/api/student/profile', studentAuth, studentProfileRoutes);
 app.use('/api/student/deals', studentAuth, studentDealsRoutes);
+app.use('/api/student/favorites', studentAuth, favoritesRouter);
 app.use(
   '/api/student/notifications',
   studentAuth,

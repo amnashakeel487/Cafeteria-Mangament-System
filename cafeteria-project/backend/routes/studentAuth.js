@@ -28,7 +28,28 @@ router.post('/register', async (req, res) => {
             .eq('email', email.trim())
             .maybeSingle();
 
-        if (existing) return res.status(409).json({ message: 'Email already registered' });
+        if (existing) {
+            const { data: existingUser } = await supabase
+                .from('users')
+                .select('id, name, email, status')
+                .eq('email', email.trim())
+                .maybeSingle();
+
+            if (existingUser?.status === 'pending') {
+                return res.status(200).json({
+                    success: true,
+                    alreadyRegistered: true,
+                    message: 'Registration already submitted. Awaiting admin approval.',
+                    data: {
+                        id: existingUser.id,
+                        name: existingUser.name,
+                        email: existingUser.email,
+                        approvalStatus: 'pending',
+                    },
+                });
+            }
+            return res.status(409).json({ message: 'Email already registered' });
+        }
 
         const hashedPassword = await bcrypt.hash(password, 10);
         const { data: newStudent, error } = await supabase
@@ -55,57 +76,65 @@ router.post('/register', async (req, res) => {
             });
         }
 
-        try {
-            await createNotification({
-                recipientType: 'admin',
-                recipientId: 'admin',
-                type: 'new_registration',
-                title: '👤 New Student Registration',
-                message: `${name} has registered and is awaiting approval`,
-                data: {
-                    studentId: newStudent.id,
-                    studentName: name,
-                    studentEmail: email.trim(),
-                },
-            });
-        } catch (_) {
-            /* notification must not block registration */
-        }
-
-        let emailSent = false;
-        try {
-            const template = registrationReceivedTemplate(newStudent.name);
-            const emailResult = await sendEmail({
-                to: { email: newStudent.email, name: newStudent.name },
-                ...template,
-            });
-            if (emailResult.success) {
-                emailSent = true;
-                const { error: flagErr } = await supabase
-                    .from('users')
-                    .update({ registration_email_sent: true })
-                    .eq('id', newStudent.id);
-                if (flagErr) {
-                    console.warn('registration_email_sent update skipped:', flagErr.message);
-                }
-            }
-        } catch (emailError) {
-            console.error('Email failed (non-critical):', emailError?.message || emailError);
-        }
-
-        res.status(201).json({
+        const payload = {
             success: true,
             message: 'Registration successful. Awaiting admin approval.',
-            emailSent,
+            emailSent: null,
             data: {
                 id: newStudent.id,
                 name: newStudent.name,
                 email: newStudent.email,
                 approvalStatus: 'pending',
             },
+        };
+
+        // Respond immediately so the client is not left waiting on email/API timeouts
+        res.status(201).json(payload);
+
+        const studentRow = { ...newStudent };
+        const trimmedEmail = email.trim();
+        setImmediate(async () => {
+            try {
+                await createNotification({
+                    recipientType: 'admin',
+                    recipientId: 'admin',
+                    type: 'new_registration',
+                    title: '👤 New Student Registration',
+                    message: `${name} has registered and is awaiting approval`,
+                    data: {
+                        studentId: studentRow.id,
+                        studentName: name,
+                        studentEmail: trimmedEmail,
+                    },
+                });
+            } catch (notifyErr) {
+                console.error('Registration notification failed (non-critical):', notifyErr?.message);
+            }
+
+            try {
+                const template = registrationReceivedTemplate(studentRow.name);
+                const emailResult = await sendEmail({
+                    to: { email: studentRow.email, name: studentRow.name },
+                    ...template,
+                });
+                if (emailResult.success) {
+                    const { error: flagErr } = await supabase
+                        .from('users')
+                        .update({ registration_email_sent: true })
+                        .eq('id', studentRow.id);
+                    if (flagErr) {
+                        console.warn('registration_email_sent update skipped:', flagErr.message);
+                    }
+                }
+            } catch (emailError) {
+                console.error('Registration email failed (non-critical):', emailError?.message);
+            }
         });
     } catch (err) {
-        res.status(500).json({ message: 'Server error' });
+        console.error('Student register error:', err);
+        if (!res.headersSent) {
+            res.status(500).json({ message: err.message || 'Server error' });
+        }
     }
 });
 

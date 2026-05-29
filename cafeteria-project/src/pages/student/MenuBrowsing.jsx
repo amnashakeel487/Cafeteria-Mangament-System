@@ -8,6 +8,7 @@ import { PAGE_SEO } from '../../seo/siteConfig';
 import LazyImage from '../../components/LazyImage';
 import { formatPrice } from '../../utils/currency';
 import StarDisplay from '../../components/ratings/StarDisplay';
+import FavoriteButton from '../../components/favorites/FavoriteButton';
 import RatingDistribution from '../../components/ratings/RatingDistribution';
 import ReviewCard from '../../components/ratings/ReviewCard';
 import ReviewsDrawer from '../../components/ratings/ReviewsDrawer';
@@ -276,8 +277,11 @@ export default function MenuBrowsing() {
                     )}
                   </>
                 )}
+                <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
+                  <FavoriteButton menuItem={item} cafeteriaId={cafeteriaId} size="md" />
+                </div>
                 {qty > 0 && (
-                  <div className="absolute top-2 right-2 bg-[#FF6B35] text-white px-2 py-0.5 rounded-md text-[10px] font-bold shadow-lg">
+                  <div className="absolute top-2 left-12 bg-[#FF6B35] text-white px-2 py-0.5 rounded-md text-[10px] font-bold shadow-lg">
                     In Cart ({qty})
                   </div>
                 )}

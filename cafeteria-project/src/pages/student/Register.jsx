@@ -37,32 +37,52 @@ export default function StudentRegister() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
+  const goToPendingApproval = (data) => {
+    sessionStorage.setItem('pendingApprovalEmail', form.email.trim());
+    sessionStorage.setItem('pendingApprovalName', form.name.trim());
+    sessionStorage.removeItem('pendingApprovalEmailDelayed');
+    navigate('/student/pending-approval', {
+      state: {
+        email: data?.email || form.email,
+        name: data?.name || form.name,
+      },
+    });
+  };
+
   const handleRegister = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
     try {
       const res = await axios.post('/api/student/register', form);
-      const data = res.data?.data || res.data;
-      sessionStorage.setItem('pendingApprovalEmail', form.email.trim());
-      sessionStorage.setItem('pendingApprovalName', form.name.trim());
-      if (res.data?.emailSent === false) {
-        sessionStorage.setItem('pendingApprovalEmailDelayed', '1');
-      } else {
-        sessionStorage.removeItem('pendingApprovalEmailDelayed');
+      if (res.data?.success) {
+        goToPendingApproval(res.data?.data);
+        return;
       }
-      navigate('/student/pending-approval', {
-        state: {
-          email: data?.email || form.email,
-          name: data?.name || form.name,
-        },
-      });
+      setError(res.data?.message || 'Registration could not be completed.');
     } catch (err) {
       if (!err.response) {
         setError(
           'Cannot reach the API. Start the backend (cd backend && node server.js) while using npm run dev, or deploy with Vercel env variables set.'
         );
+      } else if (err.response.status === 409) {
+        setError(err.response?.data?.message || 'This email is already registered.');
       } else {
+        // Account may have been created even if the response failed (e.g. email timeout)
+        try {
+          const check = await axios.get('/api/student/approval-status', {
+            params: { email: form.email.trim() },
+          });
+          if (check.data?.approvalStatus === 'pending') {
+            goToPendingApproval({
+              email: form.email.trim(),
+              name: check.data?.name || form.name,
+            });
+            return;
+          }
+        } catch {
+          /* ignore */
+        }
         setError(err.response?.data?.message || `Registration failed (${err.response.status}).`);
       }
     } finally {

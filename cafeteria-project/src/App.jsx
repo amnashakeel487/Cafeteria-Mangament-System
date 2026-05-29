@@ -30,11 +30,13 @@ import MenuBrowsing from './pages/student/MenuBrowsing';
 import CartCheckout from './pages/student/CartCheckout';
 import OrderTracking from './pages/student/OrderTracking';
 import OrderHistory from './pages/student/OrderHistory';
+import FavoritesPage from './pages/student/FavoritesPage';
 import StudentProfile from './pages/student/StudentProfile';
 import StudentNotificationsPage from './pages/student/NotificationsPage';
 import CafeteriaNotificationsPage from './pages/cafeteria/NotificationsPage';
 
 import { CartProvider } from './context/CartContext';
+import { FavoritesProvider } from './context/FavoritesContext';
 import LandingPage from './pages/LandingPage';
 import About from './pages/About';
 import Contact from './pages/Contact';
@@ -42,6 +44,7 @@ import Contact from './pages/Contact';
 function App() {
   return (
     <CartProvider>
+    <FavoritesProvider>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -82,6 +85,7 @@ function App() {
         <Route element={<StudentRoute />}>
           <Route element={<StudentLayout />}>
              <Route path="/student/cafeterias" element={<StudentCafeterias />} />
+             <Route path="/student/favorites" element={<FavoritesPage />} />
              <Route path="/student/menu/:cafeteriaId" element={<MenuBrowsing />} />
              <Route path="/student/cart" element={<CartCheckout />} />
              <Route path="/student/track" element={<OrderTracking />} />
@@ -93,6 +97,7 @@ function App() {
         </Route>
       </Routes>
     </BrowserRouter>
+    </FavoritesProvider>
     </CartProvider>
   );
 }
