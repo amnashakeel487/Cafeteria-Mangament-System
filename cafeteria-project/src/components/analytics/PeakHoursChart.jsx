@@ -1,14 +1,4 @@
 import { useState } from 'react';
-import {
-  Bar,
-  BarChart,
-  Cell,
-  ReferenceLine,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
 import { formatPrice } from '../../utils/currency';
 
 const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
@@ -52,6 +42,38 @@ function Heatmap({ byDayAndHour, peakHour }) {
   );
 }
 
+function HourlyBars({ hourly, peak }) {
+  const max = Math.max(...hourly.map((h) => h.orderCount || 0), 1);
+
+  return (
+    <div className="h-64 flex items-end gap-0.5 sm:gap-1">
+      {hourly.map((entry, index) => {
+        const h = Math.max(4, ((entry.orderCount || 0) / max) * 100);
+        const isPeak = index === peak;
+        return (
+          <div
+            key={entry.label}
+            className="flex-1 flex flex-col items-center justify-end min-w-0 group"
+            title={`${entry.label}: ${entry.orderCount} orders · ${formatPrice(entry.revenue)}`}
+          >
+            <div
+              className={`w-full rounded-t transition-all ${
+                isPeak ? 'bg-[#06d6c7]' : 'bg-[#06d6c7]/35'
+              }`}
+              style={{ height: `${h}%` }}
+            />
+            {index % 3 === 0 && (
+              <span className="text-[8px] text-on-surface-variant mt-1 truncate w-full text-center">
+                {entry.label}
+              </span>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function PeakHoursChart({ data, loading }) {
   const [tab, setTab] = useState('hourly');
 
@@ -86,24 +108,7 @@ export default function PeakHoursChart({ data, loading }) {
       </div>
 
       {tab === 'hourly' ? (
-        <div className="h-64 w-full">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data.hourly}>
-              <XAxis dataKey="label" tick={{ fill: '#e1bfb5', fontSize: 9 }} interval={2} />
-              <YAxis tick={{ fill: '#e1bfb5', fontSize: 10 }} />
-              <Tooltip
-                contentStyle={{ background: '#1E1E2F', borderRadius: 8 }}
-                formatter={(v, _n, p) => [`${v} orders · ${formatPrice(p.payload.revenue)}`, p.payload.label]}
-              />
-              <ReferenceLine x={data.hourly[peak]?.label} stroke="#06d6c7" strokeDasharray="4 4" />
-              <Bar dataKey="orderCount" radius={[4, 4, 0, 0]}>
-                {data.hourly.map((entry, index) => (
-                  <Cell key={entry.label} fill={index === peak ? '#06d6c7' : 'rgba(6,214,199,0.35)'} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </div>
+        <HourlyBars hourly={data.hourly} peak={peak} />
       ) : (
         <Heatmap byDayAndHour={data.byDayAndHour || []} peakHour={data.peakHour} />
       )}

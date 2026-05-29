@@ -1,11 +1,3 @@
-import {
-  Bar,
-  BarChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
 import { formatPrice } from '../../utils/currency';
 
 const MEDALS = ['🥇', '🥈', '🥉'];
@@ -25,37 +17,38 @@ export default function BestSellingChart({ data = [], loading }) {
     return <p className="text-sm text-on-surface-variant py-8 text-center">No sales data for this period.</p>;
   }
 
-  const chartData = data.map((item) => ({
-    ...item,
-    shortName: (item.name || '').length > 20 ? `${item.name.slice(0, 18)}…` : item.name,
-  }));
+  const maxQty = Math.max(...data.map((item) => item.totalQuantity || 0), 1);
 
   return (
     <div className="space-y-6">
-      <div className="h-72 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} layout="vertical" margin={{ left: 8, right: 16 }}>
-            <XAxis type="number" hide />
-            <YAxis type="category" dataKey="shortName" width={100} tick={{ fill: '#e1bfb5', fontSize: 11 }} />
-            <Tooltip
-              contentStyle={{
-                background: '#1E1E2F',
-                border: '1px solid rgba(89,65,57,0.3)',
-                borderRadius: 8,
-              }}
-              formatter={(value, _name, props) => [
-                `${value} sold · ${formatPrice(props.payload.totalRevenue)} (${props.payload.percentageOfTotal}%)`,
-                props.payload.name,
-              ]}
-            />
-            <Bar dataKey="totalQuantity" fill="#06d6c7" radius={[0, 6, 6, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
+      <ul className="space-y-4">
+        {data.map((item) => {
+          const pct = ((item.totalQuantity || 0) / maxQty) * 100;
+          return (
+            <li key={item.menuItemId || item.name}>
+              <div className="flex justify-between gap-2 text-sm mb-1.5">
+                <span className="font-bold text-on-surface truncate" title={item.name}>
+                  {item.name}
+                </span>
+                <span className="text-on-surface-variant shrink-0">
+                  {item.totalQuantity} · {formatPrice(item.totalRevenue)}
+                </span>
+              </div>
+              <div className="h-2.5 rounded-full bg-surface-container-lowest overflow-hidden">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#06d6c7] to-[#59d5fb] transition-all duration-500"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+              <p className="text-[10px] text-on-surface-variant mt-0.5">{item.percentageOfTotal}% of sales</p>
+            </li>
+          );
+        })}
+      </ul>
       <ul className="space-y-2">
         {data.slice(0, 3).map((item, i) => (
           <li
-            key={item.menuItemId || item.name}
+            key={`medal-${item.menuItemId || item.name}`}
             className="flex items-center justify-between text-sm bg-surface-container-lowest/50 rounded-lg px-3 py-2"
           >
             <span className="font-bold text-on-surface">

@@ -34,8 +34,18 @@ function ChartCard({ title, children, className = '' }) {
   );
 }
 
+function readCafeteriaFromStorage() {
+  try {
+    const raw = localStorage.getItem('cafeteriaData');
+    return raw ? JSON.parse(raw) : {};
+  } catch {
+    localStorage.removeItem('cafeteriaData');
+    return {};
+  }
+}
+
 export default function AnalyticsDashboard() {
-  const cafeteria = JSON.parse(localStorage.getItem('cafeteriaData') || '{}');
+  const cafeteria = readCafeteriaFromStorage();
   const token = localStorage.getItem('cafeteriaToken');
   const axiosConfig = useMemo(() => ({ headers: { Authorization: `Bearer ${token}` } }), [token]);
 

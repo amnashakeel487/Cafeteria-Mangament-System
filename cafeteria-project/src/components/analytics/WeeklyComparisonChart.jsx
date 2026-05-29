@@ -1,12 +1,3 @@
-import {
-  Bar,
-  BarChart,
-  Legend,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
 import { formatPrice } from '../../utils/currency';
 
 export default function WeeklyComparisonChart({ data, loading }) {
@@ -22,10 +13,9 @@ export default function WeeklyComparisonChart({ data, loading }) {
     day: d.day,
     thisWeek: data.thisWeek.days[i]?.revenue || 0,
     lastWeek: data.lastWeek.days[i]?.revenue || 0,
-    thisOrders: data.thisWeek.days[i]?.orders || 0,
-    lastOrders: data.lastWeek.days[i]?.orders || 0,
   }));
 
+  const maxRev = Math.max(...chartData.flatMap((d) => [d.thisWeek, d.lastWeek]), 1);
   const comp = data.comparison || {};
   const revGrowth = comp.revenueGrowth ?? 0;
 
@@ -50,20 +40,32 @@ export default function WeeklyComparisonChart({ data, loading }) {
         </span>
       </div>
 
-      <div className="h-72 w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData}>
-            <XAxis dataKey="day" tick={{ fill: '#e1bfb5', fontSize: 11 }} />
-            <YAxis tick={{ fill: '#e1bfb5', fontSize: 10 }} />
-            <Tooltip
-              contentStyle={{ background: '#1E1E2F', borderRadius: 8 }}
-              formatter={(v, name) => [formatPrice(v), name === 'thisWeek' ? 'This Week' : 'Last Week']}
-            />
-            <Legend />
-            <Bar dataKey="thisWeek" name="This Week" fill="#06d6c7" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="lastWeek" name="Last Week" fill="rgba(89,65,57,0.5)" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+      <div className="flex items-end justify-between gap-2 h-72 pt-4">
+        {chartData.map((row) => (
+          <div key={row.day} className="flex-1 flex flex-col items-center gap-1 min-w-0">
+            <div className="w-full flex items-end justify-center gap-1 h-52">
+              <div
+                className="w-[42%] rounded-t bg-[#06d6c7] transition-all"
+                style={{ height: `${Math.max(4, (row.thisWeek / maxRev) * 100)}%` }}
+                title={`This week: ${formatPrice(row.thisWeek)}`}
+              />
+              <div
+                className="w-[42%] rounded-t bg-[#594139]/60 transition-all"
+                style={{ height: `${Math.max(4, (row.lastWeek / maxRev) * 100)}%` }}
+                title={`Last week: ${formatPrice(row.lastWeek)}`}
+              />
+            </div>
+            <span className="text-[10px] font-bold text-on-surface-variant">{row.day}</span>
+          </div>
+        ))}
+      </div>
+      <div className="flex justify-center gap-6 text-xs text-on-surface-variant">
+        <span className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-sm bg-[#06d6c7]" /> This week
+        </span>
+        <span className="flex items-center gap-2">
+          <span className="w-3 h-3 rounded-sm bg-[#594139]/60" /> Last week
+        </span>
       </div>
     </div>
   );

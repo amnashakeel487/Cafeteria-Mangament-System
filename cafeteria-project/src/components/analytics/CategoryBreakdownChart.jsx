@@ -1,18 +1,39 @@
 import { useState } from 'react';
-import {
-  Bar,
-  BarChart,
-  Cell,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
 import { formatPrice } from '../../utils/currency';
 
 const COLORS = ['#06d6c7', '#FF6B35', '#59d5fb', '#a78bfa', '#fbbf24', '#f472b6'];
+
+function DonutChart({ categories, totalRevenue }) {
+  const total = categories.reduce((s, c) => s + (c.totalRevenue || 0), 0) || 1;
+  let offset = 0;
+  const segments = categories.map((c, i) => {
+    const pct = ((c.totalRevenue || 0) / total) * 100;
+    const seg = { color: COLORS[i % COLORS.length], pct, offset };
+    offset += pct;
+    return seg;
+  });
+
+  const gradient = segments
+    .map((s) => `${s.color} ${s.offset}% ${s.offset + s.pct}%`)
+    .join(', ');
+
+  return (
+    <div className="relative w-44 h-44 mx-auto">
+      <div
+        className="w-full h-full rounded-full"
+        style={{
+          background: `conic-gradient(${gradient})`,
+        }}
+      />
+      <div className="absolute inset-[18%] rounded-full bg-surface-container-high flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-[10px] text-on-surface-variant uppercase">Total</p>
+          <p className="text-sm font-bold text-on-surface">{formatPrice(totalRevenue)}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function CategoryBreakdownChart({ data, loading }) {
   const [view, setView] = useState('donut');
@@ -27,11 +48,7 @@ export default function CategoryBreakdownChart({ data, loading }) {
     return <p className="text-sm text-on-surface-variant text-center py-8">No category data.</p>;
   }
 
-  const pieData = categories.map((c, i) => ({
-    name: c.categoryName,
-    value: c.totalRevenue,
-    fill: COLORS[i % COLORS.length],
-  }));
+  const maxRev = Math.max(...categories.map((c) => c.totalRevenue || 0), 1);
 
   return (
     <div className="space-y-4">
@@ -50,40 +67,29 @@ export default function CategoryBreakdownChart({ data, loading }) {
         ))}
       </div>
 
-      <div className="h-56 w-full relative">
-        <ResponsiveContainer width="100%" height="100%">
-          {view === 'donut' ? (
-            <PieChart>
-              <Pie data={pieData} dataKey="value" nameKey="name" innerRadius={55} outerRadius={85} paddingAngle={2}>
-                {pieData.map((entry, index) => (
-                  <Cell key={entry.name} fill={entry.fill} />
-                ))}
-              </Pie>
-              <Tooltip
-                contentStyle={{ background: '#1E1E2F', borderRadius: 8 }}
-                formatter={(v) => formatPrice(v)}
-              />
-            </PieChart>
-          ) : (
-            <BarChart data={categories} layout="vertical" margin={{ left: 8 }}>
-              <XAxis type="number" hide />
-              <YAxis type="category" dataKey="categoryName" width={80} tick={{ fill: '#e1bfb5', fontSize: 10 }} />
-              <Tooltip formatter={(v) => formatPrice(v)} />
-              <Bar dataKey="totalRevenue" radius={[0, 4, 4, 0]}>
-                {categories.map((_, i) => (
-                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          )}
-        </ResponsiveContainer>
-        {view === 'donut' && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="text-center">
-              <p className="text-[10px] text-on-surface-variant uppercase">Total</p>
-              <p className="text-sm font-bold text-on-surface">{formatPrice(totalRevenue)}</p>
-            </div>
-          </div>
+      <div className="min-h-[14rem] flex items-center justify-center">
+        {view === 'donut' ? (
+          <DonutChart categories={categories} totalRevenue={totalRevenue} />
+        ) : (
+          <ul className="w-full space-y-3">
+            {categories.map((c, i) => (
+              <li key={c.categoryName}>
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="font-medium text-on-surface">{c.categoryName}</span>
+                  <span className="text-on-surface-variant">{formatPrice(c.totalRevenue)}</span>
+                </div>
+                <div className="h-2 rounded-full bg-surface-container-lowest overflow-hidden">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${((c.totalRevenue || 0) / maxRev) * 100}%`,
+                      backgroundColor: COLORS[i % COLORS.length],
+                    }}
+                  />
+                </div>
+              </li>
+            ))}
+          </ul>
         )}
       </div>
 
@@ -101,7 +107,10 @@ export default function CategoryBreakdownChart({ data, loading }) {
             {categories.map((c, i) => (
               <tr key={c.categoryName} className="border-b border-outline-variant/5">
                 <td className="py-2 font-medium text-on-surface">
-                  <span className="inline-block w-2 h-2 rounded-full mr-2" style={{ background: COLORS[i % COLORS.length] }} />
+                  <span
+                    className="inline-block w-2 h-2 rounded-full mr-2"
+                    style={{ background: COLORS[i % COLORS.length] }}
+                  />
                   {c.categoryName}
                 </td>
                 <td className="py-2 text-on-surface-variant">{c.totalItemsSold}</td>
