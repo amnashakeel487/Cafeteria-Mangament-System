@@ -18,6 +18,8 @@ export default class RootErrorBoundary extends Component {
     try {
       localStorage.removeItem('studentCart');
       localStorage.removeItem('studentCartCafeteria');
+      localStorage.removeItem('cafeteriaToken');
+      localStorage.removeItem('cafeteriaData');
     } catch {
       /* ignore */
     }
@@ -34,7 +36,7 @@ export default class RootErrorBoundary extends Component {
           <span className="material-symbols-outlined text-4xl text-[#FF6B35] mb-3">error</span>
           <h1 className="text-lg font-bold font-['Manrope'] mb-2">Something went wrong</h1>
           <p className="text-sm text-[#e1bfb5] mb-4">
-            The app could not load. This is often caused by outdated saved cart data in your browser.
+            The app could not load. Try clearing saved browser data for this site, then reload.
           </p>
           <p className="text-xs text-[#ffb4ab]/80 mb-6 break-words font-mono">{error?.message}</p>
           <button

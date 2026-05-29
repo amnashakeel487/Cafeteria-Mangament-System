@@ -26,6 +26,9 @@ export default function CafeteriaDashboard() {
   });
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [analyticsToday, setAnalyticsToday] = useState(null);
+  const [sparkTrend, setSparkTrend] = useState([]);
+  const [topItemsToday, setTopItemsToday] = useState([]);
 
   // Manual Order States
   const [isModalOpen, setIsModalOpen] = useState(false);
