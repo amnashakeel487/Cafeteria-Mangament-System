@@ -1,13 +1,15 @@
 import { useTheme } from '../context/ThemeContext';
 
-export default function ThemeToggle() {
+export default function ThemeToggle({ compact = false }) {
   const { isDark, toggleTheme } = useTheme();
+  const sizeClass = compact ? 'w-9 h-5' : 'w-12 h-6';
+  const thumbClass = compact ? 'w-4 h-4' : 'w-5 h-5';
 
   return (
     <button
       onClick={toggleTheme}
       title={isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
-      className="relative w-12 h-6 rounded-full transition-all duration-300 focus:outline-none flex-shrink-0"
+      className={`relative ${sizeClass} rounded-full transition-all duration-300 focus:outline-none flex-shrink-0`}
       style={{ background: isDark ? '#594139' : '#d0d0e0' }}
     >
       {/* Track */}
@@ -17,9 +19,9 @@ export default function ThemeToggle() {
       />
       {/* Thumb */}
       <span
-        className="absolute top-0.5 w-5 h-5 rounded-full shadow-md flex items-center justify-center transition-all duration-300"
+        className={`absolute top-0.5 ${thumbClass} rounded-full shadow-md flex items-center justify-center transition-all duration-300`}
         style={{
-          left: isDark ? 'calc(100% - 1.375rem)' : '0.125rem',
+          left: isDark ? (compact ? 'calc(100% - 1.125rem)' : 'calc(100% - 1.375rem)') : '0.125rem',
           background: isDark ? '#FF6B35' : '#6060c0',
         }}
       >

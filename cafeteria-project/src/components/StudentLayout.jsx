@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import ThemeToggle from './ThemeToggle';
 import { NotificationProvider } from '../context/NotificationContext';
@@ -28,6 +28,10 @@ export default function StudentLayout() {
     setSidebarOpen(false);
   };
 
+  useEffect(() => {
+    setSidebarOpen(false);
+  }, [location.pathname]);
+
   return (
     <NotificationProvider role="student" recipientId={student?.id}>
     <div className="bg-[#121222] text-[#E3E0F8] min-h-screen font-['Inter']">
@@ -39,7 +43,7 @@ export default function StudentLayout() {
       />
 
       {/* Sidebar */}
-      <aside className={`fixed left-0 top-0 h-screen w-64 bg-[#1A1A2B] flex flex-col p-4 z-50 transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:top-16 lg:h-[calc(100vh-64px)]`}>
+      <aside className={`fixed left-0 top-14 sm:top-16 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] w-64 bg-[#1A1A2B] flex flex-col p-4 z-40 transition-transform duration-300 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 lg:top-16 lg:h-[calc(100vh-64px)]`}>
         {/* Mobile sidebar header */}
         <div className="lg:hidden flex items-center justify-between px-2 mb-6 pt-2">
           <span className="text-lg font-black text-[#FF6B35] font-['Manrope']">COMSTAS Cafe</span>
@@ -74,6 +78,10 @@ export default function StudentLayout() {
         </nav>
 
         <div className="mt-auto space-y-2 pt-4 border-t border-[#594139]/10">
+          <div className="lg:hidden flex items-center justify-between px-4 py-2.5 rounded-lg bg-[#38374A]/15">
+            <span className="text-sm text-[#E1BFB5]/80">Theme</span>
+            <ThemeToggle compact />
+          </div>
           <Link to="/student/settings" onClick={() => setSidebarOpen(false)} className="flex items-center gap-3 px-4 py-3 text-[#E1BFB5]/70 hover:bg-[#38374A]/20 hover:text-[#E3E0F8] transition-all duration-300 ease-out font-['Inter'] text-sm tracking-wide rounded-lg">
             <span className="material-symbols-outlined">settings</span>
             Settings
@@ -86,34 +94,51 @@ export default function StudentLayout() {
       </aside>
 
       {/* TopNavBar */}
-      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-3 sm:px-4 md:px-6 bg-[#1E1E2F] h-14 sm:h-16 shadow-2xl shadow-[#0c0c1d]/50">
-        <div className="flex items-center gap-3 md:gap-8">
+      <header className="fixed top-0 w-full z-[60] flex items-center justify-between gap-2 px-2 sm:px-4 md:px-6 bg-[#1E1E2F] h-14 sm:h-16 shadow-2xl shadow-[#0c0c1d]/50">
+        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
           {/* Hamburger — mobile only */}
           <button
-            className="lg:hidden p-2 text-[#E3E0F8] hover:text-[#FF6B35] transition-colors"
-            onClick={() => setSidebarOpen(true)}
+            type="button"
+            className="lg:hidden p-1.5 sm:p-2 shrink-0 text-[#E3E0F8] hover:text-[#FF6B35] transition-colors rounded-lg relative z-[61]"
+            onClick={() => setSidebarOpen((open) => !open)}
+            aria-label={sidebarOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={sidebarOpen}
           >
-            <span className="material-symbols-outlined">menu</span>
+            <span className="material-symbols-outlined text-[22px]">
+              {sidebarOpen ? 'close' : 'menu'}
+            </span>
           </button>
 
-          <span className="text-base sm:text-xl font-bold text-[#FF6B35] font-['Manrope'] truncate max-w-[140px] sm:max-w-none">COMSTAS Cafe</span>
+          <span className="text-sm sm:text-xl font-bold text-[#FF6B35] font-['Manrope'] truncate leading-tight">
+            <span className="hidden min-[400px]:inline">COMSTAS </span>Cafe
+          </span>
 
           {/* Desktop Nav Links */}
-          <nav className="hidden md:flex items-center gap-6">
+          <nav className="hidden md:flex items-center gap-6 ml-2">
             <Link to="/student/cafeterias" className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${location.pathname.includes('/cafeterias') || location.pathname.includes('/menu') ? 'text-[#FF6B35] font-bold border-b-2 border-[#FF6B35]' : 'text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D]'}`}>Cafeterias</Link>
             <Link to="/student/orders" className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/student/orders' ? 'text-[#FF6B35] font-bold border-b-2 border-[#FF6B35]' : 'text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D]'}`}>My Orders</Link>
             <Link to="/student/track" className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${location.pathname === '/student/track' ? 'text-[#FF6B35] font-bold border-b-2 border-[#FF6B35]' : 'text-[#E3E0F8]/80 hover:bg-[#38374A]/40 hover:text-[#FFB59D]'}`}>Track Order</Link>
           </nav>
         </div>
 
-        <div className="flex items-center gap-3 text-[#FF6B35]">
-          <ThemeToggle />
+        <div className="flex items-center gap-0.5 sm:gap-2 shrink-0 text-[#FF6B35]">
+          <div className="hidden sm:block">
+            <ThemeToggle />
+          </div>
           <NotificationBell />
-          <button onClick={() => navigate('/student/cart')} className="relative p-2 hover:bg-[#38374A]/40 rounded-full transition-colors active:scale-95">
-            <span className="material-symbols-outlined">shopping_cart</span>
+          <button
+            onClick={() => navigate('/student/cart')}
+            className="relative p-1.5 sm:p-2 hover:bg-[#38374A]/40 rounded-lg transition-colors active:scale-95"
+            aria-label="Cart"
+          >
+            <span className="material-symbols-outlined text-[22px] sm:text-2xl">shopping_cart</span>
           </button>
-          <button onClick={() => navigate('/student/profile')} className="p-2 hover:bg-[#38374A]/40 rounded-full transition-colors active:scale-95">
-            <span className="material-symbols-outlined">account_circle</span>
+          <button
+            onClick={() => navigate('/student/profile')}
+            className="p-1.5 sm:p-2 hover:bg-[#38374A]/40 rounded-lg transition-colors active:scale-95"
+            aria-label="Profile"
+          >
+            <span className="material-symbols-outlined text-[22px] sm:text-2xl">account_circle</span>
           </button>
         </div>
       </header>

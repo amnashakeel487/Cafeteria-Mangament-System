@@ -12,7 +12,7 @@ export default function AdminLayout() {
     <div className="text-on-surface bg-surface min-h-screen flex relative">
       <Sidebar mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
       <main className="flex-1 w-full md:ml-64 min-h-screen bg-surface overflow-x-hidden relative">
-        <Topbar setMobileMenuOpen={setMobileMenuOpen} />
+        <Topbar setMobileMenuOpen={setMobileMenuOpen} mobileMenuOpen={mobileMenuOpen} />
         <div className="mobile-compact">
           <Outlet />
         </div>

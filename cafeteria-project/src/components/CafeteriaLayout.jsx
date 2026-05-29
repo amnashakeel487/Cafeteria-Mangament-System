@@ -23,6 +23,10 @@ export default function CafeteriaLayout() {
     return () => window.removeEventListener('storage', handleStorage);
   }, []);
 
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
   const handleLogout = () => {
     if (window.confirm('Are you sure you want to log out of the Staff Portal?')) {
       localStorage.removeItem('cafeteriaToken');
@@ -53,7 +57,7 @@ export default function CafeteriaLayout() {
       ></div>
 
       {/* Sidebar */}
-      <aside className={`h-screen w-64 fixed left-0 top-0 z-50 bg-[#1A1A2B] flex-col py-6 transition-transform duration-300 md:translate-x-0 flex ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+      <aside className={`w-64 fixed left-0 top-14 sm:top-16 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] z-40 bg-[#1A1A2B] flex-col py-6 transition-transform duration-300 md:translate-x-0 md:top-0 md:h-screen flex ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="px-6 mb-8">
           <h1 className="text-lg font-extrabold text-on-surface">COMSTAS Cafe</h1>
           <p className="text-xs text-on-surface-variant opacity-80 uppercase tracking-widest mt-0.5">Staff Portal</p>
@@ -111,21 +115,29 @@ export default function CafeteriaLayout() {
       {/* Main */}
       <main className="flex-1 md:ml-64 min-h-screen w-full overflow-x-hidden">
         {/* Topbar */}
-        <header className="bg-[#1E1E2F]/90 backdrop-blur-xl fixed top-0 w-full md:w-[calc(100%-16rem)] z-30 h-14 sm:h-16 flex items-center justify-between px-3 sm:px-4 md:px-8 border-b border-outline-variant/5 shadow-[0_8px_32px_rgba(12,12,29,0.5)]">
-          <div className="flex items-center gap-3">
-            <button className="md:hidden text-on-surface hover:text-primary transition-colors p-2 -ml-2" onClick={() => setMobileMenuOpen(true)}>
-              <span className="material-symbols-outlined mt-1">menu</span>
+        <header className="bg-[#1E1E2F]/90 backdrop-blur-xl fixed top-0 w-full md:w-[calc(100%-16rem)] z-[60] h-14 sm:h-16 flex items-center justify-between gap-2 px-2 sm:px-4 md:px-8 border-b border-outline-variant/5 shadow-[0_8px_32px_rgba(12,12,29,0.5)]">
+          <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1">
+            <button
+              type="button"
+              className="md:hidden shrink-0 text-on-surface hover:text-primary transition-colors p-1.5 -ml-1 rounded-lg relative z-[61]"
+              onClick={() => setMobileMenuOpen((open) => !open)}
+              aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileMenuOpen}
+            >
+              <span className="material-symbols-outlined text-[22px]">{mobileMenuOpen ? 'close' : 'menu'}</span>
             </button>
-            <span className="text-lg font-bold text-on-surface">
+            <span className="text-sm sm:text-lg font-bold text-on-surface truncate">
               {links.find(l => location.pathname.startsWith(l.path))?.name || 'Portal'}
-              <span className="ml-2 text-sm font-medium text-on-surface-variant opacity-60 hidden sm:inline">| Staff Portal</span>
+              <span className="ml-1 sm:ml-2 text-xs sm:text-sm font-medium text-on-surface-variant opacity-60 hidden sm:inline">| Staff</span>
             </span>
           </div>
-          <div className="flex items-center space-x-3">
-            <ThemeToggle />
+          <div className="flex items-center gap-0.5 sm:gap-2 shrink-0">
+            <div className="hidden sm:block">
+              <ThemeToggle />
+            </div>
             <NotificationBell />
-            <Link to="/cafeteria/profile" className="flex items-center gap-2 group p-1 pr-3 rounded-full hover:bg-surface-container-highest transition-all">
-              <div className="w-8 h-8 rounded-full border border-outline-variant/30 overflow-hidden bg-surface-container flex items-center justify-center">
+            <Link to="/cafeteria/profile" className="flex items-center group p-1 sm:pr-3 rounded-lg hover:bg-surface-container-highest transition-all" aria-label="Profile">
+              <div className="w-8 h-8 rounded-full border border-outline-variant/30 overflow-hidden bg-surface-container flex items-center justify-center shrink-0">
                  {cafeteria.profile_picture ? (
                    ['.mp4', '.webm', '.ogg', '.mov'].some(ext => cafeteria.profile_picture.toLowerCase().split('?')[0].endsWith(ext)) ? (
                     <video src={cafeteria.profile_picture} className="w-full h-full object-cover" autoPlay muted loop />

@@ -35,10 +35,10 @@ export default function NotificationBell() {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative p-2 text-[#E3E0F8]/80 hover:text-[#FFB59D] hover:bg-[#38374A]/40 rounded-full transition-colors"
+        className="relative p-1.5 sm:p-2 text-[#E3E0F8]/80 hover:text-[#FFB59D] hover:bg-[#38374A]/40 rounded-lg transition-colors"
         aria-label="Notifications"
       >
-        <span className="material-symbols-outlined">notifications</span>
+        <span className="material-symbols-outlined text-[22px] sm:text-2xl">notifications</span>
         {unreadCount > 0 && (
           <span
             className={`absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center text-[10px] font-bold text-white bg-red-500 rounded-full ${
@@ -49,7 +49,17 @@ export default function NotificationBell() {
           </span>
         )}
       </button>
-      {open && <NotificationDropdown onClose={() => setOpen(false)} />}
+      {open && (
+        <>
+          <button
+            type="button"
+            className="fixed inset-0 z-[55] sm:hidden bg-black/40"
+            aria-label="Close notifications"
+            onClick={() => setOpen(false)}
+          />
+          <NotificationDropdown onClose={() => setOpen(false)} />
+        </>
+      )}
     </div>
   );
 }

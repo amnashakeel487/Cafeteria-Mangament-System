@@ -15,7 +15,7 @@ export default function NotificationDropdown({ onClose }) {
 
   return (
     <div
-      className="absolute right-0 top-full mt-2 w-[min(380px,calc(100vw-1.5rem))] max-h-[min(480px,calc(100vh-6rem))] flex flex-col rounded-xl bg-[#1E1E2F]/95 border border-[#594139]/20 shadow-2xl backdrop-blur-xl z-50 overflow-hidden"
+      className="fixed left-3 right-3 top-[3.25rem] z-[60] max-h-[min(70vh,calc(100vh-5rem))] flex flex-col rounded-xl bg-[#1E1E2F]/98 border border-[#594139]/20 shadow-2xl backdrop-blur-xl overflow-hidden sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-[min(380px,calc(100vw-1.5rem))] sm:max-h-[min(480px,calc(100vh-6rem))]"
       onClick={(e) => e.stopPropagation()}
     >
       <div className="flex items-center justify-between px-4 py-3 border-b border-[#594139]/15 flex-shrink-0">
@@ -31,9 +31,9 @@ export default function NotificationDropdown({ onClose }) {
           <button
             type="button"
             onClick={() => markAllAsRead()}
-            className="text-xs text-[#FFB59D] hover:text-[#FF6B35] font-medium"
+            className="text-[10px] sm:text-xs text-[#FFB59D] hover:text-[#FF6B35] font-medium whitespace-nowrap shrink-0"
           >
-            Mark all as read
+            Mark all read
           </button>
         )}
       </div>
