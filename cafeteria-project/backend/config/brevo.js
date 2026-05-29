@@ -1,5 +1,3 @@
-const { BrevoClient } = require('@getbrevo/brevo');
-
 const DEFAULT_SENDER = {
   name: process.env.BREVO_SENDER_NAME || 'COMSTAS Cafe',
   email: process.env.BREVO_SENDER_EMAIL || 'noreply@comstascafe.com',
@@ -10,7 +8,13 @@ let client;
 function getClient() {
   if (!process.env.BREVO_API_KEY) return null;
   if (!client) {
-    client = new BrevoClient({ apiKey: process.env.BREVO_API_KEY });
+    try {
+      const { BrevoClient } = require('@getbrevo/brevo');
+      client = new BrevoClient({ apiKey: process.env.BREVO_API_KEY });
+    } catch (err) {
+      console.warn('Brevo SDK unavailable:', err?.message || err);
+      return null;
+    }
   }
   return client;
 }

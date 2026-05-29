@@ -80,6 +80,10 @@ export default function StudentLogin() {
           reason: err.response?.data?.rejectionReason,
         });
         setError('');
+      } else if (!err.response) {
+        setError('Cannot reach the server. Check your connection and try again.');
+      } else if (err.response.status >= 500) {
+        setError(msg || 'Server error. Please try again in a few minutes.');
       } else {
         setError(msg || 'Failed to login. Please check your credentials.');
       }
