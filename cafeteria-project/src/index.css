@@ -283,20 +283,18 @@
     padding: 0.625rem !important;
   }
 
-  .mobile-compact .w-14,
-  .mobile-compact .h-14 {
+  /* Only square icon boxes — do not match height-only utilities (e.g. full-width CTAs with h-14) */
+  .mobile-compact .w-14.h-14 {
     width: 2.5rem !important;
     height: 2.5rem !important;
   }
 
-  .mobile-compact .w-12,
-  .mobile-compact .h-12 {
+  .mobile-compact .w-12.h-12 {
     width: 2.125rem !important;
     height: 2.125rem !important;
   }
 
-  .mobile-compact .w-20,
-  .mobile-compact .h-20 {
+  .mobile-compact .w-20.h-20 {
     width: 3.5rem !important;
     height: 3.5rem !important;
   }

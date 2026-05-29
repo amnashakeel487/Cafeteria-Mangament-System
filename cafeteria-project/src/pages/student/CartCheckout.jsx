@@ -19,7 +19,7 @@ const isVideo = (url) => {
 
 export default function CartCheckout() {
   const navigate = useNavigate();
-  const { cart, cafeteriaId, addToCart, removeFromCart, cartTotal, cartItemCount, clearCart } = useCart();
+  const { cart, cafeteriaId, removeFromCart, cartTotal, cartItemCount, clearCart, removeUnavailableFromCart } = useCart();
   
   const [cafeteria, setCafeteria] = useState(null);
   const [paymentInfo, setPaymentInfo] = useState(null);
@@ -31,6 +31,7 @@ export default function CartCheckout() {
   const [screenshotUrl, setScreenshotUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const [unavailableModal, setUnavailableModal] = useState(null);
 
   useEffect(() => {
     if (!cafeteriaId) {
@@ -126,6 +127,22 @@ export default function CartCheckout() {
 
       try {
           const token = localStorage.getItem('studentToken');
+          const menuItemIds = cart
+            .map((i) => i.id)
+            .filter((id) => id != null && !String(id).startsWith('deal-'));
+
+          if (menuItemIds.length > 0) {
+            const checkRes = await axios.post(
+              `${BASE}/api/student/menu/check-availability`,
+              { menuItemIds, cafeteriaId },
+              { headers: { Authorization: `Bearer ${token}` } }
+            );
+            if (checkRes.data.unavailable?.length > 0) {
+              setUnavailableModal(checkRes.data.unavailable);
+              setSubmitting(false);
+              return;
+            }
+          }
           const formData = new FormData();
           formData.append('cafeteria_id', cafeteriaId);
           formData.append('total_amount', cartTotal);
@@ -144,10 +161,21 @@ export default function CartCheckout() {
           clearCart();
           navigate('/student/track'); // Assuming tracking page exists, or orders page
       } catch (err) {
-          setError(err.response?.data?.message || 'Checkout failed');
+          if (err.response?.data?.code === 'ITEMS_UNAVAILABLE') {
+            setUnavailableModal(err.response.data.unavailable || []);
+          } else {
+            setError(err.response?.data?.message || 'Checkout failed');
+          }
       } finally {
           setSubmitting(false);
       }
+  };
+
+  const handleRemoveUnavailableAndContinue = () => {
+    if (!unavailableModal?.length) return;
+    removeUnavailableFromCart(unavailableModal.map((u) => u.id));
+    setUnavailableModal(null);
+    setError('');
   };
 
   if (loading) {
@@ -396,7 +424,7 @@ export default function CartCheckout() {
                 <button 
                   onClick={handleCheckout}
                   disabled={submitting}
-                  className="w-full h-14 bg-gradient-to-br from-[#FFB59D] to-[#FF6B35] rounded-lg text-[#5d1900] font-['Manrope'] font-extrabold text-lg flex items-center justify-center gap-2 shadow-xl shadow-[#FF6B35]/20 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:active:scale-100"
+                  className="w-full min-h-14 py-3.5 bg-gradient-to-br from-[#FFB59D] to-[#FF6B35] rounded-lg text-[#5d1900] font-['Manrope'] font-extrabold text-base sm:text-lg whitespace-nowrap flex items-center justify-center gap-2 shadow-xl shadow-[#FF6B35]/20 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:active:scale-100"
                 >
                   {submitting ? 'Processing...' : 'Place Order'}
                   {!submitting && <span className="material-symbols-outlined">chevron_right</span>}
@@ -406,6 +434,40 @@ export default function CartCheckout() {
       </div>
 
     </div>
+      {unavailableModal && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0c0c1d]/80 backdrop-blur p-4">
+          <div className="max-w-md w-full bg-[#28283a] rounded-2xl p-6 border border-[#594139]/20 shadow-2xl">
+            <h3 className="text-lg font-bold text-[#E3E0F8] font-['Manrope'] mb-2">Items no longer available</h3>
+            <p className="text-sm text-[#e1bfb5] mb-4">
+              Some items in your cart are sold out. Remove them to continue.
+            </p>
+            <ul className="space-y-2 mb-6">
+              {unavailableModal.map((u) => (
+                <li key={u.id} className="text-sm text-error font-medium flex items-center gap-2">
+                  <span className="material-symbols-outlined text-base">block</span>
+                  {u.name}
+                </li>
+              ))}
+            </ul>
+            <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setUnavailableModal(null)}
+                className="flex-1 py-2.5 rounded-lg border border-[#594139]/30 text-[#e1bfb5] font-bold text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleRemoveUnavailableAndContinue}
+                className="flex-1 py-2.5 rounded-lg bg-gradient-to-br from-[#FFB59D] to-[#FF6B35] text-[#5d1900] font-bold text-sm"
+              >
+                Remove &amp; Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }

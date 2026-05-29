@@ -11,6 +11,7 @@ import CafeteriaRoute from './components/CafeteriaRoute';
 import CafeteriaLayout from './components/CafeteriaLayout';
 import CafeteriaLogin from './pages/cafeteria/Login';
 import CafeteriaDashboard from './pages/cafeteria/Dashboard';
+import AnalyticsDashboard from './pages/cafeteria/AnalyticsDashboard';
 import CafeteriaMenu from './pages/cafeteria/Menu';
 import CafeteriaRatingsDashboard from './pages/cafeteria/RatingsDashboard';
 import CafeteriaDeals from './pages/cafeteria/Deals';
@@ -67,6 +68,7 @@ function App() {
         <Route element={<CafeteriaRoute />}>
           <Route element={<CafeteriaLayout />}>
             <Route path="/cafeteria/dashboard" element={<CafeteriaDashboard />} />
+            <Route path="/cafeteria/analytics" element={<AnalyticsDashboard />} />
             <Route path="/cafeteria/orders" element={<CafeteriaOrders />} />
             <Route path="/cafeteria/history" element={<CafeteriaHistory />} />
             <Route path="/cafeteria/payments" element={<CafeteriaPayments />} />

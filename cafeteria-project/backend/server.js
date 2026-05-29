@@ -26,6 +26,7 @@ const { buildRouter: buildNotificationRouter } = require('./routes/notificationR
 const ratingsRouter = require('./routes/ratings');
 const favoritesRouter = require('./routes/favorites');
 const availabilityRouter = require('./routes/availability');
+const cafeteriaAnalyticsRouter = require('./routes/cafeteriaAnalytics');
 const { scheduleMidnightReset, runMidnightAvailabilityReset } = require('./utils/midnightReset');
 
 const cafeteriaAuth = require('./middleware/cafeteriaAuth');
@@ -55,6 +56,7 @@ app.use('/api/cafeteria/orders', cafeteriaAuth, cafeteriaOrdersRoutes);
 app.use('/api/cafeteria/profile', cafeteriaAuth, cafeteriaProfileRoutes);
 app.use('/api/cafeteria/deals', cafeteriaAuth, cafeteriaDealsRoutes);
 app.use('/api/cafeteria/availability', cafeteriaAuth, availabilityRouter);
+app.use('/api/cafeteria/analytics', cafeteriaAuth, cafeteriaAnalyticsRouter);
 
 // --- Student Endpoints ---
 app.use('/api/student', studentAuthRoutes);

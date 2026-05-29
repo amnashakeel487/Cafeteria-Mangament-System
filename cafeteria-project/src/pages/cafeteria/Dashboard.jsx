@@ -6,6 +6,8 @@ import { PAGE_SEO } from '../../seo/siteConfig';
 import LazyImage from '../../components/LazyImage';
 import { formatPrice } from '../../utils/currency';
 import MenuAvailabilityWidget from '../../components/availability/MenuAvailabilityWidget';
+import StatCard from '../../components/analytics/StatCard';
+import MiniSparkline from '../../components/analytics/MiniSparkline';
 
 const STATUS_STYLES = {
   pending:    'bg-primary-container/20 text-primary border border-primary/30',
@@ -35,7 +37,24 @@ export default function CafeteriaDashboard() {
   useEffect(() => {
     fetchAll();
     fetchMenu();
+    fetchAnalyticsExtras();
   }, []);
+
+  const fetchAnalyticsExtras = async () => {
+    try {
+      const config = { headers: { Authorization: `Bearer ${localStorage.getItem('cafeteriaToken')}` } };
+      const [ov, trend, best] = await Promise.all([
+        axios.get('/api/cafeteria/analytics/overview', { ...config, params: { period: 'today' } }),
+        axios.get('/api/cafeteria/analytics/revenue-trend', { ...config, params: { period: '30days' } }),
+        axios.get('/api/cafeteria/analytics/best-selling', { ...config, params: { period: 'today', limit: 3 } }),
+      ]);
+      setAnalyticsToday(ov.data);
+      setSparkTrend((trend.data?.trend || []).slice(-7));
+      setTopItemsToday(best.data?.items || []);
+    } catch {
+      /* non-critical */
+    }
+  };
 
   const fetchAll = async () => {
     try {
@@ -120,15 +139,7 @@ export default function CafeteriaDashboard() {
     }
   };
 
-  const StatCard = ({ label, value, sub, accent }) => (
-    <div className="bg-surface-container-high rounded-xl p-6 flex flex-col justify-between relative overflow-hidden group hover:bg-surface-container-highest transition-all duration-300">
-      <p className="text-on-surface-variant font-medium text-xs mb-1 uppercase tracking-widest">{label}</p>
-      <h2 className={`font-headline text-3xl font-extrabold mt-2 ${accent || 'text-on-surface'}`}>
-        {loading ? '—' : value}
-      </h2>
-      {sub && <p className="text-xs text-on-surface-variant mt-2 font-medium">{sub}</p>}
-    </div>
-  );
+  const maxTopQty = topItemsToday[0]?.totalQuantity || 1;
 
   return (
     <>
@@ -191,12 +202,68 @@ export default function CafeteriaDashboard() {
       {/* Stat Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-5">
-          <StatCard label="Pending Orders"   value={stats.pendingOrders}   sub="Awaiting preparation" accent="text-primary" />
-          <StatCard label="Completed Orders" value={stats.completedOrders} sub="Successfully served"  accent="text-tertiary" />
-          <StatCard label="Today's Orders"   value={stats.todayOrders}     sub="Orders placed today"  />
-          <StatCard label="Today's Revenue"  value={formatPrice(stats.todayRevenue)} sub="Earned today" accent="text-primary" />
+          <StatCard
+            title="Today's Revenue"
+            value={analyticsToday?.totalRevenue ?? stats.todayRevenue}
+            isCurrency
+            color="cyan"
+            icon="payments"
+            loading={loading}
+            trend={analyticsToday ? `${analyticsToday.revenueGrowth >= 0 ? '+' : ''}${analyticsToday.revenueGrowth}% vs yesterday` : undefined}
+            trendValue={analyticsToday?.revenueGrowth}
+            sparkline={<MiniSparkline data={sparkTrend} />}
+          />
+          <StatCard
+            title="Today's Orders"
+            value={analyticsToday?.totalOrders ?? stats.todayOrders}
+            color="blue"
+            icon="receipt_long"
+            loading={loading}
+            trend={analyticsToday ? `${analyticsToday.orderGrowth >= 0 ? '+' : ''}${analyticsToday.orderGrowth}% vs yesterday` : undefined}
+            trendValue={analyticsToday?.orderGrowth}
+          />
+          <StatCard title="Pending Orders" value={stats.pendingOrders} subtitle="Awaiting preparation" color="primary" icon="schedule" loading={loading} />
+          <StatCard title="Completed Orders" value={stats.completedOrders} subtitle="Successfully served" color="amber" icon="check_circle" loading={loading} />
         </div>
         <MenuAvailabilityWidget axiosConfig={axiosConfig} />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="md:col-span-2 bg-surface-container-high rounded-xl p-6 border border-outline-variant/10">
+          <h3 className="text-sm font-bold text-on-surface uppercase tracking-widest mb-4">Top 3 Items Today</h3>
+          {topItemsToday.length === 0 ? (
+            <p className="text-sm text-on-surface-variant">No sales recorded today yet.</p>
+          ) : (
+            <ul className="space-y-3">
+              {topItemsToday.map((item, i) => (
+                <li key={item.name}>
+                  <div className="flex justify-between text-sm mb-1">
+                    <span className="font-bold text-on-surface">
+                      {['🥇', '🥈', '🥉'][i]} {item.name}
+                    </span>
+                    <span className="text-on-surface-variant">{item.totalQuantity} sold</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-surface-container-lowest overflow-hidden">
+                    <div
+                      className="h-full bg-gradient-to-r from-[#06d6c7] to-primary rounded-full"
+                      style={{ width: `${(item.totalQuantity / maxTopQty) * 100}%` }}
+                    />
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        <div className="bg-surface-container-high rounded-xl p-6 border border-outline-variant/10 flex flex-col justify-center items-center text-center">
+          <span className="material-symbols-outlined text-4xl text-primary mb-2">bar_chart</span>
+          <p className="text-sm text-on-surface-variant mb-4">Full charts, exports, and peak-hour insights</p>
+          <Link
+            to="/cafeteria/analytics"
+            className="px-5 py-2.5 rounded-lg bg-primary text-on-primary font-bold text-sm hover:opacity-90"
+          >
+            View Full Analytics →
+          </Link>
+        </div>
       </div>
 
       {/* Live Orders Table */}

@@ -37,6 +37,7 @@ export default function CafeteriaLayout() {
 
   const links = [
     { name: 'Dashboard', path: '/cafeteria/dashboard', icon: 'dashboard' },
+    { name: 'Analytics', path: '/cafeteria/analytics', icon: 'bar_chart' },
     { name: 'Orders', path: '/cafeteria/orders', icon: 'receipt_long' },
     { name: 'Menu', path: '/cafeteria/menu', icon: 'restaurant_menu' },
     { name: 'Ratings & Reviews', path: '/cafeteria/ratings', icon: 'star' },
