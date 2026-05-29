@@ -21,13 +21,13 @@ export default function PageSEO({
   ogImage = DEFAULT_OG_IMAGE,
   ogType = 'website',
 }) {
+  const safeTitle = title || SITE_NAME;
   const canonical = `${SITE_URL}${path.startsWith('/') ? path : `/${path}`}`;
-  const fullTitle = title.includes(SITE_NAME) ? title : `${title} | ${SITE_NAME}`;
+  const fullTitle = safeTitle.includes(SITE_NAME) ? safeTitle : `${safeTitle} | ${SITE_NAME}`;
   const robots = noindex ? 'noindex, nofollow' : 'index, follow';
 
   return (
     <Helmet>
-      <html lang="en" />
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />

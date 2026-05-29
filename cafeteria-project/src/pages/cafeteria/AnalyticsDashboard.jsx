@@ -12,7 +12,6 @@ import RevenueTrendChart from '../../components/analytics/RevenueTrendChart';
 import ExportButton from '../../components/analytics/ExportButton';
 import {
   exportToCSV,
-  exportToPDF,
   prepareOrdersCSV,
   prepareItemsCSV,
   formatSummaryForPdf,
@@ -183,6 +182,7 @@ export default function AnalyticsDashboard() {
         pct: `${item.percentageOfTotal}%`,
       }));
 
+      const { exportToPDF } = await import('../../utils/exportUtilsPdf');
       exportToPDF({
         title: 'Analytics Report',
         cafeteriaName: cafeteria.name || 'Cafeteria',

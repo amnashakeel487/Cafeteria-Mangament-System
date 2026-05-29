@@ -3,13 +3,22 @@ import { isMenuItemAvailable } from '../utils/isMenuItemAvailable';
 
 const CartContext = createContext();
 
+function readCartFromStorage() {
+  try {
+    const saved = localStorage.getItem('studentCart');
+    if (!saved) return [];
+    const parsed = JSON.parse(saved);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    localStorage.removeItem('studentCart');
+    return [];
+  }
+}
+
 export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState(() => {
-    const saved = localStorage.getItem('studentCart');
-    return saved ? JSON.parse(saved) : [];
-  });
+  const [cart, setCart] = useState(readCartFromStorage);
   const [cafeteriaId, setCafeteriaId] = useState(() => {
     return localStorage.getItem('studentCartCafeteria') || null;
   });
