@@ -8,6 +8,15 @@ const MAX_PER_DAY = 20;
 
 const router = express.Router();
 
+function ensureServiceRole(res) {
+  if (supabase?._isServiceRole) return true;
+  res.status(500).json({
+    message:
+      'Server is missing SUPABASE_SERVICE_ROLE_KEY (service role). Add it to your backend environment variables to allow daily specials writes.',
+  });
+  return false;
+}
+
 function calcDiscountPct(original, special) {
   const o = parseFloat(original);
   const s = parseFloat(special);
@@ -223,6 +232,7 @@ function createCafeteriaRouter(cafeteriaAuth) {
   cr.use(cafeteriaAuth);
 
   cr.post('/', async (req, res) => {
+    if (!ensureServiceRole(res)) return;
     try {
       const cafeteriaId = String(req.cafeteria.id);
       const {
@@ -357,6 +367,7 @@ function createCafeteriaRouter(cafeteriaAuth) {
   });
 
   cr.patch('/reorder', async (req, res) => {
+    if (!ensureServiceRole(res)) return;
     try {
       const cafeteriaId = String(req.cafeteria.id);
       const { orders } = req.body;
@@ -379,6 +390,7 @@ function createCafeteriaRouter(cafeteriaAuth) {
   });
 
   cr.patch('/:specialId', async (req, res) => {
+    if (!ensureServiceRole(res)) return;
     try {
       const cafeteriaId = String(req.cafeteria.id);
       const { specialId } = req.params;
@@ -452,6 +464,7 @@ function createCafeteriaRouter(cafeteriaAuth) {
   });
 
   cr.patch('/:specialId/toggle', async (req, res) => {
+    if (!ensureServiceRole(res)) return;
     try {
       const cafeteriaId = String(req.cafeteria.id);
       const { data: existing } = await supabase
@@ -477,6 +490,7 @@ function createCafeteriaRouter(cafeteriaAuth) {
   });
 
   cr.delete('/:specialId', async (req, res) => {
+    if (!ensureServiceRole(res)) return;
     try {
       const cafeteriaId = String(req.cafeteria.id);
       const { error } = await supabase
@@ -569,6 +583,7 @@ function createAdminRouter(auth) {
   });
 
   ar.patch('/:specialId/hide', async (req, res) => {
+    if (!ensureServiceRole(res)) return;
     try {
       const { error } = await supabase
         .from('daily_specials')

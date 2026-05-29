@@ -5,6 +5,9 @@ import './index.css'
 import App from './App.jsx'
 import { ThemeProvider } from './context/ThemeContext.jsx'
 import RootErrorBoundary from './components/RootErrorBoundary.jsx'
+import { setupChunkLoadRecovery } from './utils/chunkLoadRecovery.js'
+
+setupChunkLoadRecovery()
 
 const rootEl = document.getElementById('root')
 if (!rootEl) {
