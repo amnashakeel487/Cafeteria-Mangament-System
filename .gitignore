@@ -1,0 +1,5 @@
+# Never commit secrets
+.env
+**/.env
+!**/.env.example
+cafeteria-project/backend/.env
