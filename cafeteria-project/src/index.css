@@ -183,3 +183,219 @@
     border-radius: 999px;
   }
 }
+
+/* ── Mobile-only compact UI (< 640px) — desktop/tablet unchanged ── */
+@media (max-width: 639px) {
+  .mobile-compact,
+  .mobile-compact-public {
+    font-size: 0.8125rem;
+    line-height: 1.45;
+  }
+
+  .mobile-compact h1,
+  .mobile-compact-public h1 {
+    font-size: 1.25rem !important;
+    line-height: 1.3 !important;
+  }
+
+  .mobile-compact h2,
+  .mobile-compact-public h2 {
+    font-size: 1.0625rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .mobile-compact h3,
+  .mobile-compact-public h3 {
+    font-size: 0.9375rem !important;
+    line-height: 1.35 !important;
+  }
+
+  .mobile-compact h4,
+  .mobile-compact-public h4 {
+    font-size: 0.875rem !important;
+  }
+
+  .mobile-compact .text-6xl,
+  .mobile-compact-public .text-6xl {
+    font-size: 2.25rem !important;
+    line-height: 1.15 !important;
+  }
+
+  .mobile-compact .text-5xl,
+  .mobile-compact-public .text-5xl {
+    font-size: 1.875rem !important;
+    line-height: 1.2 !important;
+  }
+
+  .mobile-compact .text-4xl,
+  .mobile-compact-public .text-4xl {
+    font-size: 1.375rem !important;
+    line-height: 1.25 !important;
+  }
+
+  .mobile-compact .text-3xl,
+  .mobile-compact-public .text-3xl {
+    font-size: 1.25rem !important;
+  }
+
+  .mobile-compact .text-2xl,
+  .mobile-compact-public .text-2xl {
+    font-size: 1.125rem !important;
+  }
+
+  .mobile-compact .text-xl,
+  .mobile-compact-public .text-xl {
+    font-size: 1rem !important;
+  }
+
+  .mobile-compact .text-lg,
+  .mobile-compact-public .text-lg {
+    font-size: 0.9375rem !important;
+  }
+
+  .mobile-compact .text-base,
+  .mobile-compact-public .text-base {
+    font-size: 0.8125rem !important;
+  }
+
+  .mobile-compact .text-sm,
+  .mobile-compact-public .text-sm {
+    font-size: 0.75rem !important;
+  }
+
+  .mobile-compact .rounded-xl.p-8,
+  .mobile-compact .rounded-xl.p-6,
+  .mobile-compact .rounded-2xl.p-8,
+  .mobile-compact .rounded-2xl.p-6,
+  .mobile-compact .rounded-3xl.p-8,
+  .mobile-compact-public .rounded-xl.p-8,
+  .mobile-compact-public .rounded-xl.p-6,
+  .mobile-compact-public .rounded-2xl.p-8,
+  .mobile-compact-public .rounded-2xl.p-6 {
+    padding: 0.75rem !important;
+  }
+
+  .mobile-compact .rounded-xl.p-5,
+  .mobile-compact .rounded-xl.p-4,
+  .mobile-compact .rounded-lg.p-6,
+  .mobile-compact-public .rounded-xl.p-5,
+  .mobile-compact-public .rounded-xl.p-4 {
+    padding: 0.625rem !important;
+  }
+
+  .mobile-compact .w-14,
+  .mobile-compact .h-14 {
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+  }
+
+  .mobile-compact .w-12,
+  .mobile-compact .h-12 {
+    width: 2.125rem !important;
+    height: 2.125rem !important;
+  }
+
+  .mobile-compact .w-20,
+  .mobile-compact .h-20 {
+    width: 3.5rem !important;
+    height: 3.5rem !important;
+  }
+
+  .mobile-compact .material-symbols-outlined.text-6xl,
+  .mobile-compact .material-symbols-outlined.text-5xl {
+    font-size: 2.25rem !important;
+  }
+
+  .mobile-compact .material-symbols-outlined.text-4xl,
+  .mobile-compact .material-symbols-outlined.text-3xl {
+    font-size: 1.5rem !important;
+  }
+
+  .mobile-compact .gap-8 {
+    gap: 0.75rem !important;
+  }
+
+  .mobile-compact .gap-6 {
+    gap: 0.625rem !important;
+  }
+
+  .mobile-compact .gap-5 {
+    gap: 0.5rem !important;
+  }
+
+  .mobile-compact .gap-4 {
+    gap: 0.5rem !important;
+  }
+
+  .mobile-compact .space-y-8 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.75rem !important;
+  }
+
+  .mobile-compact .space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.625rem !important;
+  }
+
+  .mobile-compact .space-y-4 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 0.5rem !important;
+  }
+
+  .mobile-compact .mb-10 {
+    margin-bottom: 1rem !important;
+  }
+
+  .mobile-compact .mb-8 {
+    margin-bottom: 0.75rem !important;
+  }
+
+  .mobile-compact .mb-6 {
+    margin-bottom: 0.5rem !important;
+  }
+
+  .mobile-compact input:not([type='checkbox']):not([type='radio']),
+  .mobile-compact select,
+  .mobile-compact textarea {
+    padding-top: 0.4375rem !important;
+    padding-bottom: 0.4375rem !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .mobile-compact label {
+    font-size: 0.625rem !important;
+    margin-bottom: 0.25rem !important;
+  }
+
+  .mobile-compact .px-6.py-3,
+  .mobile-compact .px-5.py-2\.5,
+  .mobile-compact .px-4.py-3 {
+    padding: 0.4375rem 0.75rem !important;
+    font-size: 0.75rem !important;
+  }
+
+  .mobile-compact-public .px-8.py-4 {
+    padding: 0.625rem 1.25rem !important;
+    font-size: 0.8125rem !important;
+  }
+
+  .mobile-compact-public section.py-20,
+  .mobile-compact-public section.py-28 {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+
+  .mobile-compact > section.pt-20,
+  .mobile-compact section.pt-20 {
+    padding-top: 3.5rem !important;
+  }
+
+  .mobile-compact > section.pb-12 {
+    padding-bottom: 2rem !important;
+  }
+
+  .mobile-compact .grid.gap-5 {
+    gap: 0.5rem !important;
+  }
+
+  .mobile-compact .grid.gap-4 {
+    gap: 0.375rem !important;
+  }
+}

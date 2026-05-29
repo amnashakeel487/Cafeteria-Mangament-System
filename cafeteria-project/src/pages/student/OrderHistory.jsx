@@ -87,18 +87,18 @@ export default function OrderHistory() {
       <PageSEO {...PAGE_SEO.studentOrders} />
     <section className="max-w-6xl mx-auto font-['Inter']" aria-label="Order history">
       {/* Header */}
-      <header className="mb-8 md:mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6">
-        <div>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-[#E3E0F8] tracking-tight mb-2 font-['Manrope']">Order History</h1>
-          <p className="text-[#e1bfb5] max-w-lg">Review and manage your past culinary selections. Track your spending and quickly re-order your campus favorites.</p>
+      <header className="mb-4 sm:mb-8 md:mb-10 flex flex-col md:flex-row md:items-end justify-between gap-2 sm:gap-4 md:gap-6">
+        <div className="min-w-0">
+          <h1 className="text-xl sm:text-3xl md:text-4xl font-extrabold text-[#E3E0F8] tracking-tight mb-1 sm:mb-2 font-['Manrope']">Order History</h1>
+          <p className="text-xs sm:text-sm text-[#e1bfb5] max-w-lg line-clamp-2 sm:line-clamp-none">Review and manage your past culinary selections. Track your spending and quickly re-order your campus favorites.</p>
         </div>
-        <div className="flex items-center gap-3">
-          <span className="text-sm font-medium text-[#e1bfb5]">{orders.length} Total Orders</span>
+        <div className="flex items-center gap-3 shrink-0">
+          <span className="text-xs sm:text-sm font-medium text-[#e1bfb5]">{orders.length} Total Orders</span>
         </div>
       </header>
 
       {/* Filters Bar */}
-      <section className="bg-[#1E1E2F] rounded-xl p-4 mb-8 shadow-xl flex flex-wrap items-end gap-6 border border-[#594139]/20">
+      <section className="bg-[#1E1E2F] rounded-xl p-3 sm:p-4 mb-4 sm:mb-8 shadow-xl flex flex-wrap items-end gap-3 sm:gap-6 border border-[#594139]/20">
         <div className="w-full sm:flex-1 sm:min-w-[200px]">
           <label className="block text-xs font-bold text-[#e1bfb5] uppercase tracking-widest mb-1.5 ml-1">Search Orders</label>
           <div className="relative">
@@ -143,21 +143,21 @@ export default function OrderHistory() {
           )}
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-2 sm:space-y-4">
           {filteredOrders.map(order => {
             const status = statusConfig[order.status] || statusConfig.pending;
             const itemsSummary = order.items?.map(i => i.item_name).join(', ') || 'N/A';
 
             return (
-              <div key={order.id} className="bg-[#28283a] hover:bg-[#333345] transition-all duration-300 rounded-xl p-5 group flex flex-col md:flex-row items-center gap-6 border border-[#594139]/10">
+              <div key={order.id} className="bg-[#28283a] hover:bg-[#333345] transition-all duration-300 rounded-lg sm:rounded-xl p-3 sm:p-5 group flex flex-col md:flex-row items-stretch md:items-center gap-3 sm:gap-6 border border-[#594139]/10">
                 {/* Left: icon + info */}
-                <div className="flex items-center gap-5 flex-1 w-full">
-                  <div className="w-14 h-14 bg-[#0c0c1d] rounded-xl flex items-center justify-center text-[#FF6B35] shrink-0">
-                    <span className="material-symbols-outlined text-3xl">restaurant</span>
+                <div className="flex items-center gap-3 sm:gap-5 flex-1 w-full min-w-0">
+                  <div className="w-10 h-10 sm:w-14 sm:h-14 bg-[#0c0c1d] rounded-lg sm:rounded-xl flex items-center justify-center text-[#FF6B35] shrink-0">
+                    <span className="material-symbols-outlined text-xl sm:text-3xl">restaurant</span>
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-1 flex-wrap">
-                      <h3 className="font-bold text-lg text-[#E3E0F8] font-['Manrope']">{order.cafeteria_name}</h3>
+                      <h3 className="font-bold text-sm sm:text-lg text-[#E3E0F8] font-['Manrope'] truncate">{order.cafeteria_name}</h3>
                       <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${status.bg} ${status.text} border ${status.border}`}>
                         {status.label}
                       </span>
@@ -165,7 +165,7 @@ export default function OrderHistory() {
                         <RefundStatusBadge refundStatus={order.refund_status} />
                       )}
                     </div>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-[#e1bfb5]">
+                    <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-4 gap-y-0.5 text-xs sm:text-sm text-[#e1bfb5]">
                       <span className="flex items-center gap-1.5">
                         <span className="material-symbols-outlined text-xs">tag</span>
                         #ORD-{order.id.toString().padStart(5, '0')}
@@ -190,7 +190,7 @@ export default function OrderHistory() {
                   </div>
                   <div className="text-right">
                     <p className="text-xs text-[#e1bfb5] font-medium uppercase tracking-tighter">Total</p>
-                    <p className={`text-xl font-bold ${order.status === 'cancelled' ? 'text-[#E3E0F8]' : 'text-[#FFB59D]'}`}>
+                    <p className={`text-base sm:text-xl font-bold ${order.status === 'cancelled' ? 'text-[#E3E0F8]' : 'text-[#FFB59D]'}`}>
                       {formatPrice(order.total_amount)}
                     </p>
                   </div>

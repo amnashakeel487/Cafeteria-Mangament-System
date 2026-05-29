@@ -4,7 +4,7 @@ import NotificationBell from './notifications/NotificationBell';
 
 export default function Topbar({ setMobileMenuOpen }) {
   return (
-    <header className="bg-[#121222]/80 backdrop-blur-xl fixed top-0 flex w-full md:w-[calc(100%-16rem)] z-30 justify-between items-center px-4 md:px-8 h-20 font-['Manrope'] font-semibold border-b border-outline-variant/5">
+    <header className="bg-[#121222]/80 backdrop-blur-xl fixed top-0 flex w-full md:w-[calc(100%-16rem)] z-30 justify-between items-center px-3 sm:px-4 md:px-8 h-14 sm:h-20 font-['Manrope'] font-semibold border-b border-outline-variant/5">
       <div className="flex items-center flex-1 max-w-xl gap-3">
         {setMobileMenuOpen && (
           <button className="md:hidden text-on-surface hover:text-primary transition-colors flex items-center justify-center p-2 -ml-2" onClick={() => setMobileMenuOpen(true)}>

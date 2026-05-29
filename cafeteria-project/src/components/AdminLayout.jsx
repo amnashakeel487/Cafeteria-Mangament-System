@@ -13,7 +13,9 @@ export default function AdminLayout() {
       <Sidebar mobileMenuOpen={mobileMenuOpen} setMobileMenuOpen={setMobileMenuOpen} />
       <main className="flex-1 w-full md:ml-64 min-h-screen bg-surface overflow-x-hidden relative">
         <Topbar setMobileMenuOpen={setMobileMenuOpen} />
-        <Outlet />
+        <div className="mobile-compact">
+          <Outlet />
+        </div>
       </main>
     </div>
     </NotificationProvider>

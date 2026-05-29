@@ -111,7 +111,7 @@ export default function CafeteriaLayout() {
       {/* Main */}
       <main className="flex-1 md:ml-64 min-h-screen w-full overflow-x-hidden">
         {/* Topbar */}
-        <header className="bg-[#1E1E2F]/90 backdrop-blur-xl fixed top-0 w-full md:w-[calc(100%-16rem)] z-30 h-16 flex items-center justify-between px-4 md:px-8 border-b border-outline-variant/5 shadow-[0_8px_32px_rgba(12,12,29,0.5)]">
+        <header className="bg-[#1E1E2F]/90 backdrop-blur-xl fixed top-0 w-full md:w-[calc(100%-16rem)] z-30 h-14 sm:h-16 flex items-center justify-between px-3 sm:px-4 md:px-8 border-b border-outline-variant/5 shadow-[0_8px_32px_rgba(12,12,29,0.5)]">
           <div className="flex items-center gap-3">
             <button className="md:hidden text-on-surface hover:text-primary transition-colors p-2 -ml-2" onClick={() => setMobileMenuOpen(true)}>
               <span className="material-symbols-outlined mt-1">menu</span>
@@ -141,7 +141,7 @@ export default function CafeteriaLayout() {
           </div>
         </header>
 
-        <div className="pt-16">
+        <div className="pt-14 sm:pt-16 px-3 sm:px-0 mobile-compact">
           <Outlet />
         </div>
       </main>

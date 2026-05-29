@@ -86,7 +86,7 @@ export default function StudentLayout() {
       </aside>
 
       {/* TopNavBar */}
-      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-4 md:px-6 bg-[#1E1E2F] h-16 shadow-2xl shadow-[#0c0c1d]/50">
+      <header className="fixed top-0 w-full z-50 flex justify-between items-center px-3 sm:px-4 md:px-6 bg-[#1E1E2F] h-14 sm:h-16 shadow-2xl shadow-[#0c0c1d]/50">
         <div className="flex items-center gap-3 md:gap-8">
           {/* Hamburger — mobile only */}
           <button
@@ -119,29 +119,29 @@ export default function StudentLayout() {
       </header>
 
       {/* Main Content Area */}
-      <main className="pt-20 px-4 sm:px-6 md:px-8 lg:pl-64 lg:pr-10 pb-24 lg:pb-12 bg-[#121222] min-h-screen overflow-x-hidden">
-        <div className="pt-6">
+      <main className="pt-14 sm:pt-20 px-3 sm:px-6 md:px-8 lg:pl-64 lg:pr-10 pb-[4.25rem] sm:pb-24 lg:pb-12 bg-[#121222] min-h-screen overflow-x-hidden">
+        <div className="pt-2 sm:pt-6 mobile-compact">
           <Outlet />
         </div>
       </main>
 
       {/* Bottom Navigation (Mobile Only) */}
-      <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-[#1A1A2B] h-16 flex justify-around items-center px-2 z-50 shadow-[0_-8px_24px_rgba(12,12,29,0.5)]">
+      <nav className="lg:hidden fixed bottom-0 left-0 w-full bg-[#1A1A2B] h-14 sm:h-16 flex justify-around items-center px-1 z-50 shadow-[0_-8px_24px_rgba(12,12,29,0.5)]">
         <button onClick={() => navigate('/student/cafeterias')} className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors ${location.pathname.includes('/cafeterias') || location.pathname.includes('/menu') ? 'text-[#FFB59D]' : 'text-[#E1BFB5]/70'}`}>
-          <span className="material-symbols-outlined text-xl" style={{fontVariationSettings: (location.pathname.includes('/cafeterias') || location.pathname.includes('/menu')) ? "'FILL' 1" : "'FILL' 0"}}>restaurant</span>
-          <span className="text-[10px] font-medium">Cafeterias</span>
+          <span className="material-symbols-outlined text-lg sm:text-xl" style={{fontVariationSettings: (location.pathname.includes('/cafeterias') || location.pathname.includes('/menu')) ? "'FILL' 1" : "'FILL' 0"}}>restaurant</span>
+          <span className="text-[9px] sm:text-[10px] font-medium">Cafeterias</span>
         </button>
         <button onClick={() => navigate('/student/orders')} className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors ${location.pathname === '/student/orders' ? 'text-[#FFB59D]' : 'text-[#E1BFB5]/70'}`}>
-          <span className="material-symbols-outlined text-xl" style={{fontVariationSettings: location.pathname === '/student/orders' ? "'FILL' 1" : "'FILL' 0"}}>receipt_long</span>
-          <span className="text-[10px] font-medium">Orders</span>
+          <span className="material-symbols-outlined text-lg sm:text-xl" style={{fontVariationSettings: location.pathname === '/student/orders' ? "'FILL' 1" : "'FILL' 0"}}>receipt_long</span>
+          <span className="text-[9px] sm:text-[10px] font-medium">Orders</span>
         </button>
         <button onClick={() => navigate('/student/track')} className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors ${location.pathname === '/student/track' ? 'text-[#FFB59D]' : 'text-[#E1BFB5]/70'}`}>
-          <span className="material-symbols-outlined text-xl" style={{fontVariationSettings: location.pathname === '/student/track' ? "'FILL' 1" : "'FILL' 0"}}>local_shipping</span>
-          <span className="text-[10px] font-medium">Track</span>
+          <span className="material-symbols-outlined text-lg sm:text-xl" style={{fontVariationSettings: location.pathname === '/student/track' ? "'FILL' 1" : "'FILL' 0"}}>local_shipping</span>
+          <span className="text-[9px] sm:text-[10px] font-medium">Track</span>
         </button>
         <button onClick={() => navigate('/student/profile')} className={`flex flex-col items-center gap-0.5 px-3 py-1 rounded-lg transition-colors ${location.pathname === '/student/profile' ? 'text-[#FFB59D]' : 'text-[#E1BFB5]/70'}`}>
-          <span className="material-symbols-outlined text-xl" style={{fontVariationSettings: location.pathname === '/student/profile' ? "'FILL' 1" : "'FILL' 0"}}>person</span>
-          <span className="text-[10px] font-medium">Profile</span>
+          <span className="material-symbols-outlined text-lg sm:text-xl" style={{fontVariationSettings: location.pathname === '/student/profile' ? "'FILL' 1" : "'FILL' 0"}}>person</span>
+          <span className="text-[9px] sm:text-[10px] font-medium">Profile</span>
         </button>
       </nav>
     </div>

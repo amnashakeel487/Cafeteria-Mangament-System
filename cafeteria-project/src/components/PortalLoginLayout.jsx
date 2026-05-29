@@ -101,7 +101,7 @@ export default function PortalLoginLayout({
   const hasSecondary = showSecondary && secondaryAction;
 
   return (
-    <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-surface text-on-surface font-body">
+    <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-surface text-on-surface font-body mobile-compact-public">
       <Link
         to="/"
         className="group fixed top-5 left-5 z-[100] flex items-center gap-2 px-[18px] py-[9px] rounded-full text-[13px] text-on-surface-variant no-underline border border-outline-variant/15 bg-surface-container/60 backdrop-blur-xl transition-all duration-250 hover:-translate-x-0.5 font-dm"

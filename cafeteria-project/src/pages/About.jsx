@@ -9,7 +9,7 @@ export default function About() {
   return (
     <>
       <PageSEO {...PAGE_SEO.about} />
-      <div className="min-h-screen bg-surface text-on-surface font-body">
+      <div className="min-h-screen bg-surface text-on-surface font-body mobile-compact-public">
         <header className="p-4 sm:p-6 border-b border-outline-variant/10">
           <BackToHome />
         </header>

@@ -241,7 +241,7 @@ export default function LandingPage() {
     <>
       {/* SEO: Dynamic meta for home route */}
       <PageSEO {...PAGE_SEO.home} />
-    <div className="min-h-screen bg-surface text-on-surface font-body overflow-x-hidden">
+    <div className="min-h-screen bg-surface text-on-surface font-body overflow-x-hidden mobile-compact-public">
       <LandingNavbar scrolled={scrolled} />
 
       {/* ── HERO ── */}

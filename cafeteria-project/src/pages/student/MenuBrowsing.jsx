@@ -299,7 +299,7 @@ export default function MenuBrowsing() {
 
       {/* Floating Sidebar Cart Preview (Desktop visible, Mobile toggleable) */}
       {(cartItemCount > 0 || cartOpen) && (
-        <div className={`fixed lg:sticky top-[auto] bottom-16 lg:bottom-auto lg:top-24 left-0 right-0 lg:left-auto w-full lg:w-80 z-40 lg:z-10 transition-transform duration-300 ${cartOpen || isLgViewport ? 'translate-y-0' : 'translate-y-[calc(100%-4rem)]'}`}>
+        <div className={`fixed lg:sticky top-[auto] bottom-14 sm:bottom-16 lg:bottom-auto lg:top-24 left-0 right-0 lg:left-auto w-full lg:w-80 z-40 lg:z-10 transition-transform duration-300 ${cartOpen || isLgViewport ? 'translate-y-0' : 'translate-y-[calc(100%-3.5rem)]'}`}>
           
           {/* Mobile Cart Toggle Handle */}
           <div 
