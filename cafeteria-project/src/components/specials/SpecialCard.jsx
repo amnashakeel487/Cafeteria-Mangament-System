@@ -24,12 +24,18 @@ export default function SpecialCard({
   animate = true,
   publicView = false,
   variant = 'default',
+  layout = 'grid',
   index = 0,
   onAddToCart,
 }) {
   if (variant === 'landing') {
     return (
-      <LandingSpecialCard special={special} index={index} showCafeteriaName={showCafeteriaName} />
+      <LandingSpecialCard
+        special={special}
+        index={index}
+        showCafeteriaName={showCafeteriaName}
+        layout={layout}
+      />
     );
   }
 

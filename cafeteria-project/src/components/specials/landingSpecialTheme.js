@@ -1,58 +1,56 @@
-/** Visual tokens for landing-page special cards (type-based gradients & accents). */
+/**
+ * Type accents for landing specials — only top bar + badge use type color.
+ * Base card uses landing page surface tokens (bg-surface-container-high).
+ */
 export const LANDING_TYPE_THEME = {
   special: {
-    gradient: 'from-amber-900/50 via-amber-950/30 to-[#1a1520]',
-    border: 'border-amber-500/25',
-    borderHover: 'group-hover:border-amber-400/50',
     bar: 'from-amber-400 via-amber-500 to-amber-600',
-    glow: 'bg-amber-500/20',
-    badge: 'bg-amber-500/15 text-amber-200 border-amber-400/35',
-    price: 'text-amber-300',
-    shadow: 'group-hover:shadow-amber-500/25',
+    badgeBg: 'bg-amber-500/12',
+    badgeBorder: 'border-amber-500/25',
+    badgeText: 'text-amber-300',
+    tint: 'rgba(245, 158, 11, 0.04)',
+    borderTint: 'border-amber-500/20',
+    borderHover: 'group-hover:border-amber-500/35',
     emoji: '🍽️',
   },
   discount: {
-    gradient: 'from-emerald-900/50 via-green-950/30 to-[#101a14]',
-    border: 'border-emerald-500/25',
-    borderHover: 'group-hover:border-emerald-400/50',
     bar: 'from-emerald-400 via-green-500 to-emerald-600',
-    glow: 'bg-emerald-500/20',
-    badge: 'bg-emerald-500/15 text-emerald-200 border-emerald-400/35',
-    price: 'text-emerald-300',
-    shadow: 'group-hover:shadow-emerald-500/25',
+    badgeBg: 'bg-emerald-500/12',
+    badgeBorder: 'border-emerald-500/25',
+    badgeText: 'text-emerald-300',
+    tint: 'rgba(16, 185, 129, 0.04)',
+    borderTint: 'border-emerald-500/20',
+    borderHover: 'group-hover:border-emerald-500/35',
     emoji: '🏷️',
   },
   new_item: {
-    gradient: 'from-violet-900/50 via-purple-950/30 to-[#15101f]',
-    border: 'border-violet-500/25',
-    borderHover: 'group-hover:border-violet-400/50',
     bar: 'from-violet-400 via-purple-500 to-violet-600',
-    glow: 'bg-violet-500/20',
-    badge: 'bg-violet-500/15 text-violet-200 border-violet-400/35',
-    price: 'text-violet-300',
-    shadow: 'group-hover:shadow-violet-500/25',
-    emoji: '🆕',
+    badgeBg: 'bg-violet-500/12',
+    badgeBorder: 'border-violet-500/25',
+    badgeText: 'text-violet-300',
+    tint: 'rgba(139, 92, 246, 0.04)',
+    borderTint: 'border-violet-500/20',
+    borderHover: 'group-hover:border-violet-500/35',
+    emoji: '🍕',
   },
   announcement: {
-    gradient: 'from-sky-900/50 via-blue-950/30 to-[#0f1419]',
-    border: 'border-sky-500/25',
-    borderHover: 'group-hover:border-sky-400/50',
     bar: 'from-sky-400 via-blue-500 to-sky-600',
-    glow: 'bg-sky-500/20',
-    badge: 'bg-sky-500/15 text-sky-200 border-sky-400/35',
-    price: 'text-sky-300',
-    shadow: 'group-hover:shadow-sky-500/25',
+    badgeBg: 'bg-sky-500/12',
+    badgeBorder: 'border-sky-500/25',
+    badgeText: 'text-sky-300',
+    tint: 'rgba(56, 189, 248, 0.04)',
+    borderTint: 'border-sky-500/20',
+    borderHover: 'group-hover:border-sky-500/35',
     emoji: '📢',
   },
   limited_time: {
-    gradient: 'from-rose-900/50 via-red-950/30 to-[#1a1012]',
-    border: 'border-rose-500/25',
-    borderHover: 'group-hover:border-rose-400/50',
     bar: 'from-rose-400 via-red-500 to-rose-600',
-    glow: 'bg-rose-500/20',
-    badge: 'bg-rose-500/15 text-rose-200 border-rose-400/35',
-    price: 'text-rose-300',
-    shadow: 'group-hover:shadow-rose-500/25',
+    badgeBg: 'bg-rose-500/12',
+    badgeBorder: 'border-rose-500/25',
+    badgeText: 'text-rose-300',
+    tint: 'rgba(244, 63, 94, 0.04)',
+    borderTint: 'border-rose-500/20',
+    borderHover: 'group-hover:border-rose-500/35',
     emoji: '⏰',
   },
 };
@@ -74,4 +72,15 @@ export function cafeteriaInitials(name) {
   const parts = String(name).trim().split(/\s+/);
   if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase();
   return parts[0].slice(0, 2).toUpperCase();
+}
+
+/** Hide auto-filled descriptions that mirror the special type label. */
+export function hasMeaningfulDescription(special) {
+  const desc = special?.description?.trim();
+  if (!desc) return false;
+  const normalized = desc.toLowerCase();
+  const typeLabel = (special.special_type || '').replace(/_/g, ' ').toLowerCase();
+  if (normalized === typeLabel) return false;
+  if (normalized === special.title?.trim().toLowerCase()) return false;
+  return desc.length > 3;
 }
