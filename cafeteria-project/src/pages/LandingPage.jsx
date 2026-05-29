@@ -332,8 +332,6 @@ export default function LandingPage() {
         </motion.div>
       </section>
 
-      <LandingSpecialsSection />
-
       {/* ── FEATURES ── */}
       <section id="features" className="py-20 sm:py-28 px-4 sm:px-6 bg-surface-container-low/30">
         <div className="max-w-6xl mx-auto">
@@ -425,6 +423,9 @@ export default function LandingPage() {
 
       {/* ── BROWSE MENU (PUBLIC) ── */}
       <BrowseMenuSection preselectCafeteriaId={browseCafeteriaId} />
+
+      {/* ── TODAY'S SPECIALS (placed below Explore Menu) ── */}
+      <LandingSpecialsSection />
 
       {/* ── PORTAL SELECTION ── */}
       <section id="portals" className="py-20 sm:py-28 px-4 sm:px-6 bg-surface-container-low/40">
