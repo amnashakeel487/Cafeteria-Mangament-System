@@ -6,7 +6,6 @@ import CustomerRegisterLayout from '../../components/CustomerRegisterLayout';
 import {
   PortalLoginErrorAlert,
   PortalLoginField,
-  PortalLoginSuccessAlert,
 } from '../../components/PortalLoginLayout';
 import {
   ArrowIcon,
@@ -36,18 +35,28 @@ export default function StudentRegister() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
-    setSuccess('');
     try {
-      await axios.post('/api/student/register', form);
-      setSuccess('Registration submitted! Please wait for admin approval before signing in.');
-      setTimeout(() => navigate('/student/login'), 3500);
+      const res = await axios.post('/api/student/register', form);
+      const data = res.data?.data || res.data;
+      sessionStorage.setItem('pendingApprovalEmail', form.email.trim());
+      sessionStorage.setItem('pendingApprovalName', form.name.trim());
+      if (res.data?.emailSent === false) {
+        sessionStorage.setItem('pendingApprovalEmailDelayed', '1');
+      } else {
+        sessionStorage.removeItem('pendingApprovalEmailDelayed');
+      }
+      navigate('/student/pending-approval', {
+        state: {
+          email: data?.email || form.email,
+          name: data?.name || form.name,
+        },
+      });
     } catch (err) {
       setError(err.response?.data?.message || 'Registration failed.');
     } finally {
@@ -60,8 +69,6 @@ export default function StudentRegister() {
       <PageSEO {...PAGE_SEO.studentRegister} />
       <CustomerRegisterLayout onSignInClick={() => navigate('/student/login')}>
         <PortalLoginErrorAlert message={error} />
-        <PortalLoginSuccessAlert message={success} accent="#ffb59d" />
-
         <form onSubmit={handleRegister}>
           <PortalLoginField delay={4}>
             <label htmlFor="reg-name" className="block text-xs font-medium uppercase tracking-wide text-on-surface-variant mb-2 font-dm">
@@ -76,7 +83,7 @@ export default function StudentRegister() {
                 type="text"
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                disabled={isLoading || !!success}
+                disabled={isLoading}
                 placeholder="Your full name"
                 className={inputClass}
                 required
@@ -97,7 +104,7 @@ export default function StudentRegister() {
                 type="email"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
-                disabled={isLoading || !!success}
+                disabled={isLoading}
                 placeholder="you@comsats.edu.pk"
                 className={inputClass}
                 required
@@ -118,7 +125,7 @@ export default function StudentRegister() {
                 type="text"
                 value={form.contact}
                 onChange={(e) => setForm({ ...form, contact: e.target.value })}
-                disabled={isLoading || !!success}
+                disabled={isLoading}
                 placeholder="+92 300 0000000"
                 className={inputClass}
               />
@@ -138,7 +145,7 @@ export default function StudentRegister() {
                 type={showPassword ? 'text' : 'password'}
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
-                disabled={isLoading || !!success}
+                disabled={isLoading}
                 placeholder="Min. 6 characters"
                 className={`${inputClass} pr-11`}
                 required
@@ -147,7 +154,7 @@ export default function StudentRegister() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                disabled={isLoading || !!success}
+                disabled={isLoading}
                 className={`absolute right-3.5 flex p-0 bg-transparent border-0 cursor-pointer transition-colors disabled:opacity-50 ${
                   showPassword ? 'text-primary' : 'text-on-surface-variant/60 hover:text-primary'
                 }`}
@@ -160,18 +167,13 @@ export default function StudentRegister() {
           <PortalLoginField delay={8} className="mb-0">
             <motion.button
               type="submit"
-              disabled={isLoading || !!success}
-              whileHover={!isLoading && !success ? { y: -2, boxShadow: theme.btnHoverShadow } : {}}
-              whileTap={!isLoading && !success ? { y: 0 } : {}}
+              disabled={isLoading}
+              whileHover={!isLoading ? { y: -2, boxShadow: theme.btnHoverShadow } : {}}
+              whileTap={!isLoading ? { y: 0 } : {}}
               className={btnClass}
             >
               {isLoading ? (
                 <span className="material-symbols-outlined animate-spin text-xl">refresh</span>
-              ) : success ? (
-                <>
-                  <span className="material-symbols-outlined text-xl">check_circle</span>
-                  Submitted
-                </>
               ) : (
                 <>
                   <UserPlusIcon />

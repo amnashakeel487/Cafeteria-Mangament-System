@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import CustomerLoginLayout, {
@@ -33,14 +33,25 @@ export default function StudentLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [pendingMessage, setPendingMessage] = useState('');
+  const [rejectionInfo, setRejectionInfo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.message) {
+      setPendingMessage(location.state.message);
+    }
+  }, [location.state]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
     setError('');
+    setPendingMessage('');
+    setRejectionInfo(null);
 
     try {
       const response = await axios.post('/api/student/login', {
@@ -54,9 +65,40 @@ export default function StudentLogin() {
         navigate('/student/home');
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to login. Please check your credentials.');
+      const code = err.response?.data?.code;
+      const msg = err.response?.data?.message;
+
+      if (code === 'REGISTRATION_PENDING') {
+        setPendingMessage(
+          msg ||
+            'Your account is still pending admin approval. You will receive an email when it is ready.'
+        );
+        setError('');
+      } else if (code === 'REGISTRATION_REJECTED') {
+        setRejectionInfo({
+          message: msg || 'Your registration was not approved.',
+          reason: err.response?.data?.rejectionReason,
+        });
+        setError('');
+      } else {
+        setError(msg || 'Failed to login. Please check your credentials.');
+      }
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const goToPendingStatus = () => {
+    const stored = sessionStorage.getItem('pendingApprovalEmail');
+    if (stored) {
+      navigate('/student/pending-approval');
+      return;
+    }
+    if (email.trim()) {
+      sessionStorage.setItem('pendingApprovalEmail', email.trim());
+      navigate('/student/pending-approval');
+    } else {
+      setError('Enter your email above, then use Check approval status.');
     }
   };
 
@@ -65,6 +107,31 @@ export default function StudentLogin() {
       <PageSEO {...PAGE_SEO.studentLogin} />
       <CustomerLoginLayout onRegisterClick={() => navigate('/student/register')}>
         <CustomerLoginErrorAlert message={error} />
+
+        {pendingMessage && (
+          <div className="mb-4 p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-sm text-amber-200">
+            <p className="font-semibold mb-2">{pendingMessage}</p>
+            <button
+              type="button"
+              onClick={goToPendingStatus}
+              className={`text-xs font-bold underline ${linkAccent}`}
+            >
+              Check your approval status →
+            </button>
+          </div>
+        )}
+
+        {rejectionInfo && (
+          <div className="mb-4 p-4 rounded-xl bg-[#93000a]/20 border border-[#93000a]/40 text-sm text-[#ffb4ab]">
+            <p className="font-semibold mb-1">{rejectionInfo.message}</p>
+            {rejectionInfo.reason && (
+              <p className="text-xs mb-2 opacity-90">Reason: {rejectionInfo.reason}</p>
+            )}
+            <Link to="/student/register" className={`text-xs font-bold underline ${linkAccent}`}>
+              Register again
+            </Link>
+          </div>
+        )}
 
         <form onSubmit={handleLogin}>
           <CustomerLoginField delay={4}>
@@ -151,7 +218,11 @@ export default function StudentLogin() {
 
           <CustomerLoginField delay={8}>
             <p className="text-center text-xs text-on-surface-variant mt-4 px-3.5 py-2.5 rounded-lg bg-surface-container/50 border border-outline-variant/15 leading-relaxed font-dm">
-              For demo purposes, logging in with any email will auto-register an account.
+              New here?{' '}
+              <button type="button" onClick={() => navigate('/student/register')} className={`font-bold ${linkAccent} bg-transparent border-0 cursor-pointer`}>
+                Register
+              </button>
+              {' '}— accounts require admin approval before you can order.
             </p>
           </CustomerLoginField>
         </form>

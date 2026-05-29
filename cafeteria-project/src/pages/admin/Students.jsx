@@ -6,7 +6,10 @@ import { PAGE_SEO } from '../../seo/siteConfig';
 export default function Students() {
   const [students, setStudents] = useState([]);
   const [search, setSearch] = useState('');
-  const [tab, setTab] = useState('approved'); // 'approved' | 'pending'
+  const [tab, setTab] = useState('pending'); // all | pending | approved | rejected
+  const [rejectModal, setRejectModal] = useState(null);
+  const [rejectReason, setRejectReason] = useState('');
+  const [rejectSubmitting, setRejectSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState('add');
   const [currentStudent, setCurrentStudent] = useState({ id: null, name: '', email: '', password: '', contact: '' });
@@ -32,19 +35,79 @@ export default function Students() {
   const handleApprove = async (id) => {
     try {
       await axios.put(`/api/admin/students/${id}/status`, { status: 'approved' }, axiosConfig);
-      showMessage('Student approved!', 'success');
+      showMessage('Student approved and notified via email', 'success');
       fetchStudents();
-    } catch { showMessage('Failed to approve', 'error'); }
+    } catch (err) {
+      showMessage(err.response?.data?.message || 'Failed to approve', 'error');
+    }
   };
 
-  const handleReject = async (id) => {
-    if (!window.confirm('Reject and delete this registration?')) return;
-    try {
-      await axios.put(`/api/admin/students/${id}/status`, { status: 'rejected' }, axiosConfig);
-      showMessage('Registration rejected.', 'success');
-      fetchStudents();
-    } catch { showMessage('Failed to reject', 'error'); }
+  const openRejectModal = (student) => {
+    setRejectModal(student);
+    setRejectReason('');
   };
+
+  const handleRejectSubmit = async () => {
+    if (!rejectModal) return;
+    const reason = rejectReason.trim();
+    if (reason.length < 10) {
+      showMessage('Please provide at least 10 characters for the rejection reason', 'error');
+      return;
+    }
+    setRejectSubmitting(true);
+    try {
+      await axios.patch(
+        `/api/admin/students/${rejectModal.id}/reject`,
+        { rejectionReason: reason },
+        axiosConfig
+      );
+      showMessage('Student rejected and notified via email', 'success');
+      setRejectModal(null);
+      setRejectReason('');
+      fetchStudents();
+    } catch (err) {
+      showMessage(err.response?.data?.message || 'Failed to reject', 'error');
+    } finally {
+      setRejectSubmitting(false);
+    }
+  };
+
+  const formatDate = (d) => {
+    if (!d) return '—';
+    try {
+      return new Date(d).toLocaleDateString('en-US', {
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+      });
+    } catch {
+      return '—';
+    }
+  };
+
+  const statusBadge = (status) => {
+    if (status === 'pending') {
+      return (
+        <span className="inline-flex items-center gap-1 px-3 py-1 text-[10px] font-extrabold uppercase rounded-full tracking-widest bg-amber-500/15 text-amber-400 border border-amber-500/30 animate-pulse">
+          Pending
+        </span>
+      );
+    }
+    if (status === 'rejected') {
+      return (
+        <span className="px-3 py-1 text-[10px] font-extrabold uppercase rounded-full tracking-widest bg-error/15 text-error border border-error/30">
+          Rejected
+        </span>
+      );
+    }
+    return (
+      <span className="px-3 py-1 text-[10px] font-extrabold uppercase rounded-full tracking-widest bg-[#28A745]/15 text-[#28A745] border border-[#28A745]/30">
+        Approved
+      </span>
+    );
+  };
+
+  const pendingCount = students.filter((s) => s.status === 'pending').length;
 
   useEffect(() => {
     fetchStudents();
@@ -100,11 +163,16 @@ export default function Students() {
     }
   };
 
-  const filteredStudents = students.filter(s => {
-    const matchSearch = s.name.toLowerCase().includes(search.toLowerCase()) ||
+  const filteredStudents = students.filter((s) => {
+    const matchSearch =
+      s.name.toLowerCase().includes(search.toLowerCase()) ||
       s.email.toLowerCase().includes(search.toLowerCase()) ||
       (s.id && s.id.toString().includes(search));
-    const matchTab = tab === 'pending' ? s.status === 'pending' : s.status !== 'pending';
+    const matchTab =
+      tab === 'all' ||
+      (tab === 'pending' && s.status === 'pending') ||
+      (tab === 'approved' && s.status === 'approved') ||
+      (tab === 'rejected' && s.status === 'rejected');
     return matchSearch && matchTab;
   });
 
@@ -132,16 +200,31 @@ export default function Students() {
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-2 bg-surface-container-low p-1 rounded-xl w-fit mb-6 md:mb-8">
-        <button onClick={() => setTab('approved')} className={`px-5 py-2 rounded-lg text-sm font-bold transition-all ${tab === 'approved' ? 'bg-surface-container-highest text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}>
-          Approved <span className="ml-1 text-[10px] bg-surface-container-lowest px-2 py-0.5 rounded-full">{students.filter(s => s.status !== 'pending').length}</span>
-        </button>
-        <button onClick={() => setTab('pending')} className={`px-5 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${tab === 'pending' ? 'bg-surface-container-highest text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'}`}>
-          Pending Approval
-          {students.filter(s => s.status === 'pending').length > 0 && (
-            <span className="bg-error text-on-error text-[10px] px-2 py-0.5 rounded-full font-bold">{students.filter(s => s.status === 'pending').length}</span>
-          )}
-        </button>
+      <div className="flex flex-wrap gap-2 bg-surface-container-low p-1 rounded-xl w-fit mb-6 md:mb-8">
+        {[
+          { id: 'all', label: 'All', count: students.length },
+          { id: 'pending', label: 'Pending', count: pendingCount },
+          { id: 'approved', label: 'Approved', count: students.filter((s) => s.status === 'approved').length },
+          { id: 'rejected', label: 'Rejected', count: students.filter((s) => s.status === 'rejected').length },
+        ].map((t) => (
+          <button
+            key={t.id}
+            type="button"
+            onClick={() => setTab(t.id)}
+            className={`px-4 py-2 rounded-lg text-sm font-bold transition-all flex items-center gap-2 ${
+              tab === t.id ? 'bg-surface-container-highest text-primary shadow-sm' : 'text-on-surface-variant hover:text-on-surface'
+            }`}
+          >
+            {t.label}
+            <span
+              className={`text-[10px] px-2 py-0.5 rounded-full ${
+                t.id === 'pending' && t.count > 0 ? 'bg-error text-on-error' : 'bg-surface-container-lowest'
+              }`}
+            >
+              {t.count}
+            </span>
+          </button>
+        ))}
       </div>
 
       {/* Filters Region */}
@@ -185,14 +268,14 @@ export default function Students() {
                 {tab === 'pending' ? (
                   <>
                     <button onClick={() => handleApprove(student.id)} className="p-2 text-tertiary hover:bg-tertiary/10 rounded-lg transition-colors"><span className="material-symbols-outlined text-lg">check_circle</span></button>
-                    <button onClick={() => handleReject(student.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors"><span className="material-symbols-outlined text-lg">cancel</span></button>
+                    <button onClick={() => openRejectModal(student)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors"><span className="material-symbols-outlined text-lg">cancel</span></button>
                   </>
-                ) : (
+                ) : student.status !== 'rejected' ? (
                   <>
                     <button onClick={() => handleOpenModal('edit', student)} className="p-2 text-on-surface-variant/40 hover:text-primary transition-colors"><span className="material-symbols-outlined text-lg">edit</span></button>
                     <button onClick={() => handleDelete(student.id)} className="p-2 text-on-surface-variant/40 hover:text-error transition-colors"><span className="material-symbols-outlined text-lg">delete</span></button>
                   </>
-                )}
+                ) : null}
               </div>
             </div>
           ))}
@@ -209,6 +292,7 @@ export default function Students() {
                 <th className="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">Student</th>
                 <th className="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">Email Address</th>
                 <th className="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">Contact Info</th>
+                <th className="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">Registered</th>
                 <th className="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest">Status</th>
                 <th className="px-8 py-5 text-xs font-bold text-on-surface-variant/40 uppercase tracking-widest text-right">Actions</th>
               </tr>
@@ -227,35 +311,92 @@ export default function Students() {
                   </td>
                   <td className="px-8 py-6 text-on-surface-variant font-medium text-sm">{student.email}</td>
                   <td className="px-8 py-6 text-on-surface-variant font-medium text-sm">{student.contact || 'N/A'}</td>
+                  <td className="px-8 py-6 text-on-surface-variant text-sm">{formatDate(student.created_at)}</td>
                   <td className="px-8 py-6">
-                    <span className={`px-3 py-1 text-[10px] font-extrabold uppercase rounded-full tracking-widest ${student.status === 'pending' ? 'bg-primary/10 text-primary' : 'bg-tertiary/10 text-tertiary'}`}>
-                      {student.status === 'pending' ? 'Pending' : 'Active'}
-                    </span>
+                    <div className="space-y-1">
+                      {statusBadge(student.status)}
+                      {student.registration_email_sent && (
+                        <p className="text-[10px] text-on-surface-variant/60 flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[12px]">mail</span>
+                          Welcome email sent
+                        </p>
+                      )}
+                      {student.status === 'rejected' && student.rejection_reason && (
+                        <p className="text-[10px] text-error/80 max-w-[200px] line-clamp-2" title={student.rejection_reason}>
+                          {student.rejection_reason}
+                        </p>
+                      )}
+                    </div>
                   </td>
                   <td className="px-8 py-6">
                     <div className="flex justify-end gap-2">
                       {tab === 'pending' ? (
                         <>
                           <button onClick={() => handleApprove(student.id)} className="p-2 text-tertiary hover:bg-tertiary/10 rounded-lg transition-colors" title="Approve"><span className="material-symbols-outlined text-xl">check_circle</span></button>
-                          <button onClick={() => handleReject(student.id)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors" title="Reject"><span className="material-symbols-outlined text-xl">cancel</span></button>
+                          <button onClick={() => openRejectModal(student)} className="p-2 text-error hover:bg-error/10 rounded-lg transition-colors" title="Reject"><span className="material-symbols-outlined text-xl">cancel</span></button>
                         </>
-                      ) : (
+                      ) : student.status !== 'rejected' ? (
                         <>
                           <button onClick={() => handleOpenModal('edit', student)} className="p-2 text-on-surface-variant/40 hover:text-primary transition-colors"><span className="material-symbols-outlined text-xl">edit</span></button>
                           <button onClick={() => handleDelete(student.id)} className="p-2 text-on-surface-variant/40 hover:text-error transition-colors"><span className="material-symbols-outlined text-xl">delete</span></button>
                         </>
-                      )}
+                      ) : null}
                     </div>
                   </td>
                 </tr>
               ))}
               {filteredStudents.length === 0 && !loading && (
-                <tr><td colSpan="5" className="px-8 py-16 text-center text-on-surface-variant">No students found matching your criteria.</td></tr>
+                <tr><td colSpan="6" className="px-8 py-16 text-center text-on-surface-variant">No students found matching your criteria.</td></tr>
               )}
             </tbody>
           </table>
         </div>
       </div>
+
+      {/* Reject Modal */}
+      {rejectModal && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-[#0c0c1d]/80 backdrop-blur p-4">
+          <div className="max-w-md w-full bg-surface-container-high rounded-2xl p-8 shadow-2xl border border-outline-variant/10">
+            <h3 className="text-xl font-bold text-on-surface mb-1">Reject Registration</h3>
+            <p className="text-sm text-on-surface-variant mb-4">
+              {rejectModal.name} — <span className="text-on-surface">{rejectModal.email}</span>
+            </p>
+            <label className="text-[10px] font-bold text-on-surface-variant/60 uppercase tracking-widest">
+              Reason for rejection (required)
+            </label>
+            <textarea
+              value={rejectReason}
+              onChange={(e) => setRejectReason(e.target.value)}
+              rows={4}
+              maxLength={500}
+              placeholder="e.g. Invalid university email, duplicate account, incomplete information..."
+              className="mt-2 w-full bg-surface-container-lowest border-none rounded-lg px-4 py-3 text-sm text-on-surface focus:ring-2 focus:ring-error/40 outline-none resize-none"
+            />
+            <p className="text-xs text-on-surface-variant mt-1">{rejectReason.length}/500 (min 10)</p>
+            <p className="text-xs text-amber-400/90 mt-3 flex items-start gap-1">
+              <span className="material-symbols-outlined text-sm shrink-0">info</span>
+              The student will be notified via email with this reason.
+            </p>
+            <div className="pt-6 flex gap-3">
+              <button
+                type="button"
+                onClick={() => setRejectModal(null)}
+                className="flex-1 py-3 bg-surface-container text-on-surface font-bold rounded-lg text-sm"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                disabled={rejectSubmitting || rejectReason.trim().length < 10}
+                onClick={handleRejectSubmit}
+                className="flex-1 py-3 bg-error text-on-error font-bold rounded-lg text-sm disabled:opacity-50"
+              >
+                {rejectSubmitting ? 'Sending...' : 'Reject & Notify'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Form Modal */}
       {isModalOpen && (
