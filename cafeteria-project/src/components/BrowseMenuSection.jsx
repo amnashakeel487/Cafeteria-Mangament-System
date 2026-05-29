@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { supabase } from '../supabaseClient';
@@ -8,6 +8,10 @@ import StarDisplay from './ratings/StarDisplay';
 import FavoriteButton from './favorites/FavoriteButton';
 import { useFavorites } from '../context/FavoritesContext';
 import { useNavigate } from 'react-router-dom';
+import { AvailabilityBadgeFromItem } from './availability/AvailabilityBadge';
+import SoldOutOverlay from './availability/SoldOutOverlay';
+import { useMenuAvailabilityRealtime } from '../hooks/useMenuAvailabilityRealtime';
+import { isMenuItemAvailable, mergeMenuItemAvailability } from '../utils/isMenuItemAvailable';
 
 const FOOD_ICONS = ['lunch_dining', 'ramen_dining', 'local_pizza', 'bakery_dining', 'emoji_food_beverage', 'icecream'];
 
@@ -35,14 +39,6 @@ function getCafeteriaIcon(name = '') {
   let hash = 0;
   for (let i = 0; i < name.length; i += 1) hash = name.charCodeAt(i) + ((hash << 5) - hash);
   return FOOD_ICONS[Math.abs(hash) % FOOD_ICONS.length];
-}
-
-function isItemAvailable(item) {
-  if (typeof item?.is_available === 'boolean') return item.is_available;
-  if (typeof item?.available === 'boolean') return item.available;
-  if (typeof item?.in_stock === 'boolean') return item.in_stock;
-  if (typeof item?.status === 'string') return item.status.toLowerCase() !== 'out of stock';
-  return true;
 }
 
 function MenuItemThumb({ imageUrl }) {
@@ -84,6 +80,9 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [error, setError] = useState('');
+  const [availableOnly, setAvailableOnly] = useState(false);
+  const [soldOutByCafe, setSoldOutByCafe] = useState({});
+  const [availToast, setAvailToast] = useState(null);
 
   // Fetch cafeteria list publicly (no auth).
   useEffect(() => {
@@ -100,6 +99,17 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
         const list = data || [];
         setCafeterias(list);
         setSelectedCafeteria(list[0] || null);
+
+        const { data: soldRows } = await supabase
+          .from('menu_items')
+          .select('cafeteria_id')
+          .eq('is_available', false);
+        const counts = {};
+        (soldRows || []).forEach((row) => {
+          const key = row.cafeteria_id;
+          counts[key] = (counts[key] || 0) + 1;
+        });
+        setSoldOutByCafe(counts);
       }
       setLoadingCafeterias(false);
     };
@@ -143,6 +153,29 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
     fetchMenuItems();
   }, [selectedCafeteria]);
 
+  const handleRealtimeUpdate = useCallback((updated) => {
+    setMenuItems((prev) =>
+      prev.map((item) =>
+        item.id === updated.id ? mergeMenuItemAvailability(item, updated) : item
+      )
+    );
+  }, []);
+
+  useMenuAvailabilityRealtime({
+    cafeteriaId: selectedCafeteria?.id,
+    enabled: Boolean(selectedCafeteria?.id),
+    onItemUpdate: handleRealtimeUpdate,
+    onSoldOut: (row) => setAvailToast({ message: `"${row.name}" just sold out`, icon: '🔴' }),
+    onAvailableAgain: (row) =>
+      setAvailToast({ message: `"${row.name}" is available again!`, icon: '✅' }),
+  });
+
+  useEffect(() => {
+    if (!availToast) return undefined;
+    const t = setTimeout(() => setAvailToast(null), 4000);
+    return () => clearTimeout(t);
+  }, [availToast]);
+
   const categoryOptions = useMemo(() => {
     const categories = Array.from(
       new Set(menuItems.map((item) => item.category).filter((cat) => typeof cat === 'string' && cat.trim()))
@@ -151,15 +184,28 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
   }, [menuItems]);
 
   const filteredItems = useMemo(() => {
-    return menuItems.filter((item) => {
-      const nameMatch = (item.name || '').toLowerCase().includes(searchQuery.toLowerCase());
-      const categoryMatch = selectedCategory === 'All' || item.category === selectedCategory;
-      return nameMatch && categoryMatch;
-    });
-  }, [menuItems, searchQuery, selectedCategory]);
+    return menuItems
+      .filter((item) => {
+        const nameMatch = (item.name || '').toLowerCase().includes(searchQuery.toLowerCase());
+        const categoryMatch = selectedCategory === 'All' || item.category === selectedCategory;
+        const availMatch = !availableOnly || isMenuItemAvailable(item);
+        return nameMatch && categoryMatch && availMatch;
+      })
+      .sort((a, b) => {
+        const aOk = isMenuItemAvailable(a) ? 0 : 1;
+        const bOk = isMenuItemAvailable(b) ? 0 : 1;
+        return aOk - bOk;
+      });
+  }, [menuItems, searchQuery, selectedCategory, availableOnly]);
 
   return (
     <section id="browse-menu" className="py-20 sm:py-28 px-4 sm:px-6 bg-surface-container-low/30">
+      {availToast && (
+        <div className="fixed top-20 right-4 z-[80] max-w-sm px-4 py-3 rounded-xl bg-surface-container-high/95 border border-outline-variant/20 shadow-2xl flex items-center gap-2">
+          <span>{availToast.icon}</span>
+          <p className="text-sm font-bold text-on-surface">{availToast.message}</p>
+        </div>
+      )}
       <div className="max-w-6xl mx-auto">
         {/* Section header */}
         <motion.div
@@ -224,6 +270,11 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
                     </span>
                   </div>
                   <p className="text-sm text-on-surface-variant line-clamp-2">{cafeteria.location || cafeteria.contact || 'Campus cafeteria'}</p>
+                  {soldOutByCafe[cafeteria.id] > 0 && (
+                    <p className="text-[11px] font-bold text-amber-400/90 mt-1">
+                      {soldOutByCafe[cafeteria.id]} item{soldOutByCafe[cafeteria.id] !== 1 ? 's' : ''} sold out today
+                    </p>
+                  )}
                   <div className="mt-2">
                     {(cafeteria.rating_count || 0) > 0 ? (
                       <StarDisplay
@@ -258,6 +309,15 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
                 className="w-full bg-surface-container-high border border-outline-variant/10 rounded-xl pl-12 pr-4 py-3 text-on-surface focus:border-primary/40 focus:ring-2 focus:ring-primary/20 placeholder:text-on-surface-variant/50 outline-none transition-all"
               />
             </div>
+            <label className="flex items-center gap-2 text-sm text-on-surface-variant cursor-pointer">
+              <input
+                type="checkbox"
+                checked={availableOnly}
+                onChange={(e) => setAvailableOnly(e.target.checked)}
+                className="rounded accent-primary"
+              />
+              Available only
+            </label>
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -312,16 +372,17 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
               className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5"
             >
               {filteredItems.map((item, index) => {
-                const available = isItemAvailable(item);
+                const available = isMenuItemAvailable(item);
                 return (
                   <motion.article
                     key={item.id}
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.03 }}
-                    whileHover={{ y: -4 }}
-                    className="group relative rounded-xl border border-outline-variant/10 bg-surface-container-high p-5 shadow-lg hover:shadow-primary/10 transition-shadow duration-300"
+                    whileHover={{ y: available ? -4 : 0 }}
+                    className={`group relative rounded-xl border border-outline-variant/10 bg-surface-container-high p-5 shadow-lg hover:shadow-primary/10 transition-shadow duration-300 overflow-hidden ${!available ? 'grayscale-[0.4]' : ''}`}
                   >
+                    <SoldOutOverlay isVisible={!available} itemName={item.name} className="rounded-xl" />
                     {selectedCafeteria && (
                       <div className="absolute top-3 right-3 z-10">
                         <FavoriteButton
@@ -355,15 +416,7 @@ export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
                       <span className="px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wide bg-tertiary/20 text-tertiary border border-tertiary/30">
                         {item.category || 'General'}
                       </span>
-                      <span
-                        className={`px-2.5 py-1 rounded-full text-[11px] font-black uppercase tracking-wide border ${
-                          available
-                            ? 'bg-[#28A745]/20 text-[#28A745] border-[#28A745]/30'
-                            : 'bg-error/10 text-error border-error/30'
-                        }`}
-                      >
-                        {available ? 'Available' : 'Out of Stock'}
-                      </span>
+                      <AvailabilityBadgeFromItem item={item} size="sm" />
                     </div>
 
                     <p className="text-sm text-on-surface-variant mt-3 line-clamp-2 min-h-[2.5rem]">

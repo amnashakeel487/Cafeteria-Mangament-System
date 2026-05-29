@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useCart } from '../../context/CartContext';
@@ -13,6 +13,10 @@ import RatingDistribution from '../../components/ratings/RatingDistribution';
 import ReviewCard from '../../components/ratings/ReviewCard';
 import ReviewsDrawer from '../../components/ratings/ReviewsDrawer';
 import { fetchMenuItemRatings } from '../../utils/ratingsApi';
+import { AvailabilityBadgeFromItem } from '../../components/availability/AvailabilityBadge';
+import SoldOutOverlay from '../../components/availability/SoldOutOverlay';
+import { useMenuAvailabilityRealtime } from '../../hooks/useMenuAvailabilityRealtime';
+import { isMenuItemAvailable } from '../../utils/isMenuItemAvailable';
 
 const BASE = '';
 const DEFAULT_IMAGE = DefaultImage; // COMSATS Cafe logo as default image
@@ -37,6 +41,8 @@ export default function MenuBrowsing() {
 
   const [filter, setFilter] = useState('All Items');
   const [search, setSearch] = useState('');
+  const [availableOnly, setAvailableOnly] = useState(false);
+  const [availToast, setAvailToast] = useState(null);
 
   const { cart, addToCart, removeFromCart, getCartQty, cartTotal, cartItemCount } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
@@ -88,13 +94,51 @@ export default function MenuBrowsing() {
     }
   };
 
+  const handleRealtimeUpdate = useCallback((updated) => {
+    setItems((prev) =>
+      prev.map((item) => (item.id === updated.id ? { ...item, ...updated } : item))
+    );
+  }, []);
+
+  useMenuAvailabilityRealtime({
+    cafeteriaId,
+    enabled: Boolean(cafeteriaId),
+    onItemUpdate: handleRealtimeUpdate,
+    onSoldOut: (row) => setAvailToast({ message: `"${row.name}" just sold out`, icon: '🔴' }),
+    onAvailableAgain: (row) =>
+      setAvailToast({ message: `"${row.name}" is available again!`, icon: '✅' }),
+  });
+
+  useEffect(() => {
+    if (!availToast) return undefined;
+    const t = setTimeout(() => setAvailToast(null), 4000);
+    return () => clearTimeout(t);
+  }, [availToast]);
+
   const filterTabs = ['All Items', ...categories.map(c => c.name)];
   
-  const filteredItems = items.filter(i => {
-    const matchCat = filter === 'All Items' || i.category === filter;
-    const matchSearch = i.name.toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchSearch;
-  });
+  const filteredItems = items
+    .filter((i) => {
+      const matchCat = filter === 'All Items' || i.category === filter;
+      const matchSearch = i.name.toLowerCase().includes(search.toLowerCase());
+      const matchAvail = !availableOnly || isMenuItemAvailable(i);
+      return matchCat && matchSearch && matchAvail;
+    })
+    .sort((a, b) => {
+      const aOk = isMenuItemAvailable(a) ? 0 : 1;
+      const bOk = isMenuItemAvailable(b) ? 0 : 1;
+      return aOk - bOk;
+    });
+
+  const handleAddToCart = (item) => {
+    addToCart(item, cafeteriaId, {
+      onBlocked: (blocked) =>
+        setAvailToast({
+          message: `Sorry, ${blocked.name} is currently sold out`,
+          icon: '🔴',
+        }),
+    });
+  };
 
   if (loading) {
     return (
@@ -127,6 +171,12 @@ export default function MenuBrowsing() {
   return (
     <>
       <PageSEO {...menuSeo} />
+      {availToast && (
+        <div className="fixed top-20 right-4 z-[80] max-w-sm px-4 py-3 rounded-xl bg-[#1E1E2F]/95 border border-[#594139]/20 shadow-2xl backdrop-blur flex items-center gap-2">
+          <span>{availToast.icon}</span>
+          <p className="text-sm font-bold text-[#E3E0F8]">{availToast.message}</p>
+        </div>
+      )}
     <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 relative font-['Inter'] pb-28 lg:pb-0">
       
       <div className="flex-1 min-w-0">
@@ -161,6 +211,15 @@ export default function MenuBrowsing() {
               type="text"
             />
           </div>
+          <label className="mt-4 flex items-center gap-2 text-sm text-[#e1bfb5] cursor-pointer w-fit">
+            <input
+              type="checkbox"
+              checked={availableOnly}
+              onChange={(e) => setAvailableOnly(e.target.checked)}
+              className="rounded accent-[#FF6B35]"
+            />
+            Available only
+          </label>
         </header>
 
         {/* Category Tabs */}
@@ -249,6 +308,7 @@ export default function MenuBrowsing() {
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredItems.map(item => {
             const qty = getCartQty(item.id);
+            const available = isMenuItemAvailable(item);
             return (
             <div
               key={item.id}
@@ -256,9 +316,10 @@ export default function MenuBrowsing() {
               tabIndex={0}
               onClick={() => openItemDetail(item)}
               onKeyDown={(e) => e.key === 'Enter' && openItemDetail(item)}
-              className="group bg-[#28283a] rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col cursor-pointer"
+              className={`group bg-[#28283a] rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col cursor-pointer ${!available ? 'grayscale-[0.35]' : ''}`}
             >
               <div className="relative h-40 overflow-hidden bg-[#333345] flex items-center justify-center">
+                <SoldOutOverlay isVisible={!available} itemName={item.name} />
                 {isVideo(item.image_url) ? (
                   <video src={item.image_url} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500" autoPlay muted loop />
                 ) : (
@@ -291,6 +352,9 @@ export default function MenuBrowsing() {
               </div>
               
               <div className="p-3 flex-1 flex flex-col">
+                <div className="mb-2">
+                  <AvailabilityBadgeFromItem item={item} size="sm" />
+                </div>
                 <div className="flex justify-between items-start mb-1 font-['Manrope']">
                   <div className="min-w-0">
                     <h3 className="text-sm font-bold text-[#E3E0F8] group-hover:text-[#FFB59D] transition-colors line-clamp-1">{item.name}</h3>
@@ -305,8 +369,17 @@ export default function MenuBrowsing() {
                 <p className="text-[#e1bfb5] text-[11px] mb-3 flex-1 line-clamp-2">{item.description}</p>
                 
                 <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#594139]/10" onClick={(e) => e.stopPropagation()}>
-                  {qty === 0 ? (
-                    <button onClick={() => addToCart(item, cafeteriaId)} className="w-full bg-[#333345] hover:bg-[#38374a] text-[#E3E0F8] px-4 py-2 rounded-lg text-xs font-bold active:scale-95 transition-all">
+                  {!available ? (
+                    <button
+                      type="button"
+                      disabled
+                      title="This item is sold out today. Check back tomorrow!"
+                      className="w-full bg-[#333345]/60 text-[#e1bfb5]/50 px-4 py-2 rounded-lg text-xs font-bold cursor-not-allowed"
+                    >
+                      Sold out today
+                    </button>
+                  ) : qty === 0 ? (
+                    <button onClick={() => handleAddToCart(item)} className="w-full bg-gradient-to-br from-[#FFB59D] to-[#FF6B35] text-[#5d1900] px-4 py-2 rounded-lg text-xs font-bold active:scale-95 transition-all">
                       Add to Cart
                     </button>
                   ) : (
@@ -314,7 +387,7 @@ export default function MenuBrowsing() {
                       <div className="flex items-center bg-[#0c0c1d] rounded-lg p-0.5 border border-[#594139]/20">
                         <button onClick={() => removeFromCart(item.id)} className="h-7 w-7 flex items-center justify-center rounded hover:bg-[#38374a] text-[#e1bfb5] transition-colors"><span className="material-symbols-outlined text-base">remove</span></button>
                         <span className="px-3 text-xs font-bold text-[#E3E0F8]">{qty}</span>
-                        <button onClick={() => addToCart(item, cafeteriaId)} className="h-7 w-7 flex items-center justify-center rounded hover:bg-[#38374a] text-[#FFB59D] transition-colors"><span className="material-symbols-outlined text-base">add</span></button>
+                        <button onClick={() => handleAddToCart(item)} className="h-7 w-7 flex items-center justify-center rounded hover:bg-[#38374a] text-[#FFB59D] transition-colors"><span className="material-symbols-outlined text-base">add</span></button>
                       </div>
                     </div>
                   )}

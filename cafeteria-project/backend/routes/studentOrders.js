@@ -6,6 +6,7 @@ const {
     assertStudentCanCancel,
 } = require('../utils/orderCancellation');
 const { createNotification } = require('../utils/notificationService');
+const { itemIsAvailable } = require('../utils/menuAvailability');
 
 const router = express.Router();
 
@@ -26,6 +27,31 @@ router.post('/', upload.single('screenshot'), async (req, res) => {
             parsedItems = typeof items === 'string' ? JSON.parse(items) : items;
         } catch (e) {
             return res.status(400).json({ message: 'Invalid items format' });
+        }
+
+        const menuItemIds = parsedItems
+            .map((item) => item.id)
+            .filter((id) => id != null && !String(id).startsWith('deal-'))
+            .map((id) => Number(id))
+            .filter((id) => !Number.isNaN(id) && id > 0);
+
+        if (menuItemIds.length > 0) {
+            const { data: menuRows, error: menuErr } = await supabase
+                .from('menu_items')
+                .select('id, name, is_available, cafeteria_id')
+                .eq('cafeteria_id', cafeteria_id)
+                .in('id', menuItemIds);
+
+            if (menuErr) return res.status(500).json({ message: 'Failed to verify menu availability' });
+
+            const unavailable = (menuRows || []).filter((row) => !itemIsAvailable(row));
+            if (unavailable.length > 0) {
+                return res.status(409).json({
+                    message: 'Some items in your cart are no longer available',
+                    unavailable: unavailable.map((r) => ({ id: r.id, name: r.name })),
+                    code: 'ITEMS_UNAVAILABLE',
+                });
+            }
         }
 
         let screenshotUrl = null;

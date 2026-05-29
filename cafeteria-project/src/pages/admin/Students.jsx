@@ -34,11 +34,32 @@ export default function Students() {
 
   const handleApprove = async (id) => {
     try {
-      await axios.put(`/api/admin/students/${id}/status`, { status: 'approved' }, axiosConfig);
-      showMessage('Student approved and notified via email', 'success');
+      const res = await axios.put(`/api/admin/students/${id}/status`, { status: 'approved' }, axiosConfig);
+      const email = res.data?.student?.email;
+      showMessage(
+        email
+          ? `Student approved. An approval email is being sent to ${email}.`
+          : 'Student approved. An approval email is being sent.',
+        'success'
+      );
       fetchStudents();
     } catch (err) {
       showMessage(err.response?.data?.message || 'Failed to approve', 'error');
+    }
+  };
+
+  const handleResendApprovalEmail = async (id) => {
+    try {
+      const res = await axios.post(`/api/admin/students/${id}/resend-approval-email`, {}, axiosConfig);
+      showMessage(
+        res.data?.emailSent
+          ? res.data.message || 'Approval email sent'
+          : res.data?.message || 'Approval email could not be sent. Check Brevo settings on the server.',
+        res.data?.emailSent ? 'success' : 'error'
+      );
+      fetchStudents();
+    } catch (err) {
+      showMessage(err.response?.data?.message || 'Failed to resend approval email', 'error');
     }
   };
 
@@ -320,6 +341,22 @@ export default function Students() {
                           <span className="material-symbols-outlined text-[12px]">mail</span>
                           Welcome email sent
                         </p>
+                      )}
+                      {student.status === 'approved' && student.approval_email_sent && (
+                        <p className="text-[10px] text-tertiary/80 flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[12px]">mark_email_read</span>
+                          Approval email sent
+                        </p>
+                      )}
+                      {student.status === 'approved' && !student.approval_email_sent && (
+                        <button
+                          type="button"
+                          onClick={() => handleResendApprovalEmail(student.id)}
+                          className="text-[10px] text-primary hover:underline flex items-center gap-1"
+                        >
+                          <span className="material-symbols-outlined text-[12px]">send</span>
+                          Resend approval email
+                        </button>
                       )}
                       {student.status === 'rejected' && student.rejection_reason && (
                         <p className="text-[10px] text-error/80 max-w-[200px] line-clamp-2" title={student.rejection_reason}>

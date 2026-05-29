@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { isMenuItemAvailable } from '../utils/isMenuItemAvailable';
 
 const CartContext = createContext();
 
@@ -19,13 +20,20 @@ export const CartProvider = ({ children }) => {
     else localStorage.removeItem('studentCartCafeteria');
   }, [cart, cafeteriaId]);
 
-  const addToCart = (item, currentCafeteriaId) => {
+  const addToCart = (item, currentCafeteriaId, options = {}) => {
+    if (!isMenuItemAvailable(item)) {
+      options.onBlocked?.(item);
+      return { ok: false, reason: 'sold_out' };
+    }
+
     // If adding from a different cafeteria, clear old cart
     if (cafeteriaId && currentCafeteriaId && cafeteriaId !== currentCafeteriaId) {
-       if(!window.confirm("Adding items from a different cafeteria will clear your current cart. Continue?")) return;
+       if(!window.confirm("Adding items from a different cafeteria will clear your current cart. Continue?")) {
+         return { ok: false, reason: 'cancelled' };
+       }
        setCart([{ ...item, qty: 1 }]);
        setCafeteriaId(currentCafeteriaId);
-       return;
+       return { ok: true };
     }
     
     if (!cafeteriaId && currentCafeteriaId) {
@@ -39,7 +47,17 @@ export const CartProvider = ({ children }) => {
       }
       return [...prev, { ...item, qty: 1 }];
     });
+    return { ok: true };
   };
+
+  const removeUnavailableFromCart = useCallback((unavailableIds) => {
+    const idSet = new Set(unavailableIds.map(String));
+    setCart((prev) => {
+      const next = prev.filter((i) => !idSet.has(String(i.id)));
+      if (next.length === 0) setCafeteriaId(null);
+      return next;
+    });
+  }, []);
 
   const removeFromCart = (itemId) => {
     setCart(prev => {
@@ -68,7 +86,15 @@ export const CartProvider = ({ children }) => {
 
   return (
     <CartContext.Provider value={{
-      cart, cafeteriaId, addToCart, removeFromCart, clearCart, getCartQty, cartTotal, cartItemCount
+      cart,
+      cafeteriaId,
+      addToCart,
+      removeFromCart,
+      clearCart,
+      getCartQty,
+      cartTotal,
+      cartItemCount,
+      removeUnavailableFromCart,
     }}>
       {children}
     </CartContext.Provider>

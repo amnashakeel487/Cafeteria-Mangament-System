@@ -19,11 +19,26 @@ function getClient() {
   return client;
 }
 
+function brevoErrorMessage(error) {
+  if (!error) return 'Unknown email error';
+  if (error.body?.message) return error.body.message;
+  if (typeof error.body === 'string') return error.body;
+  return error.message || String(error);
+}
+
 const sendEmail = async ({ to, subject, htmlContent, textContent }) => {
   const brevo = getClient();
   if (!brevo) {
     console.warn('BREVO_API_KEY not set — email skipped');
     return { success: false, error: new Error('BREVO_API_KEY not configured') };
+  }
+
+  const recipient = {
+    email: (to.email || '').trim().toLowerCase(),
+    name: to.name || to.email,
+  };
+  if (!recipient.email) {
+    return { success: false, error: new Error('Recipient email is required') };
   }
 
   try {
@@ -32,13 +47,14 @@ const sendEmail = async ({ to, subject, htmlContent, textContent }) => {
       htmlContent,
       textContent: textContent || '',
       sender: DEFAULT_SENDER,
-      to: [{ email: to.email, name: to.name || to.email }],
+      to: [recipient],
     });
-    console.log('Email sent successfully to:', to.email);
+    console.log('Email sent successfully to:', recipient.email, subject);
     return { success: true, result };
   } catch (error) {
-    console.error('Brevo email error:', error?.message || error);
-    return { success: false, error };
+    const detail = brevoErrorMessage(error);
+    console.error('Brevo email error:', recipient.email, detail, error?.body || '');
+    return { success: false, error: new Error(detail) };
   }
 };
 

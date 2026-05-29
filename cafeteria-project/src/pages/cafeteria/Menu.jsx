@@ -8,6 +8,9 @@ import LazyImage from '../../components/LazyImage';
 import { formatPrice } from '../../utils/currency';
 import StarDisplay, { ratingColorClass } from '../../components/ratings/StarDisplay';
 import ReviewsDrawer from '../../components/ratings/ReviewsDrawer';
+import AvailabilityToggle from '../../components/availability/AvailabilityToggle';
+import { formatMidnightCountdown, useMidnightCountdown } from '../../utils/midnightCountdown';
+import { isMenuItemAvailable } from '../../utils/isMenuItemAvailable';
 
 const CAT_COLORS = [
   { badge: 'bg-tertiary/20 text-tertiary border border-tertiary/30', pill: 'text-tertiary' },
@@ -47,6 +50,10 @@ export default function CafeteriaMenu() {
   
   const [toast, setToast] = useState({ visible: false, message: '', type: '' });
   const [reviewsDrawer, setReviewsDrawer] = useState(null);
+  const [availFilter, setAvailFilter] = useState('all');
+  const [selectedIds, setSelectedIds] = useState([]);
+  const [bulkLoading, setBulkLoading] = useState(false);
+  const midnightCountdown = useMidnightCountdown();
   const fileRef = useRef();
 
   const token = localStorage.getItem('cafeteriaToken');
@@ -286,13 +293,87 @@ export default function CafeteriaMenu() {
     setTimeout(() => setToast({ visible: false, message: '', type: '' }), 5000);
   };
 
-  const filtered = items.filter(i => {
-    const matchCat = filter === 'All' || i.category === filter;
-    const matchSearch = i.name.toLowerCase().includes(search.toLowerCase());
-    return matchCat && matchSearch;
-  });
+  const availableCount = items.filter((i) => isMenuItemAvailable(i)).length;
+  const soldOutCount = items.length - availableCount;
+
+  const filtered = items
+    .filter((i) => {
+      const matchCat = filter === 'All' || i.category === filter;
+      const matchSearch = i.name.toLowerCase().includes(search.toLowerCase());
+      const matchAvail =
+        availFilter === 'all' ||
+        (availFilter === 'available' && isMenuItemAvailable(i)) ||
+        (availFilter === 'soldout' && !isMenuItemAvailable(i));
+      return matchCat && matchSearch && matchAvail;
+    })
+    .sort((a, b) => {
+      const aOk = isMenuItemAvailable(a) ? 0 : 1;
+      const bOk = isMenuItemAvailable(b) ? 0 : 1;
+      return aOk - bOk;
+    });
 
   const avgPrice = items.length ? (items.reduce((a, b) => a + Number(b.price), 0) / items.length).toFixed(2) : '0.00';
+
+  const handleItemAvailabilityUpdate = (updated) => {
+    setItems((prev) => prev.map((i) => (i.id === updated.id ? { ...i, ...updated } : i)));
+  };
+
+  const toggleSelect = (id) => {
+    setSelectedIds((prev) =>
+      prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id]
+    );
+  };
+
+  const handleBulkAvailability = async (isAvailable) => {
+    if (!selectedIds.length) return;
+    setBulkLoading(true);
+    try {
+      const res = await axios.patch(
+        `${BASE}/api/cafeteria/availability/bulk`,
+        { menuItemIds: selectedIds, isAvailable, reason: 'sold_out' },
+        axiosConfig
+      );
+      const updatedMap = Object.fromEntries((res.data.items || []).map((i) => [i.id, i]));
+      setItems((prev) => prev.map((i) => updatedMap[i.id] || i));
+      setSelectedIds([]);
+      showToast(`${res.data.count} items updated`, 'success');
+    } catch (err) {
+      showToast(err.response?.data?.message || 'Bulk update failed', 'error');
+    } finally {
+      setBulkLoading(false);
+    }
+  };
+
+  const handleResetAllSoldOut = async () => {
+    if (!soldOutCount) return;
+    if (!window.confirm(`Restore all ${soldOutCount} sold out items?`)) return;
+    try {
+      const res = await axios.post(`${BASE}/api/cafeteria/availability/reset-all`, {}, axiosConfig);
+      setItems((prev) =>
+        prev.map((i) =>
+          !isMenuItemAvailable(i)
+            ? { ...i, is_available: true, sold_out_at: null, sold_out_reason: null }
+            : i
+        )
+      );
+      showToast(res.data.message || 'All items restored', 'success');
+    } catch (err) {
+      showToast(err.response?.data?.message || 'Reset failed', 'error');
+    }
+  };
+
+  const handleAutoResetToggle = async (item, enabled) => {
+    try {
+      const res = await axios.patch(
+        `${BASE}/api/cafeteria/availability/${item.id}`,
+        { isAvailable: isMenuItemAvailable(item), autoResetEnabled: enabled },
+        axiosConfig
+      );
+      handleItemAvailabilityUpdate(res.data);
+    } catch {
+      showToast('Failed to update auto-reset setting', 'error');
+    }
+  };
 
   const categoryNames = categories.map(c => c.name);
   const filterTabs = ['All', ...categoryNames];
@@ -331,6 +412,86 @@ export default function CafeteriaMenu() {
         </div>
       </div>
 
+      {/* Availability status bar */}
+      <div className="flex flex-wrap items-center justify-between gap-3 p-4 rounded-xl bg-surface-container-high border border-outline-variant/10">
+        <div className="flex flex-wrap items-center gap-4 text-sm font-bold">
+          <span className="text-[#6ee7b7] flex items-center gap-1">
+            <span className="w-2 h-2 rounded-full bg-[#34d399] animate-pulse" />
+            {availableCount} Available
+          </span>
+          <button
+            type="button"
+            onClick={() => setAvailFilter(availFilter === 'soldout' ? 'all' : 'soldout')}
+            className={`text-error hover:underline ${soldOutCount ? '' : 'opacity-50 cursor-default'}`}
+            disabled={!soldOutCount}
+          >
+            {soldOutCount} Sold Out
+          </button>
+          <span className="text-on-surface-variant/60 text-xs font-medium">
+            Auto-reset in {formatMidnightCountdown(midnightCountdown)} (PKT)
+          </span>
+        </div>
+        {soldOutCount > 0 && (
+          <button
+            type="button"
+            onClick={handleResetAllSoldOut}
+            className="text-xs font-bold text-primary hover:underline"
+          >
+            Reset All →
+          </button>
+        )}
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {[
+          { id: 'all', label: 'All Items', count: items.length },
+          { id: 'available', label: 'Available', count: availableCount },
+          { id: 'soldout', label: 'Sold Out', count: soldOutCount },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            type="button"
+            onClick={() => setAvailFilter(tab.id)}
+            className={`px-4 py-2 rounded-lg text-xs font-bold transition-colors ${
+              availFilter === tab.id
+                ? 'bg-primary/20 text-primary border border-primary/30'
+                : 'bg-surface-container-high text-on-surface-variant hover:text-on-surface'
+            }`}
+          >
+            {tab.label} ({tab.count})
+          </button>
+        ))}
+      </div>
+
+      {selectedIds.length > 0 && (
+        <div className="flex flex-wrap items-center gap-3 p-3 rounded-xl bg-surface-container-lowest border border-primary/20">
+          <span className="text-sm font-bold text-on-surface">{selectedIds.length} selected</span>
+          <button
+            type="button"
+            disabled={bulkLoading}
+            onClick={() => handleBulkAvailability(false)}
+            className="text-xs font-bold px-3 py-1.5 rounded-lg bg-error/15 text-error hover:bg-error/25 disabled:opacity-50"
+          >
+            Mark Sold Out
+          </button>
+          <button
+            type="button"
+            disabled={bulkLoading}
+            onClick={() => handleBulkAvailability(true)}
+            className="text-xs font-bold px-3 py-1.5 rounded-lg bg-[#28A745]/15 text-[#6ee7b7] hover:bg-[#28A745]/25 disabled:opacity-50"
+          >
+            Mark Available
+          </button>
+          <button
+            type="button"
+            onClick={() => setSelectedIds([])}
+            className="text-xs text-on-surface-variant hover:underline ml-auto"
+          >
+            Clear
+          </button>
+        </div>
+      )}
+
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-4">
         <div className="flex-1 min-w-[260px] relative group">
@@ -356,7 +517,16 @@ export default function CafeteriaMenu() {
         ) : filtered.map(item => {
           const style = getCatStyle(item.category);
           return (
-          <div key={item.id} className="group relative bg-surface-container-high rounded-xl overflow-hidden hover:shadow-[0_24px_48px_rgba(12,12,29,0.5)] transition-all duration-300 flex flex-col">
+          <div key={item.id} className={`group relative bg-surface-container-high rounded-xl overflow-hidden hover:shadow-[0_24px_48px_rgba(12,12,29,0.5)] transition-all duration-300 flex flex-col ${!isMenuItemAvailable(item) ? 'opacity-90' : ''}`}>
+            <div className="absolute top-3 right-3 z-20">
+              <input
+                type="checkbox"
+                checked={selectedIds.includes(item.id)}
+                onChange={() => toggleSelect(item.id)}
+                className="w-4 h-4 rounded border-outline-variant/30 accent-primary"
+                aria-label={`Select ${item.name}`}
+              />
+            </div>
             <div className="h-48 overflow-hidden relative bg-surface-container-highest font-['Manrope'] flex items-center justify-center">
               {isYoutube(item.image_url) ? (
                 <iframe
@@ -418,7 +588,25 @@ export default function CafeteriaMenu() {
                 <span className="text-xl font-extrabold text-primary">{formatPrice(item.price)}</span>
               </div>
               {item.description && <p className="text-sm text-on-surface-variant mb-4 line-clamp-2">{item.description}</p>}
-              <div className="mt-auto flex items-center justify-end border-t border-outline-variant/15 pt-4 gap-2">
+              <div className="mb-4 pb-4 border-b border-outline-variant/15">
+                <AvailabilityToggle
+                  menuItem={item}
+                  axiosConfig={axiosConfig}
+                  onToggle={handleItemAvailabilityUpdate}
+                  onToast={showToast}
+                  size="sm"
+                />
+                <label className="mt-3 flex items-center gap-2 text-[10px] text-on-surface-variant cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={item.auto_reset_enabled !== false}
+                    onChange={(e) => handleAutoResetToggle(item, e.target.checked)}
+                    className="rounded accent-primary"
+                  />
+                  Auto-reset at midnight
+                </label>
+              </div>
+              <div className="mt-auto flex items-center justify-end pt-2 gap-2">
                 <button onClick={() => openEdit(item)}
                   className="p-2 rounded-lg text-on-surface-variant hover:bg-surface-bright/40 hover:text-on-surface transition-all">
                   <span className="material-symbols-outlined text-lg">edit</span>

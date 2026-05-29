@@ -79,7 +79,7 @@ function approvalEmailTemplate(studentName, studentEmail) {
   `;
 
   return {
-    subject: '🎉 Your Account Has Been Approved — COMSTAS Cafe',
+    subject: 'Your Account Has Been Approved — COMSTAS Cafe',
     htmlContent: emailShell({
       title: 'Account Approved',
       accent: '#34d399',

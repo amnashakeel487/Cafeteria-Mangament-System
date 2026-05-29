@@ -10,7 +10,36 @@ const {
 const router = express.Router();
 
 const studentListFields =
-    'id, name, email, contact, status, rejection_reason, status_updated_at, status_updated_by, registration_email_sent, created_at';
+    'id, name, email, contact, status, rejection_reason, status_updated_at, status_updated_by, registration_email_sent, approval_email_sent, created_at';
+
+async function sendStudentStatusEmail({ studentId, name, email, type, rejectionReason }) {
+    const template =
+        type === 'approval'
+            ? approvalEmailTemplate(name, email)
+            : rejectionEmailTemplate(name, rejectionReason);
+
+    const result = await sendEmail({
+        to: { email, name },
+        ...template,
+    });
+
+    if (!result.success) {
+        console.error(`${type} email failed for ${email}:`, result.error?.message || result.error);
+        return false;
+    }
+
+    if (type === 'approval') {
+        const { error: flagErr } = await supabase
+            .from('users')
+            .update({ approval_email_sent: true })
+            .eq('id', studentId);
+        if (flagErr) {
+            console.warn('approval_email_sent update skipped:', flagErr.message);
+        }
+    }
+
+    return true;
+}
 
 // Get all students (approved + pending + rejected)
 router.get('/', async (req, res) => {
@@ -76,17 +105,60 @@ router.put('/:id/status', async (req, res) => {
 
         if (error) return res.status(500).json({ message: 'Database error' });
 
-        try {
-            const template = approvalEmailTemplate(updated.name, updated.email);
-            await sendEmail({
-                to: { email: updated.email, name: updated.name },
-                ...template,
-            });
-        } catch (emailError) {
-            console.error('Email failed (non-critical):', emailError?.message || emailError);
+        const emailPayload = {
+            studentId: updated.id,
+            name: updated.name,
+            email: updated.email,
+            type: 'approval',
+        };
+
+        res.json({
+            message: 'Student approved',
+            student: updated,
+            emailQueued: true,
+        });
+
+        setImmediate(async () => {
+            try {
+                await sendStudentStatusEmail(emailPayload);
+            } catch (emailError) {
+                console.error('Approval email error:', emailError?.message || emailError);
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// Resend approval email (approved students only)
+router.post('/:id/resend-approval-email', async (req, res) => {
+    try {
+        const { data: student, error: fetchErr } = await supabase
+            .from('users')
+            .select('id, name, email, status')
+            .eq('id', req.params.id)
+            .eq('role', 'student')
+            .maybeSingle();
+
+        if (fetchErr) return res.status(500).json({ message: 'Database error' });
+        if (!student) return res.status(404).json({ message: 'Student not found' });
+        if (student.status !== 'approved') {
+            return res.status(400).json({ message: 'Only approved students can receive the approval email' });
         }
 
-        res.json({ message: 'Student approved', student: updated });
+        const emailSent = await sendStudentStatusEmail({
+            studentId: student.id,
+            name: student.name,
+            email: student.email,
+            type: 'approval',
+        });
+
+        res.json({
+            message: emailSent
+                ? 'Approval email sent successfully'
+                : 'Could not send approval email. Check Brevo API key and sender settings.',
+            emailSent,
+        });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
     }
@@ -132,17 +204,27 @@ router.patch('/:id/reject', async (req, res) => {
 
         if (error) return res.status(500).json({ message: 'Database error' });
 
-        try {
-            const template = rejectionEmailTemplate(updated.name, reason);
-            await sendEmail({
-                to: { email: updated.email, name: updated.name },
-                ...template,
-            });
-        } catch (emailError) {
-            console.error('Email failed (non-critical):', emailError?.message || emailError);
-        }
+        const emailPayload = {
+            studentId: updated.id,
+            name: updated.name,
+            email: updated.email,
+            type: 'rejection',
+            rejectionReason: reason,
+        };
 
-        res.json({ message: 'Student rejected', student: updated });
+        res.json({
+            message: 'Student rejected',
+            student: updated,
+            emailQueued: true,
+        });
+
+        setImmediate(async () => {
+            try {
+                await sendStudentStatusEmail(emailPayload);
+            } catch (emailError) {
+                console.error('Rejection email error:', emailError?.message || emailError);
+            }
+        });
     } catch (err) {
         res.status(500).json({ message: 'Server error' });
     }

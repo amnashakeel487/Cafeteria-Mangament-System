@@ -25,6 +25,8 @@ const studentDealsRoutes = require('./routes/studentDeals');
 const { buildRouter: buildNotificationRouter } = require('./routes/notificationRoutes');
 const ratingsRouter = require('./routes/ratings');
 const favoritesRouter = require('./routes/favorites');
+const availabilityRouter = require('./routes/availability');
+const { scheduleMidnightReset, runMidnightAvailabilityReset } = require('./utils/midnightReset');
 
 const cafeteriaAuth = require('./middleware/cafeteriaAuth');
 const studentAuth = require('./middleware/studentAuth');
@@ -52,6 +54,7 @@ app.use('/api/cafeteria/payments', cafeteriaAuth, cafeteriaPaymentsRoutes);
 app.use('/api/cafeteria/orders', cafeteriaAuth, cafeteriaOrdersRoutes);
 app.use('/api/cafeteria/profile', cafeteriaAuth, cafeteriaProfileRoutes);
 app.use('/api/cafeteria/deals', cafeteriaAuth, cafeteriaDealsRoutes);
+app.use('/api/cafeteria/availability', cafeteriaAuth, availabilityRouter);
 
 // --- Student Endpoints ---
 app.use('/api/student', studentAuthRoutes);
@@ -96,6 +99,25 @@ app.get('/api/payments/public/:cafeteriaId', async (req, res) => {
 app.get('/', (req, res) => {
     res.send("Cafeteria API is running");
 });
+
+// Vercel / external cron: POST with header x-cron-secret matching CRON_SECRET
+app.post('/api/cron/midnight-availability-reset', async (req, res) => {
+    const secret = process.env.CRON_SECRET;
+    if (secret && req.headers['x-cron-secret'] !== secret) {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+    try {
+        const result = await runMidnightAvailabilityReset();
+        res.json({ ok: true, ...result });
+    } catch (err) {
+        console.error('Cron midnight reset:', err);
+        res.status(500).json({ message: err.message || 'Reset failed' });
+    }
+});
+
+if (!process.env.VERCEL) {
+    scheduleMidnightReset();
+}
 
 // Error handling middleware
 app.use((err, req, res, next) => {

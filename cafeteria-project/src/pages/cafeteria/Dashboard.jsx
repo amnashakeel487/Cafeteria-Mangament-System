@@ -5,6 +5,7 @@ import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
 import LazyImage from '../../components/LazyImage';
 import { formatPrice } from '../../utils/currency';
+import MenuAvailabilityWidget from '../../components/availability/MenuAvailabilityWidget';
 
 const STATUS_STYLES = {
   pending:    'bg-primary-container/20 text-primary border border-primary/30',
@@ -52,6 +53,9 @@ export default function CafeteriaDashboard() {
       setLoading(false);
     }
   };
+
+  const token = localStorage.getItem('cafeteriaToken');
+  const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
 
   const fetchMenu = async () => {
     try {
@@ -185,11 +189,14 @@ export default function CafeteriaDashboard() {
       </div>
 
       {/* Stat Row */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-        <StatCard label="Pending Orders"   value={stats.pendingOrders}   sub="Awaiting preparation" accent="text-primary" />
-        <StatCard label="Completed Orders" value={stats.completedOrders} sub="Successfully served"  accent="text-tertiary" />
-        <StatCard label="Today's Orders"   value={stats.todayOrders}     sub="Orders placed today"  />
-        <StatCard label="Today's Revenue"  value={formatPrice(stats.todayRevenue)} sub="Earned today" accent="text-primary" />
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-5">
+          <StatCard label="Pending Orders"   value={stats.pendingOrders}   sub="Awaiting preparation" accent="text-primary" />
+          <StatCard label="Completed Orders" value={stats.completedOrders} sub="Successfully served"  accent="text-tertiary" />
+          <StatCard label="Today's Orders"   value={stats.todayOrders}     sub="Orders placed today"  />
+          <StatCard label="Today's Revenue"  value={formatPrice(stats.todayRevenue)} sub="Earned today" accent="text-primary" />
+        </div>
+        <MenuAvailabilityWidget axiosConfig={axiosConfig} />
       </div>
 
       {/* Live Orders Table */}
