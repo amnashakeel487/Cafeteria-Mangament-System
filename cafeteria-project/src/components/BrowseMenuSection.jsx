@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import { supabase } from '../supabaseClient';
 import { formatPrice } from '../utils/currency';
-import { isDisplayableImageUrl } from '../utils/media';
+import { isDisplayableImageUrl, getOptimizedImageUrl } from '../utils/media';
 import StarDisplay from './ratings/StarDisplay';
 import FavoriteButton from './favorites/FavoriteButton';
 import { useFavorites } from '../context/FavoritesContext';
@@ -43,7 +43,9 @@ function getCafeteriaIcon(name = '') {
 
 function MenuItemThumb({ imageUrl }) {
   const [loadFailed, setLoadFailed] = useState(false);
+  const [useFallbackSrc, setUseFallbackSrc] = useState(false);
   const showImage = isDisplayableImageUrl(imageUrl) && !loadFailed;
+  const thumbSrc = useFallbackSrc ? imageUrl : getOptimizedImageUrl(imageUrl, { width: 80, height: 80 });
 
   if (!showImage) {
     return (
@@ -58,12 +60,20 @@ function MenuItemThumb({ imageUrl }) {
   return (
     <div className="w-10 h-10 rounded-lg overflow-hidden border border-outline-variant/10 shrink-0 bg-surface-container-highest">
       <img
-        src={imageUrl}
+        src={thumbSrc}
         alt=""
+        width={40}
+        height={40}
         loading="lazy"
         decoding="async"
         className="w-full h-full object-cover"
-        onError={() => setLoadFailed(true)}
+        onError={() => {
+          if (!useFallbackSrc) {
+            setUseFallbackSrc(true);
+            return;
+          }
+          setLoadFailed(true);
+        }}
       />
     </div>
   );

@@ -27,6 +27,40 @@
     <meta name="twitter:title" content="COMSTAS Cafe — Campus Cafeteria Management System" />
     <meta name="twitter:description" content="Order fresh campus meals online, track orders in real time, and manage cafeteria menus." />
     <meta name="twitter:image" content="https://comsats-cafeteria.vercel.app/favicon.svg" />
+    <!-- Performance: early connections for fonts + Supabase assets -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://nvfjbaunuzkarcizqhfu.supabase.co" crossorigin />
+    <link rel="dns-prefetch" href="https://nvfjbaunuzkarcizqhfu.supabase.co" />
+    <!-- Critical text fonts (LCP hero uses Manrope) -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700;800&family=Inter:wght@400;500;600&display=swap"
+    />
+    <!-- Login-page fonts — non-blocking -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <!-- Material Symbols (~4MB) — load after first paint -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500&display=swap"
+      />
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+      />
+    </noscript>
   </head>
   <body>
     <div id="root"></div>

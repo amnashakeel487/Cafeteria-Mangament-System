@@ -1,13 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, lazy, Suspense } from 'react';
 import { Link } from 'react-router-dom';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import ThemeToggle from '../components/ThemeToggle';
-import DevelopmentTeam from '../components/DevelopmentTeam';
-import BrowseMenuSection from '../components/BrowseMenuSection';
-import LandingSpecialsSection from '../components/specials/LandingSpecialsSection';
-import TopRatedCafeterias from '../components/landing/TopRatedCafeterias';
+import DeferredSection from '../components/DeferredSection';
 import PageSEO from '../seo/PageSEO';
 import { PAGE_SEO } from '../seo/siteConfig';
+
+const DevelopmentTeam = lazy(() => import('../components/DevelopmentTeam'));
+const BrowseMenuSection = lazy(() => import('../components/BrowseMenuSection'));
+const LandingSpecialsSection = lazy(() => import('../components/specials/LandingSpecialsSection'));
+const TopRatedCafeterias = lazy(() => import('../components/landing/TopRatedCafeterias'));
+
+const SectionFallback = ({ minHeight = '12rem' }) => (
+  <div className="px-4 sm:px-6" style={{ minHeight }} aria-hidden />
+);
 
 // Portal routes (must match App.jsx)
 const ROUTES = {
@@ -231,12 +237,11 @@ function PortalCard({ variant, title, description, icon, cta, to, delay }) {
 export default function LandingPage() {
   const [browseCafeteriaId, setBrowseCafeteriaId] = useState(null);
   const [scrolled, setScrolled] = useState(false);
-  const { scrollY } = useScroll();
-  const heroOpacity = useTransform(scrollY, [0, 300], [1, 0.6]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
@@ -250,7 +255,7 @@ export default function LandingPage() {
       {/* ── HERO ── */}
       <section className="relative min-h-[92vh] flex items-center pt-20 pb-16 px-4 sm:px-6">
         <HeroBackground />
-        <motion.div style={{ opacity: heroOpacity }} className="relative max-w-6xl mx-auto w-full z-10">
+        <motion.div className="relative max-w-6xl mx-auto w-full z-10">
           <motion.div
             initial="hidden"
             animate="visible"
@@ -267,7 +272,6 @@ export default function LandingPage() {
             </motion.span>
 
             <motion.h1
-              variants={fadeUp}
               custom={1}
               className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black editorial-text text-on-surface tracking-tight leading-[1.08] mb-6"
               style={{ fontFamily: 'Manrope' }}
@@ -414,18 +418,30 @@ export default function LandingPage() {
       </section>
 
       {/* ── TOP RATED CAFETERIAS ── */}
-      <TopRatedCafeterias
-        onSelectCafeteria={(id) => {
-          setBrowseCafeteriaId(id);
-          document.getElementById('browse-menu')?.scrollIntoView({ behavior: 'smooth' });
-        }}
-      />
+      <DeferredSection minHeight="20rem">
+        <Suspense fallback={<SectionFallback minHeight="20rem" />}>
+          <TopRatedCafeterias
+            onSelectCafeteria={(id) => {
+              setBrowseCafeteriaId(id);
+              document.getElementById('browse-menu')?.scrollIntoView({ behavior: 'smooth' });
+            }}
+          />
+        </Suspense>
+      </DeferredSection>
 
       {/* ── BROWSE MENU (PUBLIC) ── */}
-      <BrowseMenuSection preselectCafeteriaId={browseCafeteriaId} />
+      <DeferredSection minHeight="24rem">
+        <Suspense fallback={<SectionFallback minHeight="24rem" />}>
+          <BrowseMenuSection preselectCafeteriaId={browseCafeteriaId} />
+        </Suspense>
+      </DeferredSection>
 
       {/* ── TODAY'S SPECIALS (placed below Explore Menu) ── */}
-      <LandingSpecialsSection />
+      <DeferredSection minHeight="18rem">
+        <Suspense fallback={<SectionFallback minHeight="18rem" />}>
+          <LandingSpecialsSection />
+        </Suspense>
+      </DeferredSection>
 
       {/* ── PORTAL SELECTION ── */}
       <section id="portals" className="py-20 sm:py-28 px-4 sm:px-6 bg-surface-container-low/40">
@@ -467,7 +483,11 @@ export default function LandingPage() {
 
       {/* ── DEVELOPER TEAM ── */}
       <section id="team" className="px-4 sm:px-6 pb-8 sm:pb-12">
-        <DevelopmentTeam />
+        <DeferredSection minHeight="16rem">
+          <Suspense fallback={<SectionFallback minHeight="16rem" />}>
+            <DevelopmentTeam />
+          </Suspense>
+        </DeferredSection>
       </section>
 
       {/* ── FOOTER ── */}

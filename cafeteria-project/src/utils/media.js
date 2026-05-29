@@ -12,3 +12,24 @@ export function isVideoMediaUrl(url) {
 export function isDisplayableImageUrl(url) {
   return Boolean(url) && !isVideoMediaUrl(url);
 }
+
+const SUPABASE_OBJECT_PUBLIC = '/storage/v1/object/public/';
+
+/** Resize Supabase storage images via the render API (falls back to original URL). */
+export function getOptimizedImageUrl(url, { width = 80, height = 80, quality = 75 } = {}) {
+  if (!url || typeof url !== 'string') return url;
+
+  const markerIdx = url.indexOf(SUPABASE_OBJECT_PUBLIC);
+  if (markerIdx === -1) return url;
+
+  const origin = url.slice(0, markerIdx);
+  const objectPath = url.slice(markerIdx + SUPABASE_OBJECT_PUBLIC.length).split('?')[0];
+  const params = new URLSearchParams({
+    width: String(width),
+    height: String(height),
+    resize: 'cover',
+    quality: String(quality),
+  });
+
+  return `${origin}/storage/v1/render/image/public/${objectPath}?${params}`;
+}
