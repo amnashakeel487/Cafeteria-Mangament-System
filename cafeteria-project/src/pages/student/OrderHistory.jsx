@@ -7,6 +7,8 @@ import { useCart } from '../../context/CartContext';
 import RefundStatusBadge from '../../components/RefundStatusBadge';
 import { cancelledByLabel } from '../../utils/orderCancellation';
 import { formatPrice } from '../../utils/currency';
+import RateOrderModal from '../../components/ratings/RateOrderModal';
+import { checkOrderRatings } from '../../utils/ratingsApi';
 
 const BASE = '';
 
@@ -32,6 +34,14 @@ export default function OrderHistory() {
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [reasonOrder, setReasonOrder] = useState(null);
+  const [reviewStatus, setReviewStatus] = useState({});
+  const [rateOrder, setRateOrder] = useState(null);
+  const [toast, setToast] = useState({ visible: false, message: '', type: 'success' });
+
+  const showToast = (message, type = 'success') => {
+    setToast({ visible: true, message, type });
+    setTimeout(() => setToast({ visible: false, message: '', type: '' }), 4000);
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -41,6 +51,19 @@ export default function OrderHistory() {
           headers: { Authorization: `Bearer ${token}` }
         });
         setOrders(res.data);
+        const completed = (res.data || []).filter((o) => o.status === 'completed');
+        const statusMap = {};
+        await Promise.all(
+          completed.map(async (o) => {
+            try {
+              const check = await checkOrderRatings(o.id);
+              statusMap[o.id] = check;
+            } catch {
+              statusMap[o.id] = { canReview: true };
+            }
+          })
+        );
+        setReviewStatus(statusMap);
       } catch (err) {
         console.error('Failed to load orders', err);
       } finally {
@@ -86,6 +109,15 @@ export default function OrderHistory() {
     <>
       <PageSEO {...PAGE_SEO.studentOrders} />
     <section className="max-w-6xl mx-auto font-['Inter']" aria-label="Order history">
+      {toast.visible && (
+        <div
+          className={`fixed bottom-8 right-8 z-50 px-5 py-3 rounded-xl shadow-2xl text-sm font-bold ${
+            toast.type === 'error' ? 'bg-[#93000a] text-[#ffb4ab]' : 'bg-[#28A745] text-white'
+          }`}
+        >
+          {toast.message}
+        </div>
+      )}
       {/* Header */}
       <header className="mb-4 sm:mb-8 md:mb-10 flex flex-col md:flex-row md:items-end justify-between gap-2 sm:gap-4 md:gap-6">
         <div className="min-w-0">
@@ -197,7 +229,38 @@ export default function OrderHistory() {
                 </div>
 
                 {/* Right: actions */}
-                <div className="flex items-center gap-2 w-full md:w-auto">
+                <div className="flex items-center gap-2 w-full md:w-auto flex-wrap">
+                  {order.status === 'completed' && (() => {
+                    const rs = reviewStatus[order.id];
+                    if (rs?.fullyReviewed) {
+                      return (
+                        <span className="flex-1 md:flex-none px-4 py-2.5 rounded-lg text-sm font-bold bg-green-500/10 text-green-400 border border-green-500/20 flex items-center justify-center gap-1">
+                          <span className="material-symbols-outlined text-sm">check_circle</span>
+                          Reviewed ✓
+                        </span>
+                      );
+                    }
+                    if (rs?.partiallyReviewed) {
+                      return (
+                        <button
+                          type="button"
+                          onClick={() => setRateOrder(order)}
+                          className="flex-1 md:flex-none px-5 py-2.5 border border-[#fbbf24]/40 text-amber-400 text-sm font-bold rounded-lg hover:bg-amber-500/10 flex items-center justify-center gap-2"
+                        >
+                          Edit Review
+                        </button>
+                      );
+                    }
+                    return (
+                      <button
+                        type="button"
+                        onClick={() => setRateOrder(order)}
+                        className="flex-1 md:flex-none px-5 py-2.5 bg-amber-500/20 text-amber-300 border border-amber-500/40 text-sm font-bold rounded-lg hover:bg-amber-500/30 flex items-center justify-center gap-2"
+                      >
+                        Rate Order ⭐
+                      </button>
+                    );
+                  })()}
                   {order.status === 'completed' ? (
                     <button
                       onClick={() => handleReorder(order)}
@@ -232,6 +295,24 @@ export default function OrderHistory() {
             );
           })}
         </div>
+      )}
+
+      {rateOrder && (
+        <RateOrderModal
+          isOpen
+          order={rateOrder}
+          onClose={() => setRateOrder(null)}
+          onSubmitSuccess={async () => {
+            showToast('Thanks for your feedback!');
+            try {
+              const check = await checkOrderRatings(rateOrder.id);
+              setReviewStatus((prev) => ({ ...prev, [rateOrder.id]: check }));
+            } catch {
+              /* ignore */
+            }
+            setRateOrder(null);
+          }}
+        />
       )}
 
       {reasonOrder && (

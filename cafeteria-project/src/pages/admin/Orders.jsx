@@ -4,6 +4,8 @@ import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
 import RefundStatusBadge from '../../components/RefundStatusBadge';
 import { formatPrice } from '../../utils/currency';
+import { getAdminHeaders } from '../../utils/ratingsApi';
+import StarDisplay from '../../components/ratings/StarDisplay';
 
 export default function Orders() {
   const [orders, setOrders] = useState([]);
@@ -17,6 +19,9 @@ export default function Orders() {
   const [rejectTarget, setRejectTarget] = useState(null);
   const [rejectNote, setRejectNote] = useState('');
   const [refundLoading, setRefundLoading] = useState(false);
+  const [moderation, setModeration] = useState({ menuItemRatings: [], cafeteriaReviews: [] });
+  const [modFilter, setModFilter] = useState('all');
+  const [modLoading, setModLoading] = useState(false);
 
   const token = localStorage.getItem('adminToken');
   const axiosConfig = { headers: { Authorization: `Bearer ${token}` } };
@@ -43,9 +48,28 @@ export default function Orders() {
     }
   };
 
+  const fetchModeration = async (filter = modFilter) => {
+    setModLoading(true);
+    try {
+      const q = filter === 'hidden' ? 'hidden' : filter === 'visible' ? 'visible' : 'all';
+      const res = await axios.get(`/api/ratings/admin/moderation?filter=${q}`, {
+        headers: getAdminHeaders(),
+      });
+      setModeration(res.data);
+    } catch {
+      showToast('Failed to load reviews', 'error');
+    } finally {
+      setModLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  useEffect(() => {
+    if (tab === 'reviews') fetchModeration();
+  }, [tab, modFilter]);
 
   const handleRefund = async (orderId, refund_status, refund_note = '') => {
     setRefundLoading(true);
@@ -140,10 +164,96 @@ export default function Orders() {
                 <span className="bg-error text-white text-[10px] px-2 py-0.5 rounded-full">{refundQueue.length}</span>
               )}
             </button>
+            <button
+              type="button"
+              onClick={() => setTab('reviews')}
+              className={`px-5 py-2 rounded-lg text-sm font-bold transition-all ${tab === 'reviews' ? 'bg-surface-container-highest text-primary shadow-sm' : 'text-on-surface-variant'}`}
+            >
+              Review Moderation
+            </button>
           </div>
         </div>
 
-        {tab === 'refunds' ? (
+        {tab === 'reviews' ? (
+          <div className="space-y-4">
+            <div className="flex gap-2 flex-wrap">
+              {['all', 'visible', 'hidden'].map((f) => (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setModFilter(f)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold capitalize ${
+                    modFilter === f ? 'bg-primary text-on-primary' : 'bg-surface-container-high text-on-surface-variant'
+                  }`}
+                >
+                  {f}
+                </button>
+              ))}
+            </div>
+            {modLoading ? (
+              <div className="py-20 flex justify-center text-primary">
+                <span className="material-symbols-outlined animate-spin text-4xl">refresh</span>
+              </div>
+            ) : (
+              <>
+                {[...(moderation.menuItemRatings || []), ...(moderation.cafeteriaReviews || [])]
+                  .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+                  .map((r) => (
+                    <div
+                      key={`${r.type}-${r.id}`}
+                      className="bg-surface-container-high rounded-xl p-5 border border-outline-variant/10"
+                    >
+                      <div className="flex flex-wrap justify-between gap-2 mb-2">
+                        <div>
+                          <span className="text-xs uppercase text-on-surface-variant">{r.type}</span>
+                          <p className="font-bold text-on-surface">{r.student_name}</p>
+                          <p className="text-sm text-on-surface-variant">{r.cafeteria_name}</p>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <StarDisplay rating={r.rating} size="sm" />
+                          {!r.is_visible && (
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-error/20 text-error">Hidden</span>
+                          )}
+                        </div>
+                      </div>
+                      {r.review_text && (
+                        <p className="text-sm text-on-surface-variant mb-3">{r.review_text}</p>
+                      )}
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-on-surface-variant">
+                          {new Date(r.created_at).toLocaleString()}
+                        </span>
+                        {r.is_visible && (
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              try {
+                                await axios.patch(
+                                  `/api/ratings/hide/${r.type}/${r.id}`,
+                                  {},
+                                  { headers: getAdminHeaders() }
+                                );
+                                showToast('Review hidden');
+                                fetchModeration();
+                              } catch (err) {
+                                showToast(err.response?.data?.message || 'Failed to hide', 'error');
+                              }
+                            }}
+                            className="text-xs font-bold text-error hover:underline"
+                          >
+                            Hide review
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                {!(moderation.menuItemRatings?.length || moderation.cafeteriaReviews?.length) && (
+                  <p className="text-center text-on-surface-variant py-12">No reviews in this filter.</p>
+                )}
+              </>
+            )}
+          </div>
+        ) : tab === 'refunds' ? (
           <div className="space-y-4">
             {loading ? (
               <div className="py-20 flex justify-center text-primary">

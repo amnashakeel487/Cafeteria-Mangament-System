@@ -9,6 +9,8 @@ import CancelledBadge from '../../components/CancelledBadge';
 import RefundStatusBadge from '../../components/RefundStatusBadge';
 import { canStudentCancelOrder } from '../../utils/orderCancellation';
 import { formatPrice } from '../../utils/currency';
+import RateOrderModal from '../../components/ratings/RateOrderModal';
+import { checkOrderRatings } from '../../utils/ratingsApi';
 
 const BASE = '';
 
@@ -20,6 +22,9 @@ export default function OrderTracking() {
   const [cancelModalOpen, setCancelModalOpen] = useState(false);
   const [cancelling, setCancelling] = useState(false);
   const [toast, setToast] = useState({ visible: false, message: '', type: 'success' });
+  const [reviewCheck, setReviewCheck] = useState(null);
+  const [reviewBannerDismissed, setReviewBannerDismissed] = useState(false);
+  const [rateModalOpen, setRateModalOpen] = useState(false);
 
   const showToast = (message, type = 'success') => {
     setToast({ visible: true, message, type });
@@ -34,6 +39,17 @@ export default function OrderTracking() {
       });
       setOrders(res.data);
       setError('');
+      const first = res.data?.[0];
+      if (first?.status === 'completed') {
+        try {
+          const check = await checkOrderRatings(first.id);
+          setReviewCheck(check);
+        } catch {
+          setReviewCheck(null);
+        }
+      } else {
+        setReviewCheck(null);
+      }
     } catch {
       setError('Failed to load tracking data.');
     } finally {
@@ -155,6 +171,35 @@ export default function OrderTracking() {
             {toast.message}
           </div>
         )}
+
+        {activeOrder.status === 'completed' &&
+          !reviewBannerDismissed &&
+          reviewCheck &&
+          !reviewCheck.fullyReviewed && (
+            <div className="relative bg-gradient-to-r from-amber-500/20 to-[#FF6B35]/20 border border-amber-500/30 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <p className="text-lg font-bold text-[#E3E0F8]">🎉 Order Complete! How was it?</p>
+                <p className="text-sm text-[#e1bfb5] mt-1">Share your experience with other students.</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={() => setRateModalOpen(true)}
+                  className="px-5 py-2.5 rounded-lg bg-amber-500/30 text-amber-200 font-bold text-sm hover:bg-amber-500/40"
+                >
+                  Leave a Review
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setReviewBannerDismissed(true)}
+                  className="p-2 text-[#e1bfb5] hover:bg-[#38374a] rounded-lg"
+                  aria-label="Dismiss"
+                >
+                  <span className="material-symbols-outlined">close</span>
+                </button>
+              </div>
+            </div>
+          )}
 
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
@@ -290,6 +335,25 @@ export default function OrderTracking() {
         loading={cancelling}
         isOnlinePayment={isOnline}
       />
+
+      {rateModalOpen && activeOrder && (
+        <RateOrderModal
+          isOpen
+          order={activeOrder}
+          onClose={() => setRateModalOpen(false)}
+          onSubmitSuccess={async () => {
+            showToast('Thanks for your feedback!');
+            setRateModalOpen(false);
+            setReviewBannerDismissed(true);
+            try {
+              const check = await checkOrderRatings(activeOrder.id);
+              setReviewCheck(check);
+            } catch {
+              /* ignore */
+            }
+          }}
+        />
+      )}
     </>
   );
 }

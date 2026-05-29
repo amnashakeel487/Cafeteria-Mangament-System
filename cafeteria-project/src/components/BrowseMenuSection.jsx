@@ -4,6 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { supabase } from '../supabaseClient';
 import { formatPrice } from '../utils/currency';
 import { isDisplayableImageUrl } from '../utils/media';
+import StarDisplay from './ratings/StarDisplay';
 
 const FOOD_ICONS = ['lunch_dining', 'ramen_dining', 'local_pizza', 'bakery_dining', 'emoji_food_beverage', 'icecream'];
 
@@ -69,7 +70,7 @@ function MenuItemThumb({ imageUrl }) {
   );
 }
 
-export default function BrowseMenuSection() {
+export default function BrowseMenuSection({ preselectCafeteriaId = null }) {
   const [cafeterias, setCafeterias] = useState([]);
   const [selectedCafeteria, setSelectedCafeteria] = useState(null);
   const [menuItems, setMenuItems] = useState([]);
@@ -100,6 +101,12 @@ export default function BrowseMenuSection() {
 
     fetchCafeterias();
   }, []);
+
+  useEffect(() => {
+    if (!preselectCafeteriaId || !cafeterias.length) return;
+    const match = cafeterias.find((c) => String(c.id) === String(preselectCafeteriaId));
+    if (match) setSelectedCafeteria(match);
+  }, [preselectCafeteriaId, cafeterias]);
 
   // Fetch menu for selected cafeteria.
   useEffect(() => {
@@ -212,6 +219,18 @@ export default function BrowseMenuSection() {
                     </span>
                   </div>
                   <p className="text-sm text-on-surface-variant line-clamp-2">{cafeteria.location || cafeteria.contact || 'Campus cafeteria'}</p>
+                  <div className="mt-2">
+                    {(cafeteria.rating_count || 0) > 0 ? (
+                      <StarDisplay
+                        rating={cafeteria.avg_rating}
+                        count={cafeteria.rating_count}
+                        showCount
+                        size="xs"
+                      />
+                    ) : (
+                      <span className="text-[11px] text-on-surface-variant/70">No ratings yet</span>
+                    )}
+                  </div>
                   {selected && (
                     <span className="inline-block mt-3 text-[11px] font-black tracking-wide uppercase text-primary">Selected</span>
                   )}
@@ -299,9 +318,16 @@ export default function BrowseMenuSection() {
                     className="group rounded-xl border border-outline-variant/10 bg-surface-container-high p-5 shadow-lg hover:shadow-primary/10 transition-shadow duration-300"
                   >
                     <div className="flex items-start justify-between gap-3">
-                      <h3 className="text-lg font-extrabold text-on-surface editorial-text line-clamp-1" style={{ fontFamily: 'Manrope' }}>
-                        {item.name}
-                      </h3>
+                      <div className="min-w-0">
+                        <h3 className="text-lg font-extrabold text-on-surface editorial-text line-clamp-1" style={{ fontFamily: 'Manrope' }}>
+                          {item.name}
+                        </h3>
+                        {(item.rating_count || 0) > 0 ? (
+                          <StarDisplay rating={item.avg_rating} count={item.rating_count} size="xs" />
+                        ) : (
+                          <span className="text-[11px] text-on-surface-variant/70">No ratings yet</span>
+                        )}
+                      </div>
                       <span className="material-symbols-outlined text-primary/80" style={{ fontVariationSettings: "'FILL' 1" }}>
                         fastfood
                       </span>

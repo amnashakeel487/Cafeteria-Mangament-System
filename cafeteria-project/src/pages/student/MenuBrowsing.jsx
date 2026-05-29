@@ -7,6 +7,11 @@ import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
 import LazyImage from '../../components/LazyImage';
 import { formatPrice } from '../../utils/currency';
+import StarDisplay from '../../components/ratings/StarDisplay';
+import RatingDistribution from '../../components/ratings/RatingDistribution';
+import ReviewCard from '../../components/ratings/ReviewCard';
+import ReviewsDrawer from '../../components/ratings/ReviewsDrawer';
+import { fetchMenuItemRatings } from '../../utils/ratingsApi';
 
 const BASE = '';
 const DEFAULT_IMAGE = DefaultImage; // COMSATS Cafe logo as default image
@@ -35,6 +40,9 @@ export default function MenuBrowsing() {
   const { cart, addToCart, removeFromCart, getCartQty, cartTotal, cartItemCount } = useCart();
   const [cartOpen, setCartOpen] = useState(false);
   const [isLgViewport, setIsLgViewport] = useState(false);
+  const [detailItem, setDetailItem] = useState(null);
+  const [detailRatings, setDetailRatings] = useState(null);
+  const [reviewsDrawer, setReviewsDrawer] = useState(null);
 
   useEffect(() => {
     const mq = window.matchMedia('(min-width: 1024px)');
@@ -68,6 +76,16 @@ export default function MenuBrowsing() {
     };
     fetchMenu();
   }, [cafeteriaId]);
+
+  const openItemDetail = async (item) => {
+    setDetailItem(item);
+    try {
+      const data = await fetchMenuItemRatings(item.id, 1);
+      setDetailRatings(data);
+    } catch {
+      setDetailRatings(null);
+    }
+  };
 
   const filterTabs = ['All Items', ...categories.map(c => c.name)];
   
@@ -231,7 +249,14 @@ export default function MenuBrowsing() {
           {filteredItems.map(item => {
             const qty = getCartQty(item.id);
             return (
-            <div key={item.id} className="group bg-[#28283a] rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col">
+            <div
+              key={item.id}
+              role="button"
+              tabIndex={0}
+              onClick={() => openItemDetail(item)}
+              onKeyDown={(e) => e.key === 'Enter' && openItemDetail(item)}
+              className="group bg-[#28283a] rounded-xl overflow-hidden hover:shadow-2xl hover:shadow-[#0c0c1d]/50 transition-all duration-300 flex flex-col cursor-pointer"
+            >
               <div className="relative h-40 overflow-hidden bg-[#333345] flex items-center justify-center">
                 {isVideo(item.image_url) ? (
                   <video src={item.image_url} className="w-full h-full object-cover group-hover:scale-110 transition-all duration-500" autoPlay muted loop />
@@ -263,12 +288,19 @@ export default function MenuBrowsing() {
               
               <div className="p-3 flex-1 flex flex-col">
                 <div className="flex justify-between items-start mb-1 font-['Manrope']">
-                  <h3 className="text-sm font-bold text-[#E3E0F8] group-hover:text-[#FFB59D] transition-colors line-clamp-1">{item.name}</h3>
-                  <span className="text-sm font-bold text-[#FFB59D]">{formatPrice(item.price)}</span>
+                  <div className="min-w-0">
+                    <h3 className="text-sm font-bold text-[#E3E0F8] group-hover:text-[#FFB59D] transition-colors line-clamp-1">{item.name}</h3>
+                    {(item.rating_count || 0) > 0 ? (
+                      <StarDisplay rating={item.avg_rating} count={item.rating_count} size="xs" />
+                    ) : (
+                      <span className="text-[10px] text-[#9ca3af]">No ratings yet</span>
+                    )}
+                  </div>
+                  <span className="text-sm font-bold text-[#FFB59D] shrink-0">{formatPrice(item.price)}</span>
                 </div>
                 <p className="text-[#e1bfb5] text-[11px] mb-3 flex-1 line-clamp-2">{item.description}</p>
                 
-                <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#594139]/10">
+                <div className="flex items-center justify-between mt-auto pt-3 border-t border-[#594139]/10" onClick={(e) => e.stopPropagation()}>
                   {qty === 0 ? (
                     <button onClick={() => addToCart(item, cafeteriaId)} className="w-full bg-[#333345] hover:bg-[#38374a] text-[#E3E0F8] px-4 py-2 rounded-lg text-xs font-bold active:scale-95 transition-all">
                       Add to Cart
@@ -373,6 +405,59 @@ export default function MenuBrowsing() {
           </div>
         </div>
       )}
+      {detailItem && (
+        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4 bg-[#0c0c1d]/80 backdrop-blur-sm">
+          <div className="bg-[#1E1E2F] w-full max-w-md max-h-[85vh] overflow-y-auto rounded-2xl border border-[#594139]/20 p-6">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <h3 className="text-xl font-bold text-[#E3E0F8]">{detailItem.name}</h3>
+                {detailRatings && (
+                  <StarDisplay
+                    rating={detailRatings.avg_rating}
+                    count={detailRatings.rating_count}
+                    showCount
+                    size="sm"
+                  />
+                )}
+              </div>
+              <button type="button" onClick={() => setDetailItem(null)} className="p-2 text-[#e1bfb5]">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+            {detailRatings?.distribution && (
+              <RatingDistribution
+                distribution={detailRatings.distribution}
+                total={detailRatings.rating_count}
+              />
+            )}
+            <div className="mt-6 space-y-3">
+              {(detailRatings?.reviews || []).slice(0, 5).map((r) => (
+                <ReviewCard key={r.id} review={r} showReply={false} />
+              ))}
+            </div>
+            {(detailRatings?.total || 0) > 5 && (
+              <button
+                type="button"
+                onClick={() => {
+                  setReviewsDrawer({ id: detailItem.id, title: detailItem.name });
+                  setDetailItem(null);
+                }}
+                className="mt-4 text-sm font-bold text-[#59d5fb] hover:underline"
+              >
+                See all reviews
+              </button>
+            )}
+          </div>
+        </div>
+      )}
+
+      <ReviewsDrawer
+        open={!!reviewsDrawer}
+        onClose={() => setReviewsDrawer(null)}
+        type="menu-item"
+        targetId={reviewsDrawer?.id}
+        title={reviewsDrawer?.title}
+      />
     </div>
     </>
   );

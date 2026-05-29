@@ -5,12 +5,15 @@ import { PAGE_SEO } from '../../seo/siteConfig';
 import LazyImage from '../../components/LazyImage';
 import { Link } from 'react-router-dom';
 import { formatPrice } from '../../utils/currency';
+import { fetchTopCafeterias } from '../../utils/ratingsApi';
+import StarDisplay from '../../components/ratings/StarDisplay';
 
 export default function Dashboard() {
   const [stats, setStats] = useState({ totalStudents: 0, totalCafeterias: 0, totalOrders: 0, totalRevenue: 0, newestStudents: [], topCafeteria: null, cafeteriaLoads: [] });
   const [recentOrders, setRecentOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [topRated, setTopRated] = useState([]);
 
   useEffect(() => {
      const fetchDashboard = async () => {
@@ -24,6 +27,13 @@ export default function Dashboard() {
 
             const ordersRes = await axios.get('/api/admin/orders', axiosConfig);
             setRecentOrders(ordersRes.data.slice(0, 5)); // First 5 recent
+
+            try {
+              const top = await fetchTopCafeterias();
+              setTopRated(top || []);
+            } catch {
+              setTopRated([]);
+            }
 
         } catch (err) {
             console.error(err);
@@ -130,6 +140,26 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {topRated.length > 0 && (
+        <div className="bg-surface-container rounded-xl p-6 md:p-8 border border-outline-variant/5">
+          <h4 className="text-xl font-bold editorial-text mb-4">Top Rated Cafeterias</h4>
+          <ol className="space-y-3">
+            {topRated.map((cafe, i) => (
+              <li key={cafe.id} className="flex items-center justify-between gap-4">
+                <Link
+                  to="/admin/cafeterias"
+                  className="flex items-center gap-3 hover:text-primary transition-colors"
+                >
+                  <span className="text-sm font-black text-primary w-6">#{i + 1}</span>
+                  <span className="font-semibold text-on-surface">{cafe.name}</span>
+                </Link>
+                <StarDisplay rating={cafe.avg_rating} count={cafe.rating_count} showCount size="sm" />
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
 
       {/* Main Insights Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">

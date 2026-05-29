@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from 'framer-motion';
 import ThemeToggle from '../components/ThemeToggle';
 import DevelopmentTeam from '../components/DevelopmentTeam';
 import BrowseMenuSection from '../components/BrowseMenuSection';
+import TopRatedCafeterias from '../components/landing/TopRatedCafeterias';
 import PageSEO from '../seo/PageSEO';
 import { PAGE_SEO } from '../seo/siteConfig';
 
@@ -227,6 +228,7 @@ function PortalCard({ variant, title, description, icon, cta, to, delay }) {
 }
 
 export default function LandingPage() {
+  const [browseCafeteriaId, setBrowseCafeteriaId] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const { scrollY } = useScroll();
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0.6]);
@@ -410,8 +412,16 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ── TOP RATED CAFETERIAS ── */}
+      <TopRatedCafeterias
+        onSelectCafeteria={(id) => {
+          setBrowseCafeteriaId(id);
+          document.getElementById('browse-menu')?.scrollIntoView({ behavior: 'smooth' });
+        }}
+      />
+
       {/* ── BROWSE MENU (PUBLIC) ── */}
-      <BrowseMenuSection />
+      <BrowseMenuSection preselectCafeteriaId={browseCafeteriaId} />
 
       {/* ── PORTAL SELECTION ── */}
       <section id="portals" className="py-20 sm:py-28 px-4 sm:px-6 bg-surface-container-low/40">

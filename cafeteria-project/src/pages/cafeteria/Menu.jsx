@@ -6,6 +6,8 @@ import PageSEO from '../../seo/PageSEO';
 import { PAGE_SEO } from '../../seo/siteConfig';
 import LazyImage from '../../components/LazyImage';
 import { formatPrice } from '../../utils/currency';
+import StarDisplay, { ratingColorClass } from '../../components/ratings/StarDisplay';
+import ReviewsDrawer from '../../components/ratings/ReviewsDrawer';
 
 const CAT_COLORS = [
   { badge: 'bg-tertiary/20 text-tertiary border border-tertiary/30', pill: 'text-tertiary' },
@@ -44,6 +46,7 @@ export default function CafeteriaMenu() {
   const [newCategoryName, setNewCategoryName] = useState('');
   
   const [toast, setToast] = useState({ visible: false, message: '', type: '' });
+  const [reviewsDrawer, setReviewsDrawer] = useState(null);
   const fileRef = useRef();
 
   const token = localStorage.getItem('cafeteriaToken');
@@ -392,7 +395,26 @@ export default function CafeteriaMenu() {
             </div>
             <div className="p-6 flex flex-col flex-1">
               <div className="flex justify-between items-start mb-2">
-                <h3 className="text-xl font-bold text-on-surface leading-tight" style={{ fontFamily: 'Manrope' }}>{item.name}</h3>
+                <div>
+                  <h3 className="text-xl font-bold text-on-surface leading-tight" style={{ fontFamily: 'Manrope' }}>{item.name}</h3>
+                  <button
+                    type="button"
+                    onClick={() => setReviewsDrawer({ id: item.id, title: item.name })}
+                    className="mt-1"
+                  >
+                    {(item.rating_count || 0) > 0 ? (
+                      <StarDisplay
+                        rating={item.avg_rating}
+                        count={item.rating_count}
+                        showCount
+                        size="sm"
+                        colorClass={ratingColorClass(item.avg_rating)}
+                      />
+                    ) : (
+                      <span className="text-xs text-on-surface-variant">No ratings yet</span>
+                    )}
+                  </button>
+                </div>
                 <span className="text-xl font-extrabold text-primary">{formatPrice(item.price)}</span>
               </div>
               {item.description && <p className="text-sm text-on-surface-variant mb-4 line-clamp-2">{item.description}</p>}
@@ -557,6 +579,13 @@ export default function CafeteriaMenu() {
         </div>
       )}
 
+      <ReviewsDrawer
+        open={!!reviewsDrawer}
+        onClose={() => setReviewsDrawer(null)}
+        type="menu-item"
+        targetId={reviewsDrawer?.id}
+        title={reviewsDrawer?.title}
+      />
     </section>
     </>
   );

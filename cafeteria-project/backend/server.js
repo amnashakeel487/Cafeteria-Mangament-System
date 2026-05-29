@@ -23,6 +23,7 @@ const studentOrdersRoutes = require('./routes/studentOrders');
 const studentProfileRoutes = require('./routes/studentProfile');
 const studentDealsRoutes = require('./routes/studentDeals');
 const { buildRouter: buildNotificationRouter } = require('./routes/notificationRoutes');
+const ratingsRouter = require('./routes/ratings');
 
 const cafeteriaAuth = require('./middleware/cafeteriaAuth');
 const studentAuth = require('./middleware/studentAuth');
@@ -73,6 +74,7 @@ app.use(
   auth,
   buildNotificationRouter({ recipientType: 'admin', getRecipientId: () => 'admin' })
 );
+app.use('/api/ratings', ratingsRouter);
 
 app.get('/api/payments/public/:cafeteriaId', async (req, res) => {
     try {
