@@ -31,13 +31,13 @@ export default defineConfig({
         description: 'Campus cafeteria ordering — browse menus, place orders and track pickups',
 
         // Exact colors from tailwind.config.js theme
-        theme_color: '#ffb59d',       // primary: warm peach accent
+        theme_color: '#121222',       // dark background — keeps splash screen branded
         background_color: '#121222',  // surface: deep navy/dark background
 
         display: 'standalone',         // hides browser chrome — feels like a native app
         orientation: 'portrait-primary',
         scope: '/',
-        start_url: '/',
+        start_url: '/pwa-start',  // Smart redirect: checks auth → goes to right portal
         lang: 'en',
         categories: ['food', 'shopping', 'lifestyle'],
 

@@ -28,7 +28,8 @@ export default function Sidebar({ mobileMenuOpen, setMobileMenuOpen }) {
     if (window.confirm("Are you sure you want to log out of the Admin Console?")) {
       localStorage.removeItem('adminToken');
       localStorage.removeItem('adminData');
-      navigate('/admin/login');
+      const isPWA = window.matchMedia('(display-mode: standalone)').matches;
+      navigate(isPWA ? '/welcome' : '/admin/login');
     }
   };
 

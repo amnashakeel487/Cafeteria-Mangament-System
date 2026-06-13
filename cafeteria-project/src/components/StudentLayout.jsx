@@ -24,7 +24,8 @@ function StudentLayoutInner() {
     clearFavorites();
     localStorage.removeItem('studentToken');
     localStorage.removeItem('studentData');
-    navigate('/student/login');
+    const isPWA = window.matchMedia('(display-mode: standalone)').matches;
+    navigate(isPWA ? '/welcome' : '/student/login');
   };
 
   const navLinks = [

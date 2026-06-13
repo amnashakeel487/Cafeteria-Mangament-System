@@ -9,6 +9,8 @@ import StudentLayout from './components/StudentLayout';
 import { CartProvider } from './context/CartContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import PWAUpdateNotification from './components/PWAUpdateNotification';
+import PWAStart from './pages/PWAStart';
+import PWAWelcome from './pages/PWAWelcome';
 
 const PageLoader = () => (
   <div className="min-h-[50vh] flex items-center justify-center bg-[#121222]">
@@ -96,6 +98,10 @@ function App() {
               <Route path="/student/login" element={<StudentLogin />} />
               <Route path="/student/register" element={<StudentRegister />} />
               <Route path="/student/pending-approval" element={<PendingApproval />} />
+
+              {/* PWA-only public routes — no auth guard */}
+              <Route path="/pwa-start" element={<PWAStart />} />
+              <Route path="/welcome" element={<PWAWelcome />} />
               <Route element={<StudentRoute />}>
                 <Route element={<StudentLayout />}>
                   <Route path="/student/cafeterias" element={<StudentCafeterias />} />

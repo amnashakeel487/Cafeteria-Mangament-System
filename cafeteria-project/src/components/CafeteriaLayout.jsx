@@ -46,7 +46,8 @@ export default function CafeteriaLayout() {
     if (window.confirm('Are you sure you want to log out of the Staff Portal?')) {
       localStorage.removeItem('cafeteriaToken');
       localStorage.removeItem('cafeteriaData');
-      navigate('/cafeteria/login');
+      const isPWA = window.matchMedia('(display-mode: standalone)').matches;
+      navigate(isPWA ? '/welcome' : '/cafeteria/login');
     }
   };
 
