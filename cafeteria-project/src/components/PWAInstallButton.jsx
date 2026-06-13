@@ -90,7 +90,7 @@ export default function PWAInstallButton() {
         animate={{ opacity: 1, scale: 1 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        className="hidden sm:inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold transition-all border"
+        className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-bold transition-all border"
         style={{
           background: 'rgba(255,181,157,0.08)',
           border: '1px solid rgba(255,181,157,0.30)',
