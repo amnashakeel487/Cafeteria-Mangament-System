@@ -4,9 +4,33 @@
     <!-- Google Search Console site verification -->
     <meta name="google-site-verification" content="hvHbMPrjA6p6JHTrzQmYhhjeMEUmaGpi41koaJNtd00" />
     <meta charset="UTF-8" />
+    <!-- Existing favicon (SVG — used as base icon) -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- PWA icons -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <!-- SEO: viewport for mobile responsiveness (required for mobile-first indexing) -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ── PWA META TAGS ──────────────────────────────────────────────── -->
+    <!-- Basic PWA -->
+    <meta name="application-name" content="COMSTAS Cafe" />
+    <meta name="theme-color" content="#ffb59d" />
+
+    <!-- iOS PWA — allows "Add to Home Screen" to open as standalone app -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="COMSTAS Cafe" />
+
+    <!-- Android PWA -->
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <!-- Microsoft / Edge PWA -->
+    <meta name="msapplication-TileColor" content="#ffb59d" />
+    <meta name="msapplication-tap-highlight" content="no" />
+    <!-- ── END PWA META TAGS ──────────────────────────────────────────── -->
+
     <!-- SEO: Default meta — overridden per route by react-helmet-async (PageSEO.jsx) -->
     <title>COMSTAS Cafe — Campus Cafeteria Management System</title>
     <meta name="description" content="Order fresh campus meals online, track orders in real time, and manage cafeteria menus with COMSTAS Cafe — the modern cafeteria management platform for students and staff." />

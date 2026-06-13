@@ -5,6 +5,7 @@ import ThemeToggle from '../components/ThemeToggle';
 import DeferredSection from '../components/DeferredSection';
 import PageSEO from '../seo/PageSEO';
 import { PAGE_SEO } from '../seo/siteConfig';
+import PWAInstallButton from '../components/PWAInstallButton';
 
 const DevelopmentTeam = lazy(() => import('../components/DevelopmentTeam'));
 const BrowseMenuSection = lazy(() => import('../components/BrowseMenuSection'));
@@ -98,6 +99,7 @@ function LandingNavbar({ scrolled }) {
 
         <div className="flex items-center gap-2 sm:gap-3">
           <ThemeToggle />
+          <PWAInstallButton />
           <Link
             to={ROUTES.customerLogin}
             className="hidden sm:inline-flex px-4 py-2 rounded-lg text-sm font-bold text-on-surface-variant hover:text-tertiary border border-outline-variant/15 hover:border-tertiary/40 transition-all"

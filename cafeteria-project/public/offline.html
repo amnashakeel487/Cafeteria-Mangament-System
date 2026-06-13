@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Offline — COMSTAS Cafe</title>
+  <!--
+    Pure HTML + CSS — no React, no imports, no JavaScript frameworks.
+    This page must work with ZERO network access, so it cannot reference
+    any external resource (fonts, CDN scripts, etc.).
+  -->
+  <style>
+    *, *::before, *::after {
+      margin: 0; padding: 0; box-sizing: border-box;
+    }
+
+    body {
+      background: #121222;
+      color: #e3e0f8;
+      font-family: Arial, Helvetica, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #1e1e2f;
+      border: 1px solid rgba(255, 181, 157, 0.12);
+      border-radius: 20px;
+      padding: 40px 32px;
+      max-width: 380px;
+      width: 100%;
+    }
+
+    .brand {
+      font-size: 20px;
+      font-weight: 800;
+      color: #e3e0f8;
+      margin-bottom: 28px;
+      letter-spacing: -0.3px;
+    }
+
+    .brand span { color: #ffb59d; }
+
+    .emoji {
+      font-size: 72px;
+      margin-bottom: 24px;
+      display: block;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #e3e0f8;
+    }
+
+    .subtitle {
+      color: #e1bfb5;
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
+
+    .tips {
+      background: rgba(255, 181, 157, 0.05);
+      border: 1px solid rgba(255, 181, 157, 0.12);
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 24px;
+      text-align: left;
+    }
+
+    .tip {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+      color: #e1bfb5;
+      padding: 6px 0;
+    }
+
+    .tip + .tip {
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .dot {
+      width: 6px; height: 6px;
+      background: #ffb59d;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    button {
+      background: linear-gradient(135deg, #ffb59d, #ff6b35);
+      color: #5d1900;
+      border: none;
+      padding: 14px 32px;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      transition: opacity 0.2s;
+    }
+
+    button:hover  { opacity: 0.88; }
+    button:active { opacity: 0.75; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="brand">COMSTAS <span>Cafe</span></div>
+
+    <span class="emoji" role="img" aria-label="plate with cutlery">🍽️</span>
+
+    <h1>You're offline</h1>
+    <p class="subtitle">No internet connection detected.</p>
+
+    <div class="tips" role="list" aria-label="What's still available offline">
+      <div class="tip" role="listitem">
+        <div class="dot"></div>
+        Your cart items are still saved
+      </div>
+      <div class="tip" role="listitem">
+        <div class="dot"></div>
+        Your favorites are still available
+      </div>
+      <div class="tip" role="listitem">
+        <div class="dot"></div>
+        Connect to place or track orders
+      </div>
+    </div>
+
+    <button onclick="window.location.reload()" aria-label="Retry connection">
+      🔄 Try Again
+    </button>
+  </div>
+</body>
+</html>

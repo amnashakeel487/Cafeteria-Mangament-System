@@ -8,6 +8,7 @@ import StudentRoute from './components/StudentRoute';
 import StudentLayout from './components/StudentLayout';
 import { CartProvider } from './context/CartContext';
 import { FavoritesProvider } from './context/FavoritesContext';
+import PWAUpdateNotification from './components/PWAUpdateNotification';
 
 const PageLoader = () => (
   <div className="min-h-[50vh] flex items-center justify-center bg-[#121222]">
@@ -54,6 +55,8 @@ function App() {
   return (
     <CartProvider>
       <FavoritesProvider>
+        {/* PWA update toast — shown when a new version is deployed to Vercel */}
+        <PWAUpdateNotification />
         <BrowserRouter>
           <Suspense fallback={<PageLoader />}>
             <Routes>
