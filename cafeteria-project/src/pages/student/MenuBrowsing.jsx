@@ -182,7 +182,7 @@ export default function MenuBrowsing() {
       
       <div className="flex-1 min-w-0">
         {/* Header Section */}
-        <header className="mb-10">
+        <header className="mb-6 md:mb-10">
           <button 
             onClick={() => navigate('/student/cafeterias')} 
             className="flex items-center gap-2 text-[#FFB59D] font-medium mb-4 hover:opacity-80 transition-opacity"
@@ -190,20 +190,43 @@ export default function MenuBrowsing() {
             <span className="material-symbols-outlined text-sm">arrow_back</span>
             <span className="text-sm tracking-wide">Back to All Cafeterias</span>
           </button>
-          
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div>
-              <h1 className="font-['Manrope'] text-2xl md:text-4xl lg:text-5xl font-extrabold text-[#E3E0F8] tracking-tighter mb-2">
-                {cafeteria.name}
-              </h1>
-              <p className="text-[#e1bfb5] max-w-xl text-lg">
-                {cafeteria.location} - Contact: {cafeteria.contact || 'N/A'}
-              </p>
+
+          {/* ── MOBILE header (compact) — hidden on md+ ── */}
+          <div className="block md:hidden mb-4">
+            <h1 className="font-['Manrope'] text-2xl font-extrabold text-[#E3E0F8] tracking-tighter mb-2">
+              {cafeteria.name}
+            </h1>
+            <div className="flex flex-wrap items-center gap-2 text-xs">
+              <span className="bg-[#28283a] text-[#e1bfb5] px-2.5 py-1 rounded-full flex items-center gap-1">
+                <span className="material-symbols-outlined text-[12px]">location_on</span>
+                {cafeteria.location || 'Campus'}
+              </span>
+              {cafeteria.contact && (
+                <span className="bg-[#28283a] text-[#e1bfb5] px-2.5 py-1 rounded-full flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[12px]">call</span>
+                  {cafeteria.contact}
+                </span>
+              )}
+              <span className="bg-[#28A745]/20 text-[#28A745] px-2.5 py-1 rounded-full font-bold">Open</span>
             </div>
           </div>
           
-          {/* Search bar inside header for better UX on menu page */}
-          <div className="mt-6 relative max-w-md">
+          {/* ── DESKTOP header — hidden on mobile ── */}
+          <div className="hidden md:block">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+              <div>
+                <h1 className="font-['Manrope'] text-2xl md:text-4xl lg:text-5xl font-extrabold text-[#E3E0F8] tracking-tighter mb-2">
+                  {cafeteria.name}
+                </h1>
+                <p className="text-[#e1bfb5] max-w-xl text-lg">
+                  {cafeteria.location} - Contact: {cafeteria.contact || 'N/A'}
+                </p>
+              </div>
+            </div>
+          </div>
+          
+          {/* Search bar */}
+          <div className="mt-4 md:mt-6 relative max-w-md">
             <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#e1bfb5] text-sm">search</span>
             <input 
               value={search} onChange={e => setSearch(e.target.value)}
@@ -212,7 +235,7 @@ export default function MenuBrowsing() {
               type="text"
             />
           </div>
-          <label className="mt-4 flex items-center gap-2 text-sm text-[#e1bfb5] cursor-pointer w-fit">
+          <label className="mt-3 flex items-center gap-2 text-sm text-[#e1bfb5] cursor-pointer w-fit">
             <input
               type="checkbox"
               checked={availableOnly}
@@ -308,7 +331,149 @@ export default function MenuBrowsing() {
             })}
           </section>
         ) : (
-          <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <>
+          {/* ── MOBILE: Featured 2-col + horizontal list ── */}
+          <div className="block md:hidden">
+            {/* Featured section — first 2 available items */}
+            {filteredItems.filter(i => isMenuItemAvailable(i)).slice(0, 2).length > 0 && (
+              <div className="mb-5">
+                <div className="flex justify-between items-center mb-3">
+                  <h2 className="text-base font-bold text-[#E3E0F8]">Featured</h2>
+                  <span className="text-xs text-[#FFB59D] font-semibold">See all</span>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {filteredItems.filter(i => isMenuItemAvailable(i)).slice(0, 2).map(item => {
+                    const qty = getCartQty(item.id);
+                    return (
+                      <div key={`feat-${item.id}`} className="bg-[#28283a] rounded-xl overflow-hidden border border-[#594139]/20">
+                        <div className="relative h-28 bg-[#1a1a2b]">
+                          {item.image_url ? (
+                            <LazyImage src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center">
+                              <span className="material-symbols-outlined text-3xl text-[#FF6B35]/50" style={{ fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+                            </div>
+                          )}
+                          <div className="absolute top-1.5 left-1.5 bg-[#0c0c1d]/80 px-1.5 py-0.5 rounded text-[8px] font-bold text-[#59d5fb] uppercase">{item.category}</div>
+                          <div className="absolute top-1.5 right-1.5 z-10" onClick={(e) => e.stopPropagation()}>
+                            <FavoriteButton menuItem={item} cafeteriaId={cafeteriaId} size="sm" />
+                          </div>
+                        </div>
+                        <div className="p-2">
+                          <AvailabilityBadgeFromItem item={item} size="xs" />
+                          <p className="text-xs font-bold text-[#E3E0F8] mt-1 line-clamp-1">{item.name}</p>
+                          {(item.rating_count || 0) > 0 ? (
+                            <StarDisplay rating={item.avg_rating} count={item.rating_count} size="xs" />
+                          ) : (
+                            <span className="text-[9px] text-[#9ca3af]">No ratings yet</span>
+                          )}
+                          <div className="flex items-center justify-between mt-2">
+                            <span className="text-xs font-bold text-[#FFB59D]">{formatPrice(item.price)}</span>
+                            {qty === 0 ? (
+                              <button
+                                onClick={(e) => { e.stopPropagation(); handleAddToCart(item); }}
+                                className="w-7 h-7 bg-[#FF6B35] rounded-lg flex items-center justify-center active:scale-90 transition-all"
+                              >
+                                <span className="material-symbols-outlined text-white text-sm">add</span>
+                              </button>
+                            ) : (
+                              <div className="flex items-center bg-[#0c0c1d] rounded-lg border border-[#594139]/20">
+                                <button onClick={(e) => { e.stopPropagation(); removeFromCart(item.id); }} className="h-6 w-6 flex items-center justify-center"><span className="material-symbols-outlined text-xs text-[#e1bfb5]">remove</span></button>
+                                <span className="text-[10px] font-bold text-[#E3E0F8] px-1">{qty}</span>
+                                <button onClick={(e) => { e.stopPropagation(); handleAddToCart(item); }} className="h-6 w-6 flex items-center justify-center"><span className="material-symbols-outlined text-xs text-[#FFB59D]">add</span></button>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
+            {/* All items — horizontal list */}
+            <div className="flex justify-between items-center mb-3">
+              <h2 className="text-base font-bold text-[#E3E0F8]">All items</h2>
+              <span className="text-xs text-[#e1bfb5]">Sort</span>
+            </div>
+            <div className="space-y-3">
+              {filteredItems.map(item => {
+                const qty = getCartQty(item.id);
+                const available = isMenuItemAvailable(item);
+                return (
+                  <div
+                    key={item.id}
+                    onClick={() => openItemDetail(item)}
+                    className={`bg-[#28283a] rounded-xl overflow-hidden border border-[#594139]/20 flex items-center gap-3 p-3 ${!available ? 'opacity-60' : ''}`}
+                  >
+                    {/* Thumbnail */}
+                    <div className="relative w-16 h-16 shrink-0 rounded-xl overflow-hidden bg-[#1a1a2b]">
+                      {item.image_url ? (
+                        isVideo(item.image_url) ? (
+                          <video src={item.image_url} className="w-full h-full object-cover" muted playsInline preload="metadata" onLoadedMetadata={e => { e.target.currentTime = 1; }} />
+                        ) : (
+                          <LazyImage src={item.image_url} alt={item.name} className="w-full h-full object-cover" />
+                        )
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span className="material-symbols-outlined text-2xl text-[#FF6B35]/50" style={{ fontVariationSettings: "'FILL' 1" }}>restaurant</span>
+                        </div>
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 bg-[#0c0c1d]/70 text-[7px] font-bold text-[#59d5fb] uppercase text-center py-0.5">{item.category}</div>
+                    </div>
+
+                    {/* Details */}
+                    <div className="flex-1 min-w-0">
+                      <AvailabilityBadgeFromItem item={item} size="xs" />
+                      <p className="text-sm font-bold text-[#E3E0F8] truncate mt-0.5">{item.name}</p>
+                      <p className="text-[10px] text-[#e1bfb5] truncate">{item.description}</p>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        {(item.rating_count || 0) > 0 ? (
+                          <StarDisplay rating={item.avg_rating} count={item.rating_count} size="xs" />
+                        ) : (
+                          <span className="text-[9px] text-[#9ca3af]">No ratings yet</span>
+                        )}
+                      </div>
+                      <span className="text-sm font-bold text-[#FFB59D]">{formatPrice(item.price)}</span>
+                    </div>
+
+                    {/* Add button */}
+                    <div className="shrink-0" onClick={e => e.stopPropagation()}>
+                      {!available ? (
+                        <div className="w-9 h-9 rounded-full bg-[#333345]/60 flex items-center justify-center">
+                          <span className="material-symbols-outlined text-sm text-[#e1bfb5]/30">block</span>
+                        </div>
+                      ) : qty === 0 ? (
+                        <button
+                          onClick={() => handleAddToCart(item)}
+                          className="w-9 h-9 rounded-full bg-[#FF6B35] flex items-center justify-center active:scale-90 transition-all shadow-lg shadow-[#FF6B35]/30"
+                        >
+                          <span className="material-symbols-outlined text-white text-lg">add</span>
+                        </button>
+                      ) : (
+                        <div className="flex flex-col items-center bg-[#FF6B35] rounded-full w-9 gap-0">
+                          <button onClick={() => handleAddToCart(item)} className="h-4 w-9 flex items-center justify-center">
+                            <span className="material-symbols-outlined text-white text-xs">add</span>
+                          </button>
+                          <span className="text-[10px] font-black text-white leading-none">{qty}</span>
+                          <button onClick={() => removeFromCart(item.id)} className="h-4 w-9 flex items-center justify-center">
+                            <span className="material-symbols-outlined text-white text-xs">remove</span>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+              {filteredItems.length === 0 && (
+                <div className="text-center py-10 text-[#e1bfb5] text-sm">No menu items found for this filter.</div>
+              )}
+            </div>
+          </div>
+
+          {/* ── DESKTOP: existing grid — hidden on mobile ── */}
+          <section className="hidden md:grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {filteredItems.map(item => {
             const qty = getCartQty(item.id);
             const available = isMenuItemAvailable(item);
@@ -406,6 +571,7 @@ export default function MenuBrowsing() {
             </div>
           )}
         </section>
+        </>
         )}
       </div>
 
