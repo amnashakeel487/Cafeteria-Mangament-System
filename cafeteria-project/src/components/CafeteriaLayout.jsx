@@ -76,13 +76,13 @@ export default function CafeteriaLayout() {
       ></div>
 
       {/* Sidebar */}
-      <aside className={`w-64 fixed left-0 top-14 sm:top-16 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] z-40 bg-[#1A1A2B] flex-col py-6 transition-transform duration-300 md:translate-x-0 md:top-0 md:h-screen flex ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="px-6 mb-8">
+      <aside className={`w-64 fixed left-0 top-14 sm:top-16 h-[calc(100vh-3.5rem-3.5rem)] sm:h-[calc(100vh-4rem-3.5rem)] md:h-screen z-40 bg-[#1A1A2B] flex-col py-4 transition-transform duration-300 md:translate-x-0 md:top-0 flex ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="px-6 mb-6 shrink-0">
           <h1 className="text-lg font-extrabold text-on-surface">COMSTAS Cafe</h1>
           <p className="text-xs text-on-surface-variant opacity-80 uppercase tracking-widest mt-0.5">Staff Portal</p>
         </div>
 
-        <nav className="flex-1 px-2 space-y-1">
+        <nav className="flex-1 px-2 space-y-1 overflow-y-auto overflow-x-hidden">
           {links.map(link => {
             const isActive = location.pathname.startsWith(link.path);
             return (
@@ -106,7 +106,7 @@ export default function CafeteriaLayout() {
           })}
         </nav>
 
-        <div className="px-2 pt-4 border-t border-outline-variant/10">
+        <div className="shrink-0 px-2 pt-4 border-t border-outline-variant/10">
           <div className="flex items-center justify-between p-3">
             <div className="flex items-center space-x-3 min-w-0">
               <div className="w-10 h-10 rounded-full border-2 border-primary/20 flex items-center justify-center overflow-hidden flex-shrink-0 bg-surface-container-highest">
