@@ -14,7 +14,7 @@ const roles = [
   {
     id: 'student',
     emoji: '🎓',
-    title: 'Student',
+    title: 'Customer',
     subtitle: 'I browse menus\n& place orders',
     accentColor: '#ffb59d',
     bgColor: 'rgba(255,181,157,0.08)',

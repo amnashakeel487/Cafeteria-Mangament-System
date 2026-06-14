@@ -145,7 +145,7 @@ export default function PWAWelcome() {
           onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.88')}
           onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
         >
-          🎓 I&apos;m a Student
+          🎓 I&apos;m a Customer
           <span style={{ fontSize: 18 }}>→</span>
         </button>
 
