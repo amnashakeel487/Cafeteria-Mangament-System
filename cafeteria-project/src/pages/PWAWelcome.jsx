@@ -86,7 +86,7 @@ export default function PWAWelcome() {
           fontFamily: 'Manrope, Arial, sans-serif',
           letterSpacing: '-0.5px',
         }}>
-          COMSTAS{' '}
+          COMSATS{' '}
           <span style={{ color: '#ffb59d' }}>Cafe</span>
         </h1>
 

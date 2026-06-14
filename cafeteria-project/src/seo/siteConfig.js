@@ -1,21 +1,21 @@
 /**
- * SEO: Central site metadata for COMSTAS Cafe Cafeteria Management System.
+ * SEO: Central site metadata for COMSATS Cafe Cafeteria Management System.
  * Used by PageSEO (react-helmet-async) and referenced when building sitemap.xml.
  */
 
 export const SITE_URL = 'https://comsats-cafeteria.vercel.app';
-export const SITE_NAME = 'COMSTAS Cafe';
+export const SITE_NAME = 'COMSATS Cafe';
 export const SITE_TAGLINE = 'Campus Cafeteria Management System';
-export const DEFAULT_AUTHOR = 'COMSTAS Cafe Engineering Team';
+export const DEFAULT_AUTHOR = 'COMSATS Cafe Engineering Team';
 export const DEFAULT_KEYWORDS =
-  'cafeteria management, campus dining, online food ordering, COMSTAS Cafe, university cafeteria, menu ordering, order tracking, cafe dashboard';
+  'cafeteria management, campus dining, online food ordering, COMSATS Cafe, university cafeteria, menu ordering, order tracking, cafe dashboard';
 export const DEFAULT_OG_IMAGE = `${SITE_URL}/favicon.svg`;
 
 /** Default meta used in index.html and as fallbacks */
 export const DEFAULT_SEO = {
   title: `${SITE_NAME} — ${SITE_TAGLINE}`,
   description:
-    'Order fresh campus meals online, track orders in real time, and manage cafeteria menus with COMSTAS Cafe — the modern cafeteria management platform for students and staff.',
+    'Order fresh campus meals online, track orders in real time, and manage cafeteria menus with COMSATS Cafe — the modern cafeteria management platform for students and staff.',
   keywords: DEFAULT_KEYWORDS,
 };
 
@@ -28,33 +28,33 @@ export const PAGE_SEO = {
     path: '/',
     title: 'Fresh Food, Seamless Campus Orders',
     description:
-      'COMSTAS Cafe — browse campus cafeterias, place orders online, track pickup status, and manage menus. Built for students and cafe owners.',
-    keywords: 'campus cafeteria, student food ordering, COMSTAS Cafe, online menu',
+      'COMSATS Cafe — browse campus cafeterias, place orders online, track pickup status, and manage menus. Built for students and cafe owners.',
+    keywords: 'campus cafeteria, student food ordering, COMSATS Cafe, online menu',
   },
   about: {
     path: '/about',
-    title: 'About COMSTAS Cafe',
+    title: 'About COMSATS Cafe',
     description:
-      'Learn about COMSTAS Cafe — a modern cafeteria management system for campus dining, online ordering, and real-time order tracking.',
-    keywords: 'about COMSTAS Cafe, cafeteria system, campus dining platform',
+      'Learn about COMSATS Cafe — a modern cafeteria management system for campus dining, online ordering, and real-time order tracking.',
+    keywords: 'about COMSATS Cafe, cafeteria system, campus dining platform',
   },
   contact: {
     path: '/contact',
     title: 'Contact Us',
     description:
-      'Contact the COMSTAS Cafe team for support, feedback, or partnership inquiries about our campus cafeteria management platform.',
-    keywords: 'contact COMSTAS Cafe, cafeteria support, campus dining help',
+      'Contact the COMSATS Cafe team for support, feedback, or partnership inquiries about our campus cafeteria management platform.',
+    keywords: 'contact COMSATS Cafe, cafeteria support, campus dining help',
   },
   studentLogin: {
     path: '/student/login',
     title: 'Customer Login',
-    description: 'Sign in to the COMSTAS Cafe student portal to browse menus, place orders, and track your campus meal pickup.',
+    description: 'Sign in to the COMSATS Cafe student portal to browse menus, place orders, and track your campus meal pickup.',
     keywords: 'student login, customer portal, campus food order login',
   },
   studentRegister: {
     path: '/student/register',
     title: 'Student Registration',
-    description: 'Create your COMSTAS Cafe student account to start ordering from campus cafeterias online.',
+    description: 'Create your COMSATS Cafe student account to start ordering from campus cafeterias online.',
     keywords: 'student register, cafeteria account, campus dining signup',
   },
   studentCafeterias: {
@@ -78,7 +78,7 @@ export const PAGE_SEO = {
   studentOrders: {
     path: '/student/orders',
     title: 'Order History',
-    description: 'View your past cafeteria orders and order details on COMSTAS Cafe.',
+    description: 'View your past cafeteria orders and order details on COMSATS Cafe.',
     keywords: 'order history, past orders, student orders',
   },
   studentTrack: {
@@ -90,14 +90,14 @@ export const PAGE_SEO = {
   studentProfile: {
     path: '/student/profile',
     title: 'Student Profile',
-    description: 'Manage your COMSTAS Cafe student profile, contact details, and account settings.',
+    description: 'Manage your COMSATS Cafe student profile, contact details, and account settings.',
     keywords: 'student profile, account settings',
     noindex: true,
   },
   cafeLogin: {
     path: '/cafeteria/login',
     title: 'Cafe Owner Login',
-    description: 'Staff login for COMSTAS Cafe — manage menus, orders, payments, and deals from your cafe dashboard.',
+    description: 'Staff login for COMSATS Cafe — manage menus, orders, payments, and deals from your cafe dashboard.',
     keywords: 'cafe login, staff portal, cafeteria owner login',
   },
   cafeDashboard: {
@@ -152,20 +152,20 @@ export const PAGE_SEO = {
   adminLogin: {
     path: '/admin/login',
     title: 'Admin Login',
-    description: 'Administrator login for COMSTAS Cafe — manage students, cafeterias, and system-wide orders.',
+    description: 'Administrator login for COMSATS Cafe — manage students, cafeterias, and system-wide orders.',
     keywords: 'admin login, cafeteria admin console',
   },
   adminDashboard: {
     path: '/admin/dashboard',
     title: 'Admin Dashboard',
-    description: 'System-wide admin dashboard for COMSTAS Cafe cafeteria management.',
+    description: 'System-wide admin dashboard for COMSATS Cafe cafeteria management.',
     keywords: 'admin dashboard, system overview',
     noindex: true,
   },
   adminStudents: {
     path: '/admin/students',
     title: 'Manage Students',
-    description: 'View and manage registered students in the COMSTAS Cafe system.',
+    description: 'View and manage registered students in the COMSATS Cafe system.',
     keywords: 'manage students, admin students',
     noindex: true,
   },

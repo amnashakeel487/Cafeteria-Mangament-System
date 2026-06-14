@@ -63,7 +63,7 @@ export default function DevelopmentTeam({ loginSlot }) {
                   Meet The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-container">Architects</span>
                 </h2>
                 <p className="text-on-surface-variant text-sm mt-3 max-w-sm font-medium">
-                  The visionary engineering team behind the COMSTAS Cafeteria ecosystem.
+                  The visionary engineering team behind the COMSATS Cafeteria ecosystem.
                 </p>
               </div>
 
@@ -104,7 +104,7 @@ export default function DevelopmentTeam({ loginSlot }) {
                 Meet The <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-primary-container">Architects</span>
               </h2>
               <p className="text-on-surface-variant text-base mt-4 max-w-xl mx-auto font-medium">
-                The visionary engineering team behind the COMSTAS Cafeteria ecosystem.
+                The visionary engineering team behind the COMSATS Cafeteria ecosystem.
               </p>
             </div>
 

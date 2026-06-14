@@ -74,7 +74,7 @@ export default function PWAInstallButton() {
         { icon: '1️⃣', text: 'Tap the Share button (bottom of Safari)' },
         { icon: '2️⃣', text: 'Scroll and tap "Add to Home Screen"' },
         { icon: '3️⃣', text: 'Tap "Add" in the top right' },
-        { icon: '4️⃣', text: 'Find COMSTAS Cafe on your home screen!' },
+        { icon: '4️⃣', text: 'Find COMSATS Cafe on your home screen!' },
       ],
     },
     android: {
@@ -84,7 +84,7 @@ export default function PWAInstallButton() {
         { icon: '1️⃣', text: 'Tap the 3-dot menu (⋮) in Chrome' },
         { icon: '2️⃣', text: 'Tap "Add to Home Screen"' },
         { icon: '3️⃣', text: 'Tap "Install" or "Add"' },
-        { icon: '4️⃣', text: 'COMSTAS Cafe is now on your home screen!' },
+        { icon: '4️⃣', text: 'COMSATS Cafe is now on your home screen!' },
       ],
     },
     desktop: {
@@ -92,7 +92,7 @@ export default function PWAInstallButton() {
       subtitle: 'In Chrome or Edge:',
       steps: [
         { icon: '1️⃣', text: 'Click the install icon (⊕) in the address bar' },
-        { icon: '2️⃣', text: 'Or click the 3-dot menu → "Install COMSTAS Cafe"' },
+        { icon: '2️⃣', text: 'Or click the 3-dot menu → "Install COMSATS Cafe"' },
         { icon: '3️⃣', text: 'Click "Install" in the dialog' },
         { icon: '4️⃣', text: 'App opens as a standalone window!' },
       ],
@@ -119,7 +119,7 @@ export default function PWAInstallButton() {
           opacity: isInstalling ? 0.7 : 1,
           whiteSpace: 'nowrap',
         }}
-        aria-label="Install COMSTAS Cafe as an app"
+        aria-label="Install COMSATS Cafe as an app"
       >
         {isInstalling ? (
           <>

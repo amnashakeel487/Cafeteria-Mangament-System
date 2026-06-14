@@ -47,7 +47,7 @@ export default function Dashboard() {
 
   const handleCreateReport = () => {
     let csvContent = "data:text/csv;charset=utf-8,";
-    csvContent += "COMSTAS Cafe - System Report\r\n";
+    csvContent += "COMSATS Cafe - System Report\r\n";
     csvContent += `Generated,${new Date().toLocaleString()}\r\n\r\n`;
     csvContent += "METRIC,VALUE\r\n";
     csvContent += `Total Students,${stats.totalStudents}\r\n`;

@@ -233,7 +233,7 @@ export default function AnalyticsDashboard() {
 
   return (
     <>
-      <PageSEO {...PAGE_SEO.cafeDashboard} title="Analytics | COMSTAS Cafe" />
+      <PageSEO {...PAGE_SEO.cafeDashboard} title="Analytics | COMSATS Cafe" />
       <section className="p-4 md:p-8 max-w-7xl mx-auto space-y-6 md:space-y-8 pt-6 md:pt-10">
         {toast && (
           <div className="fixed bottom-8 right-8 z-50 px-4 py-3 rounded-xl bg-[#28A745] text-white font-bold text-sm shadow-xl">

@@ -87,7 +87,7 @@ export default function PWAOnboarding() {
         </motion.div>
         <h1 style={{ fontSize: 26, fontWeight: 800, color: '#e3e0f8', marginBottom: 6, fontFamily: 'Manrope, Arial, sans-serif' }}>
           Welcome to{' '}
-          <span style={{ color: '#ffb59d' }}>COMSTAS Cafe</span>
+          <span style={{ color: '#ffb59d' }}>COMSATS Cafe</span>
         </h1>
         <p style={{ fontSize: 15, color: '#e1bfb5', lineHeight: 1.5 }}>
           Tell us who you are so we can set up your experience

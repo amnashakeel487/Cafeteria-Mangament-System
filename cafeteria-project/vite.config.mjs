@@ -26,8 +26,8 @@ export default defineConfig({
 
       // Web App Manifest — controls how the app looks when installed
       manifest: {
-        name: 'COMSTAS Cafe',
-        short_name: 'COMSTAS Cafe',
+        name: 'COMSATS Cafe',
+        short_name: 'COMSATS Cafe',
         description: 'Campus cafeteria ordering — browse menus, place orders and track pickups',
 
         // Exact colors from tailwind.config.js theme
@@ -69,7 +69,7 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             form_factor: 'narrow',
-            label: 'COMSTAS Cafe Home',
+            label: 'COMSATS Cafe Home',
           },
         ],
       },

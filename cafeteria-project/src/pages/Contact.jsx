@@ -25,14 +25,14 @@ export default function Contact() {
               Contact <span className="text-tertiary">Us</span>
             </h1>
             <p className="text-on-surface-variant leading-relaxed mb-8">
-              Questions about ordering, cafe management, or technical support? Reach out to the COMSTAS Cafe team.
+              Questions about ordering, cafe management, or technical support? Reach out to the COMSATS Cafe team.
             </p>
 
             <address className="not-italic space-y-4 bg-surface-container-high rounded-xl p-6 border border-outline-variant/10">
               <p>
                 <span className="text-xs font-bold uppercase text-on-surface-variant block mb-1">Campus Support</span>
-                <a href="mailto:support@comstas.cafe" className="text-tertiary font-bold hover:underline">
-                  support@comstas.cafe
+                <a href="mailto:support@COMSATS.cafe" className="text-tertiary font-bold hover:underline">
+                  support@COMSATS.cafe
                 </a>
               </p>
               <p>
@@ -57,7 +57,7 @@ export default function Contact() {
         </main>
 
         <footer className="border-t border-outline-variant/10 py-8 text-center text-xs text-on-surface-variant">
-          © {new Date().getFullYear()} COMSTAS Cafe
+          © {new Date().getFullYear()} COMSATS Cafe
         </footer>
       </div>
     </>

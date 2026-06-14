@@ -64,7 +64,7 @@ function StudentLayoutInner() {
       >
         {/* Mobile sidebar header */}
         <div className="lg:hidden shrink-0 flex items-center justify-between px-2 mb-4 pt-2">
-          <span className="text-lg font-black text-[#FF6B35] font-['Manrope']">COMSTAS Cafe</span>
+          <span className="text-lg font-black text-[#FF6B35] font-['Manrope']">COMSATS Cafe</span>
           <button onClick={() => setSidebarOpen(false)} className="p-1 text-[#E1BFB5]/70 hover:text-[#E3E0F8]">
             <span className="material-symbols-outlined">close</span>
           </button>
@@ -144,7 +144,7 @@ function StudentLayoutInner() {
           </button>
 
           <span className="text-sm sm:text-xl font-bold text-[#FF6B35] font-['Manrope'] truncate leading-tight">
-            <span className="hidden min-[400px]:inline">COMSTAS </span>Cafe
+            <span className="hidden min-[400px]:inline">COMSATS </span>Cafe
           </span>
 
           {/* Desktop Nav Links */}

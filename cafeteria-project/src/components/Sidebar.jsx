@@ -51,7 +51,7 @@ export default function Sidebar({ mobileMenuOpen, setMobileMenuOpen }) {
 
       <aside className={`bg-[#1A1A2B] dark:bg-[#1A1A2B] font-['Manrope'] tracking-tight w-64 fixed left-0 top-14 sm:top-16 md:top-0 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] md:h-screen flex-col py-6 z-40 transition-transform duration-300 md:translate-x-0 ${mobileMenuOpen ? 'translate-x-0 flex' : '-translate-x-full md:flex'}`}>
       <div className="px-6 mb-10">
-        <h1 className="text-xl font-bold text-[#FF6B35]">COMSTAS Cafe</h1>
+        <h1 className="text-xl font-bold text-[#FF6B35]">COMSATS Cafe</h1>
         <p className="text-xs text-on-surface-variant opacity-60 uppercase tracking-widest mt-1">Admin Console</p>
       </div>
       <nav className="flex-1 space-y-2">

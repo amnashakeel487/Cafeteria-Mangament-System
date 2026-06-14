@@ -1,6 +1,6 @@
 const DEFAULT_SENDER = {
-  name: process.env.BREVO_SENDER_NAME || 'COMSTAS Cafe',
-  email: process.env.BREVO_SENDER_EMAIL || 'noreply@comstascafe.com',
+  name: process.env.BREVO_SENDER_NAME || 'COMSATS Cafe',
+  email: process.env.BREVO_SENDER_EMAIL || 'noreply@COMSATScafe.com',
 };
 
 let client;

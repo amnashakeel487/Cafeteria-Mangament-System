@@ -78,7 +78,7 @@ export default function CafeteriaLayout() {
       {/* Sidebar */}
       <aside className={`w-64 fixed left-0 top-14 sm:top-16 h-[calc(100vh-3.5rem-3.5rem)] sm:h-[calc(100vh-4rem-3.5rem)] md:h-screen z-40 bg-[#1A1A2B] flex-col py-4 transition-transform duration-300 md:translate-x-0 md:top-0 flex ${mobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="px-6 mb-6 shrink-0">
-          <h1 className="text-lg font-extrabold text-on-surface">COMSTAS Cafe</h1>
+          <h1 className="text-lg font-extrabold text-on-surface">COMSATS Cafe</h1>
           <p className="text-xs text-on-surface-variant opacity-80 uppercase tracking-widest mt-0.5">Staff Portal</p>
         </div>
 

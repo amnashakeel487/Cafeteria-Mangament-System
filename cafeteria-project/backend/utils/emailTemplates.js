@@ -16,7 +16,7 @@ function emailShell({ title, accent, bodyHtml, ctaLabel, ctaHref }) {
     <tr><td align="center">
       <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background-color:#161f2e;border-radius:12px;overflow:hidden;border:1px solid #2d3748;">
         <tr><td style="padding:32px 28px 20px;text-align:center;border-bottom:1px solid #2d3748;">
-          <p style="margin:0;font-size:22px;font-weight:bold;color:${accent};letter-spacing:0.5px;">COMSTAS Cafe</p>
+          <p style="margin:0;font-size:22px;font-weight:bold;color:${accent};letter-spacing:0.5px;">COMSATS Cafe</p>
           <p style="margin:8px 0 0;font-size:12px;color:#94a3b8;">Campus Food Management</p>
         </td></tr>
         <tr><td style="padding:28px 28px 32px;color:#e2e8f0;font-size:15px;line-height:1.65;">
@@ -24,7 +24,7 @@ function emailShell({ title, accent, bodyHtml, ctaLabel, ctaHref }) {
           ${btn}
         </td></tr>
         <tr><td style="padding:20px 28px;text-align:center;background-color:#121a27;border-top:1px solid #2d3748;">
-          <p style="margin:0;font-size:11px;color:#64748b;">COMSTAS Cafe | Campus Food Management</p>
+          <p style="margin:0;font-size:11px;color:#64748b;">COMSATS Cafe | Campus Food Management</p>
         </td></tr>
       </table>
     </td></tr>
@@ -37,13 +37,13 @@ function registrationReceivedTemplate(studentName) {
   const name = studentName || 'Student';
   const bodyHtml = `
     <p style="margin:0 0 16px;color:#f1f5f9;font-size:17px;font-weight:bold;">Hi ${name},</p>
-    <p style="margin:0 0 14px;color:#cbd5e1;">Thank you for registering on <strong style="color:#06d6c7;">COMSTAS Cafe</strong>!</p>
+    <p style="margin:0 0 14px;color:#cbd5e1;">Thank you for registering on <strong style="color:#06d6c7;">COMSATS Cafe</strong>!</p>
     <p style="margin:0 0 14px;color:#cbd5e1;">Your account is currently <strong style="color:#fbbf24;">pending approval</strong> from our admin team. You will receive another email once your account has been reviewed — usually within 24 hours.</p>
     <p style="margin:0;color:#94a3b8;font-size:14px;">In the meantime, you can browse our public menu without logging in.</p>
   `;
 
   return {
-    subject: 'Registration Received — COMSTAS Cafe',
+    subject: 'Registration Received — COMSATS Cafe',
     htmlContent: emailShell({
       title: 'Registration Received',
       accent: '#06d6c7',
@@ -65,7 +65,7 @@ function approvalEmailTemplate(studentName, studentEmail) {
       </td></tr>
     </table>
     <p style="margin:0 0 16px;color:#f1f5f9;font-size:17px;font-weight:bold;">Hi ${name},</p>
-    <p style="margin:0 0 14px;color:#cbd5e1;">Great news! Your COMSTAS Cafe account has been <strong style="color:#34d399;">approved</strong>.</p>
+    <p style="margin:0 0 14px;color:#cbd5e1;">Great news! Your COMSATS Cafe account has been <strong style="color:#34d399;">approved</strong>.</p>
     <p style="margin:0 0 14px;color:#cbd5e1;">You can now log in and start ordering from your campus cafeterias.</p>
     <p style="margin:0 0 20px;color:#94a3b8;font-size:14px;">Your registered email: <strong style="color:#06d6c7;">${studentEmail || ''}</strong></p>
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#121a27;border-radius:8px;padding:16px;">
@@ -79,7 +79,7 @@ function approvalEmailTemplate(studentName, studentEmail) {
   `;
 
   return {
-    subject: 'Your Account Has Been Approved — COMSTAS Cafe',
+    subject: 'Your Account Has Been Approved — COMSATS Cafe',
     htmlContent: emailShell({
       title: 'Account Approved',
       accent: '#34d399',
@@ -108,7 +108,7 @@ function rejectionEmailTemplate(studentName, rejectionReason) {
   `;
 
   return {
-    subject: 'Account Registration Update — COMSTAS Cafe',
+    subject: 'Account Registration Update — COMSATS Cafe',
     htmlContent: emailShell({
       title: 'Registration Update',
       accent: '#f59e0b',

@@ -93,7 +93,7 @@ function LandingNavbar({ scrolled }) {
             </span>
           </div>
           <span className="font-black text-on-surface editorial-text text-lg tracking-tight" style={{ fontFamily: 'Manrope' }}>
-            COMSTAS <span className="text-primary">Cafe</span>
+            COMSATS <span className="text-primary">Cafe</span>
           </span>
         </Link>
 
@@ -289,7 +289,7 @@ export default function LandingPage() {
               custom={2}
               className="text-base sm:text-lg text-on-surface-variant max-w-2xl mx-auto mb-10 leading-relaxed font-medium"
             >
-              COMSTAS Cafe connects students and cafeteria staff in one warm, modern platform — order campus meals online,
+              COMSATS Cafe connects students and cafeteria staff in one warm, modern platform — order campus meals online,
               track them in real time, and manage menus with ease.
             </motion.p>
 
@@ -347,7 +347,7 @@ export default function LandingPage() {
             viewport={{ once: true }}
             className="text-center mb-14"
           >
-            <span className="text-xs font-black uppercase tracking-[0.2em] text-tertiary mb-3 block">Why COMSTAS Cafe</span>
+            <span className="text-xs font-black uppercase tracking-[0.2em] text-tertiary mb-3 block">Why COMSATS Cafe</span>
             <h2 className="text-3xl sm:text-4xl font-black editorial-text text-on-surface" style={{ fontFamily: 'Manrope' }}>
               Everything You Need to <span className="text-primary">Dine Smarter</span>
             </h2>
@@ -501,7 +501,7 @@ export default function LandingPage() {
                 restaurant
               </span>
               <span className="font-black text-on-surface editorial-text text-lg" style={{ fontFamily: 'Manrope' }}>
-                COMSTAS Cafe
+                COMSATS Cafe
               </span>
             </div>
             <p className="text-sm text-on-surface-variant leading-relaxed max-w-xs">
@@ -551,7 +551,7 @@ export default function LandingPage() {
         </div>
 
         <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-outline-variant/10 text-center text-xs text-on-surface-variant/70">
-          © {new Date().getFullYear()} COMSTAS Cafe. All rights reserved.
+          © {new Date().getFullYear()} COMSATS Cafe. All rights reserved.
         </div>
       </footer>
     </div>

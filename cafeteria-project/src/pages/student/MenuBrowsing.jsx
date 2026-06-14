@@ -164,7 +164,7 @@ export default function MenuBrowsing() {
     ? {
         ...PAGE_SEO.studentMenu,
         title: `${cafeteria.name} Menu`,
-        description: `Browse ${cafeteria.name} menu items, deals, and order online on COMSTAS Cafe.`,
+        description: `Browse ${cafeteria.name} menu items, deals, and order online on COMSATS Cafe.`,
         path: `/student/menu/${cafeteriaId}`,
       }
     : { ...PAGE_SEO.studentMenu, path: `/student/menu/${cafeteriaId}` };

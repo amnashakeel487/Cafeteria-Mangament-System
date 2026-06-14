@@ -1,4 +1,4 @@
-# COMSTAS Cafeteria System — Project Documentation
+# COMSATS Cafeteria System — Project Documentation
 
 ## Overview
 

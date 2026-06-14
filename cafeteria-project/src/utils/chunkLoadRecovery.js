@@ -1,5 +1,5 @@
 /** Session key — one automatic reload per stale-chunk incident (avoids infinite loops). */
-export const CHUNK_RELOAD_KEY = 'comstas_chunk_reload_v1';
+export const CHUNK_RELOAD_KEY = 'COMSATS_chunk_reload_v1';
 
 export function isChunkLoadError(error) {
   const msg = error?.message || String(error || '');

@@ -167,7 +167,7 @@ export default function PortalLoginLayout({
 
             <p className="text-[11px] tracking-[0.2em] uppercase text-on-surface-variant/80 mb-3 font-dm">{t.portalLabel}</p>
             <h1 className="font-syne text-[46px] font-extrabold leading-none mb-1 text-on-surface">
-              COMSTAS <span style={{ color: t.accent }}>Cafe</span>
+              COMSATS <span style={{ color: t.accent }}>Cafe</span>
             </h1>
             <p className="text-[15px] text-on-surface-variant font-light mt-2.5 mb-10">{t.tagline}</p>
 
@@ -225,7 +225,7 @@ export default function PortalLoginLayout({
             <div>
               <p className="text-[10px] uppercase tracking-widest text-on-surface-variant">{t.portalLabel}</p>
               <p className="font-syne text-xl font-bold text-on-surface">
-                COMSTAS <span style={{ color: t.accent }}>Cafe</span>
+                COMSATS <span style={{ color: t.accent }}>Cafe</span>
               </p>
             </div>
           </div>

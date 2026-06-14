@@ -296,7 +296,7 @@ function VisualPanel({ variant }) {
           {v.portalLabel}
         </p>
         <h1 className="text-4xl xl:text-[2.75rem] font-black leading-tight mb-3" style={{ fontFamily: 'Manrope' }}>
-          <span className="text-white">COMSTAS</span>{' '}
+          <span className="text-white">COMSATS</span>{' '}
           <span className={v.accentText}>Cafe</span>
         </h1>
         <p className="text-on-surface-variant/90 text-base font-medium mb-8 max-w-sm">{v.tagline}</p>
@@ -361,7 +361,7 @@ function MobileBanner({ variant }) {
         <div>
           <p className={`text-[10px] font-black uppercase tracking-[0.2em] ${v.accentText}`}>{v.portalLabel}</p>
           <p className="text-lg font-black text-white" style={{ fontFamily: 'Manrope' }}>
-            COMSTAS <span className={v.accentText}>Cafe</span>
+            COMSATS <span className={v.accentText}>Cafe</span>
           </p>
           <p className="text-xs text-on-surface-variant">{v.tagline}</p>
         </div>

@@ -22,10 +22,10 @@ export default function About() {
           >
             <span className="text-xs font-black uppercase tracking-[0.2em] text-primary mb-4 block">About Us</span>
             <h1 className="text-3xl sm:text-4xl font-black editorial-text mb-6" style={{ fontFamily: 'Manrope' }}>
-              COMSTAS <span className="text-primary">Cafe</span>
+              COMSATS <span className="text-primary">Cafe</span>
             </h1>
             <p className="text-on-surface-variant leading-relaxed mb-6">
-              COMSTAS Cafe is a modern cafeteria management system built for university campuses. Students can browse
+              COMSATS Cafe is a modern cafeteria management system built for university campuses. Students can browse
               menus, place orders online, and track pickups in real time. Cafe staff manage menus, orders, deals, and
               payments from a dedicated dashboard.
             </p>
@@ -45,7 +45,7 @@ export default function About() {
         </main>
 
         <footer className="border-t border-outline-variant/10 py-8 text-center text-xs text-on-surface-variant">
-          © {new Date().getFullYear()} COMSTAS Cafe
+          © {new Date().getFullYear()} COMSATS Cafe
         </footer>
       </div>
     </>
