@@ -15,9 +15,22 @@ https://comsats-cafeteria.vercel.app/cafeteria/login
 username: cafe@culinary.edu
 password: 12345
 
+## Landing page
+<img width="1917" height="965" alt="image" src="https://github.com/user-attachments/assets/3fc79cab-57e2-44de-9aed-e18f59d3cf4c" />
+<img width="1896" height="905" alt="image" src="https://github.com/user-attachments/assets/d6ad44d7-2fe6-4876-9a5b-42635962134e" />
+<img width="1896" height="742" alt="image" src="https://github.com/user-attachments/assets/273ae80d-4dee-40dc-a717-0d6e9bf62028" />
+<img width="1890" height="622" alt="image" src="https://github.com/user-attachments/assets/063e029e-4f90-49cb-b2be-6ee67b0b4262" />
+<img width="1885" height="822" alt="image" src="https://github.com/user-attachments/assets/f87facd3-776f-41dd-ba09-87c3b3103b1c" />
+<img width="1782" height="641" alt="image" src="https://github.com/user-attachments/assets/aa650519-956e-4c15-8308-52c144b3661f" />
+<img width="1856" height="736" alt="image" src="https://github.com/user-attachments/assets/37877728-d7e3-430e-ac85-0d0a8e5a62d4" />
+<img width="1878" height="810" alt="image" src="https://github.com/user-attachments/assets/a86e3c53-d35f-4c30-a34e-6586d8721411" />
+<img width="1887" height="447" alt="image" src="https://github.com/user-attachments/assets/f25b01be-1d35-4782-a0a3-b74bff2348af" />
+
+
 
 ## Login Page and Architects
-<img width="1891" height="889" alt="Screenshot 2026-04-05 203315" src="https://github.com/user-attachments/assets/787c7d85-b86a-47ec-921f-b9fb8edf47f7" />
+<img width="1890" height="900" alt="image" src="https://github.com/user-attachments/assets/d6e95ef8-1bd8-49fe-b3b6-83678de65dfa" />
+
 
 
 ## Admin Dashboard
