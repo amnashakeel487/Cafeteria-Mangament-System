@@ -169,7 +169,7 @@ export default function CafeteriaDashboard() {
       )}
 
       {/* Hero Bento */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6">
         {/* Welcome / Revenue Hero */}
         <div className="md:col-span-2 bg-surface-container-high rounded-xl p-6 md:p-8 flex flex-col justify-between relative overflow-hidden">
           <div className="absolute right-0 bottom-0 w-1/2 h-full opacity-10 pointer-events-none">
@@ -214,7 +214,7 @@ export default function CafeteriaDashboard() {
 
       {/* KPI metrics — full-width row with comfortable spacing */}
       <section aria-label="Today's overview" className="space-y-5 md:space-y-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 lg:gap-6">
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-5 lg:gap-6">
           <StatCard
             title="Today's Revenue"
             value={analyticsToday?.totalRevenue ?? stats.todayRevenue}
