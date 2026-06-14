@@ -9,7 +9,9 @@ export default function OfflineDetector() {
   const [isOffline, setIsOffline] = useState(false);
 
   useEffect(() => {
-    // Don't show on initial load — only react to changes
+    // Check on mount AND listen for changes
+    setIsOffline(!navigator.onLine);
+
     const goOffline = () => setIsOffline(true);
     const goOnline  = () => setIsOffline(false);
 
