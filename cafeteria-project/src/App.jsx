@@ -12,6 +12,7 @@ import PWAUpdateNotification from './components/PWAUpdateNotification';
 import PWAStart from './pages/PWAStart';
 import PWAWelcome from './pages/PWAWelcome';
 import PWAOnboarding from './pages/PWAOnboarding';
+import OfflineDetector from './components/OfflineDetector';
 
 // Silent fallback — no spinner flash on route load
 const PageLoader = () => (
@@ -57,8 +58,10 @@ function App() {
   return (
     <CartProvider>
       <FavoritesProvider>
-        {/* PWA update toast — shown when a new version is deployed to Vercel */}
+        {/* PWA update toast */}
         <PWAUpdateNotification />
+        {/* Offline overlay — only shows when network is lost, never on first load */}
+        <OfflineDetector />
         <BrowserRouter>
           <Suspense fallback={<PageLoader />}>
             <Routes>

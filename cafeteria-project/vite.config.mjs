@@ -79,9 +79,9 @@ export default defineConfig({
         // Pre-cache all JS, CSS, HTML, and static assets at install time
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2}'],
 
-        // Navigate fallback for offline — show offline page when network unavailable
-        navigateFallback: '/offline.html',
-        navigateFallbackDenylist: [/^\/api\//], // never serve offline.html for API calls
+        // Don't override navigation — let React Router handle all routes
+        // Offline is handled by the NetworkFirst strategy timing out
+        navigateFallback: null,
 
         // ── DO NOT CACHE — must always hit network: ──────────────────────
         // Auth endpoints, order placement, and payment endpoints are excluded
