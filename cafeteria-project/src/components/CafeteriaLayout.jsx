@@ -177,10 +177,50 @@ export default function CafeteriaLayout() {
           </div>
         </header>
 
-        <div className="pt-14 sm:pt-16 px-3 sm:px-0 mobile-compact">
+        <div className="pt-14 sm:pt-16 px-3 sm:px-0 pb-16 md:pb-0 mobile-compact">
           <Outlet />
         </div>
       </main>
+
+      {/* ── MOBILE BOTTOM NAV — md:hidden, desktop unaffected ── */}
+      <nav
+        className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
+        style={{ background: '#1A1A2B', borderTop: '0.5px solid rgba(255,255,255,0.06)', height: 56 }}
+      >
+        <div className="flex h-full">
+          {[
+            { path: '/cafeteria/dashboard',  icon: 'dashboard',       label: 'Home'     },
+            { path: '/cafeteria/orders',     icon: 'receipt_long',    label: 'Orders'   },
+            { path: '/cafeteria/menu',       icon: 'restaurant_menu', label: 'Menu'     },
+            { path: '/cafeteria/analytics',  icon: 'bar_chart',       label: 'Stats'    },
+            { path: '/cafeteria/profile',    icon: 'account_circle',  label: 'Profile'  },
+          ].map(item => {
+            const isActive = location.pathname.startsWith(item.path);
+            const color = isActive ? '#FF6B35' : '#6b7280';
+            return (
+              <Link
+                key={item.path}
+                to={item.path}
+                className="flex-1 flex flex-col items-center justify-center gap-0.5"
+                style={{ color }}
+              >
+                <span
+                  className="material-symbols-outlined"
+                  style={{
+                    fontSize: 22,
+                    fontVariationSettings: isActive ? "'FILL' 1" : "'FILL' 0",
+                  }}
+                >
+                  {item.icon}
+                </span>
+                <span style={{ fontSize: 10, fontWeight: isActive ? 700 : 500 }}>
+                  {item.label}
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </nav>
     </div>
     </NotificationProvider>
   );
