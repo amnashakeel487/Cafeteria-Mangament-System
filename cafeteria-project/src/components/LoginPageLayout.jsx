@@ -97,7 +97,7 @@ const VARIANTS = {
 /** Fixed top-left pill — Back to Home */
 export function BackToHome({ accentHover = 'hover:text-tertiary hover:border-tertiary/50' }) {
   const isPWA = window.matchMedia('(display-mode: standalone)').matches;
-  const dest = isPWA ? '/pwa-onboarding' : '/';
+  const dest = isPWA ? '/welcome' : '/';
   return (
     <Link
       to={dest}
