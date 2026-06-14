@@ -13,10 +13,9 @@ import PWAStart from './pages/PWAStart';
 import PWAWelcome from './pages/PWAWelcome';
 import PWAOnboarding from './pages/PWAOnboarding';
 
+// Silent fallback — no spinner flash on route load
 const PageLoader = () => (
-  <div className="min-h-[50vh] flex items-center justify-center bg-[#121222]">
-    <span className="material-symbols-outlined animate-spin text-4xl text-[#FFB59D]">refresh</span>
-  </div>
+  <div className="min-h-screen bg-[#121222]" />
 );
 
 const LandingPage = lazy(() => import('./pages/LandingPage'));
