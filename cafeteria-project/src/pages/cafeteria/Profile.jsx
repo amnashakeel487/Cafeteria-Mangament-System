@@ -395,6 +395,28 @@ export default function CafeteriaProfile() {
 
         </div>
       </div>
+
+      {/* Switch Role — only shown in PWA mode */}
+      {window.matchMedia('(display-mode: standalone)').matches && (
+        <div className="bg-surface-container-high rounded-xl p-6 border border-outline-variant/10 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-bold text-on-surface mb-1">Installed as wrong role?</p>
+            <p className="text-xs text-on-surface-variant">Switch to Student or Admin login</p>
+          </div>
+          <button
+            onClick={() => {
+              localStorage.removeItem('pwa_selected_role');
+              localStorage.removeItem('cafeteriaToken');
+              localStorage.removeItem('cafeteriaData');
+              navigate('/pwa-onboarding');
+            }}
+            className="px-4 py-2 bg-transparent border border-outline-variant/20 text-on-surface-variant rounded-lg text-sm font-semibold hover:border-primary/40 hover:text-primary transition-colors whitespace-nowrap flex items-center gap-2"
+          >
+            <span className="material-symbols-outlined text-sm">swap_horiz</span>
+            Switch Role
+          </button>
+        </div>
+      )}
     </section>
     </>
   );

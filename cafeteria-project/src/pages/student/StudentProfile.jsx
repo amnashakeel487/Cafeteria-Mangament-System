@@ -412,6 +412,28 @@ export default function StudentProfile() {
           </div>
         </div>
       </div>
+
+      {/* Switch Role — only shown in PWA mode */}
+      {window.matchMedia('(display-mode: standalone)').matches && (
+        <div className="bg-[#1E1E2F] rounded-xl p-6 border border-[#594139]/20 flex items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-bold text-[#E3E0F8] mb-1">Installed as wrong role?</p>
+            <p className="text-xs text-[#e1bfb5]">Switch to Cafe Owner or Admin login</p>
+          </div>
+          <button
+            onClick={() => {
+              localStorage.removeItem('pwa_selected_role');
+              localStorage.removeItem('studentToken');
+              localStorage.removeItem('studentData');
+              navigate('/pwa-onboarding');
+            }}
+            className="px-4 py-2 bg-transparent border border-[#594139]/40 text-[#e1bfb5] rounded-lg text-sm font-semibold hover:border-[#FFB59D]/40 hover:text-[#FFB59D] transition-colors whitespace-nowrap flex items-center gap-2"
+          >
+            <span className="material-symbols-outlined text-sm">swap_horiz</span>
+            Switch Role
+          </button>
+        </div>
+      )}
     </section>
     </>
   );

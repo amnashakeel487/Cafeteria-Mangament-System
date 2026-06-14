@@ -11,6 +11,7 @@ import { FavoritesProvider } from './context/FavoritesContext';
 import PWAUpdateNotification from './components/PWAUpdateNotification';
 import PWAStart from './pages/PWAStart';
 import PWAWelcome from './pages/PWAWelcome';
+import PWAOnboarding from './pages/PWAOnboarding';
 
 const PageLoader = () => (
   <div className="min-h-[50vh] flex items-center justify-center bg-[#121222]">
@@ -102,6 +103,7 @@ function App() {
               {/* PWA-only public routes — no auth guard */}
               <Route path="/pwa-start" element={<PWAStart />} />
               <Route path="/welcome" element={<PWAWelcome />} />
+              <Route path="/pwa-onboarding" element={<PWAOnboarding />} />
               <Route element={<StudentRoute />}>
                 <Route element={<StudentLayout />}>
                   <Route path="/student/cafeterias" element={<StudentCafeterias />} />
