@@ -96,15 +96,17 @@ const VARIANTS = {
 
 /** Fixed top-left pill — Back to Home */
 export function BackToHome({ accentHover = 'hover:text-tertiary hover:border-tertiary/50' }) {
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches;
+  const dest = isPWA ? '/pwa-onboarding' : '/';
   return (
     <Link
-      to="/"
+      to={dest}
       className={`group fixed top-4 left-4 z-50 inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-bold text-on-surface/90 border border-white/10 bg-[#121222]/60 backdrop-blur-xl transition-all duration-300 hover:bg-[#1e1e2f]/80 hover:border-white/20 ${accentHover}`}
     >
       <span className="material-symbols-outlined text-lg transition-transform duration-300 group-hover:-translate-x-1.5">
         arrow_back
       </span>
-      Back to Home
+      {isPWA ? 'Back to App' : 'Back to Home'}
     </Link>
   );
 }

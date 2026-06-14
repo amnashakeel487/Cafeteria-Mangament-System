@@ -103,7 +103,7 @@ export default function PortalLoginLayout({
   return (
     <div className="min-h-screen lg:h-screen lg:overflow-hidden bg-surface text-on-surface font-body mobile-compact-public">
       <Link
-        to="/"
+        to={window.matchMedia('(display-mode: standalone)').matches ? '/pwa-onboarding' : '/'}
         className="group fixed top-5 left-5 z-[100] flex items-center gap-2 px-[18px] py-[9px] rounded-full text-[13px] text-on-surface-variant no-underline border border-outline-variant/15 bg-surface-container/60 backdrop-blur-xl transition-all duration-250 hover:-translate-x-0.5 font-dm"
         style={{ ['--hover-accent']: t.accent }}
         onMouseEnter={(e) => {
@@ -120,7 +120,7 @@ export default function PortalLoginLayout({
         <svg className="w-3.5 h-3.5 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M12 5l-7 7 7 7" />
         </svg>
-        Back to Home
+        {window.matchMedia('(display-mode: standalone)').matches ? 'Back to App' : 'Back to Home'}
       </Link>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen lg:h-screen lg:overflow-hidden">
@@ -284,7 +284,7 @@ export default function PortalLoginLayout({
 
             <motion.div variants={fadeUp} custom={10} initial="hidden" animate="visible" className="mt-7 text-center">
               <Link
-                to="/"
+                to={window.matchMedia('(display-mode: standalone)').matches ? '/pwa-onboarding' : '/'}
                 className="group inline-flex items-center gap-1.5 text-[13px] text-on-surface-variant no-underline transition-colors font-dm hover:opacity-90"
                 style={{ ['--accent']: t.accent }}
                 onMouseEnter={(e) => { e.currentTarget.style.color = t.accent; }}
@@ -293,7 +293,7 @@ export default function PortalLoginLayout({
                 <svg className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M12 5l-7 7 7 7" />
                 </svg>
-                Back to Home
+                {window.matchMedia('(display-mode: standalone)').matches ? 'Back to App' : 'Back to Home'}
               </Link>
             </motion.div>
             </div>
